@@ -1,0 +1,328 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{185985E4-FEC7-4936-B36E-2CE7AFB4742E}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>Tracker_of_Time.My.MyApplication</StartupObject>
+    <RootNamespace>Tracker_of_Time</RootNamespace>
+    <AssemblyName>Tracker of Time</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>Tracker of Time.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>Tracker of Time.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>7C2659920886323FAC55346AC1E16786639AAE87</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Tracker of Time_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Tracker of Time_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Form1.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.vb">
+      <DependentUpon>Form1.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Memory.vb" />
+    <Compile Include="MemPlus.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="trackerKey.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config" />
+    <None Include="Tracker of Time_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\dekuStick.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\dekuNut.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\bombs.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\bow.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\fireArrow.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\dinsFire.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\fairySlingshot.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\fairyOcarina.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\ocarinaOfTime.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\bombchus.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\hookshot.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\longshot.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\iceArrows.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\faroresWind.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\boomerang.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\lensOfTruth.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\magicBeans.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\megatonHammer.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\lightArrows.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\naryusLove.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="additional\nothing.bmp" />
+    <None Include="additional\stoneZora.bmp" />
+    <None Include="additional\stoneKokiri.bmp" />
+    <None Include="additional\stoneGoron.bmp" />
+    <None Include="additional\songWater.bmp" />
+    <None Include="additional\songSpirit.bmp" />
+    <None Include="additional\songShadow.bmp" />
+    <None Include="additional\songNormal.bmp" />
+    <None Include="additional\songLight.bmp" />
+    <None Include="additional\songForest.bmp" />
+    <None Include="additional\songFire.bmp" />
+    <None Include="additional\medalWater.bmp" />
+    <None Include="additional\medalSpirit.bmp" />
+    <None Include="additional\medalShadow.bmp" />
+    <None Include="additional\medalLight.bmp" />
+    <None Include="additional\medalForest.bmp" />
+    <None Include="additional\medalFire.bmp" />
+    <None Include="additional\upgradeWallet2.bmp" />
+    <None Include="additional\upgradeWallet1.bmp" />
+    <None Include="additional\upgradeSilverScale.bmp" />
+    <None Include="additional\upgradeSilverGauntlets.bmp" />
+    <None Include="additional\upgradeQuiver3.bmp" />
+    <None Include="additional\upgradeQuiver2.bmp" />
+    <None Include="additional\upgradeQuiver1.bmp" />
+    <None Include="additional\upgradeGoronsBracelet.bmp" />
+    <None Include="additional\upgradeGoldenScale.bmp" />
+    <None Include="additional\upgradeGoldenGauntlets.bmp" />
+    <None Include="additional\upgradeBulletBag3.bmp" />
+    <None Include="additional\upgradeBulletBag2.bmp" />
+    <None Include="additional\upgradeBulletBag1.bmp" />
+    <None Include="additional\upgradeBombBag3.bmp" />
+    <None Include="additional\upgradeBombBag2.bmp" />
+    <None Include="additional\upgradeBombBag1.bmp" />
+    <None Include="additional\stoneOfAgony.bmp" />
+    <None Include="additional\gerudosCard.bmp" />
+    <None Include="additional\equipZoraTunic.bmp" />
+    <None Include="additional\equipMirrorShield.bmp" />
+    <None Include="additional\equipMasterSword.bmp" />
+    <None Include="additional\equipKokiriTunic.bmp" />
+    <None Include="additional\equipKokiriSword.bmp" />
+    <None Include="additional\equipKokiriBoots.bmp" />
+    <None Include="additional\equipIronBoots.bmp" />
+    <None Include="additional\equipHylianShield.bmp" />
+    <None Include="additional\equipHoverBoots.bmp" />
+    <None Include="additional\equipGoronTunic.bmp" />
+    <None Include="additional\equipDekuShield.bmp" />
+    <None Include="additional\equipBrokenKnife.bmp" />
+    <None Include="additional\equipBiggoronsSword.bmp" />
+    <None Include="additional\youngZoraMask.bmp" />
+    <None Include="additional\youngZeldasLetter.bmp" />
+    <None Include="additional\youngWeirdEgg.bmp" />
+    <None Include="additional\youngSpookyMask.bmp" />
+    <None Include="additional\youngSoldOut.bmp" />
+    <None Include="additional\youngSkullMask.bmp" />
+    <None Include="additional\youngMaskOfTruth.bmp" />
+    <None Include="additional\youngKeatonMask.bmp" />
+    <None Include="additional\youngGoronMask.bmp" />
+    <None Include="additional\youngGerudoMask.bmp" />
+    <None Include="additional\youngChicken.bmp" />
+    <None Include="additional\youngBunnyHood.bmp" />
+    <None Include="additional\adultClaimCheck.bmp" />
+    <None Include="additional\adultCojiro.bmp" />
+    <None Include="additional\adultEyeballFrog.bmp" />
+    <None Include="additional\adultEyeDrops.bmp" />
+    <None Include="additional\adultGoronsSwordBroken.bmp" />
+    <None Include="additional\adultOddMushroom.bmp" />
+    <None Include="additional\adultOddPotion.bmp" />
+    <None Include="additional\adultPoachersSaw.bmp" />
+    <None Include="additional\adultPocketCucco.bmp" />
+    <None Include="additional\adultPocketEgg.bmp" />
+    <None Include="additional\adultPrescription.bmp" />
+    <None Include="additional\backgroundEquipment.bmp" />
+    <None Include="additional\backgroundInventory.bmp" />
+    <None Include="additional\backgroundQuestIitems.bmp" />
+    <Content Include="additional\bottleBigPoe.bmp" />
+    <Content Include="additional\bottleBlueFire.bmp" />
+    <Content Include="additional\bottleBluePotion.bmp" />
+    <Content Include="additional\bottleBottledFairy.bmp" />
+    <Content Include="additional\bottleBug.bmp" />
+    <Content Include="additional\bottleEmpty.bmp" />
+    <Content Include="additional\bottleFish.bmp" />
+    <Content Include="additional\bottleGreenPotion.bmp" />
+    <Content Include="additional\bottleLetter.bmp" />
+    <Content Include="additional\bottleLonLonMilk.bmp" />
+    <Content Include="additional\bottleLonLonMilkHalf.bmp" />
+    <Content Include="additional\bottlePoe.bmp" />
+    <Content Include="additional\bottleRedPotion.bmp" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

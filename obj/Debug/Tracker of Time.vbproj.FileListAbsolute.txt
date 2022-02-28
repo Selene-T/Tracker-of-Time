@@ -1,0 +1,20 @@
+C:\Users\denki\AppData\Local\Temporary Projects\Tracker of Time\bin\Debug\Tracker of Time.exe.config
+C:\Users\denki\AppData\Local\Temporary Projects\Tracker of Time\obj\Debug\Tracker_of_Time.Form1.resources
+C:\Users\denki\AppData\Local\Temporary Projects\Tracker of Time\obj\Debug\Tracker_of_Time.Resources.resources
+C:\Users\denki\AppData\Local\Temporary Projects\Tracker of Time\obj\Debug\Tracker of Time.vbproj.GenerateResource.Cache
+C:\Users\denki\AppData\Local\Temporary Projects\Tracker of Time\bin\Debug\Tracker of Time.exe
+C:\Users\denki\AppData\Local\Temporary Projects\Tracker of Time\bin\Debug\Tracker of Time.pdb
+C:\Users\denki\AppData\Local\Temporary Projects\Tracker of Time\bin\Debug\Tracker of Time.xml
+C:\Users\denki\AppData\Local\Temporary Projects\Tracker of Time\obj\Debug\Tracker of Time.exe
+C:\Users\denki\AppData\Local\Temporary Projects\Tracker of Time\obj\Debug\Tracker of Time.xml
+C:\Users\denki\AppData\Local\Temporary Projects\Tracker of Time\obj\Debug\Tracker of Time.pdb
+C:\Users\denki\Documents\Visual Studio 2012\Projects\Tracker of Time\Tracker of Time\bin\Debug\Tracker of Time.exe.config
+C:\Users\denki\Documents\Visual Studio 2012\Projects\Tracker of Time\Tracker of Time\obj\Debug\Tracker of Time.exe
+C:\Users\denki\Documents\Visual Studio 2012\Projects\Tracker of Time\Tracker of Time\obj\Debug\Tracker of Time.xml
+C:\Users\denki\Documents\Visual Studio 2012\Projects\Tracker of Time\Tracker of Time\obj\Debug\Tracker of Time.pdb
+C:\Users\denki\Documents\Visual Studio 2012\Projects\Tracker of Time\Tracker of Time\bin\Debug\Tracker of Time.exe
+C:\Users\denki\Documents\Visual Studio 2012\Projects\Tracker of Time\Tracker of Time\bin\Debug\Tracker of Time.pdb
+C:\Users\denki\Documents\Visual Studio 2012\Projects\Tracker of Time\Tracker of Time\bin\Debug\Tracker of Time.xml
+C:\Users\denki\Documents\Visual Studio 2012\Projects\Tracker of Time\Tracker of Time\obj\Debug\Tracker_of_Time.Form1.resources
+C:\Users\denki\Documents\Visual Studio 2012\Projects\Tracker of Time\Tracker of Time\obj\Debug\Tracker_of_Time.Resources.resources
+C:\Users\denki\Documents\Visual Studio 2012\Projects\Tracker of Time\Tracker of Time\obj\Debug\Tracker of Time.vbproj.GenerateResource.Cache
