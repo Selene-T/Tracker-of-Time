@@ -18,7 +18,8 @@ Public Class frmTrackerOfTime
     Private arrHigh(CHECK_COUNT) As Byte
     Private arrLow(CHECK_COUNT) As Byte
     Private firstRun As Boolean = True
-
+    Private firstDraw As Boolean = True
+    Private cBlend As New Color
     Private aKeys(311) As keyCheck
     Private aKeysDungeons(11)() As keyCheck
 
@@ -35,6 +36,30 @@ Public Class frmTrackerOfTime
 
     ' On load, populate the locations array
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        With btnScan
+            lbtnScan.Top = .Top + 2
+            lbtnScan.Left = .Left + 2
+            .Enabled = False
+            .TabStop = False
+            .Visible = False
+        End With
+
+        With btnAutoScan
+            lbtnAutoScan.Top = .Top + 2
+            lbtnAutoScan.Left = .Left + 2
+            .Enabled = False
+            .TabStop = False
+            .Visible = False
+        End With
+
+        With btnReset
+            lbtnReset.Top = .Top + 2
+            lbtnReset.Left = .Left + 2
+            .Enabled = False
+            .TabStop = False
+            .Visible = False
+        End With
+
         For i As Integer = 0 To arrLocation.Length - 1
             arrChests(i) = 0
             arrHigh(i) = 0
@@ -49,7 +74,6 @@ Public Class frmTrackerOfTime
         For i = 0 To aKeys.Length - 1
             aKeys(i) = New keyCheck
         Next
-
 
         For Each checkBox In pnlHidden.Controls.OfType(Of CheckBox)().Where(Function(cb As CheckBox) cb.Name.Contains("cb65"))
             AddHandler checkBox.CheckedChanged, AddressOf cccCarpenters
@@ -227,7 +251,7 @@ Public Class frmTrackerOfTime
         If sunCheck > 2147483648 Then
             sunCheck = sunCheck - 2147483648 - 2147483648
         End If
-        If emulator = "emuhawk" Then
+        If emulator = "emuhawk" Or emulator = "rmg" Then
             Try
                 WriteMemory(Of Integer)(romAddrStart64 + &H11B4AC, CInt(sunCheck))
             Catch ex As Exception
@@ -258,7 +282,8 @@ Public Class frmTrackerOfTime
             If IS_64BIT = False Then
                 emulator = "project64"
             Else
-                attachToBizHawk()
+                'attachToBizHawk()
+                attachToRMG()
             End If
         End If
         If emulator = String.Empty Then Exit Sub
@@ -670,15 +695,16 @@ Public Class frmTrackerOfTime
 
     Private Sub stopScanning()
         keepRunning = False
-        Timer1.Enabled = False
-        btnAutoScan.Text = "Auto Scan"
+        tmrAutoScan.Enabled = False
+        lbtnAutoScan.Text = "Auto Scan"
+        'Me.Controls.Find("xButtonAutoScan", True)(0).Text = "Auto Scan"
         Me.Text = "Tracker of Time"
         emulator = String.Empty
     End Sub
 
     Private Function goRead(ByVal offsetAddress As Integer, Optional bitType As Byte = 31) As Integer
         goRead = 0
-        If emulator = "emuhawk" Then
+        If emulator = "emuhawk" Or emulator = "rmg" Then
             Try
                 'Dim readAddress64 As Int64 = romAddrStart64 + offsetAddress
                 goRead = ReadMemory(Of Integer)(romAddrStart64 + offsetAddress)
@@ -770,7 +796,7 @@ Public Class frmTrackerOfTime
         End Try
     End Sub
 
-    Private Sub btnScan_Click(sender As Object, e As EventArgs) Handles btnScan.Click
+    Private Sub lbtnScan_Click(sender As Object, e As EventArgs) Handles lbtnScan.Click
         goScan(False)
     End Sub
 
@@ -787,32 +813,35 @@ Public Class frmTrackerOfTime
         updateLabels()
         updateLabelsDungeons()
         If Not auto Then Exit Sub
-        If Timer1.Enabled = False Then
-            btnAutoScan.Text = "Stop"
-            Timer1.Enabled = True
+        If tmrAutoScan.Enabled = False Then
+            lbtnAutoScan.Text = "Stop"
+            tmrAutoScan.Enabled = True
             ' checkMQs()
         Else
             stopScanning()
         End If
     End Sub
 
-    Private Sub btnAutoScan_Click(sender As Object, e As EventArgs) Handles btnAutoScan.Click
+    Private Sub lbtnAutoScan_Click(sender As Object, e As EventArgs) Handles lbtnAutoScan.Click
         goScan(True)
     End Sub
 
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-        If Not keepRunning Then
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles tmrAutoScan.Tick
+        If Not keepRunning Or emulator = String.Empty Then
             stopScanning()
             Exit Sub
         End If
-        If zeldaCheck() = False Then Exit Sub
+        If zeldaCheck() = False Then
+            stopScanning()
+            Exit Sub
+        End If
         readChestData()
         updateItems()
         updateLabels()
         updateLabelsDungeons()
     End Sub
 
-    Private Sub btnReset_Click(sender As Object, e As EventArgs) Handles btnReset.Click
+    Private Sub lbtnReset_Click(sender As Object, e As EventArgs) Handles lbtnReset.Click
         stopScanning()
         For Each chk In pnlHidden.Controls.OfType(Of CheckBox)()
             chk.Checked = False
@@ -820,7 +849,7 @@ Public Class frmTrackerOfTime
         rtbOutput.ResetText()
         lastRoomScan = 0
         populateLocations()
-        btnScan.Focus()
+        'btnScan.Focus()
     End Sub
 
     Private Sub checkMQs()
@@ -931,9 +960,55 @@ Public Class frmTrackerOfTime
         updateMQs()
     End Sub
 
+    Private Sub scanEmulator(Optional emuName As String = "rmg")
+        Dim target As Process = Nothing
+        Try
+            target = Process.GetProcessesByName(emuName)(0)
+            rtbOutput.AppendText(target.ProcessName & vbCrLf)
+        Catch ex As Exception
+            If ex.Message = "Index was outside the bounds of the array." Then
+                rtbOutput.AppendText(emuName & " not found!" & vbCrLf)
+                'MessageBox.Show("BizHawk not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Else
+                rtbOutput.AppendText("Problem: " & ex.Message & vbCrLf)
+            End If
+            Return
+        End Try
+        Dim addressDLL As Int64 = 0
+        For Each mo As ProcessModule In target.Modules
+            'If LCase(mo.ModuleName) = "mupen64plus.dll" Then
+            'addressDLL = mo.BaseAddress.ToInt64
+            'Exit For
+            'End If
+            rtbOutput.AppendText(mo.ModuleName & ":" & Hex(mo.BaseAddress.ToInt64) & vbCrLf)
+        Next
+    End Sub
+
     Private Sub btnTheme_Click(sender As Object, e As EventArgs) Handles btnTheme.Click
-        'changeTheme("test")
-        'Exit Sub
+        'scanEmulator("rmg")
+        'If 1 = 1 Then Exit Sub
+
+        Dim art As Graphics
+        Dim pn1 As Pen = New Pen(Me.ForeColor, 1)
+        Dim brBack As Brush = New SolidBrush(Me.BackColor)
+        Dim brFore As Brush = New SolidBrush(Me.ForeColor)
+
+        'For Each pnl In Me.Controls.OfType(Of Panel)()
+        With cxShowSkulltulas
+            If .Location.Y > 200 Then
+                art = .CreateGraphics
+                If .Checked Then
+                    art.FillRectangle(brFore, 0, 3, 11, 11)
+                Else
+                    art.FillRectangle(brFore, 0, 3, 11, 11)
+                    art.FillRectangle(brBack, 1, 4, 9, 9)
+
+                End If
+            End If
+        End With
+        '
+
+        Exit Sub
         For i = 0 To arrHigh.Length - 1
             rtbOutput.AppendText(i.ToString & ": " & arrLow(i).ToString & "/" & arrHigh(i).ToString & vbCrLf)
         Next
@@ -962,21 +1037,41 @@ Public Class frmTrackerOfTime
             Case 3  ' Midnight
                 cBack = Color.Black
                 cFore = Color.RoyalBlue
+            Case 4  ' Hotdog Stand
+                cBack = Color.Yellow
+                cFore = Color.Red
 
             Case Else
                 Exit Sub
         End Select
+
+        ' Dim cBlend As Color = Color.FromArgb(CInt((cFore.R + cBack.R + 1) / 2), CInt((cFore.G + cBack.G + 1) / 2), CInt((cFore.B + cBack.B + 1) / 2))
+        'Dim cBothR As Integer = CInt((CInt(cBack.R) + CInt(cFore.R)) / 2)
+        'Dim cBothG As Integer = CInt((CInt(cBack.G) + CInt(cFore.G)) / 2)
+        'Dim cBothB As Integer = CInt((CInt(cBack.B) + CInt(cFore.B)) / 2)
+
+        'Dim cBlend As Color = Color.FromArgb(cBothR, cBothG, cBothB)
+
         Me.BackColor = cBack
         Me.ForeColor = cFore
 
-        For Each btn In Me.Controls.OfType(Of Button)()
-            btn.BackColor = cBack
-            btn.ForeColor = cFore
-        Next
+        'btnScan.BackColor
+        'btnScan.FlatAppearance.MouseOverBackColor = cBlend
+
+        'For Each cbx In Me.Controls.OfType(Of CheckBox)()
+        'cbx.FlatAppearance.CheckedBackColor = cBack
+        'Next
+
         ddThemes.BackColor = cBack
         ddThemes.ForeColor = cFore
         rtbOutput.ForeColor = cFore
         rtbOutput.BackColor = cBack
+
+        Dim cbR1 As Integer = CInt((CInt(Me.BackColor.R) + CInt(Me.ForeColor.R)) / 2)
+        Dim cbG1 As Integer = CInt((CInt(Me.BackColor.G) + CInt(Me.ForeColor.G)) / 2)
+        Dim cbB1 As Integer = CInt((CInt(Me.BackColor.B) + CInt(Me.ForeColor.B)) / 2)
+        cBlend = Color.FromArgb(cbR1, cbG1, cbB1)
+
         My.Settings.setTheme = theme
         My.Settings.Save()
     End Sub
@@ -985,7 +1080,6 @@ Public Class frmTrackerOfTime
         'Exit Sub
         pnlHidden.Visible = False
         Button2.Visible = False
-
 
         Me.Width = 439
         Me.Height = rtbOutput.Location.Y + rtbOutput.Height + 51
@@ -6476,12 +6570,8 @@ Public Class frmTrackerOfTime
         Dim target As Process = Nothing
         Try
             target = Process.GetProcessesByName("emuhawk")(0)
-            'MsgBox(target.ProcessName)
         Catch ex As Exception
             If ex.Message = "Index was outside the bounds of the array." Then
-                'MessageBox.Show("BizHawk not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                'Else
-                'MessageBox.Show("Problem: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return
             End If
         End Try
@@ -6491,7 +6581,6 @@ Public Class frmTrackerOfTime
                 addressDLL = mo.BaseAddress.ToInt64
                 Exit For
             End If
-            'rtbOutput.AppendText(mo.ModuleName & ":" & Hex(mo.BaseAddress.ToInt64) & vbCrLf)
         Next
         If addressDLL = 0 Then Exit Sub
         romAddrStart64 = addressDLL + &H658E0
@@ -6499,12 +6588,44 @@ Public Class frmTrackerOfTime
         emulator = "emuhawk"
     End Sub
 
+    Private Sub attachToRMG()
+        emulator = String.Empty
+        If IS_64BIT = False Then Exit Sub
+        Dim target As Process = Nothing
+        Try
+            target = Process.GetProcessesByName("rmg")(0)
+        Catch ex As Exception
+            If ex.Message = "Index was outside the bounds of the array." Then
+                Return
+            End If
+        End Try
+        Dim addressDLL As Int64 = 0
+        For Each mo As ProcessModule In target.Modules
+            If LCase(mo.ModuleName) = "mupen64plus.dll" Then
+                addressDLL = mo.BaseAddress.ToInt64
+                Exit For
+            End If
+        Next
+        If addressDLL = 0 Then Exit Sub
+        addressDLL = addressDLL + &H29C15D8
+        SetProcessName("rmg")
+        emulator = "rmg"
+        Dim readR15 As Integer = ReadMemory(Of Integer)(addressDLL)
+        Dim hexR15 As String = Hex(readR15)
+        While hexR15.Length < 8
+            hexR15 = "0" & hexR15
+        End While
+        readR15 = ReadMemory(Of Integer)(addressDLL + 4)
+        hexR15 = Hex(readR15) & hexR15
+        romAddrStart64 = CLng("&H" & hexR15) + &H40000000 + &H40000000
+    End Sub
+
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         'updateItems()
         'Exit Sub
 
         'attachToBizHawk()
-        If emulator = "emuhawk" Then
+        If emulator = "emuhawk" Or emulator = "rmg" Then
             'WriteMemory(Of Integer)(romAddrStart64 + &H11B4AC, &H10203)
             WriteMemory(Of Integer)(romAddrStart64 + &H11A644, &H10203)
             WriteMemory(Of Integer)(romAddrStart64 + &H11A648, &H4050608)
@@ -6717,8 +6838,53 @@ Public Class frmTrackerOfTime
         Next
     End Sub
 
+    Private Sub rtbOutput_GotFocus(sender As Object, e As EventArgs) Handles rtbOutput.GotFocus
+        'btnScan.Focus()
+    End Sub
     Private Sub rtbOutput_TextChanged(sender As Object, e As EventArgs) Handles rtbOutput.TextChanged
         rtbOutput.ScrollToCaret()
+        'drawScroll()
+    End Sub
+
+    Private Sub drawButtonz(ByRef lbl As Label, Optional thick As Byte = 1)
+        Dim art As Graphics
+        Dim pnFore As Pen = New Pen(Me.ForeColor, thick)
+        With lbl
+            art = .CreateGraphics
+            art.DrawRectangle(pnFore, 1, 1, .Width - 3, .Height - 3)
+        End With
+    End Sub
+
+    Private Sub drawScroll()
+        Dim art As Graphics
+        Dim pnFore As Pen = New Pen(Me.ForeColor, 1)
+        Dim pnForeThick As Pen = New Pen(Me.ForeColor, 3)
+
+        For Each pnl In Me.Controls.OfType(Of Panel)()
+            With pnl
+                If .Location.Y > 200 Then
+                    art = .CreateGraphics
+                    art.DrawRectangle(pnFore, 0, 0, .Width - 1, .Height - 1)
+                End If
+            End With
+        Next
+        art = Me.CreateGraphics
+        With rtbOutput
+            art.DrawRectangle(pnFore, .Location.X - 1, .Location.Y - 1, .Width + 1, .Height + 1)
+        End With
+
+        For Each lbl In Me.Controls.OfType(Of Label)()
+            With lbl
+                .BackColor = Me.BackColor
+                .ForeColor = Me.ForeColor
+                If .TextAlign = ContentAlignment.MiddleCenter Then art.DrawRectangle(pnFore, .Location.X - 1, .Location.Y - 1, .Width + 1, .Height + 1)
+            End With
+        Next
+
+        With lblHideScroll
+            art = .CreateGraphics
+            art.DrawLine(pnFore, 0, 0, 0, .Height - 1)
+        End With
     End Sub
 
     Private Sub outputSong(ByVal title As String, ByVal notes As String)
@@ -6779,6 +6945,7 @@ Public Class frmTrackerOfTime
     Private Sub cxShowSkulltulas_CheckedChanged(sender As Object, e As EventArgs) Handles cxShowSkulltulas.CheckedChanged
         updateLabels()
         updateLabelsDungeons()
+        drawScroll()
         My.Settings.setSkulltula = cxShowSkulltulas.Checked
         My.Settings.Save()
     End Sub
@@ -6798,18 +6965,21 @@ Public Class frmTrackerOfTime
         Next
         updateLabels()
         updateLabelsDungeons()
+        drawScroll()
         My.Settings.setScrub = cxScrubShuffle.Checked
         My.Settings.Save()
     End Sub
     Private Sub cxCowShuffle_CheckedChanged(sender As Object, e As EventArgs) Handles cxCowShuffle.CheckedChanged
         updateLabels()
         updateLabelsDungeons()
+        drawScroll()
         My.Settings.setCow = cxCowShuffle.Checked
         My.Settings.Save()
     End Sub
     Private Sub cxShopsanity_CheckedChanged(sender As Object, e As EventArgs) Handles cxShopsanity.CheckedChanged
         updateLabels()
         updateLabelsDungeons()
+        drawScroll()
         My.Settings.setShop = cxShopsanity.Checked
         My.Settings.Save()
     End Sub
@@ -6817,4 +6987,30 @@ Public Class frmTrackerOfTime
     Private Sub ddThemes_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddThemes.SelectedIndexChanged
         changeTheme(CByte(ddThemes.SelectedIndex))
     End Sub
+
+    Private Sub frmTrackerOfTime_MouseClick(sender As Object, e As MouseEventArgs) Handles Me.MouseClick
+        btnFocus.Focus()
+    End Sub
+    Private Sub frmTrackerOfTime_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
+        drawScroll()
+    End Sub
+    Private Sub lbtnScan_MouseEnter(sender As Object, e As EventArgs) Handles lbtnScan.MouseEnter
+        lbtnScan.BackColor = cBlend
+    End Sub
+    Private Sub lbtnScan_MouseLeave(sender As Object, e As EventArgs) Handles lbtnScan.MouseLeave
+        lbtnScan.BackColor = Me.BackColor
+    End Sub
+    Private Sub lbtnAutoScan_MouseEnter(sender As Object, e As EventArgs) Handles lbtnAutoScan.MouseEnter
+        lbtnAutoScan.BackColor = cBlend
+    End Sub
+    Private Sub lbtnAutoScan_MouseLeave(sender As Object, e As EventArgs) Handles lbtnAutoScan.MouseLeave
+        lbtnAutoScan.BackColor = Me.BackColor
+    End Sub
+    Private Sub lbtnReset_MouseEnter(sender As Object, e As EventArgs) Handles lbtnReset.MouseEnter
+        lbtnReset.BackColor = cBlend
+    End Sub
+    Private Sub lbtnReset_MouseLeave(sender As Object, e As EventArgs) Handles lbtnReset.MouseLeave
+        lbtnReset.BackColor = Me.BackColor
+    End Sub
 End Class
+
