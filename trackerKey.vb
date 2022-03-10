@@ -11,6 +11,7 @@
         Public scrub As Boolean
         Public shop As Boolean
         Public dungeon As Integer
+        Public forced As Boolean
 
         Public Sub New()
             loc = String.Empty
@@ -23,6 +24,7 @@
             scrub = False
             shop = False
             dungeon = 0
+            forced = False
         End Sub
     End Class
 End Module
