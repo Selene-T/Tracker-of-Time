@@ -1,0 +1,580 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+TrackerofTime
+</name>
+</assembly>
+<members>
+<member name="P:Tracker_of_Time.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.adultClaimCheck">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.adultCojiro">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.adultEyeballFrog">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.adultEyeDrops">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.adultGoronsSwordBroken">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.adultOddMushroom">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.adultOddPotion">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.adultPoachersSaw">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.adultPocketCucco">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.adultPocketEgg">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.adultPrescription">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.backgroundDungeonItems">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.backgroundEquipment">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.backgroundInventory">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.backgroundQuestIitems">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bombchus">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bombs">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.boomerang">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bottleBigPoe">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bottleBlueFire">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bottleBluePotion">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bottleBottledFairy">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bottleBug">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bottleEmpty">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bottleFish">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bottleGreenPotion">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bottleLetter">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bottleLonLonMilk">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bottleLonLonMilkHalf">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bottlePoe">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bottleRedPotion">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.bow">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.dekuNut">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.dekuStick">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.dinsFire">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.dungeonBossKey">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.dungeonCompass">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.dungeonMap">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.dungeonSmallKey">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.emptySlot">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.enhancedDefence">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.equipBiggoronsSword">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.equipBrokenKnife">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.equipDekuShield">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.equipGoronTunic">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.equipHoverBoots">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.equipHylianShield">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.equipIronBoots">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.equipKokiriBoots">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.equipKokiriSword">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.equipKokiriTunic">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.equipMasterSword">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.equipMirrorShield">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.equipZoraTunic">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.fairyOcarina">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.fairySlingshot">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.faroresWind">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.fireArrow">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.gerudosCard">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.gerudosCardEmpty">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.goldSkulltula">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.heartContainer">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.hookshot">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.iceArrows">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.lensOfTruth">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.lightArrows">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.longshot">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.magicBar0">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.magicBar1">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.magicBar2">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.magicBeans">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.medalFire">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.medalFireEmpty">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.medalForest">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.medalForestEmpty">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.medalLight">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.medalLightEmpty">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.medalShadow">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.medalShadowEmpty">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.medalSpirit">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.medalSpiritEmpty">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.medalWater">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.medalWaterEmpty">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.megatonHammer">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.naryusLove">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.ocarinaOfTime">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.poh0">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.poh1">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.poh2">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.poh3">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.poh4">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.songEmptyNormal">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.songEmptyWarp">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.songFire">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.songForest">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.songLight">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.songNormal">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.songShadow">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.songSpirit">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.songWater">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.stoneGoron">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.stoneGoronEmpty">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.stoneKokiri">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.stoneKokiriEmpty">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.stoneOfAgony">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.stoneOfAgonyEmpty">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.stoneZora">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.stoneZoraEmpty">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.triforce">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeBombBag1">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeBombBag11">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeBombBag2">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeBombBag3">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeBulletBag1">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeBulletBag2">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeBulletBag3">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeGoldenGauntlets">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeGoldenScale">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeGoronsBracelet">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeQuiver1">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeQuiver2">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeQuiver3">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeSilverGauntlets">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeSilverScale">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeWallet1">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeWallet2">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeWallet3">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.youngBunnyHood">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.youngChicken">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.youngGerudoMask">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.youngGoronMask">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.youngKeatonMask">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.youngMaskOfTruth">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.youngSkullMask">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.youngSoldOut">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.youngSpookyMask">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.youngWeirdEgg">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.youngZeldasLetter">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.youngZoraMask">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="T:Tracker_of_Time.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+</members>
+</doc>

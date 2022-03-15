@@ -8,12 +8,13 @@ Public Class frmTrackerOfTime
 
     Const PROCESS_ALL_ACCESS = &H1F0FFF
     Const CHECK_COUNT = 103
-    Const IS_64BIT = False
+    Const IS_64BIT = True
     Const DO_COUNT = False
     'Const ONLY_GS = False
 
     Private doNotScroll As Boolean = False
     Private keepRunning As Boolean = False
+    Private zeldazFails As Integer = 0
     Private arrLocation(CHECK_COUNT) As Integer
     Private arrChests(CHECK_COUNT) As Integer
     Private arrHigh(CHECK_COUNT) As Byte
@@ -23,6 +24,12 @@ Public Class frmTrackerOfTime
     Private cBlend As New Color
     Private aKeys(311) As keyCheck
     Private aKeysDungeons(11)() As keyCheck
+    Private aQuestRewardsCollected(22) As Boolean
+    Private aQuestRewardsText(22) As Byte
+    Private aDungeonLetters() As String = {"", "Free", "Deku", "DC", "Jabu", "Frst", "Fire", "Wtr", "Sprt", "Shdw"}
+    Private randoVer As String = String.Empty
+    Private playerName As String = String.Empty
+    Private pedestalRead As Byte = 0
 
     Private Const romAddrStart As Integer = &HDFE40000
     Private romAddrStart64 As Int64 = 0
@@ -34,6 +41,16 @@ Public Class frmTrackerOfTime
 
     Private aMQ(11) As Boolean
     Private aMQOld(11) As Boolean
+
+    ' Array of Objects
+    Dim aoSmallKeys(7) As PictureBox
+    Dim aoBossKeys(10) As PictureBox
+    Dim aoCompasses(9) As PictureBox
+    Dim aoMaps(9) As PictureBox
+    Dim aoQuestItems(22) As PictureBox
+    Dim aoQuestItemImages(22) As Image
+    Dim aoQuestItemImagesEmpty(22) As Image
+    Dim aoInventory(23) As PictureBox
 
     ' Attempts to make sure graphics are drawn upon keypresses
     Private Sub frmTrackerOfTime_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
@@ -48,10 +65,12 @@ Public Class frmTrackerOfTime
 
     ' On load, populate the locations array
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        makeArrayObjects()
         custMenu.highlight = Me.ForeColor
         custMenu.backColour = Me.BackColor
         custMenu.foreColour = Me.ForeColor
         mnuOptions.Renderer = New custMenu
+        loadSettings()
 
         For i As Integer = 0 To arrLocation.Length - 1
             arrChests(i) = 0
@@ -80,20 +99,182 @@ Public Class frmTrackerOfTime
         For Each checkBox In pnlHidden.Controls.OfType(Of CheckBox)().Where(Function(cb As CheckBox) cb.Name.Contains("cb76"))
             AddHandler checkBox.CheckedChanged, AddressOf cccUpgrades
         Next
-        For Each checkBox In pnlHidden.Controls.OfType(Of CheckBox)().Where(Function(cb As CheckBox) cb.Name.Contains("cb77"))
-            AddHandler checkBox.CheckedChanged, AddressOf cccQuestItems
-        Next
 
-        ' Unset all MQs
-        For i = 0 To aMQ.Length - 1
-            aMQ(i) = False
-            aMQOld(i) = True
-        Next
-        updateMQs()
         populateLocations()
-        loadSettings()
     End Sub
 
+    Private Sub makeArrayObjects()
+        ' Link the pictureboxes of each small key into an array
+        aoSmallKeys(0) = pbxFoTSmallKey
+        aoSmallKeys(1) = pbxFiTSmallKey
+        aoSmallKeys(2) = pbxWTSmallKey
+        aoSmallKeys(3) = pbxSpTSmallKey
+        aoSmallKeys(4) = pbxShTSmallKey
+        aoSmallKeys(5) = pbxBotWSmallKey
+        aoSmallKeys(6) = pbxGTGSmallKey
+        aoSmallKeys(7) = pbxGCSmallKey
+
+        ' Link the pictureboxes of each boss key into an array
+        aoBossKeys(3) = pbxFoTBossKey
+        aoBossKeys(4) = pbxFiTBossKey
+        aoBossKeys(5) = pbxWTBossKey
+        aoBossKeys(6) = pbxSpTBossKey
+        aoBossKeys(7) = pbxShTBossKey
+        aoBossKeys(10) = pbxGCBossKey
+
+        ' Link the pictureboxes of each compass into an array
+        aoCompasses(0) = pbxDTCompass
+        aoCompasses(1) = pbxDCCompass
+        aoCompasses(2) = pbxJBCompass
+        aoCompasses(3) = pbxFoTCompass
+        aoCompasses(4) = pbxFiTCompass
+        aoCompasses(5) = pbxWTCompass
+        aoCompasses(6) = pbxSpTCompass
+        aoCompasses(7) = pbxShTCompass
+        aoCompasses(8) = pbxBotWCompass
+        aoCompasses(9) = pbxICCompass
+
+        ' Link the pictureboxes of each map into an array
+        aoMaps(0) = pbxDTMap
+        aoMaps(1) = pbxDCMap
+        aoMaps(2) = pbxJBMap
+        aoMaps(3) = pbxFotMap
+        aoMaps(4) = pbxFiTMap
+        aoMaps(5) = pbxWTMap
+        aoMaps(6) = pbxSpTMap
+        aoMaps(7) = pbxShTMap
+        aoMaps(8) = pbxBotWMap
+        aoMaps(9) = pbxICMap
+
+        ' Link the pictureboxes of each quest item into an array
+        aoQuestItems(0) = pbxMedalForest
+        aoQuestItems(1) = pbxMedalFire
+        aoQuestItems(2) = pbxMedalWater
+        aoQuestItems(3) = pbxMedalSpirit
+        aoQuestItems(4) = pbxMedalShadow
+        aoQuestItems(5) = pbxMedalLight
+        aoQuestItems(6) = pbxMinuetOfForest
+        aoQuestItems(7) = pbxBoleroOfFire
+        aoQuestItems(8) = pbxSerenadeOfWater
+        aoQuestItems(9) = pbxRequiemOfSpirit
+        aoQuestItems(10) = pbxNocturneOfShadow
+        aoQuestItems(11) = pbxPreludeOfLight
+        aoQuestItems(12) = pbxZeldasLullaby
+        aoQuestItems(13) = pbxEponasSong
+        aoQuestItems(14) = pbxSaraisSong
+        aoQuestItems(15) = pbxSunsSong
+        aoQuestItems(16) = pbxSongOfTime
+        aoQuestItems(17) = pbxSongOfStorms
+        aoQuestItems(18) = pbxStoneKokiri
+        aoQuestItems(19) = pbxStoneGoron
+        aoQuestItems(20) = pbxStoneZora
+        aoQuestItems(21) = pbxStoneOfAgony
+        aoQuestItems(22) = pbxGerudosCard
+
+        ' Link  the pictureboxes of each inventory item into an array
+        aoInventory(0) = pbx01
+        aoInventory(1) = pbx02
+        aoInventory(2) = pbx03
+        aoInventory(3) = pbx04
+        aoInventory(4) = pbx05
+        aoInventory(5) = pbx06
+        aoInventory(6) = pbx07
+        aoInventory(7) = pbx08
+        aoInventory(8) = pbx09
+        aoInventory(9) = pbx10
+        aoInventory(10) = pbx11
+        aoInventory(11) = pbx12
+        aoInventory(12) = pbx13
+        aoInventory(13) = pbx14
+        aoInventory(14) = pbx15
+        aoInventory(15) = pbx16
+        aoInventory(16) = pbx17
+        aoInventory(17) = pbx18
+        aoInventory(18) = pbx19
+        aoInventory(19) = pbx20
+        aoInventory(20) = pbx21
+        aoInventory(21) = pbx22
+        aoInventory(22) = pbx23
+        aoInventory(23) = pbx24
+
+        For i As Byte = 0 To 22
+            refreshQuestItemImages(i)
+        Next
+    End Sub
+
+    Private Sub refreshQuestItemImages(ByVal img As Byte)
+        Select Case img
+            Case 0
+                aoQuestItemImages(img) = My.Resources.medalForest
+                aoQuestItemImagesEmpty(img) = My.Resources.medalForestEmpty
+            Case 1
+                aoQuestItemImages(img) = My.Resources.medalFire
+                aoQuestItemImagesEmpty(img) = My.Resources.medalFireEmpty
+            Case 2
+                aoQuestItemImages(img) = My.Resources.medalWater
+                aoQuestItemImagesEmpty(img) = My.Resources.medalWaterEmpty
+            Case 3
+                aoQuestItemImages(img) = My.Resources.medalSpirit
+                aoQuestItemImagesEmpty(img) = My.Resources.medalSpiritEmpty
+            Case 4
+                aoQuestItemImages(img) = My.Resources.medalShadow
+                aoQuestItemImagesEmpty(img) = My.Resources.medalShadowEmpty
+            Case 5
+                aoQuestItemImages(img) = My.Resources.medalLight
+                aoQuestItemImagesEmpty(img) = My.Resources.medalLightEmpty
+            Case 6
+                aoQuestItemImages(img) = My.Resources.songForest
+                aoQuestItemImagesEmpty(img) = My.Resources.songEmptyWarp
+            Case 7
+                aoQuestItemImages(img) = My.Resources.songFire
+                aoQuestItemImagesEmpty(img) = My.Resources.songEmptyWarp
+            Case 8
+                aoQuestItemImages(img) = My.Resources.songWater
+                aoQuestItemImagesEmpty(img) = My.Resources.songEmptyWarp
+            Case 9
+                aoQuestItemImages(img) = My.Resources.songSpirit
+                aoQuestItemImagesEmpty(img) = My.Resources.songEmptyWarp
+            Case 10
+                aoQuestItemImages(img) = My.Resources.songShadow
+                aoQuestItemImagesEmpty(img) = My.Resources.songEmptyWarp
+            Case 11
+                aoQuestItemImages(img) = My.Resources.songLight
+                aoQuestItemImagesEmpty(img) = My.Resources.songEmptyWarp
+            Case 12
+                aoQuestItemImages(img) = My.Resources.songNormal
+                aoQuestItemImagesEmpty(img) = My.Resources.songEmptyNormal
+            Case 13
+                aoQuestItemImages(img) = My.Resources.songNormal
+                aoQuestItemImagesEmpty(img) = My.Resources.songEmptyNormal
+            Case 14
+                aoQuestItemImages(img) = My.Resources.songNormal
+                aoQuestItemImagesEmpty(img) = My.Resources.songEmptyNormal
+            Case 15
+                aoQuestItemImages(img) = My.Resources.songNormal
+                aoQuestItemImagesEmpty(img) = My.Resources.songEmptyNormal
+            Case 16
+                aoQuestItemImages(img) = My.Resources.songNormal
+                aoQuestItemImagesEmpty(img) = My.Resources.songEmptyNormal
+            Case 17
+                aoQuestItemImages(img) = My.Resources.songNormal
+                aoQuestItemImagesEmpty(img) = My.Resources.songEmptyNormal
+            Case 18
+                aoQuestItemImages(img) = My.Resources.stoneKokiri
+                aoQuestItemImagesEmpty(img) = My.Resources.stoneKokiriEmpty
+            Case 19
+                aoQuestItemImages(img) = My.Resources.stoneGoron
+                aoQuestItemImagesEmpty(img) = My.Resources.stoneGoronEmpty
+            Case 20
+                aoQuestItemImages(img) = My.Resources.stoneZora
+                aoQuestItemImagesEmpty(img) = My.Resources.stoneZoraEmpty
+            Case 21
+                aoQuestItemImages(img) = My.Resources.stoneOfAgony
+                aoQuestItemImagesEmpty(img) = My.Resources.stoneOfAgonyEmpty
+            Case 22
+                aoQuestItemImages(img) = My.Resources.gerudosCard
+                aoQuestItemImagesEmpty(img) = My.Resources.gerudosCardEmpty
+        End Select
+    End Sub
     Private Sub loadSettings()
         'ddThemes.SelectedIndex = My.Settings.setTheme
         changeTheme(My.Settings.setTheme)
@@ -102,6 +283,16 @@ Public Class frmTrackerOfTime
 
     ' Populate location's addresses and clear up the chest data
     Private Sub populateLocations()
+        ' Unset all MQs
+        For i = 0 To aMQ.Length - 1
+            aMQ(i) = False
+            aMQOld(i) = True
+        Next
+        updateMQs()
+
+        randoVer = String.Empty
+        playerName = String.Empty
+
         clearItems()
         setupKeys()
         updateLabels()
@@ -242,7 +433,7 @@ Public Class frmTrackerOfTime
         If sunCheck > 2147483648 Then
             sunCheck = sunCheck - 2147483648 - 2147483648
         End If
-        If emulator = "emuhawk" Or emulator = "rmg" Or emulator = "mupen64plus-gui" Then
+        If emulator = "variousX64" Then
             Try
                 WriteMemory(Of Integer)(romAddrStart64 + &H11B4AC, CInt(sunCheck))
             Catch ex As Exception
@@ -254,6 +445,329 @@ Public Class frmTrackerOfTime
         End If
     End Function
 
+    Private Sub getPedestalRead()
+        pedestalRead = CByte(goRead(&H11B4FC, 1))
+    End Sub
+
+    Private Sub getSmallKeys()
+        ' Variables used to grab values and store the needed parts into an easy to use string
+        Dim tempKeys As String = String.Empty
+        Dim stringKeys As String = String.Empty
+
+        '  Grab keys for just Forest Temple
+        tempKeys = Hex(goRead(&H11A68C, 1))
+
+        ' Make sure all leading 0's are put back
+        While tempKeys.Length < 2
+            tempKeys = "0" & tempKeys
+        End While
+
+        ' Set string to the Forest Temple keys
+        stringKeys = tempKeys
+
+        ' Grab keys for Fire, Water, Spirit, and Shadow Temple
+        tempKeys = Hex(goRead(&H11A690))
+
+        ' Make sure all leading 0's are put back
+        While tempKeys.Length < 8
+            tempKeys = "0" & tempKeys
+        End While
+
+        ' Add all four of the grabbed Temple keys
+        stringKeys = stringKeys & tempKeys
+
+        ' Grab keys for Bottom of the Well and Gerudo Training Ground
+        tempKeys = Hex(goRead(&H11A694))
+
+        ' Make sure all leading 0's are put back
+        While tempKeys.Length < 8
+            tempKeys = "0" & tempKeys
+        End While
+
+        ' Add Bottom of the Well and Gerudo Training Ground keys
+        stringKeys = stringKeys & Mid(tempKeys, 1, 2) & Mid(tempKeys, 7, 2)
+
+        ' Grab keys for Ganon's Castle
+        tempKeys = Hex(goRead(&H11A698))
+
+        ' Make sure all leading 0's are put back
+        While tempKeys.Length < 8
+            tempKeys = "0" & tempKeys
+        End While
+
+        ' Add Ganon's Castle keys
+        stringKeys = stringKeys & Mid(tempKeys, 3, 2)
+
+        ' Set up the font for the number of keys
+        Dim fontSmallKeys = New Font("Lucida Console", 14, FontStyle.Bold, GraphicsUnit.Pixel)
+        ' Variable for temp storage for keys
+        Dim valKeys As Byte = 0
+        ' Position for x: 2 for double digits, 11 for single
+        Dim xPos As Byte = 0
+
+        ' Step through each stored small keys
+        For i = 0 To 7
+            With aoSmallKeys(i)
+                ' Default position 11 since technically no key should reach double digits
+                xPos = 11
+
+                ' Move hex value in string to a value
+                valKeys = CByte("&H" & Mid(stringKeys, (i * 2) + 1, 2))
+
+                If valKeys = 255 Then
+                    ' 255 (FF) is used as no keys found at all for the dungeon, make sure it is greyed out
+                    If .Visible Then .Visible = False
+                Else
+                    ' For any real value, makue sure key is visible and reload the default key image to remove old numbers drawn on it
+                    If Not .Visible Then .Visible = True
+                    .Image = My.Resources.dungeonSmallKey()
+
+                    ' The number of keys should never be over 9, much less 99, but just in case, keep it down to double digits
+                    If valKeys > 99 Then valKeys = 99
+
+                    ' Again, keys should never be double digit, but just in case, move the starting x position to draw 2 digits
+                    If valKeys > 9 Then xPos = 2
+
+                    ' Draw the value over the lower right of the key picturebox, first in black to give it some definition, then in white
+                    Graphics.FromImage(.Image).DrawString(valKeys.ToString, fontSmallKeys, New SolidBrush(Color.Black), xPos - 1, 10)
+                    Graphics.FromImage(.Image).DrawString(valKeys.ToString, fontSmallKeys, New SolidBrush(Color.White), xPos, 11)
+                    '.Invalidate()
+                End If
+            End With
+        Next
+    End Sub
+    Private Sub getDungeonItems()
+        'arrLocation(104) = &H11A678         ' *Boss Key/Compass/Map 1
+        'arrLocation(105) = &H11A67C         ' *Boss Key/Compass/Map 2
+        'arrLocation(106) = &H11A680         ' *Boss Key/Compass/Map 3
+
+        Dim stringItems As String = String.Empty
+        Dim tempItems As String = String.Empty
+        Dim valueItems As Integer = 0
+
+        For i = 0 To 2
+            ' Scans at &H11A678, &H11A67C, and &H11A680 
+            tempItems = Hex(goRead(&H11A678 + (i * 4)))
+
+            ' Make sure all leading 0's are put back
+            While tempItems.Length < 8
+                tempItems = "0" & tempItems
+            End While
+
+            ' Add info into main string
+            stringItems = stringItems & tempItems
+        Next
+
+        For i = 0 To 10
+            ' Grab only the lower hex of each paired check as the 16's place does not matter, store as value
+            valueItems = CInt("&H" & Mid(stringItems, (i + 1) * 2, 1))
+
+            ' Again, something that should never happen, but best cover for anyone hacking. This works by lowering the everything down to 3 bits (1-7)
+            While valueItems > 7
+                valueItems = valueItems - 8
+            End While
+
+            If i <= 9 Then
+                ' Map and compass checks are only for the first 10 dungeons
+                If valueItems >= 4 Then
+                    ' This is the Map check, 3rd bit (4). Make sure coloured map is visible
+                    valueItems = valueItems - 4
+                    If Not aoMaps(i).Visible Then aoMaps(i).Visible = True
+                Else
+                    ' Or not if not found
+                    If aoMaps(i).Visible Then aoMaps(i).Visible = False
+                End If
+
+                If valueItems >= 2 Then
+                    ' This is the compass check, 2nd bit (2). Make sure coloured compass is visible
+                    valueItems = valueItems - 2
+                    If Not aoCompasses(i).Visible Then aoCompasses(i).Visible = True
+                Else
+                    ' Or not if not found
+                    If aoCompasses(i).Visible Then aoCompasses(i).Visible = False
+                End If
+            End If
+            If i = 3 Or i = 4 Or i = 5 Or i = 6 Or i = 7 Or i = 10 Then
+                If valueItems = 1 Then
+                    ' This is the Boss Key check, 1st bit (1). Make sure coloured boss key is visible
+                    valueItems = valueItems - 4
+                    If Not aoBossKeys(i).Visible Then aoBossKeys(i).Visible = True
+                Else
+                    ' Or not if not found
+                    If aoBossKeys(i).Visible Then aoBossKeys(i).Visible = False
+                End If
+            End If
+        Next
+    End Sub
+    Private Sub getHearts()
+        ' Check if player has enhanced defence
+        Dim isEnhanced As Boolean = CBool(IIf(goRead(&H11A60C + 2, 1) > 0, True, False))
+
+        ' Get max heart container value, divide by 16 to undo their 16x multiplyer
+        Dim bHearts As Byte = CByte(goRead(&H11A5FC, 15) / 16)
+
+        ' Just a percaution, limit hearts to 99, even though 20 is the max. Never know what people may do to their save file 
+        If bHearts > 99 Then bHearts = 99
+
+        ' 18 is the starting position for single digit numbers
+        Dim xPos As Byte = 18
+        ' If double digits, set starting position to 7
+        If bHearts > 9 Then xPos = 7
+
+        ' Set up the font for the number of hearts
+        Dim fontHearts = New Font("Lucida Console", 18, FontStyle.Bold, GraphicsUnit.Pixel)
+
+        With pbxHeartContainer
+            ' If not already visible, make it so. This is left here to let it stay greyed out before the first scan
+            If Not .Visible Then .Visible = True
+
+            If isEnhanced Then
+                ' Set image to enhanced defence if active
+                .Image = My.Resources.enhancedDefence
+            Else
+                ' Set image to normal heart container, still refreshing it to remove drawn numbers
+                .Image = My.Resources.heartContainer
+            End If
+
+            ' Draw the value over the lower right of the heart container picturebox, first in black to give it some definition, then in white
+            Graphics.FromImage(.Image).DrawString(bHearts.ToString, fontHearts, New SolidBrush(Color.Black), xPos - 1, 17)
+            Graphics.FromImage(.Image).DrawString(bHearts.ToString, fontHearts, New SolidBrush(Color.White), xPos, 18)
+            '.Invalidate()
+        End With
+
+        ' Now for the heart pieces
+        bHearts = CByte(goRead(&H11A674 + 3, 1))
+
+        With pbxPoH
+            ' If not visible, make visible
+            If Not .Visible Then .Visible = True
+            Select Case bHearts
+                Case Is >= 64
+                    ' This is only a temporary chance check where all 4 pieces of heart are detected, but before the game combines them into a full piece
+                    .Image = My.Resources.poh4
+                Case Is >= 48
+                    ' 3 pieces of heart
+                    .Image = My.Resources.poh3
+                Case Is >= 32
+                    ' 2 pieces of heart
+                    .Image = My.Resources.poh2
+                Case Is >= 16
+                    ' 1 piece of heart
+                    .Image = My.Resources.poh1
+                Case Else
+                    ' No pieces of heart
+                    .Image = My.Resources.poh0
+            End Select
+        End With
+    End Sub
+    Private Sub getMagic()
+        ' Get magic check. This one is a curious one as there are many areas to check, and none perfect. Should someone hack their file to have magic, this should hopefully find it though
+        Dim bMagic As Byte = CByte(goRead(&H11A600 + 1, 1))
+
+        With pbxMagicBar
+            ' If not visible, make visible
+            If Not .Visible Then .Visible = True
+            Select Case bMagic
+                Case 2
+                    ' 2 for both magic upgrades
+                    .Image = My.Resources.magicBar2
+                Case 1
+                    ' 1 for one magic upgrade
+                    .Image = My.Resources.magicBar1
+                Case Else
+                    ' 0, or whatever else it finds, for no magic
+                    .Image = My.Resources.magicBar0
+            End Select
+        End With
+    End Sub
+    Private Sub getGoldSkulltulas()
+        ' Get gold skulltula count
+        Dim bGS As Byte = CByte(goRead(&H11A6A0 + 2, 1))
+
+        With pbxGoldSkulltula
+            ' If not visible, make visible, and reset image to default to remove drawn numbers
+            If Not .Visible Then .Visible = True
+            .Image = My.Resources.goldSkulltula
+
+            ' 23 is the starting position for single digit numbers, but will be reducing it by 5 since byte varaibles cannot be negative and triple digits needs to start at -5
+            Dim xPos As Byte = 23
+            ' If double digits, set starting position to 12(-5 = 7)
+            If bGS > 9 Then xPos = 12
+            ' If triple digits, set starting position to 0(-5 = -5)
+            If bGS > 99 Then xPos = 0
+            ' Font for gold skulltula numbers
+            Dim fontGS = New Font("Lucida Console", 18, FontStyle.Bold, GraphicsUnit.Pixel)
+
+            ' Draw the value over the lower right of the gold skulltula picturebox, first in black to give it some definition, then in white
+            Graphics.FromImage(.Image).DrawString(bGS.ToString, fontGS, New SolidBrush(Color.Black), xPos - 6, 17)
+            Graphics.FromImage(.Image).DrawString(bGS.ToString, fontGS, New SolidBrush(Color.White), xPos - 5, 18)
+        End With
+    End Sub
+    Private Function isTriforceHunt() As Boolean
+        ' Default to false, and grab at where the varaible for needed triforce pieces is at
+        isTriforceHunt = False
+
+        ' Checks for different rom generators
+        Dim isOOTR As Boolean = False
+        Dim isAP As Boolean = False
+
+        ' Both use the pattern of "0032####" for thieir requirement check location
+        If goRead(&H40B668 + 2, 15) = 50 Then isOOTR = True
+
+        ' If not OOTR, check for AP
+        If Not isOOTR Then
+            If goRead(&H40B1B0 + 2, 15) = 50 Then isAP = True
+        End If
+
+        ' Variable to store required triforce pieces
+        Dim neededTriforce As Int16 = 0
+
+        Select Case True
+            Case isAP
+                ' If rom is generated by archipelago.gg
+                neededTriforce = CShort(goRead(&H40B1B0, 15))
+            Case isOOTR
+                ' If rom is generated by ootrandomizer.com
+                neededTriforce = CShort(goRead(&H40B668, 15))
+            Case Else
+                ' Anything else, return false
+                Return False
+        End Select
+
+        ' If value is 'FFFF' then it is just a placeholder, not a triforce hunt, so return false
+        If neededTriforce = -1 Then Return False
+
+        ' If it makes it this far, return true
+        Return True
+    End Function
+    Private Sub getTriforce()
+        ' Get gold skulltula count
+        Dim bTriforce As Byte = CByte(goRead(&H11AE94, 1))
+
+        With pbxTriforce
+            If bTriforce > 0 Then
+                If Not .Visible Then .Visible = True
+                ' Reset the image to the default triforce piece to remove drawn numbers
+                .Image = My.Resources.triforce
+
+                ' 23 is the starting position for single digit numbers, but will be reducing it by 5 since byte varaibles cannot be negative and triple digits needs to start at -5
+                Dim xPos As Byte = 23
+                ' If double digits, set starting position to 12(-5 = 7)
+                If bTriforce > 9 Then xPos = 12
+                ' If triple digits, set starting position to 0(-5 = -5)
+                If bTriforce > 99 Then xPos = 0
+                ' Font for triforce numbers
+                Dim fontTriforce = New Font("Lucida Console", 18, FontStyle.Bold, GraphicsUnit.Pixel)
+
+                ' Draw the value over the lower right of the triforce picturebox, first in black to give it some definition, then in white
+                Graphics.FromImage(.Image).DrawString(bTriforce.ToString, fontTriforce, New SolidBrush(Color.Black), xPos - 6, 17)
+                Graphics.FromImage(.Image).DrawString(bTriforce.ToString, fontTriforce, New SolidBrush(Color.White), xPos - 5, 18)
+            Else
+                If .Visible Then .Visible = False
+            End If
+        End With
+    End Sub
+
     Private Sub cccCarpenters(chx As Object, e As EventArgs)
         checkCarpenters()
     End Sub
@@ -262,9 +776,6 @@ Public Class frmTrackerOfTime
     End Sub
     Private Sub cccUpgrades(chx As Object, e As EventArgs)
         checkUpgrades()
-    End Sub
-    Private Sub cccQuestItems(chx As Object, e As EventArgs)
-        checkQuestItems()
     End Sub
 
     ' Scan each of the chests data
@@ -276,13 +787,20 @@ Public Class frmTrackerOfTime
                 attachToBizHawk()
                 If emulator = String.Empty Then attachToRMG()
                 If emulator = String.Empty Then attachToM64P()
+                If emulator = String.Empty Then attachToRetroArch()
+            End If
+            If Not emulator = String.Empty Then
+                Me.Text = "Tracker of Time (" & emulator & ")"
+                Select Case LCase(emulator)
+                    Case "emuhawk", "rmg", "mupen64plus-gui", "retroarch - mupen64plus", "retroarch - parallel"
+                        emulator = "variousX64"
+                End Select
             End If
         End If
         If emulator = String.Empty Then Exit Sub
-        Me.Text = "Tracker of Time (" & emulator & ")"
 
 
-        If zeldaCheck() = False Then Exit Sub
+        If isLoadedGame() = False Then Exit Sub
         ' Get current room code
         Dim roomCode As String = String.Empty
         Dim tempVar As Integer = 0
@@ -335,7 +853,7 @@ Public Class frmTrackerOfTime
                     ' Scene Checks
                     inc(doMath, 4)
                     tempVar = &H1CA1C8
-                ElseIf i <= 30 Or i >= 100 Then
+                ElseIf i <= 30 Or i = 100 Or i = 101 Or i = 102 Then
                     ' Standing Checks
                     inc(doMath, 12)
                     tempVar = &H1CA1E4
@@ -374,14 +892,31 @@ Public Class frmTrackerOfTime
         Next
     End Sub
 
-    Private Function zeldaCheck() As Boolean
+    Private Function checkZeldaz() As Byte
         ' Checks for the 'ZELDAZ' within the memory to make sure you are playing Ocarina of Time, and that it is still reading the correct memory region
-        zeldaCheck = False
-        Dim zeld As Integer = goRead(CInt("&H11A5EC"))
-        If zeld = 1514490948 Then
-            Dim az As Integer = goRead(CInt("&H11A5F0"))
-            If az >= 1096417280 And az <= 1096482815 Then zeldaCheck = True
+        checkZeldaz = 0
+        Dim zeldaz1 As Integer = goRead(&H11A5EC)
+        Dim zeldaz2 As Integer = goRead(&H11A5F0 + 2, 15)
+
+        ' If both checks are zero, and menu screen varaible is there, set to 1 for half-true
+        If zeldaz1 = 0 And zeldaz2 = 0 Then
+            ' Checks if on the game menu screen
+            If goRead(&H11B92C, 1) = 2 Then checkZeldaz = 1
         End If
+
+        ' Check both and if they are proper, 2 for full-true
+        If zeldaz1 = 1514490948 Then
+            If zeldaz2 = 16730 Then checkZeldaz = 2
+        End If
+
+        ' Check for the rando version only if a full-true
+        If randoVer = String.Empty And checkZeldaz = 2 Then getRandoVer()
+    End Function
+
+    Private Function isLoadedGame() As Boolean
+        ' Checks the game state (2=game menu, 1=title screen, 0=gameplay), if 0 and a successful ZELDAZ check, then true
+        isLoadedGame = False
+        If goRead(&H11B92C, 1) = 0 And checkZeldaz() = 2 Then isLoadedGame = True
     End Function
 
     Private Sub parseChestData(ByVal loc As Integer)
@@ -705,7 +1240,6 @@ Public Class frmTrackerOfTime
                 Return 26
         End Select
     End Function
-
     Private Function area2code(ByVal area As String) As String
         ' Converts the area name into a area code
         area2code = String.Empty
@@ -788,7 +1322,6 @@ Public Class frmTrackerOfTime
                 Return "DUN11"
         End Select
     End Function
-
     Private Function dungeonNumber2name(ByVal dunNum As Byte) As String
         dungeonNumber2name = String.Empty
         Select Case dunNum
@@ -818,6 +1351,7 @@ Public Class frmTrackerOfTime
                 dungeonNumber2name = "Ganon's Castle"
         End Select
     End Function
+
     Private Sub stopScanning()
         keepRunning = False
         tmrAutoScan.Enabled = False
@@ -829,7 +1363,7 @@ Public Class frmTrackerOfTime
 
     Private Function goRead(ByVal offsetAddress As Integer, Optional bitType As Byte = 31) As Integer
         goRead = 0
-        If emulator = "emuhawk" Or emulator = "rmg" Or emulator = "mupen64plus-gui" Then
+        If emulator = "variousX64" Then
             Try
                 Select Case bitType
                     Case 0 To 7
@@ -841,7 +1375,9 @@ Public Class frmTrackerOfTime
                 End Select
             Catch ex As Exception
                 stopScanning()
-                MessageBox.Show("goRead Problem: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                If Not ex.Message = "External component has thrown an exception." Then
+                    MessageBox.Show("goRead Problem: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                End If
             End Try
         ElseIf emulator = "project64" Then
             If IS_64BIT = False Then
@@ -926,11 +1462,8 @@ Public Class frmTrackerOfTime
         End Try
     End Sub
 
-    Private Sub lbtnScan_Click(sender As Object, e As EventArgs)
-        goScan(False)
-    End Sub
-
     Private Sub goScan(ByVal auto As Boolean)
+        zeldazFails = 0
         keepRunning = True
         readChestData()
         If Not keepRunning Then
@@ -939,9 +1472,7 @@ Public Class frmTrackerOfTime
         End If
         checkMQs()
         readChestData()
-        updateItems()
-        updateLabels()
-        updateLabelsDungeons()
+        updateEverything()
         If Not auto Then Exit Sub
         If tmrAutoScan.Enabled = False Then
             AutoScanToolStripMenuItem.Text = "Stop"
@@ -952,37 +1483,42 @@ Public Class frmTrackerOfTime
         End If
     End Sub
 
-    Private Sub lbtnAutoScan_Click(sender As Object, e As EventArgs)
-        goScan(True)
-    End Sub
-
-    Private Sub tmrAutoScan_Tick(sender As Object, e As EventArgs) Handles tmrAutoScan.Tick
-        If Not keepRunning Or emulator = String.Empty Then
-            stopScanning()
-            Exit Sub
-        End If
-        If zeldaCheck() = False Then
-            stopScanning()
-            Exit Sub
-        End If
-        readChestData()
+    Private Sub updateEverything()
         updateItems()
+        updateQuestItems()
+        updateDungeonItems()
         updateLabels()
         updateLabelsDungeons()
     End Sub
 
-    Private Sub lbtnReset_Click(sender As Object, e As EventArgs)
-        stopScanning()
-        For Each chk In pnlHidden.Controls.OfType(Of CheckBox)()
-            chk.Checked = False
-        Next
-        rtbOutput.ResetText()
-        lastRoomScan = 0
-        populateLocations()
-        'btnScan.Focus()
+    Private Sub tmrAutoScan_Tick(sender As Object, e As EventArgs) Handles tmrAutoScan.Tick
+        ' Timer is ran every 3 seconds. Often enough for accuracy but not so much that it bogs things down. May Lower to 5 seconds.
+
+        ' Checks that things should still be running and ready
+        If Not keepRunning Or emulator = String.Empty Then
+            stopScanning()
+            Exit Sub
+        End If
+
+        ' Runs a check for "ZELDAZ" in the memory where it is expected
+        If checkZeldaz() = 0 Then
+            ' On fail, count up the fails, allowing for 5 fails (15 seconds) before disconnecting
+            inc(zeldazFails)
+            If zeldazFails >= 5 Then
+                stopScanning()
+                Exit Sub
+            End If
+        Else
+            ' Only do a scan with the zeldaCheck was successful, and reset the fail counter
+            zeldazFails = 0
+            readChestData()
+            updateEverything()
+        End If
     End Sub
 
     Private Sub checkMQs()
+        If Not isLoadedGame() Then Exit Sub
+
         ' Update the MQ Dungeons
         Dim MQs As String = String.Empty
         Dim testSpot As Integer = &H40B6E0
@@ -994,6 +1530,7 @@ Public Class frmTrackerOfTime
         Next
 
         For i = 0 To 1
+            If randoVer = "AP" Then i = 1
             allZeros = 0
             If i = 1 Then testSpot = &H40B220
             MQs = Hex(goRead(testSpot))
@@ -1085,6 +1622,7 @@ Public Class frmTrackerOfTime
             End If
 
             If hits > 0 Or allZeros = 4 Then Exit For
+            If randoVer = "OOTR" Then Exit For
         Next
 
         updateMQs()
@@ -1114,11 +1652,19 @@ Public Class frmTrackerOfTime
         Next
     End Sub
 
-    Private Sub btnTheme_Click(sender As Object, e As EventArgs) Handles btnTheme.Click
+    Private Sub btnTest_Click(sender As Object, e As EventArgs) Handles btnTest.Click
+        'scanEmulator("project64")
+        Dim az As Integer = goRead(CInt("&H11A5F0") + 2, 15)
+
+        'pbxGoldSkulltula.Visible = True
+        'pbxTriforce.Visible = True
         ' This is just my little debug testing button
-        'Dim goRead As Integer = ReadMemory(Of Byte)(romAddrStart64 + &H11A5EC)
-        Dim goRead As Integer = quickRead8(romAddrStart + &H11A5EC, emulator)
-        rtbOutput.AppendText(Hex(goRead) & vbCrLf)
+        'Dim tRead As Integer = goRead(&H40B668 + 2, 15)
+        rtbOutput.AppendText(az.ToString & vbCrLf)
+        'Dim goRead As Integer = quickRead8(romAddrStart + &H11A5EC, emulator)
+        'rtbOutput.AppendText(Hex(goRead) & vbCrLf)
+
+        'pbxDTMap.Visible = False
         Exit Sub
         For i = 0 To arrHigh.Length - 1
             rtbOutput.AppendText(i.ToString & ": " & arrLow(i).ToString & "/" & arrHigh(i).ToString & vbCrLf)
@@ -1216,7 +1762,7 @@ Public Class frmTrackerOfTime
         Dim cpnlBack As Color = Control.DefaultBackColor
         Dim cpnlFore As Color = Control.DefaultForeColor
         Select Case theme
-            Case 0  ' Light Mode
+            Case 0  ' Default
                 cBack = Color.WhiteSmoke
                 cFore = Color.Black
             Case 1  ' Dark Mode
@@ -1272,7 +1818,7 @@ Public Class frmTrackerOfTime
 
         Me.Width = pnlDekuTree.Location.X + pnlDekuTree.Width + 22
         Me.Height = rtbOutput.Location.Y + rtbOutput.Height + 46
-        btnTheme.Visible = False
+        btnTest.Visible = False
     End Sub
 
     Private Sub displayChecks(ByVal area As String, Optional showChecked As Boolean = False)
@@ -3429,217 +3975,217 @@ Public Class frmTrackerOfTime
             .name = "Kokiri Shop #1"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10322"
             .area = "KF"
             .name = "Kokiri Shop #2"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10321"
             .area = "KF"
             .name = "Kokiri Shop #3"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10320"
             .area = "KF"
             .name = "Kokiri Shop #4"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10315"
             .area = "MK"
             .name = "Bazaar #1"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10314"
             .area = "MK"
             .name = "Bazaar #2"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10313"
             .area = "MK"
             .name = "Bazaar #3"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10312"
             .area = "MK"
             .name = "Bazaar #4"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10303"
             .area = "MK"
             .name = "Bombchu Shop #1"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10302"
             .area = "MK"
             .name = "Bombchu Shop #2"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10301"
             .area = "MK"
             .name = "Bombchu Shop #3"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10300"
             .area = "MK"
             .name = "Bombchu Shop #4"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10331"
             .area = "MK"
             .name = "Potion Shop #1"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10330"
             .area = "MK"
             .name = "Potion Shop #2"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10329"
             .area = "MK"
             .name = "Potion Shop #3"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10328"
             .area = "MK"
             .name = "Potion Shop #4"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10327"
             .area = "KV"
             .name = "Bazaar #1"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10326"
             .area = "KV"
             .name = "Bazaar #2"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10325"
             .area = "KV"
             .name = "Bazaar #3"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10324"
             .area = "KV"
             .name = "Bazaar #4"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10311"
             .area = "KV"
             .name = "Potion Shop #1"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10310"
             .area = "KV"
             .name = "Potion Shop #2"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10309"
             .area = "KV"
             .name = "Potion Shop #3"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10308"
             .area = "KV"
             .name = "Potion Shop #4"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10319"
             .area = "GC"
             .name = "Goron Shop #1"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10318"
             .area = "GC"
             .name = "Goron Shop #2"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10317"
             .area = "GC"
             .name = "Goron Shop #3"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10316"
             .area = "GC"
             .name = "Goron Shop #4"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10307"
             .area = "ZD"
             .name = "Zora Shop #1"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10306"
             .area = "ZD"
             .name = "Zora Shop #2"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10305"
             .area = "ZD"
             .name = "Zora Shop #3"
             .shop = True
         End With
-        inc(tK)
+        inc(tk)
         With aKeys(tk)
             .loc = "10304"
             .area = "ZD"
@@ -6488,7 +7034,7 @@ Public Class frmTrackerOfTime
         displayChecks("QM", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
     End Sub
 
-    Private Sub inc(ByRef value As Integer, Optional ByRef amount As Integer = 1)
+    Private Sub inc(ByRef value As Integer, Optional ByVal amount As Integer = 1)
         ' Small sub for shorthand increments
         value = value + amount
     End Sub
@@ -6605,15 +7151,15 @@ Public Class frmTrackerOfTime
             Select Case upgrades(0)
                 Case 1
                     .Image = My.Resources.upgradeQuiver1
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
                 Case 2
                     .Image = My.Resources.upgradeQuiver2
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
                 Case 3
                     .Image = My.Resources.upgradeQuiver3
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
                 Case Else
-                    .Visible = False
+                    If .Visible Then .Visible = False
             End Select
         End With
 
@@ -6621,15 +7167,15 @@ Public Class frmTrackerOfTime
             Select Case upgrades(1)
                 Case 1
                     .Image = My.Resources.upgradeBombBag1
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
                 Case 2
                     .Image = My.Resources.upgradeBombBag2
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
                 Case 3
                     .Image = My.Resources.upgradeBombBag3
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
                 Case Else
-                    .Visible = False
+                    If .Visible Then .Visible = False
             End Select
         End With
 
@@ -6637,15 +7183,15 @@ Public Class frmTrackerOfTime
             Select Case upgrades(2)
                 Case 1
                     .Image = My.Resources.upgradeGoronsBracelet
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
                 Case 2
                     .Image = My.Resources.upgradeSilverGauntlets
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
                 Case 3
                     .Image = My.Resources.upgradeGoldenGauntlets
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
                 Case Else
-                    .Visible = False
+                    If .Visible Then .Visible = False
             End Select
         End With
 
@@ -6653,12 +7199,12 @@ Public Class frmTrackerOfTime
             Select Case upgrades(3)
                 Case 1
                     .Image = My.Resources.upgradeSilverScale
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
                 Case 2
                     .Image = My.Resources.upgradeGoldenScale
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
                 Case Else
-                    .Visible = False
+                    If .Visible Then .Visible = False
             End Select
         End With
 
@@ -6666,12 +7212,15 @@ Public Class frmTrackerOfTime
             Select Case upgrades(4)
                 Case 1
                     .Image = My.Resources.upgradeWallet1
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
                 Case 2
                     .Image = My.Resources.upgradeWallet2
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
+                Case 3
+                    .Image = My.Resources.upgradeWallet3
+                    If Not .Visible Then .Visible = True
                 Case Else
-                    .Visible = False
+                    If .Visible Then .Visible = False
             End Select
         End With
 
@@ -6679,42 +7228,47 @@ Public Class frmTrackerOfTime
             Select Case upgrades(5)
                 Case 1
                     .Image = My.Resources.upgradeBulletBag1
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
                 Case 2
                     .Image = My.Resources.upgradeBulletBag2
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
                 Case 3
                     .Image = My.Resources.upgradeBulletBag3
-                    .Visible = True
+                    If Not .Visible Then .Visible = True
                 Case Else
-                    .Visible = False
+                    If .Visible Then .Visible = False
             End Select
         End With
     End Sub
-    Private Sub checkQuestItems()
-        pbxMedalForest.Visible = cb7700.Checked
-        pbxMedalFire.Visible = cb7701.Checked
-        pbxMedalWater.Visible = cb7702.Checked
-        pbxMedalSpirit.Visible = cb7703.Checked
-        pbxMedalShadow.Visible = cb7704.Checked
-        pbxMedalLight.Visible = cb7705.Checked
-        pbxMinuetOfForest.Visible = cb7706.Checked
-        pbxBoleroOfFire.Visible = cb7707.Checked
-        pbxSerenadeOfWater.Visible = cb7708.Checked
-        pbxRequiemOfSpirit.Visible = cb7709.Checked
-        pbxNocturneOfShadow.Visible = cb7710.Checked
-        pbxPreludeOfLight.Visible = cb7711.Checked
-        pbxZeldasLullaby.Visible = cb7712.Checked
-        pbxEponasSong.Visible = cb7713.Checked
-        pbxSaraisSong.Visible = cb7714.Checked
-        pbxSunsSong.Visible = cb7715.Checked
-        pbxSongOfTime.Visible = cb7716.Checked
-        pbxSongOfStorms.Visible = cb7717.Checked
-        pbxStoneKokiri.Visible = cb7718.Checked
-        pbxStoneGoron.Visible = cb7719.Checked
-        pbxStoneZora.Visible = cb7720.Checked
-        pbxStoneOfAgony.Visible = cb7721.Checked
-        pbxGerudosCard.Visible = cb7722.Checked
+    Private Sub updateQuestItems()
+        Dim aChecks(22) As Boolean
+
+        For i = 0 To 22
+            For Each key In aKeys
+                With key
+                    If .loc = "77" & IIf(i > 9, "", "0").ToString & i.ToString Then aChecks(i) = .checked
+                End With
+            Next
+        Next
+
+        For i As Byte = 0 To 22
+            With aoQuestItems(i)
+                If aChecks(i) Then
+                    .Image = aoQuestItemImages(i)
+                Else
+                    .Image = aoQuestItemImagesEmpty(i)
+                End If
+            End With
+
+            ' Store for use when drawing text over each quest reward
+            aQuestRewardsCollected(i) = aChecks(i)
+
+            ' Update the added dungeon text on each medallion and stone
+            Select Case i
+                Case 0 To 5, 18 To 20
+                    changeDungeonRewardText(i, , True)
+            End Select
+        Next
     End Sub
 
     Private Sub attachToBizHawk()
@@ -6740,7 +7294,6 @@ Public Class frmTrackerOfTime
         SetProcessName("emuhawk")
         emulator = "emuhawk"
     End Sub
-
     Private Sub attachToRMG()
         ' This should already be empty in order to reach this point, but never hurts to make sure
         emulator = String.Empty
@@ -6802,7 +7355,6 @@ Public Class frmTrackerOfTime
         ' Set it + 0x8000000 as starting address, done as 4's since 8 invokes negative value
         romAddrStart64 = CLng("&H" & hexR15) + &H40000000 + &H40000000
     End Sub
-
     Private Sub attachToM64P()
         ' This should already be empty in order to reach this point, but never hurts to make sure
         emulator = String.Empty
@@ -6864,13 +7416,87 @@ Public Class frmTrackerOfTime
         ' Set it + 0x8000000 as starting address, done as 4's since 8 invokes negative value
         romAddrStart64 = CLng("&H" & hexR15) + &H40000000 + &H40000000
     End Sub
+    Private Sub attachToRetroArch()
+        ' This should already be empty in order to reach this point, but never hurts to make sure
+        emulator = String.Empty
+        ' If not 64bit, do not even bother
+        If IS_64BIT = False Then Exit Sub
+        ' Prepare new target process
+        Dim target As Process = Nothing
+
+        Try
+            ' Try to attach to application
+            target = Process.GetProcessesByName("retroarch")(0)
+        Catch ex As Exception
+            If ex.Message = "Index was outside the bounds of the array." Then
+                ' This is the expected error if process was not found, just return
+                Return
+            Else
+                ' Any other error, output error message to textbox
+                rtbOutput.AppendText("Attachment Problem: " & ex.Message & vbCrLf)
+                Return
+            End If
+        End Try
+
+        ' Prepare new address variable
+        Dim addressDLL As Int64 = 0
+
+        ' Step through all modules to find RetroArch's mupen64plus.dll's base address
+        For Each mo As ProcessModule In target.Modules
+            If LCase(mo.ModuleName) = "mupen64plus_next_libretro.dll" Then
+                addressDLL = mo.BaseAddress.ToInt64
+                Exit For
+            End If
+        Next
+
+        ' RetroArch will be coded for two cores, though no idea why someone would use the second. If it found the mupen64plus, go ahead with it
+        If addressDLL <> 0 Then
+            ' Add location of variable to base address
+            addressDLL = addressDLL + &H8E795E0
+
+            ' Attach to process and set it as the current emulator
+            SetProcessName("retroarch")
+            emulator = "retroarch - mupen64plus"
+
+            ' Read the first half of the address
+            Dim readR15 As Integer = ReadMemory(Of Integer)(addressDLL)
+            ' Convert to hex
+            Dim hexR15 As String = Hex(readR15)
+
+            ' Make sure length is 8 digit for any dropped 0's
+            While hexR15.Length < 8
+                hexR15 = "0" & hexR15
+            End While
+
+            ' Read the second half of the address
+            readR15 = ReadMemory(Of Integer)(addressDLL + 4)
+            ' Convert to hex and attach to first half
+            hexR15 = Hex(readR15) & hexR15
+
+            ' Set it + 0x8000000 as starting address, done as 4's since 8 invokes negative value
+            romAddrStart64 = CLng("&H" & hexR15) + &H40000000 + &H40000000
+        Else
+            ' Check for RetroArch's parallel core, again, for whatever reason but best to cover extra bases
+            For Each mo As ProcessModule In target.Modules
+                If LCase(mo.ModuleName) = "parallel_n64_libretro.dll" Then
+                    addressDLL = mo.BaseAddress.ToInt64
+                    Exit For
+                End If
+            Next
+            If addressDLL = 0 Then Exit Sub
+            romAddrStart64 = addressDLL + &H845000
+            SetProcessName("retroarch")
+            emulator = "retroarch - parallel"
+        End If
+
+    End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         'updateItems()
         'Exit Sub
 
         'attachToBizHawk()
-        If emulator = "emuhawk" Or emulator = "rmg" Or emulator = "mupen64plus-gui" Then
+        If emulator = "variousX64" Then
             'WriteMemory(Of Integer)(romAddrStart64 + &H11B4AC, &H10203)
             WriteMemory(Of Integer)(romAddrStart64 + &H11A644, &H10203)
             WriteMemory(Of Integer)(romAddrStart64 + &H11A648, &H4050608)
@@ -6909,41 +7535,31 @@ Public Class frmTrackerOfTime
         For Each pbx In pnlEquips.Controls.OfType(Of PictureBox)()
             pbx.Visible = False
         Next
-        For Each pbx In pnlSongsMedals.Controls.OfType(Of PictureBox)()
+
+        For i As Byte = 0 To 22
+            With aoQuestItems(i)
+                If Not .Visible Then .Visible = True
+                .Image = aoQuestItemImagesEmpty(i)
+            End With
+            aQuestRewardsCollected(i) = False
+            aQuestRewardsText(i) = 0
+            Select Case i
+                Case 0 To 5, 18 To 20
+                    changeDungeonRewardText(i, , True)
+            End Select
+        Next
+
+        For Each pbx In pnlDungeonItems.Controls.OfType(Of PictureBox)()
             pbx.Visible = False
         Next
+        pbxPoH.Visible = True
     End Sub
     Private Sub updateItems()
         If emulator = String.Empty Then Exit Sub
-        If zeldaCheck() = False Then Exit Sub
+        If isLoadedGame() = False Then Exit Sub
         Dim items As String = String.Empty
         Dim temp As String = String.Empty
         Dim cTemp As Integer = 0
-        Dim inventory(23) As PictureBox
-        inventory(0) = pbx01
-        inventory(1) = pbx02
-        inventory(2) = pbx03
-        inventory(3) = pbx04
-        inventory(4) = pbx05
-        inventory(5) = pbx06
-        inventory(6) = pbx07
-        inventory(7) = pbx08
-        inventory(8) = pbx09
-        inventory(9) = pbx10
-        inventory(10) = pbx11
-        inventory(11) = pbx12
-        inventory(12) = pbx13
-        inventory(13) = pbx14
-        inventory(14) = pbx15
-        inventory(15) = pbx16
-        inventory(16) = pbx17
-        inventory(17) = pbx18
-        inventory(18) = pbx19
-        inventory(19) = pbx20
-        inventory(20) = pbx21
-        inventory(21) = pbx22
-        inventory(22) = pbx23
-        inventory(23) = pbx24
 
         For i = &H11A644 To &H11A658 Step 4
             temp = Hex(goRead(i))
@@ -6956,7 +7572,7 @@ Public Class frmTrackerOfTime
         For i = 0 To 23 ' 1 To items.Length Step 2
             temp = Mid(items, (i * 2) + 1, 2)
             cTemp = CInt("&H" & temp)
-            With inventory(i)
+            With aoInventory(i)
                 Select Case cTemp
                     Case 0 To 55
                         If Not .Visible Then .Visible = True
@@ -7082,6 +7698,27 @@ Public Class frmTrackerOfTime
             End With
         Next
     End Sub
+    Private Sub updateDungeonItems()
+        If isLoadedGame() = False Then Exit Sub
+        getSmallKeys()
+        getDungeonItems()
+        getHearts()
+        getMagic()
+        getGoldSkulltulas()
+
+        ' This is for detecting if it is a triforce hunt, which people did not want. Oddly enough it is also the only solid check for OOTR vs AP, might use it later.
+        'With pbxTriforce
+        'If isTriforceHunt() Then
+        ' Make sure the triforce is visible
+        'If Not .Visible Then .Visible = True
+        getTriforce()
+        'Else
+        ' If not a triforce hunt, hide the triforce picturebox
+        'If .Visible Then .Visible = False
+        'End If
+        'End With
+        getPlayerName()
+    End Sub
 
     Private Sub rtbOutput_KeyDown(sender As Object, e As KeyEventArgs) Handles rtbOutput.KeyDown
         ' Do not want to disable key inputs, as we want scrolling to work, so just supress keys
@@ -7159,7 +7796,7 @@ Public Class frmTrackerOfTime
 
         For Each pnl In Me.Controls.OfType(Of Panel)()
             With pnl
-                If .Location.Y > 200 Then
+                If .Location.Y > 300 Then
                     .Refresh()
                     art = .CreateGraphics
                     art.DrawRectangle(pnFore, 0, 0, .Width - 1, .Height - 1)
@@ -7244,6 +7881,60 @@ Public Class frmTrackerOfTime
     Private Sub pbxPreludeOfLight_Click(sender As Object, e As EventArgs) Handles pbxPreludeOfLight.Click
         outputSong("Prelude of Light", "URURLU")
     End Sub
+    Private Sub pbxStoneKokiri_MouseClick(sender As Object, e As MouseEventArgs) Handles pbxStoneKokiri.MouseClick
+        changeDungeonRewardText(18, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxStoneKokiri_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles pbxStoneKokiri.MouseDoubleClick
+        changeDungeonRewardText(18, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxStoneGoron_MouseClick(sender As Object, e As MouseEventArgs) Handles pbxStoneGoron.MouseClick
+        changeDungeonRewardText(19, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxStoneGoron_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles pbxStoneGoron.MouseDoubleClick
+        changeDungeonRewardText(19, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxStoneZora_MouseClick(sender As Object, e As MouseEventArgs) Handles pbxStoneZora.MouseClick
+        changeDungeonRewardText(20, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxStoneZora_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles pbxStoneZora.MouseDoubleClick
+        changeDungeonRewardText(20, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxMedalForest_MouseClick(sender As Object, e As MouseEventArgs) Handles pbxMedalForest.MouseClick
+        changeDungeonRewardText(0, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxMedalForest_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles pbxMedalForest.MouseDoubleClick
+        changeDungeonRewardText(0, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxMedalFire_MouseClick(sender As Object, e As MouseEventArgs) Handles pbxMedalFire.MouseClick
+        changeDungeonRewardText(1, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxMedalFire_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles pbxMedalFire.MouseDoubleClick
+        changeDungeonRewardText(1, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxMedalWater_MouseClick(sender As Object, e As MouseEventArgs) Handles pbxMedalWater.MouseClick
+        changeDungeonRewardText(2, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxMedalWater_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles pbxMedalWater.MouseDoubleClick
+        changeDungeonRewardText(2, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxMedalSpirit_MouseClick(sender As Object, e As MouseEventArgs) Handles pbxMedalSpirit.MouseClick
+        changeDungeonRewardText(3, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxMedalSpirit_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles pbxMedalSpirit.MouseDoubleClick
+        changeDungeonRewardText(3, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxMedalShadow_MouseClick(sender As Object, e As MouseEventArgs) Handles pbxMedalShadow.MouseClick
+        changeDungeonRewardText(4, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxMedalShadow_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles pbxMedalShadow.MouseDoubleClick
+        changeDungeonRewardText(4, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxMedalLight_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles pbxMedalLight.MouseDoubleClick
+        changeDungeonRewardText(5, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub pbxMedalLight_MouseClick(sender As Object, e As MouseEventArgs) Handles pbxMedalLight.MouseClick
+        changeDungeonRewardText(5, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
 
     Private Sub frmTrackerOfTime_MouseClick(sender As Object, e As MouseEventArgs) Handles Me.MouseClick
         btnFocus.Focus()
@@ -7251,7 +7942,7 @@ Public Class frmTrackerOfTime
     Private Sub frmTrackerOfTime_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
         drawGraphics()
     End Sub
-    
+
     Private Sub lcxShowSkulltulas_Click(sender As Object, e As EventArgs) Handles lcxShowSkulltulas.Click
         ' Flip the Gold Skulltulas setting, save settings, then update labels and graphics
         My.Settings.setSkulltula = Not My.Settings.setSkulltula
@@ -7311,7 +8002,7 @@ Public Class frmTrackerOfTime
         Dim valTheme As Byte = 0
 
         Select Case LCase(strTheme)
-            Case "light mode"
+            Case "default"
                 valTheme = 0
             Case "dark mode"
                 valTheme = 1
@@ -7333,7 +8024,7 @@ Public Class frmTrackerOfTime
     End Sub
 
     Private Sub subMenuCheck(ByVal valTheme As Byte)
-        LightModeToolStripMenuItem.Checked = False
+        DefaultToolStripMenuItem.Checked = False
         DarkModeToolStripMenuItem.Checked = False
         LavenderToolStripMenuItem.Checked = False
         MidnightToolStripMenuItem.Checked = False
@@ -7341,7 +8032,7 @@ Public Class frmTrackerOfTime
         TheHubToolStripMenuItem.Checked = False
         Select Case valTheme
             Case 0
-                LightModeToolStripMenuItem.Checked = True
+                DefaultToolStripMenuItem.Checked = True
             Case 1
                 DarkModeToolStripMenuItem.Checked = True
             Case 2
@@ -7357,7 +8048,7 @@ Public Class frmTrackerOfTime
         End Select
     End Sub
 
-    Private Sub LightModeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LightModeToolStripMenuItem.Click
+    Private Sub DefaultToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DefaultToolStripMenuItem.Click
         subMenu(sender.ToString)
     End Sub
     Private Sub DarkModeToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DarkModeToolStripMenuItem.Click
@@ -7431,6 +8122,144 @@ Public Class frmTrackerOfTime
         rtbOutput.ResetText()
         lastRoomScan = 0
         populateLocations()
+    End Sub
+
+    Private Sub changeDungeonRewardText(ByVal thisOne As Byte, Optional reverse As Boolean = False, Optional justRefresh As Boolean = False)
+        refreshQuestItemImages(thisOne)
+        With aoQuestItems(thisOne)
+
+            ' We need to reset the image to clear off any drawn letters
+            ' This checks if the reward was set to collected, if so we will use the coloured image, if not we use the greyed out image
+            If aQuestRewardsCollected(thisOne) Then
+                .Image = aoQuestItemImages(thisOne)
+            Else
+                .Image = aoQuestItemImagesEmpty(thisOne)
+            End If
+
+            ' Need to store value to an integer for a bit to work math on it that may make it go negative, which byte cannot handle
+            Dim tempValue As Integer = aQuestRewardsText(thisOne)
+
+            ' Sometimes we just need a refresh
+            If Not justRefresh Then
+                ' If reverse, then backstep one dungeon. If not, then forward step
+                If reverse Then
+                    tempValue = tempValue - 1
+                Else
+                    inc(tempValue)
+                End If
+            End If
+
+            ' Make sure the value stays between 0 and 9
+            If tempValue < 0 Then tempValue = 9
+            If tempValue > 9 Then tempValue = 0
+
+            ' And put it back when done
+            aQuestRewardsText(thisOne) = CByte(tempValue)
+
+            ' Get the new dungeon letters to draw
+            Dim outputText As String = aDungeonLetters(tempValue)
+
+            Dim xPos As Integer = 0
+            Select Case outputText.Length
+                Case 2
+                    xPos = 6
+                Case 3
+                    xPos = 3
+                Case 4
+                    xPos = -1
+            End Select
+
+            ' Font for dungeon letters
+            Dim fontDungeon = New Font("Lucida Console", 12, FontStyle.Regular, GraphicsUnit.Pixel)
+
+            ' Draw the value over the lower right of the gold skulltula picturebox, first in black to give it some definition, then in white
+            Graphics.FromImage(.Image).DrawString(outputText, fontDungeon, New SolidBrush(Color.Black), xPos - 1, 20)
+            Graphics.FromImage(.Image).DrawString(outputText, fontDungeon, New SolidBrush(Color.White), xPos, 21)
+        End With
+    End Sub
+
+    Private Sub getPlayerName()
+        ' Grab the first 4 characters
+        Dim sPlayerName1 As String = Hex(goRead(&H11A5F4))
+        ' Grab the last 4 characters
+        Dim sPlayerName2 As String = Hex(goRead(&H11A5F8))
+
+        ' Make sure to fill the 0's
+        While sPlayerName1.Length < 8
+            sPlayerName1 = "0" & sPlayerName1
+        End While
+
+        ' Make sure to fill the 0's
+        While sPlayerName2.Length < 8
+            sPlayerName2 = "0" & sPlayerName2
+        End While
+
+        ' Combine into one
+        sPlayerName1 = sPlayerName1 & sPlayerName2
+
+        ' Check with the stored player name, if it is the same, exit sub and do not redraw it
+        If playerName = sPlayerName1 Then Exit Sub
+        playerName = sPlayerName1
+
+        ' Will re-use second half of name varaible
+        sPlayerName2 = String.Empty
+        For i = 0 To 7
+            ' Steps through the stored hex of the player name and convert it into readable characters
+            sPlayerName2 = sPlayerName2 & decodeLetter(CByte("&H" & Mid(sPlayerName1, (i * 2) + 1, 2)))
+        Next
+
+        With pnlDungeonItems
+            ' Restore the background image and prepare the font for the player name
+            .BackgroundImage = My.Resources.backgroundDungeonItems
+            Dim fontName As Font = New Font("Lucida Console", 26, FontStyle.Bold, GraphicsUnit.Pixel)
+
+            ' Draw the value over the lower right of the gold skulltula picturebox, first in black to give it some definition, then in white
+            Graphics.FromImage(.BackgroundImage).DrawString(sPlayerName2.TrimEnd, fontName, New SolidBrush(Color.White), -3, 98)
+        End With
+
+
+    End Sub
+
+    Private Function decodeLetter(ByRef valLetter As Byte) As String
+        decodeLetter = String.Empty
+        Select Case valLetter
+            Case 0 To 9
+                ' 0 to 9, 48 to 57, so +48, but instead just turn it a string
+                decodeLetter = valLetter.ToString
+            Case 171 To 196
+                ' A-Z, normally 65 to 90, so -106
+                decodeLetter = Chr(valLetter - 106)
+            Case 197 To 222
+                ' a-z, normally 97-122, so -100
+                decodeLetter = Chr(valLetter - 100)
+            Case 223
+                decodeLetter = " "
+            Case 228
+                decodeLetter = "-"
+            Case 234
+                decodeLetter = "."
+        End Select
+
+    End Function
+
+    Private Sub getRandoVer()
+        ' Checks for different rom generators
+        Dim isOOTR As Boolean = False
+        Dim isAP As Boolean = False
+
+        ' Both use the pattern of "0032####" for thieir requirement check location
+        If goRead(&H40B668 + 2, 15) = 50 Then isOOTR = True
+
+        ' If not OOTR, check for AP
+        If Not isOOTR Then
+            If goRead(&H40B1B0 + 2, 15) = 50 Then isAP = True
+        End If
+
+        randoVer = String.Empty
+        If isOOTR And Not isAP Then randoVer = "OOTR"
+        If isAP And Not isOOTR Then randoVer = "AP"
+        If isOOTR And isAP Then randoVer = "BOTH"
+        If Not isOOTR And Not isAP Then randoVer = "NONE"
     End Sub
 End Class
 

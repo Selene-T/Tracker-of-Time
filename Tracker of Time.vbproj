@@ -40,7 +40,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
@@ -229,6 +229,36 @@
     <None Include="additional\naryusLove.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="additional\upgradeWallet3.bmp" />
+    <None Include="additional\stoneOfAgonyEmpty.bmp" />
+    <None Include="additional\gerudosCardEmpty.bmp" />
+    <None Include="additional\stoneZoraEmpty.bmp" />
+    <None Include="additional\stoneKokiriEmpty.bmp" />
+    <None Include="additional\stoneGoronEmpty.bmp" />
+    <None Include="additional\medalWaterEmpty.bmp" />
+    <None Include="additional\medalSpiritEmpty.bmp" />
+    <None Include="additional\medalShadowEmpty.bmp" />
+    <None Include="additional\medalLightEmpty.bmp" />
+    <None Include="additional\medalForestEmpty.bmp" />
+    <None Include="additional\medalFireEmpty.bmp" />
+    <None Include="additional\songEmptyWarp.bmp" />
+    <None Include="additional\songEmptyNormal.bmp" />
+    <None Include="additional\goldSkulltula.bmp" />
+    <None Include="additional\triforce.bmp" />
+    <None Include="additional\magicBar0.bmp" />
+    <None Include="additional\magicBar2.bmp" />
+    <None Include="additional\magicBar1.bmp" />
+    <None Include="additional\poh4.bmp" />
+    <None Include="additional\poh3.bmp" />
+    <None Include="additional\poh2.bmp" />
+    <None Include="additional\poh1.bmp" />
+    <None Include="additional\poh0.bmp" />
+    <None Include="additional\heartContainer.bmp" />
+    <None Include="additional\enhancedDefense.bmp" />
+    <None Include="additional\dungeonSmallKey.bmp" />
+    <None Include="additional\dungeonMap.bmp" />
+    <None Include="additional\dungeonCompass.bmp" />
+    <None Include="additional\dungeonBossKey.bmp" />
     <None Include="additional\nothing.bmp" />
     <None Include="additional\stoneZora.bmp" />
     <None Include="additional\stoneKokiri.bmp" />
@@ -303,6 +333,7 @@
     <None Include="additional\backgroundEquipment.bmp" />
     <None Include="additional\backgroundInventory.bmp" />
     <None Include="additional\backgroundQuestIitems.bmp" />
+    <None Include="additional\backgroundDungeonItems.bmp" />
     <Content Include="additional\bottleBigPoe.bmp" />
     <Content Include="additional\bottleBlueFire.bmp" />
     <Content Include="additional\bottleBluePotion.bmp" />
