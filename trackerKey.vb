@@ -10,21 +10,21 @@
         Public cow As Boolean
         Public scrub As Boolean
         Public shop As Boolean
-        Public dungeon As Integer
         Public forced As Boolean
+        Public logic As String
 
         Public Sub New()
             loc = String.Empty
             area = String.Empty
             name = String.Empty
             checked = False
-            scan = True
+            scan = False
             gs = False
             cow = False
             scrub = False
             shop = False
-            dungeon = 0
             forced = False
+            logic = String.Empty
         End Sub
     End Class
 End Module

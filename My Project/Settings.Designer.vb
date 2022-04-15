@@ -68,10 +68,10 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public Property setSkulltula() As Boolean
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property setSkulltula() As Byte
             Get
-                Return CType(Me("setSkulltula"),Boolean)
+                Return CType(Me("setSkulltula"),Byte)
             End Get
             Set
                 Me("setSkulltula") = value
@@ -104,13 +104,541 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public Property setShop() As Boolean
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property setShop() As Byte
             Get
-                Return CType(Me("setShop"),Boolean)
+                Return CType(Me("setShop"),Byte)
             End Get
             Set
                 Me("setShop") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setLogic() As Boolean
+            Get
+                Return CType(Me("setLogic"),Boolean)
+            End Get
+            Set
+                Me("setLogic") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setBombchus() As Boolean
+            Get
+                Return CType(Me("setBombchus"),Boolean)
+            End Get
+            Set
+                Me("setBombchus") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property setLensOfTruth() As Boolean
+            Get
+                Return CType(Me("setLensOfTruth"),Boolean)
+            End Get
+            Set
+                Me("setLensOfTruth") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property setStoneOfAgony() As Boolean
+            Get
+                Return CType(Me("setStoneOfAgony"),Boolean)
+            End Get
+            Set
+                Me("setStoneOfAgony") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setHoverTricks() As Boolean
+            Get
+                Return CType(Me("setHoverTricks"),Boolean)
+            End Get
+            Set
+                Me("setHoverTricks") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setFewerTunics() As Boolean
+            Get
+                Return CType(Me("setFewerTunics"),Boolean)
+            End Get
+            Set
+                Me("setFewerTunics") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setOpenKF() As Boolean
+            Get
+                Return CType(Me("setOpenKF"),Boolean)
+            End Get
+            Set
+                Me("setOpenKF") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setOpenZF() As Boolean
+            Get
+                Return CType(Me("setOpenZF"),Boolean)
+            End Get
+            Set
+                Me("setOpenZF") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property setRainbow() As Byte
+            Get
+                Return CType(Me("setRainbow"),Byte)
+            End Get
+            Set
+                Me("setRainbow") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setDekuB1Skip() As Boolean
+            Get
+                Return CType(Me("setDekuB1Skip"),Boolean)
+            End Get
+            Set
+                Me("setDekuB1Skip") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setDCStaircase() As Boolean
+            Get
+                Return CType(Me("setDCStaircase"),Boolean)
+            End Get
+            Set
+                Me("setDCStaircase") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setDCSpikeJump() As Boolean
+            Get
+                Return CType(Me("setDCSpikeJump"),Boolean)
+            End Get
+            Set
+                Me("setDCSpikeJump") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setDCSlingshotSkips() As Boolean
+            Get
+                Return CType(Me("setDCSlingshotSkips"),Boolean)
+            End Get
+            Set
+                Me("setDCSlingshotSkips") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setDCLightEyes() As Boolean
+            Get
+                Return CType(Me("setDCLightEyes"),Boolean)
+            End Get
+            Set
+                Me("setDCLightEyes") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setFoTVines() As Boolean
+            Get
+                Return CType(Me("setFoTVines"),Boolean)
+            End Get
+            Set
+                Me("setFoTVines") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setFoTFrame() As Boolean
+            Get
+                Return CType(Me("setFoTFrame"),Boolean)
+            End Get
+            Set
+                Me("setFoTFrame") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setFoTBackdoor() As Boolean
+            Get
+                Return CType(Me("setFoTBackdoor"),Boolean)
+            End Get
+            Set
+                Me("setFoTBackdoor") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setFoTMQPuzzle() As Boolean
+            Get
+                Return CType(Me("setFoTMQPuzzle"),Boolean)
+            End Get
+            Set
+                Me("setFoTMQPuzzle") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setFoTMQTwisted() As Boolean
+            Get
+                Return CType(Me("setFoTMQTwisted"),Boolean)
+            End Get
+            Set
+                Me("setFoTMQTwisted") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setFoTMQWell() As Boolean
+            Get
+                Return CType(Me("setFoTMQWell"),Boolean)
+            End Get
+            Set
+                Me("setFoTMQWell") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setFoTLedge() As Boolean
+            Get
+                Return CType(Me("setFoTLedge"),Boolean)
+            End Get
+            Set
+                Me("setFoTLedge") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property setSmallKeys() As Byte
+            Get
+                Return CType(Me("setSmallKeys"),Byte)
+            End Get
+            Set
+                Me("setSmallKeys") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setFiTClimb() As Boolean
+            Get
+                Return CType(Me("setFiTClimb"),Boolean)
+            End Get
+            Set
+                Me("setFiTClimb") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setFiTMaze() As Boolean
+            Get
+                Return CType(Me("setFiTMaze"),Boolean)
+            End Get
+            Set
+                Me("setFiTMaze") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setFiTMQClimb() As Boolean
+            Get
+                Return CType(Me("setFiTMQClimb"),Boolean)
+            End Get
+            Set
+                Me("setFiTMQClimb") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setRustedSwitches() As Boolean
+            Get
+                Return CType(Me("setRustedSwitches"),Boolean)
+            End Get
+            Set
+                Me("setRustedSwitches") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setFiTMQMazeHovers() As Boolean
+            Get
+                Return CType(Me("setFiTMQMazeHovers"),Boolean)
+            End Get
+            Set
+                Me("setFiTMQMazeHovers") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setFiTMQMazeJump() As Boolean
+            Get
+                Return CType(Me("setFiTMQMazeJump"),Boolean)
+            End Get
+            Set
+                Me("setFiTMQMazeJump") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setWaTTorch() As Boolean
+            Get
+                Return CType(Me("setWaTTorch"),Boolean)
+            End Get
+            Set
+                Me("setWaTTorch") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setWaTDragonDive() As Boolean
+            Get
+                Return CType(Me("setWaTDragonDive"),Boolean)
+            End Get
+            Set
+                Me("setWaTDragonDive") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setWaTBKR() As Boolean
+            Get
+                Return CType(Me("setWaTBKR"),Boolean)
+            End Get
+            Set
+                Me("setWaTBKR") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setWaTCrackNothing() As Boolean
+            Get
+                Return CType(Me("setWaTCrackNothing"),Boolean)
+            End Get
+            Set
+                Me("setWaTCrackNothing") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setWaTCrackHovers() As Boolean
+            Get
+                Return CType(Me("setWaTCrackHovers"),Boolean)
+            End Get
+            Set
+                Me("setWaTCrackHovers") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setSpTWall() As Boolean
+            Get
+                Return CType(Me("setSpTWall"),Boolean)
+            End Get
+            Set
+                Me("setSpTWall") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setSpTBombchu() As Boolean
+            Get
+                Return CType(Me("setSpTBombchu"),Boolean)
+            End Get
+            Set
+                Me("setSpTBombchu") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setSpTMQLowAdult() As Boolean
+            Get
+                Return CType(Me("setSpTMQLowAdult"),Boolean)
+            End Get
+            Set
+                Me("setSpTMQLowAdult") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setSpTMQSunRoom() As Boolean
+            Get
+                Return CType(Me("setSpTMQSunRoom"),Boolean)
+            End Get
+            Set
+                Me("setSpTMQSunRoom") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setShTLensless() As Boolean
+            Get
+                Return CType(Me("setShTLensless"),Boolean)
+            End Get
+            Set
+                Me("setShTLensless") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setShTUmbrella() As Boolean
+            Get
+                Return CType(Me("setShTUmbrella"),Boolean)
+            End Get
+            Set
+                Me("setShTUmbrella") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setShTMQGap() As Boolean
+            Get
+                Return CType(Me("setShTMQGap"),Boolean)
+            End Get
+            Set
+                Me("setShTMQGap") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setShTStatue() As Boolean
+            Get
+                Return CType(Me("setShTStatue"),Boolean)
+            End Get
+            Set
+                Me("setShTStatue") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setBotWLensless() As Boolean
+            Get
+                Return CType(Me("setBotWLensless"),Boolean)
+            End Get
+            Set
+                Me("setBotWLensless") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setBotWDeadHand() As Boolean
+            Get
+                Return CType(Me("setBotWDeadHand"),Boolean)
+            End Get
+            Set
+                Me("setBotWDeadHand") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setNavi() As Boolean
+            Get
+                Return CType(Me("setNavi"),Boolean)
+            End Get
+            Set
+                Me("setNavi") = value
             End Set
         End Property
     End Class

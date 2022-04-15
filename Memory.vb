@@ -15,6 +15,10 @@ Module Memory
     '   Return WriteBytes(P, memAdr, BitConverter.GetBytes(value), 2)
     'End Function
 
+    Public Function WriteInt16(ByVal P As Process, ByVal memAdr As Int32, ByVal value As Int16) As Boolean
+        Return WriteBytes(P, memAdr, BitConverter.GetBytes(value), 2)
+    End Function
+
     Public Function WriteInt32(ByVal P As Process, ByVal memAdr As Int32, ByVal value As Integer) As Boolean
         Return WriteBytes(P, memAdr, BitConverter.GetBytes(value), 4)
     End Function

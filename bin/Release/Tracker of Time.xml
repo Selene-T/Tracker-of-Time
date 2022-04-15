@@ -71,7 +71,7 @@ TrackerofTime
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
-</member><member name="P:Tracker_of_Time.My.Resources.Resources.backgroundQuestIitems">
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.backgroundQuestItems">
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
@@ -452,10 +452,6 @@ TrackerofTime
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
 </member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeBombBag1">
-	<summary>
-  Looks up a localized resource of type System.Drawing.Bitmap.
-</summary>
-</member><member name="P:Tracker_of_Time.My.Resources.Resources.upgradeBombBag11">
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>

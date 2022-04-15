@@ -203,9 +203,9 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property backgroundQuestIitems() As System.Drawing.Bitmap
+        Friend ReadOnly Property backgroundQuestItems() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("backgroundQuestIitems", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("backgroundQuestItems", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -1156,16 +1156,6 @@ Namespace My.Resources
         Friend ReadOnly Property upgradeBombBag1() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("upgradeBombBag1", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Bitmap.
-        '''</summary>
-        Friend ReadOnly Property upgradeBombBag11() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("upgradeBombBag11", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
