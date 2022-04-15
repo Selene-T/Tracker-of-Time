@@ -10673,7 +10673,7 @@ Public Class frmTrackerOfTime
         ' Set it + 0x8000000 as starting address, done as 4's since 8 invokes negative value
         romAddrStart64 = CLng("&H" & hexR15) + &H40000000 + &H40000000
     End Sub
-    Private Sub attachToM64P()
+    Private Sub attachToM64P(Optional attempt As Byte = 0)
         ' This should already be empty in order to reach this point, but never hurts to make sure
         emulator = String.Empty
         ' If not 64bit, do not even bother
@@ -10697,6 +10697,21 @@ Public Class frmTrackerOfTime
 
         ' Prepare new address variable
         Dim addressDLL As Int64 = 0
+        Dim attemptOffset As Int64 = 0
+        Dim attemptAdded As Int64 = 0
+
+
+        Select Case attempt
+            Case 0
+                ' Builds October 27, 2021 to March 31, 2022
+                attemptOffset = &H29C95D8
+                attemptAdded = 2147483648
+            Case 1
+                ' Builds July13, 2021 to October 11, 2021
+                attemptOffset = &HCA6B8
+            Case Else
+                Return
+        End Select
 
         ' Step through all modules to find mupen64plus.dll's base address
         For Each mo As ProcessModule In target.Modules
@@ -10705,35 +10720,31 @@ Public Class frmTrackerOfTime
                 Exit For
             End If
         Next
-
-        ' If 0, aka did not find mupen64plus.dll, then exit
-        If addressDLL = 0 Then Exit Sub
-
-        ' Add location of variable to base address
-        addressDLL = addressDLL + &H29C95D8
-        'addressDLL = addressDLL + &H117B53B
-
-        ' Attach to process and set it as the current emulator
-        SetProcessName("mupen64plus-gui")
-        emulator = "mupen64plus-gui"
-
-        ' Read the first half of the address
-        Dim readR15 As Integer = ReadMemory(Of Integer)(addressDLL)
-        ' Convert to hex
-        Dim hexR15 As String = Hex(readR15)
-
-        ' Make sure length is 8 digit for any dropped 0's
-        While hexR15.Length < 8
-            hexR15 = "0" & hexR15
-        End While
-
-        ' Read the second half of the address
-        readR15 = ReadMemory(Of Integer)(addressDLL + 4)
-        ' Convert to hex and attach to first half
-        hexR15 = Hex(readR15) & hexR15
-
-        ' Set it + 0x8000000 as starting address, done as 4's since 8 invokes negative value
-        romAddrStart64 = CLng("&H" & hexR15) + &H40000000 + &H40000000
+        ' Check if mupen64plus.dll was found
+        Dim nextAttempt As Boolean = True
+        If Not addressDLL = 0 Then
+            ' Add location of variable to base address
+            addressDLL = addressDLL + attemptOffset
+            'rtbOutput.AppendText(Hex(addressDLL) & vbCrLf)
+            ' Attach to process and set it as the current emulator
+            SetProcessName("mupen64plus-gui")
+            emulator = "mupen64plus-gui"
+            ' Read the first half of the address
+            Dim readR15 As Integer = ReadMemory(Of Integer)(addressDLL)
+            ' Convert to hex
+            Dim hexR15 As String = Hex(readR15)
+            If Not hexR15 = "0" Then
+                ' Make sure length is 8 digit for any dropped 0's
+                fixHex(hexR15)
+                ' Read the second half of the address
+                readR15 = ReadMemory(Of Integer)(addressDLL + 4)
+                ' Convert to hex and attach to first half
+                hexR15 = Hex(readR15) & hexR15
+                romAddrStart64 = CLng("&H" & hexR15) + attemptAdded
+                If ReadMemory(Of Integer)(romAddrStart64 + &H11A5D0) = 529 Then nextAttempt = False
+            End If
+        End If
+        If nextAttempt Then attachToM64P(CByte(attempt + 1))
     End Sub
     Private Sub attachToRetroArch()
         ' This should already be empty in order to reach this point, but never hurts to make sure
