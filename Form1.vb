@@ -9,7 +9,7 @@ Public Class frmTrackerOfTime
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS = &H1F0FFF
     Private Const CHECK_COUNT = 113
-    Private Const IS_64BIT = True
+    Private Const IS_64BIT = False
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private Const romAddrStart As Integer = &HDFE40000
@@ -33,6 +33,9 @@ Public Class frmTrackerOfTime
 
     ' RTB variables
     Private emboldenList As New List(Of String)
+    Private rtbRefresh As Byte = 0
+    Private lastArea As String = String.Empty
+    Private lastOutput As New List(Of String)
 
     ' Arrays for location scanning and their settings
     Private arrLocation(CHECK_COUNT) As Integer
@@ -79,7 +82,7 @@ Public Class frmTrackerOfTime
     Private aMQOld(11) As Boolean
 
     ' Array of Objects
-    Private aoLabels(25) As Label
+    Private aoLabels(23) As Label
     Private aoDungeonLabels(11) As Label
     Private aoSmallKeys(7) As PictureBox
     Private aoBossKeys(10) As PictureBox
@@ -183,10 +186,8 @@ Public Class frmTrackerOfTime
         aoLabels(19) = lblHauntedWasteland
         aoLabels(20) = lblDesertColossus
         aoLabels(21) = lblOutsideGanonsCastle
-        aoLabels(22) = lblQuestBigPoes
-        aoLabels(23) = lblQuestFrogs
-        aoLabels(24) = lblQuestGoldSkulltulas
-        aoLabels(25) = lblQuestMasks
+        aoLabels(22) = lblQuestGoldSkulltulas
+        aoLabels(23) = lblQuestMasks
 
         ' Link the dungeon labels for displaying progress into an array
         aoDungeonLabels(0) = lblDekuTree
@@ -412,6 +413,8 @@ Public Class frmTrackerOfTime
         rainbowBridge(1) = 64
         magicBeans = 0
         goldSkulltulas = 0
+        lastArea = String.Empty
+        lastOutput.Clear()
 
         resetDAC()
         For i = 0 To 7
@@ -1045,9 +1048,8 @@ Public Class frmTrackerOfTime
             End If
         End If
         If emulator = String.Empty Then Exit Sub
-
-
         If isLoadedGame() = False Then Exit Sub
+
         ' Get current room code
         Dim roomCode As String = String.Empty
         Dim tempVar As Integer = 0
@@ -1055,9 +1057,7 @@ Public Class frmTrackerOfTime
             stopScanning()
             Exit Sub
         End If
-        roomCode = Hex(goRead(CUR_ROOM_ADDR))
-        fixHex(roomCode)
-        Dim dontMath As Integer = Convert.ToInt16(Mid(roomCode, 1, 4), 16)
+        Dim locationCode As Integer = goRead(CUR_ROOM_ADDR + 2, 15)
         Dim doMath As Integer = 0
         If Not keepRunning Then
             stopScanning()
@@ -1079,11 +1079,11 @@ Public Class frmTrackerOfTime
                 Case 0 To 59, Is >= 100
                     ' These are the area checks, either chest, standing items, area events, as they will need to be checked as they happen
 
-                    doMath = (dontMath * 28) + 212 + &H11A5D0
+                    doMath = (locationCode * 28) + 212 + &H11A5D0
                     tempVar = &H1CA1D8
 
                     ' Royal Tomb Only
-                    If Hex(doMath) = "11ADC0" And randoVer = "OOTR" Then
+                    If locationCode = 65 And randoVer = "OOTR" Then
                         If Not cb6410.Checked Then
                             If royalSongScan = 0 Then royalSongScan = goRead(&H11A674)
                             If Not royalSongScan = goRead(&H11A674) Then
@@ -1148,6 +1148,93 @@ Public Class frmTrackerOfTime
             End If
         Next
         scanSingleChecks()
+
+        If rtbRefresh = 0 Then
+            Select Case locationCode
+                Case 0 To 9
+                    ' Dungeons from DT to IC
+                    lastArea = "DN" & locationCode.ToString
+                Case 11
+                    ' Gerudo Training Grounds
+                    lastArea = "DN10"
+                Case 13, 10
+                    ' Ganon's Castle 
+                    lastArea = "DN11"
+                Case 85, 52
+                    ' Kakori Forest
+                    lastArea = "KF"
+                Case 91
+                    ' Lost Woods
+                    lastArea = "LW"
+                Case 86
+                    ' Sacred Forest Meadow
+                    lastArea = "SFM"
+                Case 81
+                    ' Hyrule Field
+                    lastArea = "HF"
+                Case 99
+                    ' Lon Lon Ranch
+                    lastArea = "LLR"
+                Case 32, 27
+                    ' The Market
+                    lastArea = "MK"
+                Case 67, 35
+                    ' Temple of Time
+                    lastArea = "TT"
+                Case 95, 74
+                    ' Hyrule Castle
+                    lastArea = "HC"
+                Case 82
+                    ' Kakakori Village
+                    lastArea = "KV"
+                Case 83
+                    ' Graveyard
+                    lastArea = "GY"
+                Case 96
+                    ' Death Mountain Trail
+                    lastArea = "DMT"
+                Case 97
+                    ' Death Mountain Crater
+                    lastArea = "DMC"
+                Case 98
+                    ' Goron City
+                    lastArea = "GC"
+                Case 84
+                    ' Zora's River
+                    lastArea = "ZR"
+                Case 88
+                    ' Zora's Domain
+                    lastArea = "ZD"
+                Case 89
+                    ' Zora's Fountain
+                    lastArea = "ZF"
+                Case 87
+                    ' Lake Hylia
+                    lastArea = "LH"
+                Case 90
+                    ' Gerudo Valley
+                    lastArea = "GV"
+                Case 93, 12
+                    ' Gerudo Fortress
+                    lastArea = "GF"
+                Case 94
+                    ' Haunted Wasteland
+                    lastArea = "HW"
+                Case 92
+                    ' Desert Colossus
+                    lastArea = "DC"
+            End Select
+
+            If Not lastArea = String.Empty Then
+                If Mid(lastArea, 1, 2) = "DN" Then
+                    displayChecksDungeons(CByte(Mid(lastArea, 3)), False, False)
+                Else
+                    displayChecks(lastArea, False, False)
+                End If
+            End If
+        Else
+            decB(rtbRefresh)
+        End If
     End Sub
     Private Sub scanSingleChecks()
         ' LW Bean Planted
@@ -1261,12 +1348,11 @@ Public Class frmTrackerOfTime
     End Sub
 
     Private Sub updateLabels()
-        Dim aCheck(26) As Integer
-        Dim aTotal(26) As Integer
-        Dim outputLabel(26) As String
+        Dim aCheck(24) As Integer
+        Dim aTotal(24) As Integer
+        Dim outputLabel(24) As String
         Dim countCheck As Boolean = False
-        Dim aBoldLabels(26) As Boolean
-
+        Dim aBoldLabels(24) As Boolean
 
         For i = 0 To aTotal.Length - 1
             aTotal(i) = 0
@@ -1313,7 +1399,7 @@ Public Class frmTrackerOfTime
             End With
         Next
 
-        For i = 0 To 25
+        For i = 0 To 23
             If i >= 22 Then
                 ' 22, 23, 24, and 25 are Quests, add the quest title and grab the second part of the split
                 If aoLabels(i).Text.Contains(":") Then outputLabel(i) = "Quest:" & aoLabels(i).Text.Split(CChar(":"))(1) & ": "
@@ -1373,14 +1459,10 @@ Public Class frmTrackerOfTime
         lblDesertColossus.Font = CType(IIf(aBoldLabels(20), boldFont, normalFont), Drawing.Font)
         If Not lblOutsideGanonsCastle.Text = outputLabel(21) Then lblOutsideGanonsCastle.Text = outputLabel(21)
         lblOutsideGanonsCastle.Font = CType(IIf(aBoldLabels(21), boldFont, normalFont), Drawing.Font)
-        If Not lblQuestBigPoes.Text = outputLabel(22) Then lblQuestBigPoes.Text = outputLabel(22)
-        lblQuestBigPoes.Font = CType(IIf(aBoldLabels(22), boldFont, normalFont), Drawing.Font)
-        If Not lblQuestFrogs.Text = outputLabel(23) Then lblQuestFrogs.Text = outputLabel(23)
-        lblQuestFrogs.Font = CType(IIf(aBoldLabels(23), boldFont, normalFont), Drawing.Font)
-        If Not lblQuestGoldSkulltulas.Text = outputLabel(24) Then lblQuestGoldSkulltulas.Text = outputLabel(24)
-        lblQuestGoldSkulltulas.Font = CType(IIf(aBoldLabels(24), boldFont, normalFont), Drawing.Font)
-        If Not lblQuestMasks.Text = outputLabel(25) Then lblQuestMasks.Text = outputLabel(25)
-        lblQuestMasks.Font = CType(IIf(aBoldLabels(25), boldFont, normalFont), Drawing.Font)
+        If Not lblQuestGoldSkulltulas.Text = outputLabel(22) Then lblQuestGoldSkulltulas.Text = outputLabel(22)
+        lblQuestGoldSkulltulas.Font = CType(IIf(aBoldLabels(22), boldFont, normalFont), Drawing.Font)
+        If Not lblQuestMasks.Text = outputLabel(23) Then lblQuestMasks.Text = outputLabel(23)
+        lblQuestMasks.Font = CType(IIf(aBoldLabels(23), boldFont, normalFont), Drawing.Font)
     End Sub
     Private Sub updateLabelsDungeons()
         Dim aTotal(11) As Integer
@@ -1475,7 +1557,7 @@ Public Class frmTrackerOfTime
                 Return 1
             Case "SFM"
                 Return 2
-            Case "HF"
+            Case "HF", "QBPH"
                 Return 3
             Case "LLR"
                 Return 4
@@ -1495,7 +1577,7 @@ Public Class frmTrackerOfTime
                 Return 11
             Case "GC"
                 Return 12
-            Case "ZR"
+            Case "ZR", "QF"
                 Return 13
             Case "ZD"
                 Return 14
@@ -1513,16 +1595,12 @@ Public Class frmTrackerOfTime
                 Return 20
             Case "OGC"
                 Return 21
-            Case "QBPH"
-                Return 22
-            Case "QF"
-                Return 23
             Case "QGS"
-                Return 24
+                Return 22
             Case "QM"
-                Return 25
+                Return 23
             Case "INV", "EVENT", ""
-                Return 26
+                Return 24
         End Select
     End Function
     Private Function area2code(ByVal area As String) As String
@@ -2060,8 +2138,16 @@ Public Class frmTrackerOfTime
     End Sub
 
     Private Sub btnTest_Click(sender As Object, e As EventArgs) Handles btnTest.Click
-        MsgBox(goldSkulltulas.ToString)
-        'rtbAddLine("Test")
+        'Dim roomCode As String = Hex(goRead(CUR_ROOM_ADDR))
+        'fixHex(roomCode)
+        'Dim locationCode As Integer = Convert.ToInt16(Mid(roomCode, 1, 4), 16)
+        'locationCode = (locationCode * 28) + 212 + &H11A5D0
+        'MsgBox(roomCode & vbCrLf & Hex(locationCode))
+        Dim roomCode As String = Hex(goRead(CUR_ROOM_ADDR))
+        fixHex(roomCode)
+        Dim locationCode As Integer = goRead(CUR_ROOM_ADDR + 2, 15)
+        locationCode = (locationCode * 28) + 212 + &H11A5D0
+        MsgBox(roomCode & vbCrLf & Hex(locationCode))
     End Sub
 
     Private Sub changeTheme(Optional theme As Byte = 0)
@@ -2132,11 +2218,13 @@ Public Class frmTrackerOfTime
         Me.Height = rtbOutputRight.Location.Y + rtbOutputRight.Height + 46
     End Sub
 
-    Private Sub displayChecks(ByVal area As String, Optional showChecked As Boolean = False)
+    Private Sub displayChecks(ByVal area As String, ByVal showChecked As Boolean, Optional setCounter As Boolean = True)
         Dim displayName As String = String.Empty
         Dim sOut As String = String.Empty
 
-        emboldenList.Clear()
+        ' Counter set to delay refreshing the output
+        If setCounter Then rtbRefresh = 3
+
         Select Case area
             Case "KF"
                 displayName = "Kokiri Forest"
@@ -2182,10 +2270,6 @@ Public Class frmTrackerOfTime
                 displayName = "Desert Colossus"
             Case "OGC"
                 displayName = "Outside Ganon's Castle"
-            Case "QBPH"
-                displayName = "Quest: Big Poe Hunt"
-            Case "QF"
-                displayName = "Quest: Frogs"
             Case "QGS"
                 displayName = "Quest: Gold Skulltulas"
             Case "QM"
@@ -2201,15 +2285,45 @@ Public Class frmTrackerOfTime
         Dim outputLines As New List(Of String)
         scanArea(outputLines, area, showChecked)
 
-        ' Clear out the output boxes and set the display name
-        rtbOutputLeft.Text = displayName & ":"
-        rtbOutputRight.Clear()
-        'rtbOutputRight.Text = TimeOfDay.Hour & ":" & TimeOfDay.Minute
-
-        ' Output each line
-        For Each line In outputLines
-            rtbAddLine(line)
+        Dim theyLookSoGodDamnLikeTheSameList As Boolean = True
+        For i = 0 To outputLines.Count - 1
+            If i >= lastOutput.Count Then
+                theyLookSoGodDamnLikeTheSameList = False
+                Exit For
+            End If
+            If Not outputLines(i) = lastOutput(i) Then
+                theyLookSoGodDamnLikeTheSameList = False
+                Exit For
+            End If
         Next
+
+        If Not theyLookSoGodDamnLikeTheSameList Then
+            ' Clear out the output boxes and set the display name
+            emboldenList.Clear()
+            rtbOutputLeft.Text = displayName & ":"
+            Select Case area
+                Case "HF"
+                    rtbOutputRight.Text = "Big Poes:" & IIf(showChecked, " (Found)", "").ToString
+                    Do While outputLines.Count < 13
+                        outputLines.Add(String.Empty)
+                    Loop
+                    scanArea(outputLines, "QBPH", showChecked)
+                Case "ZR"
+                    rtbOutputRight.Text = "Fabulous Five Froggish Tenors:" & IIf(showChecked, " (Found)", "").ToString
+                    Do While outputLines.Count < 13
+                        outputLines.Add(String.Empty)
+                    Loop
+                    scanArea(outputLines, "QF", showChecked)
+                Case Else
+                    rtbOutputRight.Clear()
+            End Select
+
+            ' Output each line
+            For Each line In outputLines
+                rtbAddLine(line)
+            Next
+        End If
+        lastOutput = outputLines
 
         ' If logic setting is set, and the embolden list is not empty
         If My.Settings.setLogic And emboldenList.Count > 0 Then
@@ -2288,10 +2402,13 @@ Public Class frmTrackerOfTime
             End With
         Next
     End Sub
-    Private Sub displayChecksDungeons(ByVal dungeon As Byte, Optional showChecked As Boolean = False)
+    Private Sub displayChecksDungeons(ByVal dungeon As Byte, ByVal showChecked As Boolean, Optional setCounter As Boolean = True)
         Dim displayName As String = String.Empty
         Dim sOut As String = String.Empty
-        emboldenList.Clear()
+
+
+        ' Counter set to delay refreshing the output
+        If setCounter Then rtbRefresh = 3
 
         displayName = dungeonNumber2name(dungeon)
 
@@ -2305,14 +2422,29 @@ Public Class frmTrackerOfTime
         Dim outputLines As New List(Of String)
         scanDungeon(outputLines, dungeon, showChecked)
 
-        ' Clear out the output boxes and set the display name
-        rtbOutputLeft.Text = displayName & ":"
-        rtbOutputRight.Clear()
-
-        ' Output each line
-        For Each line In outputLines
-            rtbAddLine(line)
+        Dim theyLookSoGodDamnLikeTheSameList As Boolean = True
+        For i = 0 To outputLines.Count - 1
+            If i >= lastOutput.Count Then
+                theyLookSoGodDamnLikeTheSameList = False
+                Exit For
+            End If
+            If Not outputLines(i) = lastOutput(i) Then
+                theyLookSoGodDamnLikeTheSameList = False
+                Exit For
+            End If
         Next
+
+        If Not theyLookSoGodDamnLikeTheSameList Then
+            ' Clear out the output boxes and set the display name
+            rtbOutputLeft.Text = displayName & ":"
+            rtbOutputRight.Clear()
+
+            ' Output each line
+            For Each line In outputLines
+                rtbAddLine(line)
+            Next
+            lastOutput = outputLines
+        End If
 
         ' If logic setting is set, and the embolden list is not empty
         If My.Settings.setLogic And emboldenList.Count > 0 Then
@@ -10285,18 +10417,6 @@ Public Class frmTrackerOfTime
     Private Sub pnlGanonsCastle_MouseClick(sender As Object, e As MouseEventArgs) Handles pnlGanonsCastle.MouseClick
         displayChecksDungeons(11, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
     End Sub
-    Private Sub lblQuestBigPoes_MouseClick(sender As Object, e As MouseEventArgs) Handles lblQuestBigPoes.MouseClick
-        displayChecks("QBPH", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
-    End Sub
-    Private Sub pnlQuestBigPoes_MouseClick(sender As Object, e As MouseEventArgs) Handles pnlQuestBigPoes.MouseClick
-        displayChecks("QBPH", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
-    End Sub
-    Private Sub lblQuestFrogs_MouseClick(sender As Object, e As MouseEventArgs) Handles lblQuestFrogs.MouseClick
-        displayChecks("QF", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
-    End Sub
-    Private Sub pnlQuestFrogs_MouseClick(sender As Object, e As MouseEventArgs) Handles pnlQuestFrogs.MouseClick
-        displayChecks("QF", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
-    End Sub
     Private Sub lblQuestGoldSkulltulas_MouseClick(sender As Object, e As MouseEventArgs) Handles lblQuestGoldSkulltulas.MouseClick
         displayChecks("QGS", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
     End Sub
@@ -10313,6 +10433,10 @@ Public Class frmTrackerOfTime
     Private Sub dec(ByRef value As Integer, Optional ByVal amount As Byte = 1)
         ' Small sub for shorthand decrements
         value = value - amount
+    End Sub
+    Private Sub decB(ByRef value As Byte, Optional ByVal amount As Byte = 1)
+        ' Small sub for shorthand decrements
+        If value > 0 Then value = value - amount
     End Sub
     Private Sub inc(ByRef value As Integer, Optional ByVal amount As Byte = 1)
         ' Small sub for shorthand increments
@@ -11074,9 +11198,9 @@ Public Class frmTrackerOfTime
     End Sub
     Private Sub rtbOutputRight_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles rtbOutputRight.MouseDoubleClick
         Dim rtb As RichTextBox = CType(sender, RichTextBox)
-        rtbDoubleClicks(rtb, e)
+        rtbDoubleClicks(rtb, e, True)
     End Sub
-    Private Sub rtbDoubleClicks(ByVal rtb As RichTextBox, e As MouseEventArgs)
+    Private Sub rtbDoubleClicks(ByVal rtb As RichTextBox, e As MouseEventArgs, Optional right As Boolean = False)
         With rtb
             ' Get the double-clicked location
             Dim clickPos As Integer = .GetCharIndexFromPosition(e.Location)
@@ -11090,7 +11214,15 @@ Public Class frmTrackerOfTime
             readArea = Trim(readArea.Replace(":", "").Replace("MQ", "").Replace("(Found)", ""))
             ' Convert area name into the code used
             Dim areaCode As String = area2code(readArea)
-            If getKeyInfo(Trim(readLine), areaCode) Then
+            If right Then
+                Select Case areaCode
+                    Case "HF"
+                        areaCode = "QBPH"
+                    Case "ZR"
+                        areaCode = "QF"
+                End Select
+            End If
+            If flipKeyForced(Trim(readLine), areaCode) Then
                 Dim newLine As String = readLine
                 updateLabels()
                 updateLabelsDungeons()
@@ -11109,7 +11241,6 @@ Public Class frmTrackerOfTime
                     Next
                 End If
             End If
-
         End With
     End Sub
     Private Sub replaceRTB(ByVal rtb As RichTextBox, ByVal line As Integer, ByVal newText As String)
@@ -11766,7 +11897,6 @@ Public Class frmTrackerOfTime
         Next
 
     End Sub
-
     Private Sub subMenu(ByVal strTheme As String)
         Dim valTheme As Byte = 0
 
@@ -11791,7 +11921,6 @@ Public Class frmTrackerOfTime
         subMenuCheck(valTheme)
         changeTheme(valTheme)
     End Sub
-
     Private Sub subMenuCheck(ByVal valTheme As Byte)
         DefaultToolStripMenuItem.Checked = False
         DarkModeToolStripMenuItem.Checked = False
@@ -11816,7 +11945,6 @@ Public Class frmTrackerOfTime
                 rtbOutputLeft.Text = "-- Check Theme Error: " & valTheme.ToString
         End Select
     End Sub
-
     Private Sub DefaultToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DefaultToolStripMenuItem.Click
         subMenu(sender.ToString)
     End Sub
@@ -11845,7 +11973,6 @@ Public Class frmTrackerOfTime
         name = Replace(name, "Shopsanity:", "")
         name = Replace(name, "(Forced)", "")
         name = Trim(name)
-
         ' Start with an empty string
 
         If Not Mid(area, 1, 3) = "DUN" Then
@@ -11873,8 +12000,8 @@ Public Class frmTrackerOfTime
             Next
         End If
     End Function
-    Private Function getKeyInfo(ByVal name As String, ByVal area As String) As Boolean
-        getKeyInfo = False
+    Private Function flipKeyForced(ByVal name As String, ByVal area As String) As Boolean
+        flipKeyForced = False
         ' Strip any extras we added to the display name to get the original key name
         name = Replace(name, "GS:", "")
         name = Replace(name, "Cow:", "")
@@ -11889,7 +12016,7 @@ Public Class frmTrackerOfTime
                 With key
                     If .area = area Then
                         .forced = Not .forced
-                        getKeyInfo = True
+                        flipKeyForced = True
                         Exit Function
                     End If
                 End With
@@ -11901,7 +12028,7 @@ Public Class frmTrackerOfTime
                 With aKeysDungeons(dunNum)(i)
                     If .name = name Then
                         .forced = Not .forced
-                        getKeyInfo = True
+                        flipKeyForced = True
                         Exit Function
                     End If
                 End With

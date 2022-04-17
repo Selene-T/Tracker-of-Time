@@ -80,8 +80,6 @@ Partial Class frmTrackerOfTime
         Me.pnlZorasRiver = New System.Windows.Forms.Panel()
         Me.lblZorasRiver = New System.Windows.Forms.Label()
         Me.pnlZorasDomain = New System.Windows.Forms.Panel()
-        Me.pnlQuestBigPoes = New System.Windows.Forms.Panel()
-        Me.lblQuestBigPoes = New System.Windows.Forms.Label()
         Me.pnlForestTemple = New System.Windows.Forms.Panel()
         Me.lblForestTemple = New System.Windows.Forms.Label()
         Me.pnlTempleOfTime = New System.Windows.Forms.Panel()
@@ -93,8 +91,6 @@ Partial Class frmTrackerOfTime
         Me.pnlIceCavern = New System.Windows.Forms.Panel()
         Me.lblIceCavern = New System.Windows.Forms.Label()
         Me.pnlQuestMasks = New System.Windows.Forms.Panel()
-        Me.pnlQuestFrogs = New System.Windows.Forms.Panel()
-        Me.lblQuestFrogs = New System.Windows.Forms.Label()
         Me.pnlFireTemple = New System.Windows.Forms.Panel()
         Me.pnlGerudoTrainingGround = New System.Windows.Forms.Panel()
         Me.lblGerudoTrainingGround = New System.Windows.Forms.Label()
@@ -375,14 +371,12 @@ Partial Class frmTrackerOfTime
         Me.pnlGoronCity.SuspendLayout()
         Me.pnlZorasRiver.SuspendLayout()
         Me.pnlZorasDomain.SuspendLayout()
-        Me.pnlQuestBigPoes.SuspendLayout()
         Me.pnlForestTemple.SuspendLayout()
         Me.pnlTempleOfTime.SuspendLayout()
         Me.pnlQuestGoldSkulltulas.SuspendLayout()
         Me.pnlZorasFountain.SuspendLayout()
         Me.pnlIceCavern.SuspendLayout()
         Me.pnlQuestMasks.SuspendLayout()
-        Me.pnlQuestFrogs.SuspendLayout()
         Me.pnlFireTemple.SuspendLayout()
         Me.pnlGerudoTrainingGround.SuspendLayout()
         Me.pnlJabuJabusBelly.SuspendLayout()
@@ -880,7 +874,7 @@ Partial Class frmTrackerOfTime
         'pnlLakeHylia
         '
         Me.pnlLakeHylia.Controls.Add(Me.lblLakeHylia)
-        Me.pnlLakeHylia.Location = New System.Drawing.Point(193, 449)
+        Me.pnlLakeHylia.Location = New System.Drawing.Point(193, 473)
         Me.pnlLakeHylia.Name = "pnlLakeHylia"
         Me.pnlLakeHylia.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlLakeHylia.Size = New System.Drawing.Size(188, 25)
@@ -889,7 +883,7 @@ Partial Class frmTrackerOfTime
         'pnlGerudoValley
         '
         Me.pnlGerudoValley.Controls.Add(Me.lblGerudoValley)
-        Me.pnlGerudoValley.Location = New System.Drawing.Point(193, 473)
+        Me.pnlGerudoValley.Location = New System.Drawing.Point(193, 497)
         Me.pnlGerudoValley.Name = "pnlGerudoValley"
         Me.pnlGerudoValley.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlGerudoValley.Size = New System.Drawing.Size(188, 25)
@@ -898,7 +892,7 @@ Partial Class frmTrackerOfTime
         'pnlGerudoFortress
         '
         Me.pnlGerudoFortress.Controls.Add(Me.lblGerudoFortress)
-        Me.pnlGerudoFortress.Location = New System.Drawing.Point(193, 497)
+        Me.pnlGerudoFortress.Location = New System.Drawing.Point(193, 521)
         Me.pnlGerudoFortress.Name = "pnlGerudoFortress"
         Me.pnlGerudoFortress.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlGerudoFortress.Size = New System.Drawing.Size(188, 25)
@@ -916,7 +910,7 @@ Partial Class frmTrackerOfTime
         'pnlHauntedWasteland
         '
         Me.pnlHauntedWasteland.Controls.Add(Me.lblHauntedWasteland)
-        Me.pnlHauntedWasteland.Location = New System.Drawing.Point(193, 521)
+        Me.pnlHauntedWasteland.Location = New System.Drawing.Point(193, 545)
         Me.pnlHauntedWasteland.Name = "pnlHauntedWasteland"
         Me.pnlHauntedWasteland.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlHauntedWasteland.Size = New System.Drawing.Size(188, 25)
@@ -934,7 +928,7 @@ Partial Class frmTrackerOfTime
         'pnlDesertColossus
         '
         Me.pnlDesertColossus.Controls.Add(Me.lblDesertColossus)
-        Me.pnlDesertColossus.Location = New System.Drawing.Point(193, 545)
+        Me.pnlDesertColossus.Location = New System.Drawing.Point(193, 569)
         Me.pnlDesertColossus.Name = "pnlDesertColossus"
         Me.pnlDesertColossus.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlDesertColossus.Size = New System.Drawing.Size(188, 25)
@@ -1024,7 +1018,7 @@ Partial Class frmTrackerOfTime
         'pnlGoronCity
         '
         Me.pnlGoronCity.Controls.Add(Me.lblGoronCity)
-        Me.pnlGoronCity.Location = New System.Drawing.Point(6, 665)
+        Me.pnlGoronCity.Location = New System.Drawing.Point(193, 377)
         Me.pnlGoronCity.Name = "pnlGoronCity"
         Me.pnlGoronCity.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlGoronCity.Size = New System.Drawing.Size(188, 25)
@@ -1033,7 +1027,7 @@ Partial Class frmTrackerOfTime
         'pnlZorasRiver
         '
         Me.pnlZorasRiver.Controls.Add(Me.lblZorasRiver)
-        Me.pnlZorasRiver.Location = New System.Drawing.Point(193, 377)
+        Me.pnlZorasRiver.Location = New System.Drawing.Point(193, 401)
         Me.pnlZorasRiver.Name = "pnlZorasRiver"
         Me.pnlZorasRiver.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlZorasRiver.Size = New System.Drawing.Size(188, 25)
@@ -1051,29 +1045,11 @@ Partial Class frmTrackerOfTime
         'pnlZorasDomain
         '
         Me.pnlZorasDomain.Controls.Add(Me.lblZorasDomain)
-        Me.pnlZorasDomain.Location = New System.Drawing.Point(193, 401)
+        Me.pnlZorasDomain.Location = New System.Drawing.Point(193, 425)
         Me.pnlZorasDomain.Name = "pnlZorasDomain"
         Me.pnlZorasDomain.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlZorasDomain.Size = New System.Drawing.Size(188, 25)
         Me.pnlZorasDomain.TabIndex = 188
-        '
-        'pnlQuestBigPoes
-        '
-        Me.pnlQuestBigPoes.Controls.Add(Me.lblQuestBigPoes)
-        Me.pnlQuestBigPoes.Location = New System.Drawing.Point(193, 593)
-        Me.pnlQuestBigPoes.Name = "pnlQuestBigPoes"
-        Me.pnlQuestBigPoes.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlQuestBigPoes.Size = New System.Drawing.Size(188, 25)
-        Me.pnlQuestBigPoes.TabIndex = 199
-        '
-        'lblQuestBigPoes
-        '
-        Me.lblQuestBigPoes.AutoSize = True
-        Me.lblQuestBigPoes.Location = New System.Drawing.Point(2, 6)
-        Me.lblQuestBigPoes.Name = "lblQuestBigPoes"
-        Me.lblQuestBigPoes.Size = New System.Drawing.Size(127, 13)
-        Me.lblQuestBigPoes.TabIndex = 0
-        Me.lblQuestBigPoes.Text = "Quest: Big Poe Hunt: 0/0"
         '
         'pnlForestTemple
         '
@@ -1115,7 +1091,7 @@ Partial Class frmTrackerOfTime
         'pnlQuestGoldSkulltulas
         '
         Me.pnlQuestGoldSkulltulas.Controls.Add(Me.lblQuestGoldSkulltulas)
-        Me.pnlQuestGoldSkulltulas.Location = New System.Drawing.Point(193, 641)
+        Me.pnlQuestGoldSkulltulas.Location = New System.Drawing.Point(193, 617)
         Me.pnlQuestGoldSkulltulas.Name = "pnlQuestGoldSkulltulas"
         Me.pnlQuestGoldSkulltulas.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlQuestGoldSkulltulas.Size = New System.Drawing.Size(188, 25)
@@ -1133,7 +1109,7 @@ Partial Class frmTrackerOfTime
         'pnlZorasFountain
         '
         Me.pnlZorasFountain.Controls.Add(Me.lblZorasFountain)
-        Me.pnlZorasFountain.Location = New System.Drawing.Point(193, 425)
+        Me.pnlZorasFountain.Location = New System.Drawing.Point(193, 449)
         Me.pnlZorasFountain.Name = "pnlZorasFountain"
         Me.pnlZorasFountain.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlZorasFountain.Size = New System.Drawing.Size(188, 25)
@@ -1170,29 +1146,11 @@ Partial Class frmTrackerOfTime
         'pnlQuestMasks
         '
         Me.pnlQuestMasks.Controls.Add(Me.lblQuestMasks)
-        Me.pnlQuestMasks.Location = New System.Drawing.Point(193, 665)
+        Me.pnlQuestMasks.Location = New System.Drawing.Point(193, 641)
         Me.pnlQuestMasks.Name = "pnlQuestMasks"
         Me.pnlQuestMasks.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlQuestMasks.Size = New System.Drawing.Size(188, 25)
         Me.pnlQuestMasks.TabIndex = 210
-        '
-        'pnlQuestFrogs
-        '
-        Me.pnlQuestFrogs.Controls.Add(Me.lblQuestFrogs)
-        Me.pnlQuestFrogs.Location = New System.Drawing.Point(193, 617)
-        Me.pnlQuestFrogs.Name = "pnlQuestFrogs"
-        Me.pnlQuestFrogs.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlQuestFrogs.Size = New System.Drawing.Size(188, 25)
-        Me.pnlQuestFrogs.TabIndex = 211
-        '
-        'lblQuestFrogs
-        '
-        Me.lblQuestFrogs.AutoSize = True
-        Me.lblQuestFrogs.Location = New System.Drawing.Point(2, 6)
-        Me.lblQuestFrogs.Name = "lblQuestFrogs"
-        Me.lblQuestFrogs.Size = New System.Drawing.Size(90, 13)
-        Me.lblQuestFrogs.TabIndex = 111
-        Me.lblQuestFrogs.Text = "Quest: Frogs: 0/0"
         '
         'pnlFireTemple
         '
@@ -1246,7 +1204,7 @@ Partial Class frmTrackerOfTime
         'pnlOutsideGanonsCastle
         '
         Me.pnlOutsideGanonsCastle.Controls.Add(Me.lblOutsideGanonsCastle)
-        Me.pnlOutsideGanonsCastle.Location = New System.Drawing.Point(193, 569)
+        Me.pnlOutsideGanonsCastle.Location = New System.Drawing.Point(193, 593)
         Me.pnlOutsideGanonsCastle.Name = "pnlOutsideGanonsCastle"
         Me.pnlOutsideGanonsCastle.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlOutsideGanonsCastle.Size = New System.Drawing.Size(188, 25)
@@ -1360,7 +1318,7 @@ Partial Class frmTrackerOfTime
         '
         Me.rtbOutputLeft.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.rtbOutputLeft.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rtbOutputLeft.Location = New System.Drawing.Point(7, 690)
+        Me.rtbOutputLeft.Location = New System.Drawing.Point(7, 666)
         Me.rtbOutputLeft.MaxLength = 4096
         Me.rtbOutputLeft.Name = "rtbOutputLeft"
         Me.rtbOutputLeft.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
@@ -2110,7 +2068,7 @@ Partial Class frmTrackerOfTime
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(264, 812)
+        Me.Label1.Location = New System.Drawing.Point(264, 788)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(128, 26)
         Me.Label1.TabIndex = 233
@@ -2168,7 +2126,7 @@ Partial Class frmTrackerOfTime
         'ScanToolStripMenuItem
         '
         Me.ScanToolStripMenuItem.AutoSize = False
-        Me.ScanToolStripMenuItem.Margin = New System.Windows.Forms.Padding(106, 0, 9, 0)
+        Me.ScanToolStripMenuItem.Margin = New System.Windows.Forms.Padding(110, 0, 62, 0)
         Me.ScanToolStripMenuItem.Name = "ScanToolStripMenuItem"
         Me.ScanToolStripMenuItem.Size = New System.Drawing.Size(73, 22)
         Me.ScanToolStripMenuItem.Text = "Scan"
@@ -2177,7 +2135,7 @@ Partial Class frmTrackerOfTime
         'AutoScanToolStripMenuItem
         '
         Me.AutoScanToolStripMenuItem.AutoSize = False
-        Me.AutoScanToolStripMenuItem.Margin = New System.Windows.Forms.Padding(0, 0, 9, 0)
+        Me.AutoScanToolStripMenuItem.Margin = New System.Windows.Forms.Padding(0, 0, 62, 0)
         Me.AutoScanToolStripMenuItem.Name = "AutoScanToolStripMenuItem"
         Me.AutoScanToolStripMenuItem.Size = New System.Drawing.Size(73, 22)
         Me.AutoScanToolStripMenuItem.Text = "Auto Scan"
@@ -2186,7 +2144,7 @@ Partial Class frmTrackerOfTime
         'ResetToolStripMenuItem
         '
         Me.ResetToolStripMenuItem.AutoSize = False
-        Me.ResetToolStripMenuItem.Margin = New System.Windows.Forms.Padding(0, 0, 134, 0)
+        Me.ResetToolStripMenuItem.Margin = New System.Windows.Forms.Padding(0, 0, 36, 0)
         Me.ResetToolStripMenuItem.Name = "ResetToolStripMenuItem"
         Me.ResetToolStripMenuItem.Size = New System.Drawing.Size(73, 22)
         Me.ResetToolStripMenuItem.Text = "Reset"
@@ -2204,7 +2162,7 @@ Partial Class frmTrackerOfTime
         '
         Me.ThemesToolStripMenuItem.AutoSize = False
         Me.ThemesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DefaultToolStripMenuItem, Me.DarkModeToolStripMenuItem, Me.LavenderToolStripMenuItem, Me.MidnightToolStripMenuItem, Me.HotdogStandToolStripMenuItem, Me.TheHubToolStripMenuItem})
-        Me.ThemesToolStripMenuItem.Margin = New System.Windows.Forms.Padding(340, 0, 0, 0)
+        Me.ThemesToolStripMenuItem.Margin = New System.Windows.Forms.Padding(328, 0, 0, 0)
         Me.ThemesToolStripMenuItem.Name = "ThemesToolStripMenuItem"
         Me.ThemesToolStripMenuItem.Size = New System.Drawing.Size(73, 22)
         Me.ThemesToolStripMenuItem.Text = "Themes"
@@ -4055,11 +4013,11 @@ Partial Class frmTrackerOfTime
         '
         Me.rtbOutputRight.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.rtbOutputRight.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rtbOutputRight.Location = New System.Drawing.Point(287, 690)
+        Me.rtbOutputRight.Location = New System.Drawing.Point(285, 666)
         Me.rtbOutputRight.MaxLength = 4096
         Me.rtbOutputRight.Name = "rtbOutputRight"
         Me.rtbOutputRight.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
-        Me.rtbOutputRight.Size = New System.Drawing.Size(280, 182)
+        Me.rtbOutputRight.Size = New System.Drawing.Size(282, 182)
         Me.rtbOutputRight.TabIndex = 254
         Me.rtbOutputRight.TabStop = False
         Me.rtbOutputRight.Text = ""
@@ -4092,13 +4050,11 @@ Partial Class frmTrackerOfTime
         Me.Controls.Add(Me.pnlGerudoTrainingGround)
         Me.Controls.Add(Me.pnlKakarikoVillage)
         Me.Controls.Add(Me.pnlFireTemple)
-        Me.Controls.Add(Me.pnlQuestFrogs)
         Me.Controls.Add(Me.pnlQuestMasks)
         Me.Controls.Add(Me.pnlZorasFountain)
         Me.Controls.Add(Me.pnlDesertColossus)
         Me.Controls.Add(Me.pnlDMTrail)
         Me.Controls.Add(Me.pnlTempleOfTime)
-        Me.Controls.Add(Me.pnlQuestBigPoes)
         Me.Controls.Add(Me.pnlZorasDomain)
         Me.Controls.Add(Me.pnlZorasRiver)
         Me.Controls.Add(Me.pnlGerudoValley)
@@ -4164,8 +4120,6 @@ Partial Class frmTrackerOfTime
         Me.pnlZorasRiver.PerformLayout()
         Me.pnlZorasDomain.ResumeLayout(False)
         Me.pnlZorasDomain.PerformLayout()
-        Me.pnlQuestBigPoes.ResumeLayout(False)
-        Me.pnlQuestBigPoes.PerformLayout()
         Me.pnlForestTemple.ResumeLayout(False)
         Me.pnlForestTemple.PerformLayout()
         Me.pnlTempleOfTime.ResumeLayout(False)
@@ -4178,8 +4132,6 @@ Partial Class frmTrackerOfTime
         Me.pnlIceCavern.PerformLayout()
         Me.pnlQuestMasks.ResumeLayout(False)
         Me.pnlQuestMasks.PerformLayout()
-        Me.pnlQuestFrogs.ResumeLayout(False)
-        Me.pnlQuestFrogs.PerformLayout()
         Me.pnlFireTemple.ResumeLayout(False)
         Me.pnlFireTemple.PerformLayout()
         Me.pnlGerudoTrainingGround.ResumeLayout(False)
@@ -4375,8 +4327,6 @@ Partial Class frmTrackerOfTime
     Friend WithEvents pnlZorasRiver As System.Windows.Forms.Panel
     Friend WithEvents lblZorasRiver As System.Windows.Forms.Label
     Friend WithEvents pnlZorasDomain As System.Windows.Forms.Panel
-    Friend WithEvents pnlQuestBigPoes As System.Windows.Forms.Panel
-    Friend WithEvents lblQuestBigPoes As System.Windows.Forms.Label
     Friend WithEvents pnlForestTemple As System.Windows.Forms.Panel
     Friend WithEvents lblForestTemple As System.Windows.Forms.Label
     Friend WithEvents pnlTempleOfTime As System.Windows.Forms.Panel
@@ -4388,8 +4338,6 @@ Partial Class frmTrackerOfTime
     Friend WithEvents pnlIceCavern As System.Windows.Forms.Panel
     Friend WithEvents lblIceCavern As System.Windows.Forms.Label
     Friend WithEvents pnlQuestMasks As System.Windows.Forms.Panel
-    Friend WithEvents pnlQuestFrogs As System.Windows.Forms.Panel
-    Friend WithEvents lblQuestFrogs As System.Windows.Forms.Label
     Friend WithEvents pnlFireTemple As System.Windows.Forms.Panel
     Friend WithEvents pnlGerudoTrainingGround As System.Windows.Forms.Panel
     Friend WithEvents lblGerudoTrainingGround As System.Windows.Forms.Label
