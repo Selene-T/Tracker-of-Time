@@ -32,7 +32,6 @@ Public Class frmTrackerOfTime
     Private aQIChecks(22) As Boolean
 
     ' RTB variables
-    Private doNotScroll As Boolean = False
     Private emboldenList As New List(Of String)
 
     ' Arrays for location scanning and their settings
@@ -44,7 +43,6 @@ Public Class frmTrackerOfTime
     ' Variables for from settings
     Private firstRun As Boolean = True
     Private showSetting As Boolean = False
-    Private expandedLDD As String = String.Empty
 
     ' Variable for the colour of the highlight, blended from both front and background colour
     Private cBlend As New Color
@@ -382,9 +380,6 @@ Public Class frmTrackerOfTime
         For Each Label In pnlSettings.Controls.OfType(Of Label)().Where(Function(lbl As Label) Mid(lbl.Name, 1, 3) = "ltb")
             updateLTB(Label.Name)
         Next
-        For Each Label In pnlSettings.Controls.OfType(Of Label)().Where(Function(lbl As Label) Mid(lbl.Name, 1, 3) = "ldd")
-            lddRewrite(Label.Name, Label.Text)
-        Next
     End Sub
     Private Sub updateShowSettings()
         ShowSettingsToolStripMenuItem.Text = "Settings " & IIf(showSetting, "<", ">").ToString
@@ -416,6 +411,8 @@ Public Class frmTrackerOfTime
         rainbowBridge(0) = 4
         rainbowBridge(1) = 64
         magicBeans = 0
+        goldSkulltulas = 0
+
         resetDAC()
         For i = 0 To 7
             aDungeonKeys(i) = 0
@@ -1574,7 +1571,7 @@ Public Class frmTrackerOfTime
                 Return "HW"
             Case "Desert Colossus"
                 Return "DC"
-            Case "Ooutside Ganon's Castle"
+            Case "Outside Ganon's Castle"
                 Return "OGC"
             Case "Quest Big Poe Hunt"
                 Return "QBPH"
@@ -1866,24 +1863,24 @@ Public Class frmTrackerOfTime
         End If
         If emulator = String.Empty Then Exit Sub
         getRandoVer()
-        rtbOutput.Clear()
-        rtbOutput.AppendText("Attached to " & emulator & vbCrLf & "Starting address: 0x" & Hex(CInt(IIf(IS_64BIT, romAddrStart64, romAddrStart))) & vbCrLf & "Randomizer Version: " & randoVer & vbCrLf & vbCrLf)
+        rtbOutputLeft.Clear()
+        rtbOutputLeft.AppendText("Attached to " & emulator & vbCrLf & "Starting address: 0x" & Hex(CInt(IIf(IS_64BIT, romAddrStart64, romAddrStart))) & vbCrLf & "Randomizer Version: " & randoVer & vbCrLf & vbCrLf)
         scanEmulator(emulator)
         Dim zeldaz1 As Integer = goRead(&H11A5EC)
         Dim zeldaz2 As Integer = goRead(&H11A5F0 + 2, 15)
-        rtbOutput.AppendText("ZELDAZ check: " & Hex(zeldaz1) & Hex(zeldaz2) & vbCrLf & "Game State: " & goRead(&H11B92C, 1).ToString & vbCrLf & vbCrLf)
+        rtbOutputLeft.AppendText("ZELDAZ check: " & Hex(zeldaz1) & Hex(zeldaz2) & vbCrLf & "Game State: " & goRead(&H11B92C, 1).ToString & vbCrLf & vbCrLf)
     End Sub
     Private Sub scanEmulator(Optional emuName As String = "rmg")
         Dim target As Process = Nothing
         Try
             target = Process.GetProcessesByName(emuName)(0)
-            rtbOutput.AppendText(target.ProcessName & vbCrLf)
+            rtbOutputLeft.AppendText(target.ProcessName & vbCrLf)
         Catch ex As Exception
             If ex.Message = "Index was outside the bounds of the array." Then
-                rtbOutput.AppendText(emuName & " not found!" & vbCrLf)
+                rtbOutputLeft.AppendText(emuName & " not found!" & vbCrLf)
                 'MessageBox.Show("BizHawk not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Else
-                rtbOutput.AppendText("Problem: " & ex.Message & vbCrLf)
+                rtbOutputLeft.AppendText("Problem: " & ex.Message & vbCrLf)
             End If
             Return
         End Try
@@ -1893,9 +1890,9 @@ Public Class frmTrackerOfTime
             'addressDLL = mo.BaseAddress.ToInt64
             'Exit For
             'End If
-            rtbOutput.AppendText(mo.ModuleName & ":" & Hex(mo.BaseAddress.ToInt64) & vbCrLf)
+            rtbOutputLeft.AppendText(mo.ModuleName & ":" & Hex(mo.BaseAddress.ToInt64) & vbCrLf)
         Next
-        rtbOutput.AppendText(vbCrLf)
+        rtbOutputLeft.AppendText(vbCrLf)
     End Sub
     Private Sub checkMQs()
         If Not isLoadedGame() Then Exit Sub
@@ -2063,33 +2060,8 @@ Public Class frmTrackerOfTime
     End Sub
 
     Private Sub btnTest_Click(sender As Object, e As EventArgs) Handles btnTest.Click
-        For i = 0 To arrDAC(5).Length - 1
-            rtbOutput.AppendText("Water " & i.ToString & ": " & arrDAC(5)(i).ToString & vbCrLf)
-        Next
-        Exit Sub
-        For i = 0 To aDungeonKeys.Length - 1
-            rtbOutput.AppendText(i.ToString & ": " & aDungeonKeys(i).ToString & vbCrLf)
-
-
-        Next
-        Exit Sub
-
-        For Each key In aKeysDungeons(4)
-            With key
-                If .area = "EVENT" Then rtbOutput.AppendText(.loc & ": " & .checked.ToString & vbCrLf)
-            End With
-        Next
-        Exit Sub
-        For Each key In aKeys
-            With key
-                If .loc = "7721" Then rtbOutput.AppendText(aKeys(293).name.ToString & vbCrLf)
-            End With
-        Next
-        Exit Sub
-        For Each key In aKeysDungeons(2)
-            rtbOutput.AppendText(key.loc & ": " & key.name & " = " & key.checked & vbCrLf)
-        Next
-        Exit Sub
+        MsgBox(goldSkulltulas.ToString)
+        'rtbAddLine("Test")
     End Sub
 
     Private Sub changeTheme(Optional theme As Byte = 0)
@@ -2128,8 +2100,10 @@ Public Class frmTrackerOfTime
         Dim cbB1 As Integer = CInt((CInt(Me.BackColor.B) + CInt(Me.ForeColor.B)) / 2)
         cBlend = Color.FromArgb(cbR1, cbG1, cbB1)
 
-        rtbOutput.BackColor = cBack
-        rtbOutput.ForeColor = cFore
+        rtbOutputLeft.BackColor = cBack
+        rtbOutputLeft.ForeColor = cFore
+        rtbOutputRight.BackColor = cBack
+        rtbOutputRight.ForeColor = cFore
 
         mnuOptions.BackColor = cBack
         mnuOptions.ForeColor = cFore
@@ -2155,16 +2129,14 @@ Public Class frmTrackerOfTime
         Else
             Me.Width = pnlDekuTree.Location.X + pnlDekuTree.Width + 22
         End If
-        Me.Height = rtbOutput.Location.Y + rtbOutput.Height + 46
-        'btnTest.Visible = False
-        'Me.Invalidate()
-        'pnlSettings.Refresh()
+        Me.Height = rtbOutputRight.Location.Y + rtbOutputRight.Height + 46
     End Sub
 
     Private Sub displayChecks(ByVal area As String, Optional showChecked As Boolean = False)
         Dim displayName As String = String.Empty
         Dim sOut As String = String.Empty
 
+        emboldenList.Clear()
         Select Case area
             Case "KF"
                 displayName = "Kokiri Forest"
@@ -2225,38 +2197,34 @@ Public Class frmTrackerOfTime
         ' If right-clicked to show checked, not that it is found checks
         If showChecked Then displayName = displayName & " (Found)"
 
-        ' Scan the area code for missed or found checks
-        sOut = scanArea(area, showChecked)
+        ' Create a list and fill it with checks
+        Dim outputLines As New List(Of String)
+        scanArea(outputLines, area, showChecked)
 
-        ' If the string is empty, nothing was found, note if no checks or complete checks
-        If sOut = String.Empty Then sOut = "  " & IIf(showChecked, "None", "Complete!").ToString & vbCrLf
+        ' Clear out the output boxes and set the display name
+        rtbOutputLeft.Text = displayName & ":"
+        rtbOutputRight.Clear()
+        'rtbOutputRight.Text = TimeOfDay.Hour & ":" & TimeOfDay.Minute
 
-        ' If there is previous text in the output box, add a couple new lines for spacing
-        If rtbOutput.TextLength > 0 Then displayName = vbCrLf & vbCrLf & displayName
-
-        ' Display the output, cropping off the last new line code
-        rtbOutput.AppendText(displayName & ":" & vbCrLf & sOut.Substring(0, sOut.Length - 2))
+        ' Output each line
+        For Each line In outputLines
+            rtbAddLine(line)
+        Next
 
         ' If logic setting is set, and the embolden list is not empty
         If My.Settings.setLogic And emboldenList.Count > 0 Then
             ' Run each line through the emboldening process
             For Each line In emboldenList
-                embolden(rtbOutput, line)
+                embolden(line)
             Next
-            ' Clear list afterwards
-            emboldenList.Clear()
         End If
     End Sub
-    Private Function scanArea(ByVal area As String, ByVal showChecked As Boolean) As String
-        scanArea = String.Empty
+    Private Sub scanArea(ByRef lines As List(Of String), ByVal area As String, ByVal showChecked As Boolean)
         ' Prefix for adding indent and things like GS (Gold Skulltula) for other options, suffix for if it is forced
         Dim prefix As String = String.Empty
         Dim suffix As String = String.Empty
         ' Confirmation to add the check to the output list or not
         Dim addCheck As Boolean = False
-        ' For floating the check to the top of the list
-        Dim doFloat As Boolean = False
-        Dim floatChecks As String = String.Empty
 
         For i = 0 To aKeys.Length - 1
             With aKeys(i)
@@ -2271,7 +2239,7 @@ Public Class frmTrackerOfTime
                         Case .cow
                             prefix = "  Cow: "
                         Case .scrub
-                            prefix = "  Deku Scrub: "
+                            prefix = "  Scrub: "
                         Case .shop
                             prefix = "  Shopsanity: "
                     End Select
@@ -2280,7 +2248,6 @@ Public Class frmTrackerOfTime
                     If .scan = True Then
                         If .checked = showChecked Or (showChecked And .forced) Then
                             addCheck = False
-                            doFloat = False
                             If .gs Then
                                 Select Case My.Settings.setSkulltula
                                     Case 0
@@ -2306,8 +2273,6 @@ Public Class frmTrackerOfTime
                             suffix = ""
                             If .forced Then suffix = " (Forced)"
 
-
-
                             ' Do not bolden the checked list. This will still bolden the forced items in the check list
                             If Not .checked Then
                                 ' If logic is on, bold the ones that are accessable
@@ -2316,25 +2281,17 @@ Public Class frmTrackerOfTime
                                 End If
                             End If
 
-                            ' Output the check and note if it is forced
-                            'If addCheck Then scanArea = scanArea & prefix & .name & IIf(.forced, " (Forced)", "").ToString & vbCrLf
-                            If addCheck Then
-                                If doFloat Then
-                                    floatChecks = floatChecks & prefix & .name & suffix & Chr(32) & vbCrLf
-                                Else
-                                    scanArea = scanArea & prefix & .name & suffix & Chr(32) & vbCrLf
-                                End If
-                            End If
+                            If addCheck Then lines.Add(prefix & .name & suffix & Chr(32))
                         End If
                     End If
                 End If
             End With
         Next
-        scanArea = floatChecks & scanArea
-    End Function
+    End Sub
     Private Sub displayChecksDungeons(ByVal dungeon As Byte, Optional showChecked As Boolean = False)
         Dim displayName As String = String.Empty
         Dim sOut As String = String.Empty
+        emboldenList.Clear()
 
         displayName = dungeonNumber2name(dungeon)
 
@@ -2344,39 +2301,33 @@ Public Class frmTrackerOfTime
         ' If right-clicked to show checked, not that it is found checks
         If showChecked Then displayName = displayName & " (Found)"
 
-        ' Scan the dungeon for missed or found checks
-        sOut = scanDungeon(dungeon, showChecked)
+        ' Create a list and fill it with checks
+        Dim outputLines As New List(Of String)
+        scanDungeon(outputLines, dungeon, showChecked)
 
-        ' If the string is empty, nothing was found, note if no checks or complete checks
-        If sOut = String.Empty Then sOut = "  " & IIf(showChecked, "None", "Complete!").ToString & vbCrLf
+        ' Clear out the output boxes and set the display name
+        rtbOutputLeft.Text = displayName & ":"
+        rtbOutputRight.Clear()
 
-        ' If there is previous text in the output box, add a couple new lines for spacing
-        If rtbOutput.TextLength > 0 Then displayName = vbCrLf & vbCrLf & displayName
-
-        ' Display the output, cropping off the last new line code
-        rtbOutput.AppendText(displayName & ":" & vbCrLf & sOut.Substring(0, sOut.Length - 2))
+        ' Output each line
+        For Each line In outputLines
+            rtbAddLine(line)
+        Next
 
         ' If logic setting is set, and the embolden list is not empty
         If My.Settings.setLogic And emboldenList.Count > 0 Then
             ' Run each line through the emboldening process
             For Each line In emboldenList
-                embolden(rtbOutput, line)
+                embolden(line)
             Next
-            ' Clear list afterwards
-            emboldenList.Clear()
         End If
-
     End Sub
-    Private Function scanDungeon(ByVal dungeon As Byte, ByVal showChecked As Boolean) As String
-        scanDungeon = String.Empty
+    Private Sub scanDungeon(ByRef lines As List(Of String), ByVal dungeon As Byte, ByVal showChecked As Boolean)
         ' Prefix for adding indent and things like GS (Gold Skulltula) for other options, suffix for if it is forced
         Dim prefix As String = String.Empty
         Dim suffix As String = String.Empty
         ' Confirmation to add the check to the output list or not
         Dim addCheck As Boolean = False
-        ' For floating the check to the top of the list
-        Dim doFloat As Boolean = False
-        Dim floatChecks As String = String.Empty
 
         For i = 0 To aKeysDungeons(dungeon).Length - 1
             With aKeysDungeons(dungeon)(i)
@@ -2390,7 +2341,7 @@ Public Class frmTrackerOfTime
                     Case .cow
                         prefix = "  Cow: "
                     Case .scrub
-                        prefix = "  Deku Scrub: "
+                        prefix = "  Scrub: "
                     Case .shop
                         prefix = "  Shopsanity: "
                 End Select
@@ -2399,7 +2350,6 @@ Public Class frmTrackerOfTime
                 If .scan = True Then
                     If .checked = showChecked Or (showChecked And .forced) Then
                         addCheck = False
-                        doFloat = False
                         If .gs Then
                             Select Case My.Settings.setSkulltula
                                 Case 0
@@ -2434,20 +2384,12 @@ Public Class frmTrackerOfTime
                         End If
 
                         ' Output the check and note if it is forced
-                        'If addCheck Then scanDungeon = scanDungeon & prefix & .name & IIf(.forced, " (Forced)", "").ToString & vbCrLf
-                        If addCheck Then
-                            If doFloat Then
-                                floatChecks = floatChecks & prefix & .name & suffix & Chr(32) & vbCrLf
-                            Else
-                                scanDungeon = scanDungeon & prefix & .name & suffix & Chr(32) & vbCrLf
-                            End If
-                        End If
+                        If addCheck Then lines.Add(prefix & .name & suffix & Chr(32))
                     End If
                 End If
             End With
         Next
-        scanDungeon = floatChecks & scanDungeon
-    End Function
+    End Sub
 
     Private Sub setupKeys()
         ' tK is short for thisKey
@@ -2745,6 +2687,11 @@ Public Class frmTrackerOfTime
             Next
         Next
     End Sub
+    Private Sub fullDAC(ByVal dungeon As Byte)
+        For i = 0 To arrDAC(dungeon).Length - 1
+            arrDAC(dungeon)(i) = True
+        Next
+    End Sub
     Private Sub updateDACs()
         dacDekuTree()
         dacDodongosCavern()
@@ -2959,6 +2906,7 @@ Public Class frmTrackerOfTime
     Private Sub dacForestTemple()
         ' Set up DAC for Forest Temple
         resetDAC(3)
+        Dim reach As Boolean = False
         ' Need to get to SFM as an adult with the hookshot
         If entranceCheck("SFM") And canAdult And allItems.Contains("k") Then
             ' 0: Forest Temple Lobby
@@ -2973,6 +2921,14 @@ Public Class frmTrackerOfTime
                 ' 7: Forest Temple Outside Upper Ledge
                 ' 8: Forest Temple Bow Region
                 ' 9: Forest Temple Boss Region
+
+                If Not My.Settings.setSmallKeys = 1 Then
+                    ' If not keysanity, do a check for reaching all areas
+                    If item("bow") And item("lift", 1) And (item("song of time") Or item("hover boots") Or ((item("longshot") Or (item("hookshot") And My.Settings.setFoTVines)) And (item("iron boots") Or item("dive", 2)) Or My.Settings.setFoTBackdoor)) Then
+                        fullDAC(3)
+                        Exit Sub
+                    End If
+                End If
 
                 ' 0 to 1
                 If item("song of time") Then
@@ -2995,7 +2951,6 @@ Public Class frmTrackerOfTime
                 If dungeonKeyCounter(3, "01") Then
                     arrDAC(3)(5) = True
                     ' This reach is for checking access to area 7 (Outside Upper Ledge)
-                    Dim reach As Boolean = False
                     ' 5 to 7
                     If item("hover boots") Then reach = True
                     If item("lift") Then
@@ -4242,7 +4197,7 @@ Public Class frmTrackerOfTime
                     ' G# = Test Types:  00 = Break Rock 01 = Break Rock with SoA    02 = Storms Grotto      03 = Ascending Death Mountain   04 = Crater Entrance Check  05 = Half Crater Climb  06 = Full Crater Climb
                     '                   07 = LW to ZR   08 = Can Buy Beans          09 = Fewer Goron Tunic  0A = Fewer Zora Tunic           0B = Entrance Check GV      0C = Reach Structure    0D = Can Get Bugs
                     '                   0E = Young ZD   0F = Adult ZD               10 = Young DC           11 = Adult DC                   12 = Young DC Centre        13 = Adult DC Centre    14 = DC Shortcut
-                    '                   15 = Young ZF   16 = Adult ZF               17 = Blue Fire Access
+                    '                   15 = Young ZF   16 = Adult ZF               17 = Blue Fire Access   18 = KV Entrance
                     '                   
                     '                   20 = Can Projectile Young   21 = Can Projectile Adult
                     '                   
@@ -4312,6 +4267,8 @@ Public Class frmTrackerOfTime
                             canDoThis = canEnterZF(True)
                         Case "17"
                             canDoThis = item("blue fire")
+                        Case "18"
+                            canDoThis = entranceCheck("KV")
                         Case "20"
                             canDoThis = canProjectile(0)
                         Case "21"
@@ -4544,7 +4501,7 @@ Public Class frmTrackerOfTime
         With aKeys(tK)
             .loc = "8101"
             .area = "KF"
-            .name = "Behind Know-it-All Brother's House (N) (Young)"
+            .name = "On Know-it-All Brother's House (N) (Young)"
             .gs = True
             .logic = "YJN"
         End With
@@ -5167,7 +5124,7 @@ Public Class frmTrackerOfTime
         With aKeys(tk)
             .loc = "8201"
             .area = "KV"
-            .name = "On House Near Death Mountain Trail (N) (Young)"
+            .name = "On House Near Death Mountain (N) (Young)"
             .gs = True
             .logic = "YN"
         End With
@@ -5711,19 +5668,19 @@ Public Class frmTrackerOfTime
         End With
         inc(tk)
         With aKeys(tk)
-            .loc = "8213"
+            .loc = "8215"
             .area = "ZF"
-            .name = "Southeast Corner Silver Rock Passage (N) (Adult)"
+            .name = "Southeast Corner Log (Young)"
             .gs = True
-            .logic = "G16V02G00Nk"
+            .logic = "G15"
         End With
         inc(tk)
         With aKeys(tk)
-            .loc = "8215"
+            .loc = "8213"
             .area = "ZF"
-            .name = "Southeast Corner Tree (Young)"
+            .name = "Hidden Cave (N) (Adult)"
             .gs = True
-            .logic = "G15"
+            .logic = "G16V02G00Nk"
         End With
         inc(tk)
     End Sub
@@ -6146,61 +6103,61 @@ Public Class frmTrackerOfTime
         With aKeys(tk)
             .loc = "124"
             .area = "QBPH"
-            .name = "Big Poe #1: Near Castle Gate"
+            .name = "#1: Near Castle Gate"
         End With
         inc(tk)
         With aKeys(tk)
             .loc = "123"
             .area = "QBPH"
-            .name = "Big Poe #2: Near Lon Lon Ranch"
+            .name = "#2: Near Lon Lon Ranch"
         End With
         inc(tk)
         With aKeys(tk)
             .loc = "122"
             .area = "QBPH"
-            .name = "Big Poe #3: West of Castle"
+            .name = "#3: West of Castle"
         End With
         inc(tk)
         With aKeys(tk)
             .loc = "130"
             .area = "QBPH"
-            .name = "Big Poe #4: Between Gerudo Valley and Lon Lon Ranch"
+            .name = "#4: Between Gerudo Valley and Lon Lon Ranch"
         End With
         inc(tk)
         With aKeys(tk)
             .loc = "131"
             .area = "QBPH"
-            .name = "Big Poe #5: Near Gerudo Valley"
+            .name = "#5: Near Gerudo Valley"
         End With
         inc(tk)
         With aKeys(tk)
             .loc = "128"
             .area = "QBPH"
-            .name = "Big Poe #6: Southeast Field Near Path"
+            .name = "#6: Southeast Field Near Path"
         End With
         inc(tk)
         With aKeys(tk)
             .loc = "129"
             .area = "QBPH"
-            .name = "Big Poe #7: Southeast Field Near Grotto"
+            .name = "#7: Southeast Field Near Grotto"
         End With
         inc(tk)
         With aKeys(tk)
             .loc = "127"
             .area = "QBPH"
-            .name = "Big Poe #8: Between Kokiri Forest and Lon Lon Ranch"
+            .name = "#8: Between Kokiri Forest and Lon Lon Ranch"
         End With
         inc(tk)
         With aKeys(tk)
             .loc = "126"
             .area = "QBPH"
-            .name = "Big Poe #9: Wall East of Lon Lon Ranch"
+            .name = "#9: Wall East of Lon Lon Ranch"
         End With
         inc(tk)
         With aKeys(tk)
             .loc = "125"
             .area = "QBPH"
-            .name = "Big Poe #10: Near Kakariko Village"
+            .name = "#10: Near Kakariko Village"
         End With
         inc(tk)
     End Sub
@@ -6300,6 +6257,7 @@ Public Class frmTrackerOfTime
             .loc = "C05"
             .area = "QM"
             .name = "Deliver Zelda's Letter to Unlock Mask Shoppe"
+            .logic = "G18y3"
         End With
         inc(tk)
         With aKeys(tk)
@@ -10629,7 +10587,7 @@ Public Class frmTrackerOfTime
                 Return
             Else
                 ' Any other error, output error message to textbox
-                rtbOutput.AppendText("Attachment Problem: " & ex.Message & vbCrLf)
+                rtbOutputLeft.Text = "Attachment Problem: " & ex.Message & vbCrLf
                 Return
             End If
         End Try
@@ -10690,7 +10648,7 @@ Public Class frmTrackerOfTime
                 Return
             Else
                 ' Any other error, output error message to textbox
-                rtbOutput.AppendText("Attachment Problem: " & ex.Message & vbCrLf)
+                rtbOutputLeft.Text = "Attachment Problem: " & ex.Message & vbCrLf
                 Return
             End If
         End Try
@@ -10707,7 +10665,7 @@ Public Class frmTrackerOfTime
                 attemptOffset = &H29C95D8
                 attemptAdded = 2147483648
             Case 1
-                ' Builds July13, 2021 to October 11, 2021
+                ' Builds July 13, 2021 to October 11, 2021
                 attemptOffset = &HCA6B8
             Case Else
                 Return
@@ -10763,7 +10721,7 @@ Public Class frmTrackerOfTime
                 Return
             Else
                 ' Any other error, output error message to textbox
-                rtbOutput.AppendText("Attachment Problem: " & ex.Message & vbCrLf)
+                rtbOutputLeft.Text = "Attachment Problem: " & ex.Message & vbCrLf
                 Return
             End If
         End Try
@@ -11110,72 +11068,107 @@ Public Class frmTrackerOfTime
         getPlayerName()
     End Sub
 
-    Private Sub rtbOutput_KeyDown(sender As Object, e As KeyEventArgs) Handles rtbOutput.KeyDown
-        ' Do not want to disable key inputs, as we want scrolling to work, so just supress keys
-        'e.SuppressKeyPress = True
+    Private Sub rtbOutputLeft_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles rtbOutputLeft.MouseDoubleClick
+        Dim rtb As RichTextBox = CType(sender, RichTextBox)
+        rtbDoubleClicks(rtb, e)
     End Sub
-    Private Sub rtbOutput_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles rtbOutput.MouseDoubleClick
-        ' Get the double-clicked location
-        Dim clickPos As Integer = rtbOutput.GetCharIndexFromPosition(e.Location)
-        ' Get the line that location was located on
-        Dim linePos As Integer = rtbOutput.GetLineFromCharIndex(clickPos)
-        ' Read the line into a string
-        Dim readLine As String = rtbOutput.Lines(linePos).ToString
-        ' Empty string to store the area name into
-        Dim readArea As String = String.Empty
-
-        ' Step backwards from current line to the very beginning
-        For i = linePos To 0 Step -1
-            ' Read the current line's text
-            readArea = rtbOutput.Lines(i).ToString
-            ' All lines start with 2 spaces except the area names, stop on the first one found
-            If Not Mid(readArea, 1, 2) = "  " Then Exit For
-        Next
-        ' If the found line was the same as the double-clicked line, or none was found, then exit
-        If readArea = readLine Or readArea = String.Empty Then Exit Sub
-        ' Remove any added things and trim up the area name
-        readArea = Trim(readArea.Replace(":", "").Replace("MQ", "").Replace("(Found)", ""))
-        ' Convert area name into the code used
-        Dim areaCode As String = area2code(readArea)
-        If getKeyInfo(Trim(readLine), areaCode) Then
-            Dim newLine As String = readLine
-            updateLabels()
-            updateLabelsDungeons()
-            btnFocus.Focus()
-            If newLine.Contains("(Forced)") Then
-                newLine = newLine.Replace(" (Forced)", "")
-            Else
-                newLine = newLine & " (Forced)"
+    Private Sub rtbOutputRight_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles rtbOutputRight.MouseDoubleClick
+        Dim rtb As RichTextBox = CType(sender, RichTextBox)
+        rtbDoubleClicks(rtb, e)
+    End Sub
+    Private Sub rtbDoubleClicks(ByVal rtb As RichTextBox, e As MouseEventArgs)
+        With rtb
+            ' Get the double-clicked location
+            Dim clickPos As Integer = .GetCharIndexFromPosition(e.Location)
+            ' Get the line that location was located on
+            Dim linePos As Integer = .GetLineFromCharIndex(clickPos)
+            ' Read the line into a string
+            Dim readLine As String = .Lines(linePos).ToString
+            ' Grab the first line from the left textbox, the location
+            Dim readArea As String = rtbOutputLeft.Lines(0).ToString
+            ' Clean up the location name
+            readArea = Trim(readArea.Replace(":", "").Replace("MQ", "").Replace("(Found)", ""))
+            ' Convert area name into the code used
+            Dim areaCode As String = area2code(readArea)
+            If getKeyInfo(Trim(readLine), areaCode) Then
+                Dim newLine As String = readLine
+                updateLabels()
+                updateLabelsDungeons()
+                btnFocus.Focus()
+                If newLine.Contains("(Forced)") Then
+                    newLine = newLine.Replace(" (Forced)", "")
+                Else
+                    newLine = newLine & " (Forced)"
+                End If
+                replaceRTB(rtb, linePos, newLine)
+                ' If logic setting is set, and the embolden list is not empty
+                If My.Settings.setLogic And emboldenList.Count > 0 Then
+                    ' Run each line through the emboldening process
+                    For Each line In emboldenList
+                        embolden(line)
+                    Next
+                End If
             End If
-            replaceRTB(linePos, newLine)
-        End If
-    End Sub
-    Private Sub rtbOutput_TextChanged(sender As Object, e As EventArgs) Handles rtbOutput.TextChanged
-        If rtbOutput.Lines.Count > 30 Then
-            rtbOutput.SelectionStart = 0
-            rtbOutput.SelectionLength = rtbOutput.GetFirstCharIndexFromLine(rtbOutput.Lines.Count - 30)
-            rtbOutput.SelectedText = ""
-        End If
 
-        ' Whenever text is changed, scroll down to the bottom
-        If doNotScroll Then
-            doNotScroll = False
-        Else
-            With rtbOutput
-                .SelectionStart = .TextLength
-                .ScrollToCaret()
+        End With
+    End Sub
+    Private Sub replaceRTB(ByVal rtb As RichTextBox, ByVal line As Integer, ByVal newText As String)
+        ' Replaces the targeted line with the newText
+        Dim newRTB As String = String.Empty
+        ' Step through the contents of the RichTextBox and remake its contents
+        For i = 0 To rtb.Lines.Count - 1
+            If i > 0 Then newRTB = newRTB & vbCrLf
+            If Not i = line Then
+                newRTB = newRTB & rtb.Lines(i)
+            Else
+                ' If we are at the selected line, instead replace it with newText
+                newRTB = newRTB & newText
+            End If
+        Next
+        ' Replace the text
+        rtb.Text = newRTB
+    End Sub
+    Private Sub embolden(ByVal toBold As String)
+        ' Trim up the text to bold
+        toBold = Trim(toBold.Replace(vbCrLf, ""))
+        Dim findStart As Integer = -1
+        ' Start with left side
+        Dim rtb As RichTextBox = rtbOutputLeft
+
+        For ii = 1 To 2
+            With rtb
+                ' search for the line to bold
+                For i = .Lines.Count - 1 To 0 Step -1
+                    If .Lines(i).Contains(toBold) Then
+                        findStart = i
+                        Exit For
+                    End If
+                Next
             End With
-        End If
+            If findStart = -1 Then
+                ' If not found, check for the right side next
+                rtb = rtbOutputRight
+            Else
+                ' If found, go ahead and exit the small loop
+                Exit For
+            End If
+        Next
+        ' If still not found, then exit sub
+        If findStart = -1 Then Exit Sub
 
+        ' Set up the font to be the same, select the line, and replace the font with just a bolded version
+        Dim richFont As System.Drawing.Font = rtb.Font
+        rtb.Select(rtb.GetFirstCharIndexFromLine(findStart), rtb.Lines(findStart).Length - 1)
+        rtb.SelectionFont = New Font(richFont.FontFamily, richFont.Size, FontStyle.Bold)
     End Sub
-    Private Sub embolden(ByVal richB As RichTextBox, ByVal toBold As String)
+    Private Sub emboldenOld(ByVal rtb As RichTextBox, ByVal toBold As String)
         ' Trim up the text to bold
         toBold = Trim(toBold.Replace(vbCrLf, ""))
         Dim findStart As Integer = -1
 
         ' Start at the end of the lines and check for all that should be bolded
-        For i = richB.Lines.Count - 1 To 0 Step -1
-            If richB.Lines(i).Contains(toBold) Then
+        For i = rtb.Lines.Count - 1 To 0 Step -1
+            If rtb.Lines(i).Contains(toBold) Then
                 findStart = i
                 Exit For
             End If
@@ -11185,29 +11178,15 @@ Public Class frmTrackerOfTime
         If findStart = -1 Then Exit Sub
 
         ' Set up the font to be the same, select the line, and replace the font with just a bolded version
-        Dim richFont As System.Drawing.Font = richB.Font
-        richB.Select(richB.GetFirstCharIndexFromLine(findStart), richB.Lines(findStart).Length - 1)
-        richB.SelectionFont = New Font(richFont.FontFamily, richFont.Size, FontStyle.Bold)
-    End Sub
-    Private Sub replaceRTB(ByVal line As Integer, ByVal newText As String)
-        'Dim storeStart As Integer = rtbOutput.SelectionStart
-        doNotScroll = True
-        Dim newRTB As String = String.Empty
-        For i = 0 To rtbOutput.Lines.Count - 1
-            If i > 0 Then newRTB = newRTB & vbCrLf
-            If Not i = line Then
-                newRTB = newRTB & rtbOutput.Lines(i)
-            Else
-                newRTB = newRTB & newText
-            End If
-        Next
-        rtbOutput.Text = newRTB
-        'rtbOutput.SelectionStart = storeStart
+        Dim richFont As System.Drawing.Font = rtb.Font
+        rtb.Select(rtb.GetFirstCharIndexFromLine(findStart), rtb.Lines(findStart).Length - 1)
+        rtb.SelectionFont = New Font(richFont.FontFamily, richFont.Size, FontStyle.Bold)
     End Sub
 
     Private Sub outputSong(ByVal title As String, ByVal notes As String)
-        Dim outSong As String = title & ":" & vbCrLf & "  "
-        If rtbOutput.TextLength > 0 Then outSong = vbCrLf & vbCrLf & outSong
+        rtbOutputLeft.Text = title & ":"
+
+        Dim outSong As String = "  "
         For i = 1 To notes.Length
             Select Case LCase(Mid(notes, i, 1))
                 Case "a"
@@ -11222,7 +11201,7 @@ Public Class frmTrackerOfTime
                     outSong = outSong & "▶   "
             End Select
         Next
-        rtbOutput.AppendText(outSong)
+        rtbAddLine(outSong)
     End Sub
     Private Sub pbxZeldasLullaby_Click(sender As Object, e As EventArgs) Handles pbxZeldasLullaby.Click
         outputSong("Zelda's Lullaby", "LURLUR")
@@ -11321,7 +11300,7 @@ Public Class frmTrackerOfTime
     Private Sub frmTrackerOfTime_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
         Dim pnFore As Pen = New Pen(Me.ForeColor, 1)
         If showSetting Then e.Graphics.DrawLine(pnFore, pnlDekuTree.Location.X + pnlDekuTree.Width + 6, 0, pnlDekuTree.Location.X + pnlDekuTree.Width + 6, Me.Height)
-        With rtbOutput
+        With rtbOutputLeft
             e.Graphics.DrawRectangle(pnFore, .Location.X - 1, .Location.Y - 1, .Width + 1, .Height + 1)
         End With
         updateSettingsPanel()
@@ -11439,7 +11418,7 @@ Public Class frmTrackerOfTime
                 'Case lcxxx.Text
                 'My.Settings.setxx = Not My.Settings.setxx
             Case Else
-                rtbOutput.AppendText(vbCrLf & "Unhandled LCX: " & text)
+                rtbOutputLeft.Text = "Unhandled LCX: " & text
         End Select
 
         ' Save settings and update labels and graphics
@@ -11551,8 +11530,8 @@ Public Class frmTrackerOfTime
         End Select
 
         If Not message = String.Empty Then
-            If rtbOutput.TextLength > 0 Then rtbOutput.AppendText(vbCrLf & vbCrLf)
-            rtbOutput.AppendText(text.Replace(":", "") & ":" & vbCrLf & message)
+            rtbOutputLeft.Text = text.Replace(":", "") & ":"
+            rtbAddLine("  " & message, True)
         End If
     End Sub
     Private Sub changeScrubs()
@@ -11805,7 +11784,7 @@ Public Class frmTrackerOfTime
             Case "the hub"
                 valTheme = 5
             Case Else
-                rtbOutput.AppendText("-- Theme Error: " & strTheme & vbCrLf)
+                rtbOutputLeft.Text = "-- Theme Error: " & strTheme
                 Exit Sub
         End Select
 
@@ -11834,7 +11813,7 @@ Public Class frmTrackerOfTime
             Case 5
                 TheHubToolStripMenuItem.Checked = True
             Case Else
-                rtbOutput.AppendText("-- Check Theme Error: " & valTheme.ToString & vbCrLf)
+                rtbOutputLeft.Text = "-- Check Theme Error: " & valTheme.ToString
         End Select
     End Sub
 
@@ -11943,7 +11922,8 @@ Public Class frmTrackerOfTime
         For Each chk In pnlHidden.Controls.OfType(Of CheckBox)()
             chk.Checked = False
         Next
-        rtbOutput.ResetText()
+        rtbOutputLeft.Clear()
+        rtbOutputRight.Clear()
         lastRoomScan = 0
         populateLocations()
     End Sub
@@ -12102,97 +12082,17 @@ Public Class frmTrackerOfTime
         rainbowBridge(1) = CByte(goRead(startAddress + 18, 1))
     End Sub
 
-    Private Sub lblHideScroll_Paint(sender As Object, e As PaintEventArgs) Handles lblHideScroll.Paint
-        e.Graphics.DrawLine(New Pen(Me.ForeColor, 1), 0, 0, 0, lblHideScroll.Height - 1)
-    End Sub
-    Private Sub pnlSettings_MouseMove(sender As Object, e As MouseEventArgs) Handles pnlSettings.MouseMove
-        ' Ignore this sub if no ldd is currently expanded
-        If expandedLDD = String.Empty Then Exit Sub
-        For Each Label In pnlSettings.Controls.OfType(Of Label)().Where(Function(lbl As Label) lbl.Name = expandedLDD)
-            collapseLDD(Label)
-            rtbOutput.AppendText(Label.Name & vbCrLf)
-        Next
-
-    End Sub
     Private Sub pnlSettings_Paint(sender As Object, e As PaintEventArgs) Handles pnlSettings.Paint
         updateSettingsPanel()
     End Sub
-    Private Sub handleLDDMouseEnter(sender As Object, e As EventArgs)
-        Dim ldd As Label = CType(sender, Label)
-        Dim lines As Byte = CByte(ldd.Text.Split(CChar(vbCrLf)).Length)
-        ldd.Height = 18 + ((lines - 1) * 13)
-        'ldd.Padding = New Padding(0)
-        With ldd.Padding
-            ldd.Padding = New Padding(.Left, .Top, .Right, .Bottom + 3)
-        End With
-        'ldd.BorderStyle = BorderStyle.FixedSingle
-        expandedLDD = ldd.Name
-    End Sub
-    Private Sub handleLDDMouseLeave(sender As Object, e As EventArgs)
-        collapseLDD(CType(sender, Label))
-    End Sub
-    Private Sub collapseLDD(ByVal ldd As Label)
-        expandedLDD = String.Empty
-        'ldd.BorderStyle = BorderStyle.None
-        ldd.Padding = New Padding(1)
-        'With ldd.Padding
-        ' ldd.Padding = New Padding(.Left, .Top, .Right, .Bottom - 2)
-        ' End With
-        ldd.Height = 15
-    End Sub
-    Private Sub handleLDDMouseClick(sender As Object, e As MouseEventArgs)
-        Dim ldd As Label = CType(sender, Label)
-        ' Converts the area clicked to the line
-        Dim lineClick As Double = Math.Ceiling((e.Y - 1) / 13 - 1)
-
-        ' If less than 1 (0 for first line, -1 for the padding above it), then exit
-        If lineClick < 1 Then Exit Sub
-        ' Sets the max line available, and ensures that the clicked spot is not above it (this can happen due to the padding)
-        Dim lineMax As Byte = CByte(ldd.Text.Split(CChar(vbCrLf)).Length - 1)
-        If lineClick > lineMax Then lineClick = lineMax
-
-        Select Case ldd.Name
-            'Case lddShopsanity.Name
-            ' Set the new setting
-            'My.Settings.setShop = CByte(lineClick - 1)
-            ' Create the first line depending on the setting
-            'lddRewrite(ldd.Name, ldd.Text)
-        End Select
-        collapseLDD(ldd)
-    End Sub
-    Private Sub lddRewrite(ByVal name As String, ByVal text As String)
-        Dim newLabelText As String = String.Empty
-        ' Split the text into an array of each line
-        Dim eachLine() As String = text.Split(CChar(vbCrLf))
-        ' Step through the lines, all but the first one
-        For i = 1 To eachLine.Length - 1
-            ' Rebuild the label text, just missing the first line
-            newLabelText = newLabelText & vbCrLf & eachLine(i).Trim
-        Next
-        ' An array for the new first line
-        Dim newFirstLine As String = String.Empty
-
-        ' Compare the name of the ldd to see what setting it is paired with
-        Select Case name
-            'Case lddShopsanity.Name
-            'Select Case My.Settings.setShop
-            ' Create the first line depending on the setting
-            'Case 0
-            'lddShopsanity.Text = "Off" & newLabelText
-            'Case Else
-            'lddShopsanity.Text = My.Settings.setShop.ToString & " Item" & IIf(My.Settings.setShop > 1, "s", "").ToString & " Per Shop" & newLabelText
-            'End Select
-        End Select
-    End Sub
-    Private Sub handleLDDPaint(sender As Object, e As PaintEventArgs)
-        Dim ldd As Label = CType(sender, Label)
-        Dim pnFore As Pen = New Pen(Me.ForeColor, 1)
-        With ldd
-            If .Name = expandedLDD Then
-                e.Graphics.DrawRectangle(pnFore, New Rectangle(1, 1, .Width - 2, 13))
-                e.Graphics.DrawRectangle(pnFore, New Rectangle(1, 14, .Width - 2, .Height - 16))
-            End If
-        End With
+    Private Sub rtbAddLine(ByVal line As String, Optional hideRight As Boolean = False)
+        rtbOutputRight.Visible = Not hideRight
+        If rtbOutputLeft.Lines.Count < 14 Then
+            'rtbOutputLeft.AppendText(IIf(rtbOutputLeft.TextLength > 0, vbCrLf, "").ToString & line)
+            rtbOutputLeft.AppendText(vbCrLf & line)
+        Else
+            rtbOutputRight.AppendText(vbCrLf & line)
+        End If
     End Sub
 End Class
 
