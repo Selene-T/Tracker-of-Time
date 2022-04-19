@@ -9,7 +9,7 @@ Public Class frmTrackerOfTime
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS = &H1F0FFF
     Private Const CHECK_COUNT = 113
-    Private Const IS_64BIT = False
+    Private Const IS_64BIT = True
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private Const romAddrStart As Integer = &HDFE40000
@@ -23,6 +23,7 @@ Public Class frmTrackerOfTime
     Private playerName As String = String.Empty
     Private randoVer As String = String.Empty
     Private rainbowBridge(1) As Byte
+    Private aGetQuantity(14) As Boolean
 
     ' Arrays for tracking checks
     Private keyCount As Integer = 325
@@ -788,22 +789,24 @@ Public Class frmTrackerOfTime
         Dim itemAmount As Byte = 0
 
         For i = 0 To 14
-            itemAmount = CByte("&H" & Mid(itemsAll, (i * 2) + 1, 2))
-            If itemAmount > 0 Then
-                With aoInventory(i)
-                    ' 23 is the starting position for single digit numbers, but will be reducing it by 5 since byte varaibles cannot be negative and triple digits needs to start at -5
-                    Dim xPos As Byte = 23
-                    ' If double digits, set starting position to 12(-5 = 7)
-                    If itemAmount > 9 Then xPos = 12
-                    ' If triple digits, set starting position to 0(-5 = -5)
-                    If itemAmount > 99 Then xPos = 0
-                    ' Font for items numbers
-                    Dim fontGS = New Font("Lucida Console", 18, FontStyle.Bold, GraphicsUnit.Pixel)
+            If aGetQuantity(i) = True Then
+                itemAmount = CByte("&H" & Mid(itemsAll, (i * 2) + 1, 2))
+                If itemAmount > 0 Then
+                    With aoInventory(i)
+                        ' 23 is the starting position for single digit numbers, but will be reducing it by 5 since byte varaibles cannot be negative and triple digits needs to start at -5
+                        Dim xPos As Byte = 23
+                        ' If double digits, set starting position to 12(-5 = 7)
+                        If itemAmount > 9 Then xPos = 12
+                        ' If triple digits, set starting position to 0(-5 = -5)
+                        If itemAmount > 99 Then xPos = 0
+                        ' Font for items numbers
+                        Dim fontGS = New Font("Lucida Console", 18, FontStyle.Bold, GraphicsUnit.Pixel)
 
-                    ' Draw the value over the lower right of the item's picturebox, first in black to give it some definition, then in white
-                    Graphics.FromImage(.Image).DrawString(itemAmount.ToString, fontGS, New SolidBrush(Color.Black), xPos - 6, 17)
-                    Graphics.FromImage(.Image).DrawString(itemAmount.ToString, fontGS, New SolidBrush(Color.White), xPos - 5, 18)
-                End With
+                        ' Draw the value over the lower right of the item's picturebox, first in black to give it some definition, then in white
+                        Graphics.FromImage(.Image).DrawString(itemAmount.ToString, fontGS, New SolidBrush(Color.Black), xPos - 6, 17)
+                        Graphics.FromImage(.Image).DrawString(itemAmount.ToString, fontGS, New SolidBrush(Color.White), xPos - 5, 18)
+                    End With
+                End If
             End If
         Next
         ' Since the last check is Magic Beans, store that value to our beans
@@ -3054,13 +3057,13 @@ Public Class frmTrackerOfTime
                 ' 8: Forest Temple Bow Region
                 ' 9: Forest Temple Boss Region
 
-                If Not My.Settings.setSmallKeys = 1 Then
-                    ' If not keysanity, do a check for reaching all areas
-                    If item("bow") And item("lift", 1) And (item("song of time") Or item("hover boots") Or ((item("longshot") Or (item("hookshot") And My.Settings.setFoTVines)) And (item("iron boots") Or item("dive", 2)) Or My.Settings.setFoTBackdoor)) Then
-                        fullDAC(3)
-                        Exit Sub
-                    End If
-                End If
+                'If Not My.Settings.setSmallKeys = 1 Then
+                ' If not keysanity, do a check for reaching all areas
+                'If item("bow") And item("lift", 1) And (item("song of time") Or item("hover boots") Or ((item("longshot") Or (item("hookshot") And My.Settings.setFoTVines)) And (item("iron boots") Or item("dive", 2)) Or My.Settings.setFoTBackdoor)) Then
+                'fullDAC(3)
+                'Exit Sub
+                'End If
+                'End If
 
                 ' 0 to 1
                 If item("song of time") Then
@@ -11166,6 +11169,14 @@ Public Class frmTrackerOfTime
                     Case Else
                         .Image = My.Resources.emptySlot
                 End Select
+                If i <= 14 Then
+                    Select Case cTemp
+                        Case 0 To 3, 6, 9, 16
+                            aGetQuantity(i) = True
+                        Case Else
+                            aGetQuantity(i) = False
+                    End Select
+                End If
             End With
         Next
         getItemAmounts()
