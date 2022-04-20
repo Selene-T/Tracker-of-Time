@@ -4887,7 +4887,7 @@ Public Class frmTrackerOfTime
             .loc = "1901"
             .area = "HF"
             .name = "Tektite Grotto Piece of Heart (Adult)"
-            .logic = "G01LL7429.GLL17610"
+            .logic = "G01LL7429.G01LL7610"
         End With
         inc(tk)
         With aKeys(tk)
