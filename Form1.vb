@@ -7,9 +7,10 @@ Public Class frmTrackerOfTime
     Public Declare Function ReadProcessMemory Lib "kernel32" Alias "ReadProcessMemory" (ByVal hProcess As Integer, ByVal lpBaseAddress As Integer, ByRef lpBuffer As Integer, ByVal nSize As Integer, ByRef lpNumberOfBytesWritten As Integer) As Integer
 
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
-    Private Const PROCESS_ALL_ACCESS = &H1F0FFF
-    Private Const CHECK_COUNT = 113
-    Private Const IS_64BIT = True
+    Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
+    Private Const CHECK_COUNT As Byte = 113
+    Private Const IS_64BIT As Boolean = False
+    Private Const VER As String = "2.2.3"
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private Const romAddrStart As Integer = &HDFE40000
@@ -100,7 +101,7 @@ Public Class frmTrackerOfTime
 
     ' On load, populate the locations array
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        Me.Text = "Tracker of Time v" & VER
         For i = 0 To aKeys.Length - 1
             aKeys(i) = New keyCheck
         Next
@@ -1043,7 +1044,7 @@ Public Class frmTrackerOfTime
                 If emulator = String.Empty Then attachToRetroArch()
             End If
             If Not emulator = String.Empty Then
-                Me.Text = "Tracker of Time (" & emulator & ")"
+                Me.Text = "Tracker of Time v" & VER & " (" & emulator & ")"
                 Select Case LCase(emulator)
                     Case "emuhawk", "rmg", "mupen64plus-gui", "retroarch - mupen64plus", "retroarch - parallel"
                         emulator = "variousX64"
@@ -1178,10 +1179,10 @@ Public Class frmTrackerOfTime
                 Case 99
                     ' Lon Lon Ranch
                     lastArea = "LLR"
-                Case 32, 27
+                Case 32, 33, 27, 28
                     ' The Market
                     lastArea = "MK"
-                Case 67, 35
+                Case 67, 35 To 37
                     ' Temple of Time
                     lastArea = "TT"
                 Case 95, 74
@@ -1226,6 +1227,9 @@ Public Class frmTrackerOfTime
                 Case 92
                     ' Desert Colossus
                     lastArea = "DC"
+                Case 100, 34
+                    ' Outside Ganon's Castle
+                    lastArea = "OGC"
             End Select
 
             If Not lastArea = String.Empty Then
@@ -1723,7 +1727,7 @@ Public Class frmTrackerOfTime
         tmrAutoScan.Enabled = False
         AutoScanToolStripMenuItem.Text = "Auto Scan"
         'Me.Controls.Find("xButtonAutoScan", True)(0).Text = "Auto Scan"
-        Me.Text = "Tracker of Time"
+        Me.Text = "Tracker of Time v" & VER
         emulator = String.Empty
     End Sub
 
@@ -1936,7 +1940,7 @@ Public Class frmTrackerOfTime
             If emulator = String.Empty Then attachToRetroArch()
         End If
         If Not emulator = String.Empty Then
-            Me.Text = "Tracker of Time (" & emulator & ")"
+            Me.Text = "Tracker of Time v" & VER & " (" & emulator & ")"
             Select Case LCase(emulator)
                 Case "emuhawk", "rmg", "mupen64plus-gui", "retroarch - mupen64plus", "retroarch - parallel"
                     emulator = "variousX64"
