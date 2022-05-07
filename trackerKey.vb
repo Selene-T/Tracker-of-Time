@@ -3,6 +3,7 @@
     Public Class keyCheck
         Public loc As String
         Public area As String
+        Public zone As Byte
         Public name As String
         Public scan As Boolean
         Public checked As Boolean
@@ -16,6 +17,7 @@
         Public Sub New()
             loc = String.Empty
             area = String.Empty
+            zone = 99
             name = String.Empty
             checked = False
             scan = False

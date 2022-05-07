@@ -417,12 +417,12 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public Property setRustedSwitches() As Boolean
+        Public Property setFiTRustedSwitches() As Boolean
             Get
-                Return CType(Me("setRustedSwitches"),Boolean)
+                Return CType(Me("setFiTRustedSwitches"),Boolean)
             End Get
             Set
-                Me("setRustedSwitches") = value
+                Me("setFiTRustedSwitches") = value
             End Set
         End Property
         
@@ -639,6 +639,174 @@ Namespace My
             End Get
             Set
                 Me("setNavi") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setBeans() As Boolean
+            Get
+                Return CType(Me("setBeans"),Boolean)
+            End Get
+            Set
+                Me("setBeans") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setSalesman() As Boolean
+            Get
+                Return CType(Me("setSalesman"),Boolean)
+            End Get
+            Set
+                Me("setSalesman") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setWastelandBackstep() As Boolean
+            Get
+                Return CType(Me("setWastelandBackstep"),Boolean)
+            End Get
+            Set
+                Me("setWastelandBackstep") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setWastelandLensless() As Boolean
+            Get
+                Return CType(Me("setWastelandLensless"),Boolean)
+            End Get
+            Set
+                Me("setWastelandLensless") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setWastelandReverse() As Boolean
+            Get
+                Return CType(Me("setWastelandReverse"),Boolean)
+            End Get
+            Set
+                Me("setWastelandReverse") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setShTPlatform() As Boolean
+            Get
+                Return CType(Me("setShTPlatform"),Boolean)
+            End Get
+            Set
+                Me("setShTPlatform") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setIGCMQRustedSwitches() As Boolean
+            Get
+                Return CType(Me("setIGCMQRustedSwitches"),Boolean)
+            End Get
+            Set
+                Me("setIGCMQRustedSwitches") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property setHideSpoiler() As Boolean
+            Get
+                Return CType(Me("setHideSpoiler"),Boolean)
+            End Get
+            Set
+                Me("setHideSpoiler") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setCucco() As Boolean
+            Get
+                Return CType(Me("setCucco"),Boolean)
+            End Get
+            Set
+                Me("setCucco") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setWaTDrgnSwitch() As Boolean
+            Get
+                Return CType(Me("setWaTDrgnSwitch"),Boolean)
+            End Get
+            Set
+                Me("setWaTDrgnSwitch") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setSpTLensless() As Boolean
+            Get
+                Return CType(Me("setSpTLensless"),Boolean)
+            End Get
+            Set
+                Me("setSpTLensless") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setShTMQPit() As Boolean
+            Get
+                Return CType(Me("setShTMQPit"),Boolean)
+            End Get
+            Set
+                Me("setShTMQPit") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setBotWMQPits() As Boolean
+            Get
+                Return CType(Me("setBotWMQPits"),Boolean)
+            End Get
+            Set
+                Me("setBotWMQPits") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setIGCLensless() As Boolean
+            Get
+                Return CType(Me("setIGCLensless"),Boolean)
+            End Get
+            Set
+                Me("setIGCLensless") = value
             End Set
         End Property
     End Class
