@@ -9,8 +9,8 @@ Public Class frmTrackerOfTime
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 116
-    Private Const IS_64BIT As Boolean = True
-    Private Const VER As String = "3.0.0"
+    Private Const IS_64BIT As Boolean = False
+    Private Const VER As String = "3.0.1"
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private Const romAddrStart As Integer = &HDFE40000
@@ -147,8 +147,12 @@ Public Class frmTrackerOfTime
             AddHandler Label.Paint, AddressOf drawArrows
         Next
         ' Used to give a border to each panel below the item display
-        For Each Panel In Me.Controls.OfType(Of Panel)().Where(Function(pnl As Panel) pnl.Location.Y > 300)
+        For Each Panel In Me.Controls.OfType(Of Panel)().Where(Function(pnl As Panel) pnl.Height < 50)
             AddHandler Panel.Paint, AddressOf pnlDrawBorder
+        Next
+        ' Used to give a border to each panel below the item display
+        For Each Label In pnlWorldMap.Controls.OfType(Of Label)()
+            AddHandler Label.Paint, AddressOf lblDrawBorder
         Next
 
         populateLocations()
@@ -1411,70 +1415,137 @@ Public Class frmTrackerOfTime
             End With
         Next
 
-        For i = 0 To 23
-            If i >= 22 Then
-                ' 22, 23, 24, and 25 are Quests, add the quest title and grab the second part of the split
-                If aoLabels(i).Text.Contains(":") Then outputLabel(i) = "Quest:" & aoLabels(i).Text.Split(CChar(":"))(1) & ": "
-            Else
-                ' All others, just use the first grab of the split
-                If aoLabels(i).Text.Contains(":") Then outputLabel(i) = aoLabels(i).Text.Split(CChar(":"))(0) & ": "
-            End If
+        Dim workLabel As Label = zKF
+        If My.Settings.setMap Then
+            inc(aCheck(5), aCheck(6))
+            inc(aTotal(5), aTotal(6))
+            If aBoldLabels(6) Then aBoldLabels(5) = True
+            inc(aCheck(7), aCheck(21))
+            inc(aTotal(7), aTotal(21))
+            If aBoldLabels(21) Then aBoldLabels(7) = True
+            For i = 0 To 20
+                Select Case i
+                    Case 0
+                        workLabel = zKF
+                    Case 1
+                        workLabel = zLW
+                    Case 2
+                        workLabel = zSFM
+                    Case 3
+                        workLabel = zHF
+                    Case 4
+                        workLabel = zLLR
+                    Case 5, 6
+                        workLabel = zMK
+                    Case 7, 21
+                        workLabel = zCastle
+                    Case 8
+                        workLabel = zKV
+                    Case 9
+                        workLabel = zGY
+                    Case 10
+                        workLabel = zDMT
+                    Case 11
+                        workLabel = zDMC
+                    Case 12
+                        workLabel = zGC
+                    Case 13
+                        workLabel = zZR
+                    Case 14
+                        workLabel = zZD
+                    Case 15
+                        workLabel = zZF
+                    Case 16
+                        workLabel = zLH
+                    Case 17
+                        workLabel = zGV
+                    Case 18
+                        workLabel = zGF
+                    Case 19
+                        workLabel = zHW
+                    Case 20
+                        workLabel = zDC
+                End Select
 
-            outputLabel(i) = outputLabel(i) & aCheck(i).ToString & "/" & aTotal(i).ToString
-        Next
+                If aCheck(i) = aTotal(i) Then
+                    workLabel.BackColor = Color.Transparent
+                Else
+                    workLabel.Visible = True
+                    If aBoldLabels(i) Then
+                        workLabel.BackColor = Color.Lime
+                    Else
+                        workLabel.BackColor = Color.Red
+                    End If
+                End If
+                If i = 5 Then inc(i)
+            Next
+        Else
+            For i = 0 To 23
+                If i >= 22 Then
+                    ' 22, 23, 24, and 25 are Quests, add the quest title and grab the second part of the split
+                    If aoLabels(i).Text.Contains(":") Then outputLabel(i) = "Quest:" & aoLabels(i).Text.Split(CChar(":"))(1) & ": "
+                Else
+                    ' All others, just use the first grab of the split
+                    If aoLabels(i).Text.Contains(":") Then outputLabel(i) = aoLabels(i).Text.Split(CChar(":"))(0) & ": "
+                End If
 
-        Dim normalFont As New Font("Microsoft Sans Serif", 8, FontStyle.Regular)
-        Dim boldFont As New Font("Microsoft Sans Serif", 8, FontStyle.Bold)
+                outputLabel(i) = outputLabel(i) & aCheck(i).ToString & "/" & aTotal(i).ToString
+            Next
+
+            Dim normalFont As New Font("Microsoft Sans Serif", 8, FontStyle.Regular)
+            Dim boldFont As New Font("Microsoft Sans Serif", 8, FontStyle.Bold)
 
 
-        If Not lblKokiriForest.Text = outputLabel(0) Then lblKokiriForest.Text = outputLabel(0)
-        lblKokiriForest.Font = CType(IIf(aBoldLabels(0), boldFont, normalFont), Drawing.Font)
-        If Not lblLostWoods.Text = outputLabel(1) Then lblLostWoods.Text = outputLabel(1)
-        lblLostWoods.Font = CType(IIf(aBoldLabels(1), boldFont, normalFont), Drawing.Font)
-        If Not lblSacredForestMeadow.Text = outputLabel(2) Then lblSacredForestMeadow.Text = outputLabel(2)
-        lblSacredForestMeadow.Font = CType(IIf(aBoldLabels(2), boldFont, normalFont), Drawing.Font)
-        If Not lblHyruleField.Text = outputLabel(3) Then lblHyruleField.Text = outputLabel(3)
-        lblHyruleField.Font = CType(IIf(aBoldLabels(3), boldFont, normalFont), Drawing.Font)
-        If Not lblLonLonRanch.Text = outputLabel(4) Then lblLonLonRanch.Text = outputLabel(4)
-        lblLonLonRanch.Font = CType(IIf(aBoldLabels(4), boldFont, normalFont), Drawing.Font)
-        If Not lblMarket.Text = outputLabel(5) Then lblMarket.Text = outputLabel(5)
-        lblMarket.Font = CType(IIf(aBoldLabels(5), boldFont, normalFont), Drawing.Font)
-        If Not lblTempleOfTime.Text = outputLabel(6) Then lblTempleOfTime.Text = outputLabel(6)
-        lblTempleOfTime.Font = CType(IIf(aBoldLabels(6), boldFont, normalFont), Drawing.Font)
-        If Not lblHyruleCastle.Text = outputLabel(7) Then lblHyruleCastle.Text = outputLabel(7)
-        lblHyruleCastle.Font = CType(IIf(aBoldLabels(7), boldFont, normalFont), Drawing.Font)
-        If Not lblKakarikoVillage.Text = outputLabel(8) Then lblKakarikoVillage.Text = outputLabel(8)
-        lblKakarikoVillage.Font = CType(IIf(aBoldLabels(8), boldFont, normalFont), Drawing.Font)
-        If Not lblGraveyard.Text = outputLabel(9) Then lblGraveyard.Text = outputLabel(9)
-        lblGraveyard.Font = CType(IIf(aBoldLabels(9), boldFont, normalFont), Drawing.Font)
-        If Not lblDMTrail.Text = outputLabel(10) Then lblDMTrail.Text = outputLabel(10)
-        lblDMTrail.Font = CType(IIf(aBoldLabels(10), boldFont, normalFont), Drawing.Font)
-        If Not lblDMCrater.Text = outputLabel(11) Then lblDMCrater.Text = outputLabel(11)
-        lblDMCrater.Font = CType(IIf(aBoldLabels(11), boldFont, normalFont), Drawing.Font)
-        If Not lblGoronCity.Text = outputLabel(12) Then lblGoronCity.Text = outputLabel(12)
-        lblGoronCity.Font = CType(IIf(aBoldLabels(12), boldFont, normalFont), Drawing.Font)
-        If Not lblZorasRiver.Text = outputLabel(13) Then lblZorasRiver.Text = outputLabel(13)
-        lblZorasRiver.Font = CType(IIf(aBoldLabels(13), boldFont, normalFont), Drawing.Font)
-        If Not lblZorasDomain.Text = outputLabel(14) Then lblZorasDomain.Text = outputLabel(14)
-        lblZorasDomain.Font = CType(IIf(aBoldLabels(14), boldFont, normalFont), Drawing.Font)
-        If Not lblZorasFountain.Text = outputLabel(15) Then lblZorasFountain.Text = outputLabel(15)
-        lblZorasFountain.Font = CType(IIf(aBoldLabels(15), boldFont, normalFont), Drawing.Font)
-        If Not lblLakeHylia.Text = outputLabel(16) Then lblLakeHylia.Text = outputLabel(16)
-        lblLakeHylia.Font = CType(IIf(aBoldLabels(16), boldFont, normalFont), Drawing.Font)
-        If Not lblGerudoValley.Text = outputLabel(17) Then lblGerudoValley.Text = outputLabel(17)
-        lblGerudoValley.Font = CType(IIf(aBoldLabels(17), boldFont, normalFont), Drawing.Font)
-        If Not lblGerudoFortress.Text = outputLabel(18) Then lblGerudoFortress.Text = outputLabel(18)
-        lblGerudoFortress.Font = CType(IIf(aBoldLabels(18), boldFont, normalFont), Drawing.Font)
-        If Not lblHauntedWasteland.Text = outputLabel(19) Then lblHauntedWasteland.Text = outputLabel(19)
-        lblHauntedWasteland.Font = CType(IIf(aBoldLabels(19), boldFont, normalFont), Drawing.Font)
-        If Not lblDesertColossus.Text = outputLabel(20) Then lblDesertColossus.Text = outputLabel(20)
-        lblDesertColossus.Font = CType(IIf(aBoldLabels(20), boldFont, normalFont), Drawing.Font)
-        If Not lblOutsideGanonsCastle.Text = outputLabel(21) Then lblOutsideGanonsCastle.Text = outputLabel(21)
-        lblOutsideGanonsCastle.Font = CType(IIf(aBoldLabels(21), boldFont, normalFont), Drawing.Font)
-        If Not lblQuestGoldSkulltulas.Text = outputLabel(22) Then lblQuestGoldSkulltulas.Text = outputLabel(22)
-        lblQuestGoldSkulltulas.Font = CType(IIf(aBoldLabels(22), boldFont, normalFont), Drawing.Font)
-        If Not lblQuestMasks.Text = outputLabel(23) Then lblQuestMasks.Text = outputLabel(23)
-        lblQuestMasks.Font = CType(IIf(aBoldLabels(23), boldFont, normalFont), Drawing.Font)
+            If Not lblKokiriForest.Text = outputLabel(0) Then lblKokiriForest.Text = outputLabel(0)
+            lblKokiriForest.Font = CType(IIf(aBoldLabels(0), boldFont, normalFont), Drawing.Font)
+            If Not lblLostWoods.Text = outputLabel(1) Then lblLostWoods.Text = outputLabel(1)
+            lblLostWoods.Font = CType(IIf(aBoldLabels(1), boldFont, normalFont), Drawing.Font)
+            If Not lblSacredForestMeadow.Text = outputLabel(2) Then lblSacredForestMeadow.Text = outputLabel(2)
+            lblSacredForestMeadow.Font = CType(IIf(aBoldLabels(2), boldFont, normalFont), Drawing.Font)
+            If Not lblHyruleField.Text = outputLabel(3) Then lblHyruleField.Text = outputLabel(3)
+            lblHyruleField.Font = CType(IIf(aBoldLabels(3), boldFont, normalFont), Drawing.Font)
+            If Not lblLonLonRanch.Text = outputLabel(4) Then lblLonLonRanch.Text = outputLabel(4)
+            lblLonLonRanch.Font = CType(IIf(aBoldLabels(4), boldFont, normalFont), Drawing.Font)
+            If Not lblMarket.Text = outputLabel(5) Then lblMarket.Text = outputLabel(5)
+            lblMarket.Font = CType(IIf(aBoldLabels(5), boldFont, normalFont), Drawing.Font)
+            If Not lblTempleOfTime.Text = outputLabel(6) Then lblTempleOfTime.Text = outputLabel(6)
+            lblTempleOfTime.Font = CType(IIf(aBoldLabels(6), boldFont, normalFont), Drawing.Font)
+            If Not lblHyruleCastle.Text = outputLabel(7) Then lblHyruleCastle.Text = outputLabel(7)
+            lblHyruleCastle.Font = CType(IIf(aBoldLabels(7), boldFont, normalFont), Drawing.Font)
+            If Not lblKakarikoVillage.Text = outputLabel(8) Then lblKakarikoVillage.Text = outputLabel(8)
+            lblKakarikoVillage.Font = CType(IIf(aBoldLabels(8), boldFont, normalFont), Drawing.Font)
+            If Not lblGraveyard.Text = outputLabel(9) Then lblGraveyard.Text = outputLabel(9)
+            lblGraveyard.Font = CType(IIf(aBoldLabels(9), boldFont, normalFont), Drawing.Font)
+            If Not lblDMTrail.Text = outputLabel(10) Then lblDMTrail.Text = outputLabel(10)
+            lblDMTrail.Font = CType(IIf(aBoldLabels(10), boldFont, normalFont), Drawing.Font)
+            If Not lblDMCrater.Text = outputLabel(11) Then lblDMCrater.Text = outputLabel(11)
+            lblDMCrater.Font = CType(IIf(aBoldLabels(11), boldFont, normalFont), Drawing.Font)
+            If Not lblGoronCity.Text = outputLabel(12) Then lblGoronCity.Text = outputLabel(12)
+            lblGoronCity.Font = CType(IIf(aBoldLabels(12), boldFont, normalFont), Drawing.Font)
+            If Not lblZorasRiver.Text = outputLabel(13) Then lblZorasRiver.Text = outputLabel(13)
+            lblZorasRiver.Font = CType(IIf(aBoldLabels(13), boldFont, normalFont), Drawing.Font)
+            If Not lblZorasDomain.Text = outputLabel(14) Then lblZorasDomain.Text = outputLabel(14)
+            lblZorasDomain.Font = CType(IIf(aBoldLabels(14), boldFont, normalFont), Drawing.Font)
+            If Not lblZorasFountain.Text = outputLabel(15) Then lblZorasFountain.Text = outputLabel(15)
+            lblZorasFountain.Font = CType(IIf(aBoldLabels(15), boldFont, normalFont), Drawing.Font)
+            If Not lblLakeHylia.Text = outputLabel(16) Then lblLakeHylia.Text = outputLabel(16)
+            lblLakeHylia.Font = CType(IIf(aBoldLabels(16), boldFont, normalFont), Drawing.Font)
+            If Not lblGerudoValley.Text = outputLabel(17) Then lblGerudoValley.Text = outputLabel(17)
+            lblGerudoValley.Font = CType(IIf(aBoldLabels(17), boldFont, normalFont), Drawing.Font)
+            If Not lblGerudoFortress.Text = outputLabel(18) Then lblGerudoFortress.Text = outputLabel(18)
+            lblGerudoFortress.Font = CType(IIf(aBoldLabels(18), boldFont, normalFont), Drawing.Font)
+            If Not lblHauntedWasteland.Text = outputLabel(19) Then lblHauntedWasteland.Text = outputLabel(19)
+            lblHauntedWasteland.Font = CType(IIf(aBoldLabels(19), boldFont, normalFont), Drawing.Font)
+            If Not lblDesertColossus.Text = outputLabel(20) Then lblDesertColossus.Text = outputLabel(20)
+            lblDesertColossus.Font = CType(IIf(aBoldLabels(20), boldFont, normalFont), Drawing.Font)
+            If Not lblOutsideGanonsCastle.Text = outputLabel(21) Then lblOutsideGanonsCastle.Text = outputLabel(21)
+            lblOutsideGanonsCastle.Font = CType(IIf(aBoldLabels(21), boldFont, normalFont), Drawing.Font)
+            If Not lblQuestGoldSkulltulas.Text = outputLabel(22) Then lblQuestGoldSkulltulas.Text = outputLabel(22)
+            lblQuestGoldSkulltulas.Font = CType(IIf(aBoldLabels(22), boldFont, normalFont), Drawing.Font)
+            If Not lblQuestMasks.Text = outputLabel(23) Then lblQuestMasks.Text = outputLabel(23)
+            lblQuestMasks.Font = CType(IIf(aBoldLabels(23), boldFont, normalFont), Drawing.Font)
+        End If
+
     End Sub
     Private Sub updateLabelsDungeons()
         Dim aTotal(11) As Integer
@@ -1525,39 +1596,81 @@ Public Class frmTrackerOfTime
                 End With
             Next
         Next
+        Dim workLabel As Label = zKF
+        If My.Settings.setMap Then
+            For i = 0 To 11
+                Select Case i
+                    Case 0
+                        workLabel = zDT
+                    Case 1
+                        workLabel = zDDC
+                    Case 2
+                        workLabel = zJB
+                    Case 3
+                        workLabel = zFoT
+                    Case 4
+                        workLabel = zFiT
+                    Case 5
+                        workLabel = zWaT
+                    Case 6
+                        workLabel = zSpT
+                    Case 7
+                        workLabel = zShT
+                    Case 8
+                        workLabel = zBotW
+                    Case 9
+                        workLabel = zIC
+                    Case 10
+                        workLabel = zGTG
+                    Case 11
+                        workLabel = zIGC
+                End Select
 
-        For i = 0 To aTotal.Length - 1
-            outputLabel(i) = aoDungeonLabels(i).Text.Split(CChar(":"))(0) & ": "
-            outputLabel(i) = outputLabel(i) & aCheck(i).ToString & "/" & aTotal(i).ToString
-        Next
+                If aCheck(i) = aTotal(i) Then
+                    workLabel.BackColor = Color.Transparent
+                Else
+                    workLabel.Visible = True
+                    If aBoldLabels(i) Then
+                        workLabel.BackColor = Color.Lime
+                    Else
+                        workLabel.BackColor = Color.Red
+                    End If
+                End If
+            Next
+        Else
+            For i = 0 To aTotal.Length - 1
+                outputLabel(i) = aoDungeonLabels(i).Text.Split(CChar(":"))(0) & ": "
+                outputLabel(i) = outputLabel(i) & aCheck(i).ToString & "/" & aTotal(i).ToString
+            Next
 
-        Dim normalFont As New Font("Microsoft Sans Serif", 8, FontStyle.Regular)
-        Dim boldFont As New Font("Microsoft Sans Serif", 8, FontStyle.Bold)
+            Dim normalFont As New Font("Microsoft Sans Serif", 8, FontStyle.Regular)
+            Dim boldFont As New Font("Microsoft Sans Serif", 8, FontStyle.Bold)
 
-        If Not lblDekuTree.Text = outputLabel(0) Then lblDekuTree.Text = outputLabel(0)
-        lblDekuTree.Font = CType(IIf(aBoldLabels(0), boldFont, normalFont), Drawing.Font)
-        If Not lblDodongosCavern.Text = outputLabel(1) Then lblDodongosCavern.Text = outputLabel(1)
-        lblDodongosCavern.Font = CType(IIf(aBoldLabels(1), boldFont, normalFont), Drawing.Font)
-        If Not lblJabuJabusBelly.Text = outputLabel(2) Then lblJabuJabusBelly.Text = outputLabel(2)
-        lblJabuJabusBelly.Font = CType(IIf(aBoldLabels(2), boldFont, normalFont), Drawing.Font)
-        If Not lblForestTemple.Text = outputLabel(3) Then lblForestTemple.Text = outputLabel(3)
-        lblForestTemple.Font = CType(IIf(aBoldLabels(3), boldFont, normalFont), Drawing.Font)
-        If Not lblFireTemple.Text = outputLabel(4) Then lblFireTemple.Text = outputLabel(4)
-        lblFireTemple.Font = CType(IIf(aBoldLabels(4), boldFont, normalFont), Drawing.Font)
-        If Not lblWaterTemple.Text = outputLabel(5) Then lblWaterTemple.Text = outputLabel(5)
-        lblWaterTemple.Font = CType(IIf(aBoldLabels(5), boldFont, normalFont), Drawing.Font)
-        If Not lblSpiritTemple.Text = outputLabel(6) Then lblSpiritTemple.Text = outputLabel(6)
-        lblSpiritTemple.Font = CType(IIf(aBoldLabels(6), boldFont, normalFont), Drawing.Font)
-        If Not lblShadowTemple.Text = outputLabel(7) Then lblShadowTemple.Text = outputLabel(7)
-        lblShadowTemple.Font = CType(IIf(aBoldLabels(7), boldFont, normalFont), Drawing.Font)
-        If Not lblBottomOfTheWell.Text = outputLabel(8) Then lblBottomOfTheWell.Text = outputLabel(8)
-        lblBottomOfTheWell.Font = CType(IIf(aBoldLabels(8), boldFont, normalFont), Drawing.Font)
-        If Not lblIceCavern.Text = outputLabel(9) Then lblIceCavern.Text = outputLabel(9)
-        lblIceCavern.Font = CType(IIf(aBoldLabels(9), boldFont, normalFont), Drawing.Font)
-        If Not lblGerudoTrainingGround.Text = outputLabel(10) Then lblGerudoTrainingGround.Text = outputLabel(10)
-        lblGerudoTrainingGround.Font = CType(IIf(aBoldLabels(10), boldFont, normalFont), Drawing.Font)
-        If Not lblGanonsCastle.Text = outputLabel(11) Then lblGanonsCastle.Text = outputLabel(11)
-        lblGanonsCastle.Font = CType(IIf(aBoldLabels(11), boldFont, normalFont), Drawing.Font)
+            If Not lblDekuTree.Text = outputLabel(0) Then lblDekuTree.Text = outputLabel(0)
+            lblDekuTree.Font = CType(IIf(aBoldLabels(0), boldFont, normalFont), Drawing.Font)
+            If Not lblDodongosCavern.Text = outputLabel(1) Then lblDodongosCavern.Text = outputLabel(1)
+            lblDodongosCavern.Font = CType(IIf(aBoldLabels(1), boldFont, normalFont), Drawing.Font)
+            If Not lblJabuJabusBelly.Text = outputLabel(2) Then lblJabuJabusBelly.Text = outputLabel(2)
+            lblJabuJabusBelly.Font = CType(IIf(aBoldLabels(2), boldFont, normalFont), Drawing.Font)
+            If Not lblForestTemple.Text = outputLabel(3) Then lblForestTemple.Text = outputLabel(3)
+            lblForestTemple.Font = CType(IIf(aBoldLabels(3), boldFont, normalFont), Drawing.Font)
+            If Not lblFireTemple.Text = outputLabel(4) Then lblFireTemple.Text = outputLabel(4)
+            lblFireTemple.Font = CType(IIf(aBoldLabels(4), boldFont, normalFont), Drawing.Font)
+            If Not lblWaterTemple.Text = outputLabel(5) Then lblWaterTemple.Text = outputLabel(5)
+            lblWaterTemple.Font = CType(IIf(aBoldLabels(5), boldFont, normalFont), Drawing.Font)
+            If Not lblSpiritTemple.Text = outputLabel(6) Then lblSpiritTemple.Text = outputLabel(6)
+            lblSpiritTemple.Font = CType(IIf(aBoldLabels(6), boldFont, normalFont), Drawing.Font)
+            If Not lblShadowTemple.Text = outputLabel(7) Then lblShadowTemple.Text = outputLabel(7)
+            lblShadowTemple.Font = CType(IIf(aBoldLabels(7), boldFont, normalFont), Drawing.Font)
+            If Not lblBottomOfTheWell.Text = outputLabel(8) Then lblBottomOfTheWell.Text = outputLabel(8)
+            lblBottomOfTheWell.Font = CType(IIf(aBoldLabels(8), boldFont, normalFont), Drawing.Font)
+            If Not lblIceCavern.Text = outputLabel(9) Then lblIceCavern.Text = outputLabel(9)
+            lblIceCavern.Font = CType(IIf(aBoldLabels(9), boldFont, normalFont), Drawing.Font)
+            If Not lblGerudoTrainingGround.Text = outputLabel(10) Then lblGerudoTrainingGround.Text = outputLabel(10)
+            lblGerudoTrainingGround.Font = CType(IIf(aBoldLabels(10), boldFont, normalFont), Drawing.Font)
+            If Not lblGanonsCastle.Text = outputLabel(11) Then lblGanonsCastle.Text = outputLabel(11)
+            lblGanonsCastle.Font = CType(IIf(aBoldLabels(11), boldFont, normalFont), Drawing.Font)
+        End If
     End Sub
 
     Private Function area2num(ByVal area As String) As Integer
@@ -1630,11 +1743,11 @@ Public Class frmTrackerOfTime
                 Return "HF"
             Case "Lon Lon Ranch"
                 Return "LLR"
-            Case "Market"
+            Case "Market", "Market & Temple of Time"
                 Return "MK"
             Case "Temple of Time"
                 Return "TT"
-            Case "Hyrule Castle"
+            Case "Hyrule Castle", "Hyrule Castle & Outside Ganon's Castle"
                 Return "HC"
             Case "Kakariko Village"
                 Return "KV"
@@ -2236,16 +2349,36 @@ Public Class frmTrackerOfTime
         'updateSettingsPanel()
     End Sub
     Private Sub resizeForm()
+        If My.Settings.setMap Then
+            rtbOutputLeft.Top = 696
+            rtbOutputRight.Top = 696
+        Else
+            rtbOutputLeft.Top = 666
+            rtbOutputRight.Top = 666
+        End If
         'Exit Sub
+        Dim pnFore As Pen = New Pen(Me.ForeColor, 1)
+        Dim pnBack As Pen = New Pen(Me.BackColor, 1)
+        Dim gfx As Graphics = Me.CreateGraphics
+
+        pnlWorldMap.Visible = My.Settings.setMap
         pnlHidden.Visible = False
         Button2.Visible = False
 
+        Application.DoEvents()
         If showSetting Then
             Me.Width = pnlDekuTree.Location.X + pnlDekuTree.Width + 623
         Else
             Me.Width = pnlDekuTree.Location.X + pnlDekuTree.Width + 22
         End If
         Me.Height = rtbOutputRight.Location.Y + rtbOutputRight.Height + 46
+
+        'If showSetting Then e.Graphics.DrawLine(pnFore, pnlDekuTree.Location.X + pnlDekuTree.Width + 6, 0, pnlDekuTree.Location.X + pnlDekuTree.Width + 6, Me.Height)
+        gfx = Me.CreateGraphics
+        With rtbOutputLeft
+            gfx.DrawRectangle(pnBack, .Location.X - 1, .Location.Y - 1, .Width + 1, .Height + 20)
+            gfx.DrawRectangle(pnFore, .Location.X - 1, .Location.Y - 1, .Width + 1, .Height + 1)
+        End With
     End Sub
 
     Private Sub displayChecks(ByVal area As String, ByVal showChecked As Boolean, Optional setCounter As Boolean = True)
@@ -2268,11 +2401,23 @@ Public Class frmTrackerOfTime
             Case "LLR"
                 displayName = "Lon Lon Ranch"
             Case "MK"
-                displayName = "Market"
+                If My.Settings.setMap Then
+                    displayName = "Market & Temple of Time"
+                Else
+                    displayName = "Market"
+                End If
             Case "TT"
-                displayName = "Temple of Time"
+                If My.Settings.setMap Then
+                    displayName = "Market & Temple of Time"
+                Else
+                    displayName = "Temple of Time"
+                End If
             Case "HC"
-                displayName = "Hyrule Castle"
+                If My.Settings.setMap Then
+                    displayName = "Hyrule Castle & Outside Ganon's Castle"
+                Else
+                    displayName = "Hyrule Castle"
+                End If
             Case "KV"
                 displayName = "Kakariko Village"
             Case "GY"
@@ -2300,7 +2445,11 @@ Public Class frmTrackerOfTime
             Case "DC"
                 displayName = "Desert Colossus"
             Case "OGC"
-                displayName = "Outside Ganon's Castle"
+                If My.Settings.setMap Then
+                    displayName = "Hyrule Castle & Outside Ganon's Castle"
+                Else
+                    displayName = "Outside Ganon's Castle"
+                End If
             Case "QGS"
                 displayName = "Quest: Gold Skulltulas"
             Case "QM"
@@ -2328,8 +2477,35 @@ Public Class frmTrackerOfTime
                     outputLines.Add(String.Empty)
                 Loop
                 scanArea(outputLines, "QF", showChecked)
+            Case "MK", "TT"
+                If My.Settings.setMap Then
+                    emboldenList.Clear()
+                    outputLines.Clear()
+                    scanArea(outputLines, "MK", showChecked)
+                    scanArea(outputLines, "QM", showChecked)
+                    Do While outputLines.Count < 14
+                        outputLines.Add(String.Empty)
+                    Loop
+                    scanArea(outputLines, "TT", showChecked)
+                End If
+            Case "HC", "OGC"
+                If My.Settings.setMap Then
+                    emboldenList.Clear()
+                    outputLines.Clear()
+                    scanArea(outputLines, "HC", showChecked)
+                    Do While outputLines.Count < 14
+                        outputLines.Add(String.Empty)
+                    Loop
+                    scanArea(outputLines, "OGC", showChecked)
+                End If
+            Case "KV"
+                If My.Settings.setMap Then
+                    scanArea(outputLines, "QGS", showChecked)
+                    Do While outputLines.Count > 28
+                        outputLines.RemoveAt(outputLines.Count - 1)
+                    Loop
+                End If
         End Select
-
 
         Dim theyLookSoGodDamnLikeTheSameList As Boolean = False
 
@@ -5421,7 +5597,7 @@ Public Class frmTrackerOfTime
             .loc = "6809"
             .area = "HC"
             .zone = 54
-            .name = "Great Fairy Fountain"
+            .name = "HC Great Fairy Fountain"
             .logic = "hLL7712"
         End With
         inc(tk)
@@ -6459,7 +6635,7 @@ Public Class frmTrackerOfTime
             .loc = "5400"
             .area = "GV"
             .zone = 45
-            .name = "Chest Behind Rocks(Adult)"
+            .name = "Chest Behind Rocks"
             .logic = "Zr"
         End With
         inc(tk)
@@ -6536,7 +6712,7 @@ Public Class frmTrackerOfTime
             .loc = "5600"
             .area = "GF"
             .zone = 46
-            .name = "Chest on Top(Adult)"
+            .name = "Chest on Top"
             .logic = "Zl.ZLL7430.ZkhLL6512"
         End With
         inc(tk)
@@ -6746,7 +6922,7 @@ Public Class frmTrackerOfTime
             .loc = "008"
             .area = "OGC"
             .zone = 53
-            .name = "Great Fairy Fountain"
+            .name = "OGC Great Fairy Fountain"
             .logic = "hLL7712"
         End With
         inc(tk)
@@ -11415,7 +11591,7 @@ Public Class frmTrackerOfTime
         ' Small sub for shorthand decrements
         If value > 0 Then value = value - amount
     End Sub
-    Private Sub inc(ByRef value As Integer, Optional ByVal amount As Byte = 1)
+    Private Sub inc(ByRef value As Integer, Optional ByVal amount As Integer = 1)
         ' Small sub for shorthand increments
         value = value + amount
     End Sub
@@ -12422,7 +12598,7 @@ Public Class frmTrackerOfTime
         Dim pnFore As Pen = New Pen(Me.ForeColor, 1)
         If showSetting Then e.Graphics.DrawLine(pnFore, pnlDekuTree.Location.X + pnlDekuTree.Width + 6, 0, pnlDekuTree.Location.X + pnlDekuTree.Width + 6, Me.Height)
         With rtbOutputLeft
-            e.Graphics.DrawRectangle(pnFore, .Location.X - 1, .Location.Y - 1, .Width + 1, .Height + 1)
+            'e.Graphics.DrawRectangle(pnFore, .Location.X - 1, .Location.Y - 1, .Width + 1, .Height + 1)
         End With
         updateSettingsPanel()
     End Sub
@@ -12566,6 +12742,8 @@ Public Class frmTrackerOfTime
                 My.Settings.setHideSpoiler = Not My.Settings.setHideSpoiler
             Case lcxCucco.Text
                 My.Settings.setCucco = Not My.Settings.setCucco
+            Case lcxShowMap.Text
+                My.Settings.setMap = Not My.Settings.setMap
                 'Case lcxxx.Text
                 'My.Settings.setxx = Not My.Settings.setxx
             Case Else
@@ -12706,6 +12884,8 @@ Public Class frmTrackerOfTime
                 message = "Hide information that might be spoilers, such as bolding the Light Arrow Cutscene when it is ready, Ganon's Castle before triggering Rainbow Bridge, or your adult/young Link spawn locations before collecting the Song from Sheik at the pedestal."
             Case lcxCucco.Text
                 message = "As young Link, use a cucco to fly behind the water to enter Zora's Domain."
+            Case lcxShowMap.Text
+                message = "Uses a visual map rather than text. You do not get to see the number of checks for each area, but it looks prettier for streaming."
                 'Case lcxxx.Text
                 'message = "."
         End Select
@@ -12822,6 +13002,10 @@ Public Class frmTrackerOfTime
     Private Sub pnlDrawBorder(sender As Object, e As PaintEventArgs)
         Dim pnl As Panel = CType(sender, Panel)
         e.Graphics.DrawRectangle(New Pen(Me.ForeColor, 1), 0, 0, pnl.Width - 1, pnl.Height - 1)
+    End Sub
+    Private Sub lblDrawBorder(sender As Object, e As PaintEventArgs)
+        Dim pnl As Label = CType(sender, Label)
+        e.Graphics.DrawRectangle(New Pen(Color.Black, 2), 1, 1, pnl.Width - 2, pnl.Height - 2)
     End Sub
 
 
@@ -12958,6 +13142,9 @@ Public Class frmTrackerOfTime
                                 isTrue = My.Settings.setHideSpoiler
                             Case lcxCucco.Name
                                 isTrue = My.Settings.setCucco
+                            Case lcxShowMap.Name
+                                isTrue = My.Settings.setMap
+                                resizeForm()
                                 'Case lcxxx.Name
                                 'isTrue = My.Settings.setxx
                             Case Else
@@ -13103,9 +13290,25 @@ Public Class frmTrackerOfTime
 
         If Not Mid(area, 1, 3) = "DUN" Then
             ' Start with the non-dungeon checks
+
+            ' Need to work on the doubled areas for visual map
+            Dim area2 As String = area
+            Dim area3 As String = area
+            If My.Settings.setMap Then
+                Select Case area
+                    Case "MK"
+                        area2 = "QM"
+                        area3 = "TT"
+                    Case "HC"
+                        area2 = "OGC"
+                    Case "KV"
+                        area2 = "QGS"
+                End Select
+            End If
+
             For Each key In aKeys.Where(Function(k As keyCheck) k.name.Equals(name))
                 With key
-                    If .area = area Then
+                    If .area = area Or .area = area2 Or .area = area3 Then
                         .forced = Not .forced
                         flipKeyForced = True
                         Exit Function
@@ -13771,6 +13974,103 @@ Public Class frmTrackerOfTime
                 End Select
             End If
         Next
+    End Sub
+
+    Private Sub zKF_MouseClick(sender As Object, e As MouseEventArgs) Handles zKF.MouseClick
+        displayChecks("KF", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zLW_MouseClick(sender As Object, e As MouseEventArgs) Handles zLW.MouseClick
+        displayChecks("LW", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zSFM_MouseClick(sender As Object, e As MouseEventArgs) Handles zSFM.MouseClick
+        displayChecks("SFM", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zHF_MouseClick(sender As Object, e As MouseEventArgs) Handles zHF.MouseClick
+        displayChecks("HF", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zLLR_MouseClick(sender As Object, e As MouseEventArgs) Handles zLLR.MouseClick
+        displayChecks("LLR", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zMK_MouseClick(sender As Object, e As MouseEventArgs) Handles zMK.MouseClick
+        displayChecks("MK", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zCastle_MouseClick(sender As Object, e As MouseEventArgs) Handles zCastle.MouseClick
+        displayChecks("HC", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zKV_MouseClick(sender As Object, e As MouseEventArgs) Handles zKV.MouseClick
+        displayChecks("KV", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zGY_MouseClick(sender As Object, e As MouseEventArgs) Handles zGY.MouseClick
+        displayChecks("GY", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zDMT_MouseClick(sender As Object, e As MouseEventArgs) Handles zDMT.MouseClick
+        displayChecks("DMT", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zDMC_MouseClick(sender As Object, e As MouseEventArgs) Handles zDMC.MouseClick
+        displayChecks("DMC", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zGC_MouseClick(sender As Object, e As MouseEventArgs) Handles zGC.MouseClick
+        displayChecks("GC", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zZR_MouseClick(sender As Object, e As MouseEventArgs) Handles zZR.MouseClick
+        displayChecks("ZR", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zZD_MouseClick(sender As Object, e As MouseEventArgs) Handles zZD.MouseClick
+        displayChecks("ZD", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zZF_MouseClick(sender As Object, e As MouseEventArgs) Handles zZF.MouseClick
+        displayChecks("ZF", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zLH_MouseClick(sender As Object, e As MouseEventArgs) Handles zLH.MouseClick
+        displayChecks("LH", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zGV_MouseClick(sender As Object, e As MouseEventArgs) Handles zGV.MouseClick
+        displayChecks("GV", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zGF_MouseClick(sender As Object, e As MouseEventArgs) Handles zGF.MouseClick
+        displayChecks("GF", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zHW_MouseClick(sender As Object, e As MouseEventArgs) Handles zHW.MouseClick
+        displayChecks("HW", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zDC_MouseClick(sender As Object, e As MouseEventArgs) Handles zDC.MouseClick
+        displayChecks("DC", CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zDT_MouseClick(sender As Object, e As MouseEventArgs) Handles zDT.MouseClick
+        displayChecksDungeons(0, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zDDC_MouseClick(sender As Object, e As MouseEventArgs) Handles zDDC.MouseClick
+        displayChecksDungeons(1, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zJB_MouseClick(sender As Object, e As MouseEventArgs) Handles zJB.MouseClick
+        displayChecksDungeons(2, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zFoT_MouseClick(sender As Object, e As MouseEventArgs) Handles zFoT.MouseClick
+        displayChecksDungeons(3, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zFiT_MouseClick(sender As Object, e As MouseEventArgs) Handles zFiT.MouseClick
+        displayChecksDungeons(4, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zWaT_MouseClick(sender As Object, e As MouseEventArgs) Handles zWaT.MouseClick
+        displayChecksDungeons(5, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zSpT_MouseClick(sender As Object, e As MouseEventArgs) Handles zSpT.MouseClick
+        displayChecksDungeons(6, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zShT_MouseClick(sender As Object, e As MouseEventArgs) Handles zShT.MouseClick
+        displayChecksDungeons(7, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zBotW_MouseClick(sender As Object, e As MouseEventArgs) Handles zBotW.MouseClick
+        displayChecksDungeons(8, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zIC_MouseClick(sender As Object, e As MouseEventArgs) Handles zIC.MouseClick
+        displayChecksDungeons(9, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zGTG_MouseClick(sender As Object, e As MouseEventArgs) Handles zGTG.MouseClick
+        displayChecksDungeons(10, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
+    End Sub
+    Private Sub zOGC_MouseClick(sender As Object, e As MouseEventArgs) Handles zIGC.MouseClick
+        displayChecksDungeons(11, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
     End Sub
 End Class
 

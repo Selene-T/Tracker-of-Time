@@ -906,7 +906,7 @@ Namespace My.Resources
         Friend ReadOnly Property nayrusLove() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("nayrusLove", resourceCulture)
-                Return CType(obj, System.Drawing.Bitmap)
+                Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
@@ -1326,6 +1326,16 @@ Namespace My.Resources
         Friend ReadOnly Property upgradeWallet3() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("upgradeWallet3", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property worldMap() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("worldMap", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

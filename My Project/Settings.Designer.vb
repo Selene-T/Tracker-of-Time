@@ -809,6 +809,18 @@ Namespace My
                 Me("setIGCLensless") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property setMap() As Boolean
+            Get
+                Return CType(Me("setMap"),Boolean)
+            End Get
+            Set
+                Me("setMap") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

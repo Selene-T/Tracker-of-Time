@@ -281,6 +281,39 @@ Partial Class frmTrackerOfTime
         Me.pbxMinuetOfForest = New System.Windows.Forms.PictureBox()
         Me.pbxZeldasLullaby = New System.Windows.Forms.PictureBox()
         Me.rtbOutputRight = New System.Windows.Forms.RichTextBox()
+        Me.pnlWorldMap = New System.Windows.Forms.Panel()
+        Me.zFiT = New System.Windows.Forms.Label()
+        Me.zGTG = New System.Windows.Forms.Label()
+        Me.zKV = New System.Windows.Forms.Label()
+        Me.zShT = New System.Windows.Forms.Label()
+        Me.zSpT = New System.Windows.Forms.Label()
+        Me.zWaT = New System.Windows.Forms.Label()
+        Me.zFoT = New System.Windows.Forms.Label()
+        Me.zIC = New System.Windows.Forms.Label()
+        Me.zJB = New System.Windows.Forms.Label()
+        Me.zDDC = New System.Windows.Forms.Label()
+        Me.zDT = New System.Windows.Forms.Label()
+        Me.zDC = New System.Windows.Forms.Label()
+        Me.zHW = New System.Windows.Forms.Label()
+        Me.zGF = New System.Windows.Forms.Label()
+        Me.zGV = New System.Windows.Forms.Label()
+        Me.zLH = New System.Windows.Forms.Label()
+        Me.zZF = New System.Windows.Forms.Label()
+        Me.zZD = New System.Windows.Forms.Label()
+        Me.zZR = New System.Windows.Forms.Label()
+        Me.zGC = New System.Windows.Forms.Label()
+        Me.zDMC = New System.Windows.Forms.Label()
+        Me.zDMT = New System.Windows.Forms.Label()
+        Me.zGY = New System.Windows.Forms.Label()
+        Me.zBotW = New System.Windows.Forms.Label()
+        Me.zIGC = New System.Windows.Forms.Label()
+        Me.zCastle = New System.Windows.Forms.Label()
+        Me.zMK = New System.Windows.Forms.Label()
+        Me.zLLR = New System.Windows.Forms.Label()
+        Me.zHF = New System.Windows.Forms.Label()
+        Me.zSFM = New System.Windows.Forms.Label()
+        Me.zLW = New System.Windows.Forms.Label()
+        Me.zKF = New System.Windows.Forms.Label()
         Me.pnlDungeonItems = New System.Windows.Forms.Panel()
         Me.pbxTriforce = New System.Windows.Forms.PictureBox()
         Me.pbxGoldSkulltula = New System.Windows.Forms.PictureBox()
@@ -368,6 +401,7 @@ Partial Class frmTrackerOfTime
         Me.pbxMasterSword = New System.Windows.Forms.PictureBox()
         Me.pbxBrokenKnife = New System.Windows.Forms.PictureBox()
         Me.pbxBiggoronsSword = New System.Windows.Forms.PictureBox()
+        Me.lcxShowMap = New System.Windows.Forms.Label()
         Me.pnlDekuTree.SuspendLayout()
         Me.pnlDodongosCavern.SuspendLayout()
         Me.pnlKokiriForest.SuspendLayout()
@@ -431,6 +465,7 @@ Partial Class frmTrackerOfTime
         CType(Me.pbxBoleroOfFire, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbxMinuetOfForest, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbxZeldasLullaby, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pnlWorldMap.SuspendLayout()
         Me.pnlDungeonItems.SuspendLayout()
         CType(Me.pbxTriforce, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbxGoldSkulltula, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -2295,6 +2330,7 @@ Partial Class frmTrackerOfTime
         '
         'pnlSettings
         '
+        Me.pnlSettings.Controls.Add(Me.lcxShowMap)
         Me.pnlSettings.Controls.Add(Me.lcxIGCMQRustedSwitches)
         Me.pnlSettings.Controls.Add(Me.lcxIGCLensless)
         Me.pnlSettings.Controls.Add(Me.lcxBotWMQPits)
@@ -3336,6 +3372,302 @@ Partial Class frmTrackerOfTime
         Me.rtbOutputRight.TabStop = False
         Me.rtbOutputRight.Text = ""
         '
+        'pnlWorldMap
+        '
+        Me.pnlWorldMap.BackgroundImage = Global.Tracker_of_Time.My.Resources.Resources.worldMap
+        Me.pnlWorldMap.Controls.Add(Me.zFiT)
+        Me.pnlWorldMap.Controls.Add(Me.zGTG)
+        Me.pnlWorldMap.Controls.Add(Me.zKV)
+        Me.pnlWorldMap.Controls.Add(Me.zShT)
+        Me.pnlWorldMap.Controls.Add(Me.zSpT)
+        Me.pnlWorldMap.Controls.Add(Me.zWaT)
+        Me.pnlWorldMap.Controls.Add(Me.zFoT)
+        Me.pnlWorldMap.Controls.Add(Me.zIC)
+        Me.pnlWorldMap.Controls.Add(Me.zJB)
+        Me.pnlWorldMap.Controls.Add(Me.zDDC)
+        Me.pnlWorldMap.Controls.Add(Me.zDT)
+        Me.pnlWorldMap.Controls.Add(Me.zDC)
+        Me.pnlWorldMap.Controls.Add(Me.zHW)
+        Me.pnlWorldMap.Controls.Add(Me.zGF)
+        Me.pnlWorldMap.Controls.Add(Me.zGV)
+        Me.pnlWorldMap.Controls.Add(Me.zLH)
+        Me.pnlWorldMap.Controls.Add(Me.zZF)
+        Me.pnlWorldMap.Controls.Add(Me.zZD)
+        Me.pnlWorldMap.Controls.Add(Me.zZR)
+        Me.pnlWorldMap.Controls.Add(Me.zGC)
+        Me.pnlWorldMap.Controls.Add(Me.zDMC)
+        Me.pnlWorldMap.Controls.Add(Me.zDMT)
+        Me.pnlWorldMap.Controls.Add(Me.zGY)
+        Me.pnlWorldMap.Controls.Add(Me.zBotW)
+        Me.pnlWorldMap.Controls.Add(Me.zIGC)
+        Me.pnlWorldMap.Controls.Add(Me.zCastle)
+        Me.pnlWorldMap.Controls.Add(Me.zMK)
+        Me.pnlWorldMap.Controls.Add(Me.zLLR)
+        Me.pnlWorldMap.Controls.Add(Me.zHF)
+        Me.pnlWorldMap.Controls.Add(Me.zSFM)
+        Me.pnlWorldMap.Controls.Add(Me.zLW)
+        Me.pnlWorldMap.Controls.Add(Me.zKF)
+        Me.pnlWorldMap.Location = New System.Drawing.Point(6, 377)
+        Me.pnlWorldMap.Name = "pnlWorldMap"
+        Me.pnlWorldMap.Size = New System.Drawing.Size(562, 318)
+        Me.pnlWorldMap.TabIndex = 326
+        '
+        'zFiT
+        '
+        Me.zFiT.BackColor = System.Drawing.Color.Red
+        Me.zFiT.Location = New System.Drawing.Point(372, 7)
+        Me.zFiT.Name = "zFiT"
+        Me.zFiT.Size = New System.Drawing.Size(18, 18)
+        Me.zFiT.TabIndex = 358
+        '
+        'zGTG
+        '
+        Me.zGTG.BackColor = System.Drawing.Color.Red
+        Me.zGTG.Location = New System.Drawing.Point(106, 82)
+        Me.zGTG.Name = "zGTG"
+        Me.zGTG.Size = New System.Drawing.Size(18, 18)
+        Me.zGTG.TabIndex = 357
+        '
+        'zKV
+        '
+        Me.zKV.BackColor = System.Drawing.Color.Red
+        Me.zKV.Location = New System.Drawing.Point(357, 69)
+        Me.zKV.Name = "zKV"
+        Me.zKV.Size = New System.Drawing.Size(18, 18)
+        Me.zKV.TabIndex = 356
+        '
+        'zShT
+        '
+        Me.zShT.BackColor = System.Drawing.Color.Red
+        Me.zShT.Location = New System.Drawing.Point(421, 64)
+        Me.zShT.Name = "zShT"
+        Me.zShT.Size = New System.Drawing.Size(18, 18)
+        Me.zShT.TabIndex = 355
+        '
+        'zSpT
+        '
+        Me.zSpT.BackColor = System.Drawing.Color.Red
+        Me.zSpT.Location = New System.Drawing.Point(8, 50)
+        Me.zSpT.Name = "zSpT"
+        Me.zSpT.Size = New System.Drawing.Size(18, 18)
+        Me.zSpT.TabIndex = 354
+        '
+        'zWaT
+        '
+        Me.zWaT.BackColor = System.Drawing.Color.Red
+        Me.zWaT.Location = New System.Drawing.Point(197, 271)
+        Me.zWaT.Name = "zWaT"
+        Me.zWaT.Size = New System.Drawing.Size(18, 18)
+        Me.zWaT.TabIndex = 353
+        '
+        'zFoT
+        '
+        Me.zFoT.BackColor = System.Drawing.Color.Red
+        Me.zFoT.Location = New System.Drawing.Point(435, 112)
+        Me.zFoT.Name = "zFoT"
+        Me.zFoT.Size = New System.Drawing.Size(18, 18)
+        Me.zFoT.TabIndex = 352
+        '
+        'zIC
+        '
+        Me.zIC.BackColor = System.Drawing.Color.Red
+        Me.zIC.Location = New System.Drawing.Point(501, 43)
+        Me.zIC.Name = "zIC"
+        Me.zIC.Size = New System.Drawing.Size(18, 18)
+        Me.zIC.TabIndex = 351
+        '
+        'zJB
+        '
+        Me.zJB.BackColor = System.Drawing.Color.Red
+        Me.zJB.Location = New System.Drawing.Point(519, 61)
+        Me.zJB.Name = "zJB"
+        Me.zJB.Size = New System.Drawing.Size(18, 18)
+        Me.zJB.TabIndex = 350
+        '
+        'zDDC
+        '
+        Me.zDDC.BackColor = System.Drawing.Color.Red
+        Me.zDDC.Location = New System.Drawing.Point(326, 33)
+        Me.zDDC.Name = "zDDC"
+        Me.zDDC.Size = New System.Drawing.Size(18, 18)
+        Me.zDDC.TabIndex = 349
+        '
+        'zDT
+        '
+        Me.zDT.BackColor = System.Drawing.Color.Red
+        Me.zDT.Location = New System.Drawing.Point(488, 168)
+        Me.zDT.Name = "zDT"
+        Me.zDT.Size = New System.Drawing.Size(18, 18)
+        Me.zDT.TabIndex = 348
+        '
+        'zDC
+        '
+        Me.zDC.BackColor = System.Drawing.Color.Red
+        Me.zDC.Location = New System.Drawing.Point(27, 67)
+        Me.zDC.Name = "zDC"
+        Me.zDC.Size = New System.Drawing.Size(18, 18)
+        Me.zDC.TabIndex = 347
+        '
+        'zHW
+        '
+        Me.zHW.BackColor = System.Drawing.Color.Red
+        Me.zHW.Location = New System.Drawing.Point(63, 64)
+        Me.zHW.Name = "zHW"
+        Me.zHW.Size = New System.Drawing.Size(18, 18)
+        Me.zHW.TabIndex = 346
+        '
+        'zGF
+        '
+        Me.zGF.BackColor = System.Drawing.Color.Red
+        Me.zGF.Location = New System.Drawing.Point(88, 82)
+        Me.zGF.Name = "zGF"
+        Me.zGF.Size = New System.Drawing.Size(18, 18)
+        Me.zGF.TabIndex = 345
+        '
+        'zGV
+        '
+        Me.zGV.BackColor = System.Drawing.Color.Red
+        Me.zGV.Location = New System.Drawing.Point(130, 107)
+        Me.zGV.Name = "zGV"
+        Me.zGV.Size = New System.Drawing.Size(18, 18)
+        Me.zGV.TabIndex = 344
+        '
+        'zLH
+        '
+        Me.zLH.BackColor = System.Drawing.Color.Red
+        Me.zLH.Location = New System.Drawing.Point(205, 241)
+        Me.zLH.Name = "zLH"
+        Me.zLH.Size = New System.Drawing.Size(18, 18)
+        Me.zLH.TabIndex = 343
+        '
+        'zZF
+        '
+        Me.zZF.BackColor = System.Drawing.Color.Red
+        Me.zZF.Location = New System.Drawing.Point(501, 61)
+        Me.zZF.Name = "zZF"
+        Me.zZF.Size = New System.Drawing.Size(18, 18)
+        Me.zZF.TabIndex = 342
+        '
+        'zZD
+        '
+        Me.zZD.BackColor = System.Drawing.Color.Red
+        Me.zZD.Location = New System.Drawing.Point(518, 87)
+        Me.zZD.Name = "zZD"
+        Me.zZD.Size = New System.Drawing.Size(18, 18)
+        Me.zZD.TabIndex = 341
+        '
+        'zZR
+        '
+        Me.zZR.BackColor = System.Drawing.Color.Red
+        Me.zZR.Location = New System.Drawing.Point(419, 94)
+        Me.zZR.Name = "zZR"
+        Me.zZR.Size = New System.Drawing.Size(18, 18)
+        Me.zZR.TabIndex = 340
+        '
+        'zGC
+        '
+        Me.zGC.BackColor = System.Drawing.Color.Red
+        Me.zGC.Location = New System.Drawing.Point(330, 11)
+        Me.zGC.Name = "zGC"
+        Me.zGC.Size = New System.Drawing.Size(18, 18)
+        Me.zGC.TabIndex = 339
+        '
+        'zDMC
+        '
+        Me.zDMC.BackColor = System.Drawing.Color.Red
+        Me.zDMC.Location = New System.Drawing.Point(354, 7)
+        Me.zDMC.Name = "zDMC"
+        Me.zDMC.Size = New System.Drawing.Size(18, 18)
+        Me.zDMC.TabIndex = 338
+        '
+        'zDMT
+        '
+        Me.zDMT.BackColor = System.Drawing.Color.Red
+        Me.zDMT.Location = New System.Drawing.Point(344, 42)
+        Me.zDMT.Name = "zDMT"
+        Me.zDMT.Size = New System.Drawing.Size(18, 18)
+        Me.zDMT.TabIndex = 337
+        '
+        'zGY
+        '
+        Me.zGY.BackColor = System.Drawing.Color.Red
+        Me.zGY.Location = New System.Drawing.Point(403, 64)
+        Me.zGY.Name = "zGY"
+        Me.zGY.Size = New System.Drawing.Size(18, 18)
+        Me.zGY.TabIndex = 336
+        '
+        'zBotW
+        '
+        Me.zBotW.BackColor = System.Drawing.Color.Red
+        Me.zBotW.Location = New System.Drawing.Point(375, 69)
+        Me.zBotW.Name = "zBotW"
+        Me.zBotW.Size = New System.Drawing.Size(18, 18)
+        Me.zBotW.TabIndex = 335
+        '
+        'zIGC
+        '
+        Me.zIGC.BackColor = System.Drawing.Color.Red
+        Me.zIGC.Location = New System.Drawing.Point(294, 38)
+        Me.zIGC.Name = "zIGC"
+        Me.zIGC.Size = New System.Drawing.Size(18, 18)
+        Me.zIGC.TabIndex = 334
+        '
+        'zCastle
+        '
+        Me.zCastle.BackColor = System.Drawing.Color.Red
+        Me.zCastle.Location = New System.Drawing.Point(276, 38)
+        Me.zCastle.Name = "zCastle"
+        Me.zCastle.Size = New System.Drawing.Size(18, 18)
+        Me.zCastle.TabIndex = 333
+        '
+        'zMK
+        '
+        Me.zMK.BackColor = System.Drawing.Color.Red
+        Me.zMK.Location = New System.Drawing.Point(285, 66)
+        Me.zMK.Name = "zMK"
+        Me.zMK.Size = New System.Drawing.Size(18, 18)
+        Me.zMK.TabIndex = 332
+        '
+        'zLLR
+        '
+        Me.zLLR.BackColor = System.Drawing.Color.Red
+        Me.zLLR.Location = New System.Drawing.Point(257, 124)
+        Me.zLLR.Name = "zLLR"
+        Me.zLLR.Size = New System.Drawing.Size(18, 18)
+        Me.zLLR.TabIndex = 331
+        '
+        'zHF
+        '
+        Me.zHF.BackColor = System.Drawing.Color.Red
+        Me.zHF.Location = New System.Drawing.Point(295, 104)
+        Me.zHF.Name = "zHF"
+        Me.zHF.Size = New System.Drawing.Size(18, 18)
+        Me.zHF.TabIndex = 330
+        '
+        'zSFM
+        '
+        Me.zSFM.BackColor = System.Drawing.Color.Red
+        Me.zSFM.Location = New System.Drawing.Point(435, 130)
+        Me.zSFM.Name = "zSFM"
+        Me.zSFM.Size = New System.Drawing.Size(18, 18)
+        Me.zSFM.TabIndex = 329
+        '
+        'zLW
+        '
+        Me.zLW.BackColor = System.Drawing.Color.Red
+        Me.zLW.Location = New System.Drawing.Point(427, 150)
+        Me.zLW.Name = "zLW"
+        Me.zLW.Size = New System.Drawing.Size(18, 18)
+        Me.zLW.TabIndex = 328
+        '
+        'zKF
+        '
+        Me.zKF.BackColor = System.Drawing.Color.Red
+        Me.zKF.Location = New System.Drawing.Point(435, 183)
+        Me.zKF.Name = "zKF"
+        Me.zKF.Size = New System.Drawing.Size(18, 18)
+        Me.zKF.TabIndex = 327
+        '
         'pnlDungeonItems
         '
         Me.pnlDungeonItems.BackColor = System.Drawing.Color.Black
@@ -4247,12 +4579,24 @@ Partial Class frmTrackerOfTime
         Me.pbxBiggoronsSword.TabIndex = 1
         Me.pbxBiggoronsSword.TabStop = False
         '
+        'lcxShowMap
+        '
+        Me.lcxShowMap.Location = New System.Drawing.Point(401, 3)
+        Me.lcxShowMap.Name = "lcxShowMap"
+        Me.lcxShowMap.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxShowMap.Size = New System.Drawing.Size(155, 20)
+        Me.lcxShowMap.TabIndex = 326
+        Me.lcxShowMap.Text = "Show Map Instead of Text"
+        Me.lcxShowMap.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
         'frmTrackerOfTime
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1175, 1073)
+        Me.ClientSize = New System.Drawing.Size(1175, 1067)
         Me.Controls.Add(Me.rtbOutputRight)
+        Me.Controls.Add(Me.rtbOutputLeft)
+        Me.Controls.Add(Me.pnlWorldMap)
         Me.Controls.Add(Me.pnlSettings)
         Me.Controls.Add(Me.pnlDungeonItems)
         Me.Controls.Add(Me.btnFocus)
@@ -4298,7 +4642,6 @@ Partial Class frmTrackerOfTime
         Me.Controls.Add(Me.pnlDekuTree)
         Me.Controls.Add(Me.btnTest)
         Me.Controls.Add(Me.pnlHidden)
-        Me.Controls.Add(Me.rtbOutputLeft)
         Me.Controls.Add(Me.mnuOptions)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MainMenuStrip = Me.mnuOptions
@@ -4407,6 +4750,7 @@ Partial Class frmTrackerOfTime
         CType(Me.pbxBoleroOfFire, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbxMinuetOfForest, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbxZeldasLullaby, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pnlWorldMap.ResumeLayout(False)
         Me.pnlDungeonItems.ResumeLayout(False)
         CType(Me.pbxTriforce, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbxGoldSkulltula, System.ComponentModel.ISupportInitialize).EndInit()
@@ -4842,5 +5186,39 @@ Partial Class frmTrackerOfTime
     Friend WithEvents lcxBotWMQPits As System.Windows.Forms.Label
     Friend WithEvents lcxIGCMQRustedSwitches As System.Windows.Forms.Label
     Friend WithEvents lcxIGCLensless As System.Windows.Forms.Label
+    Friend WithEvents zKF As System.Windows.Forms.Label
+    Friend WithEvents pnlWorldMap As System.Windows.Forms.Panel
+    Friend WithEvents zGTG As System.Windows.Forms.Label
+    Friend WithEvents zKV As System.Windows.Forms.Label
+    Friend WithEvents zShT As System.Windows.Forms.Label
+    Friend WithEvents zSpT As System.Windows.Forms.Label
+    Friend WithEvents zWaT As System.Windows.Forms.Label
+    Friend WithEvents zFoT As System.Windows.Forms.Label
+    Friend WithEvents zIC As System.Windows.Forms.Label
+    Friend WithEvents zJB As System.Windows.Forms.Label
+    Friend WithEvents zDDC As System.Windows.Forms.Label
+    Friend WithEvents zDT As System.Windows.Forms.Label
+    Friend WithEvents zDC As System.Windows.Forms.Label
+    Friend WithEvents zHW As System.Windows.Forms.Label
+    Friend WithEvents zGF As System.Windows.Forms.Label
+    Friend WithEvents zGV As System.Windows.Forms.Label
+    Friend WithEvents zLH As System.Windows.Forms.Label
+    Friend WithEvents zZF As System.Windows.Forms.Label
+    Friend WithEvents zZD As System.Windows.Forms.Label
+    Friend WithEvents zZR As System.Windows.Forms.Label
+    Friend WithEvents zGC As System.Windows.Forms.Label
+    Friend WithEvents zDMC As System.Windows.Forms.Label
+    Friend WithEvents zDMT As System.Windows.Forms.Label
+    Friend WithEvents zGY As System.Windows.Forms.Label
+    Friend WithEvents zBotW As System.Windows.Forms.Label
+    Friend WithEvents zIGC As System.Windows.Forms.Label
+    Friend WithEvents zCastle As System.Windows.Forms.Label
+    Friend WithEvents zMK As System.Windows.Forms.Label
+    Friend WithEvents zLLR As System.Windows.Forms.Label
+    Friend WithEvents zHF As System.Windows.Forms.Label
+    Friend WithEvents zSFM As System.Windows.Forms.Label
+    Friend WithEvents zLW As System.Windows.Forms.Label
+    Friend WithEvents zFiT As System.Windows.Forms.Label
+    Friend WithEvents lcxShowMap As System.Windows.Forms.Label
 
 End Class
