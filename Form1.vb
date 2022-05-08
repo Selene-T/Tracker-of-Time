@@ -10,7 +10,7 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 116
     Private Const IS_64BIT As Boolean = False
-    Private Const VER As String = "3.0.1"
+    Private Const VER As String = "3.1.0"
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private Const romAddrStart As Integer = &HDFE40000
@@ -36,6 +36,7 @@ Public Class frmTrackerOfTime
     ' RTB variables
     Private emboldenList As New List(Of String)
     Private rtbRefresh As Byte = 0
+    Private rtbLines As Byte = 14
     Private lastArea As String = String.Empty
     Private lastOutput As New List(Of String)
 
@@ -92,6 +93,7 @@ Public Class frmTrackerOfTime
     Private aoQuestItems(22) As PictureBox
     Private aoQuestItemImages(22) As Image
     Private aoQuestItemImagesEmpty(22) As Image
+    Private aoEquipment(20) As PictureBox
     Private aoInventory(23) As PictureBox
 
     Private Sub frmTrackerOfTime_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -100,6 +102,10 @@ Public Class frmTrackerOfTime
 
     ' On load, populate the locations array
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If My.Settings.setFirstTime Then
+            showSetting = True
+            updateShowSettings()
+        End If
         Me.Text = "Tracker of Time v" & VER
         For i = 0 To aKeys.Length - 1
             aKeys(i) = New keyCheck
@@ -111,11 +117,6 @@ Public Class frmTrackerOfTime
         custMenu.foreColour = Me.ForeColor
         mnuOptions.Renderer = New custMenu
 
-        'custComboBox.highlight = Me.ForeColor
-        'custComboBox.backColour = Me.BackColor
-        'custComboBox.foreColour = Me.ForeColor
-        'ComboBox1 = New custCombobox
-        'custComboBox.
         loadSettings()
 
         For i As Integer = 0 To arrLocation.Length - 1
@@ -156,6 +157,7 @@ Public Class frmTrackerOfTime
         Next
 
         populateLocations()
+
     End Sub
 
     Private Sub makeArrayObjects()
@@ -266,7 +268,30 @@ Public Class frmTrackerOfTime
         aoQuestItems(21) = pbxStoneOfAgony
         aoQuestItems(22) = pbxGerudosCard
 
-        ' Link  the pictureboxes of each inventory item into an array
+        ' Link the pictureboxes of each equipment item into an array
+        aoEquipment(0) = pbxQuiver
+        aoEquipment(1) = pbxBulletBag
+        aoEquipment(2) = pbxKokiriSword
+        aoEquipment(3) = pbxMasterSword
+        aoEquipment(4) = pbxBiggoronsSword
+        aoEquipment(5) = pbxWallet
+        aoEquipment(6) = pbxBombBag
+        aoEquipment(7) = pbxDekuShield
+        aoEquipment(8) = pbxHylianShield
+        aoEquipment(9) = pbxMirrorShield
+        aoEquipment(10) = pbxStoneOfAgony
+        aoEquipment(11) = pbxGauntlet
+        aoEquipment(12) = pbxKokiriTunic
+        aoEquipment(13) = pbxGoronTunic
+        aoEquipment(14) = pbxZoraTunic
+        aoEquipment(15) = pbxGerudosCard
+        aoEquipment(16) = pbxScale
+        aoEquipment(17) = pbxKokiriBoots
+        aoEquipment(18) = pbxIronBoots
+        aoEquipment(19) = pbxHoverBoots
+        aoEquipment(20) = pbxBrokenKnife
+
+        ' Link the pictureboxes of each inventory item into an array
         aoInventory(0) = pbx01
         aoInventory(1) = pbx02
         aoInventory(2) = pbx03
@@ -674,18 +699,18 @@ Public Class frmTrackerOfTime
             If Not .Visible Then .Visible = True
             .Image = My.Resources.goldSkulltula
 
-            ' 23 is the starting position for single digit numbers, but will be reducing it by 5 since byte varaibles cannot be negative and triple digits needs to start at -5
-            Dim xPos As Byte = 23
-            ' If double digits, set starting position to 12(-5 = 7)
-            If bGS > 9 Then xPos = 12
-            ' If triple digits, set starting position to 0(-5 = -5)
-            If bGS > 99 Then xPos = 0
-            ' Font for gold skulltula numbers
-            Dim fontGS = New Font("Lucida Console", 18, FontStyle.Bold, GraphicsUnit.Pixel)
+            ' If single digit
+            Dim xPos As Byte = 34
+            ' If double digits
+            If bGS > 9 Then xPos = 19
+            ' If triple digits
+            If bGS > 99 Then xPos = 3
+            ' Font for items numbers
+            Dim fontGS = New Font("Lucida Console", 24, FontStyle.Bold, GraphicsUnit.Pixel)
 
             ' Draw the value over the lower right of the gold skulltula picturebox, first in black to give it some definition, then in white
-            Graphics.FromImage(.Image).DrawString(bGS.ToString, fontGS, New SolidBrush(Color.Black), xPos - 6, 17)
-            Graphics.FromImage(.Image).DrawString(bGS.ToString, fontGS, New SolidBrush(Color.White), xPos - 5, 18)
+            Graphics.FromImage(.Image).DrawString(bGS.ToString, fontGS, New SolidBrush(Color.Black), xPos - 6, 28)
+            Graphics.FromImage(.Image).DrawString(bGS.ToString, fontGS, New SolidBrush(Color.White), xPos - 5, 29)
         End With
     End Sub
     Private Sub getHearts()
@@ -699,13 +724,13 @@ Public Class frmTrackerOfTime
         ' Just a percaution, limit hearts to 99, even though 20 is the max. Never know what people may do to their save file 
         If bHearts > 99 Then bHearts = 99
 
-        ' 18 is the starting position for single digit numbers
-        Dim xPos As Byte = 18
-        ' If double digits, set starting position to 7
-        If bHearts > 9 Then xPos = 7
+        ' 29 is the starting position for single digit numbers
+        Dim xPos As Byte = 29
+        ' If double digits, set starting position to 14
+        If bHearts > 9 Then xPos = 14
 
         ' Set up the font for the number of hearts
-        Dim fontHearts = New Font("Lucida Console", 18, FontStyle.Bold, GraphicsUnit.Pixel)
+        Dim fontHearts = New Font("Lucida Console", 24, FontStyle.Bold, GraphicsUnit.Pixel)
 
         With pbxHeartContainer
             ' If not already visible, make it so. This is left here to let it stay greyed out before the first scan
@@ -720,8 +745,8 @@ Public Class frmTrackerOfTime
             End If
 
             ' Draw the value over the lower right of the heart container picturebox, first in black to give it some definition, then in white
-            Graphics.FromImage(.Image).DrawString(bHearts.ToString, fontHearts, New SolidBrush(Color.Black), xPos - 1, 17)
-            Graphics.FromImage(.Image).DrawString(bHearts.ToString, fontHearts, New SolidBrush(Color.White), xPos, 18)
+            Graphics.FromImage(.Image).DrawString(bHearts.ToString, fontHearts, New SolidBrush(Color.Black), xPos - 1, 28)
+            Graphics.FromImage(.Image).DrawString(bHearts.ToString, fontHearts, New SolidBrush(Color.White), xPos, 29)
             '.Invalidate()
         End With
 
@@ -769,18 +794,18 @@ Public Class frmTrackerOfTime
             itemAmount = CByte("&H" & Mid(itemsAll, (i * 2) + 1, 2))
             If aGetQuantity(i) = True Then
                 With aoInventory(i)
-                    ' 23 is the starting position for single digit numbers, but will be reducing it by 5 since byte varaibles cannot be negative and triple digits needs to start at -5
-                    Dim xPos As Byte = 23
-                    ' If double digits, set starting position to 12(-5 = 7)
-                    If itemAmount > 9 Then xPos = 12
-                    ' If triple digits, set starting position to 0(-5 = -5)
-                    If itemAmount > 99 Then xPos = 0
+                    ' If single digits
+                    Dim xPos As Byte = 34
+                    ' If double digits
+                    If itemAmount > 9 Then xPos = 19
+                    ' If triple digits
+                    If itemAmount > 99 Then xPos = 3
                     ' Font for items numbers
-                    Dim fontGS = New Font("Lucida Console", 18, FontStyle.Bold, GraphicsUnit.Pixel)
+                    Dim fontItem = New Font("Lucida Console", 24, FontStyle.Bold, GraphicsUnit.Pixel)
 
                     ' Draw the value over the lower right of the item's picturebox, first in black to give it some definition, then in white
-                    Graphics.FromImage(.Image).DrawString(itemAmount.ToString, fontGS, New SolidBrush(Color.Black), xPos - 6, 17)
-                    Graphics.FromImage(.Image).DrawString(itemAmount.ToString, fontGS, New SolidBrush(Color.White), xPos - 5, 18)
+                    Graphics.FromImage(.Image).DrawString(itemAmount.ToString, fontItem, New SolidBrush(Color.Black), xPos - 6, 28)
+                    Graphics.FromImage(.Image).DrawString(itemAmount.ToString, fontItem, New SolidBrush(Color.White), xPos - 5, 29)
                 End With
             End If
         Next
@@ -855,7 +880,7 @@ Public Class frmTrackerOfTime
         stringKeys = stringKeys & Mid(tempKeys, 3, 2)
 
         ' Set up the font for the number of keys
-        Dim fontSmallKeys = New Font("Lucida Console", 14, FontStyle.Bold, GraphicsUnit.Pixel)
+        Dim fontSmallKeys = New Font("Lucida Console", 20, FontStyle.Bold, GraphicsUnit.Pixel)
         ' Variable for temp storage for keys
         Dim valKeys As Byte = 0
         ' Position for x: 2 for double digits, 11 for single
@@ -864,8 +889,8 @@ Public Class frmTrackerOfTime
         ' Step through each stored small keys
         For i = 0 To 7
             With aoSmallKeys(i)
-                ' Default position 11 since technically no key should reach double digits
-                xPos = 11
+                ' Default position 20 since technically no key should reach double digits
+                xPos = 20
 
                 ' Move hex value in string to a value
                 valKeys = CByte("&H" & Mid(stringKeys, (i * 2) + 1, 2))
@@ -883,11 +908,11 @@ Public Class frmTrackerOfTime
                     If valKeys > 99 Then valKeys = 99
 
                     ' Again, keys should never be double digit, but just in case, move the starting x position to draw 2 digits
-                    If valKeys > 9 Then xPos = 2
+                    If valKeys > 9 Then xPos = 7
 
                     ' Draw the value over the lower right of the key picturebox, first in black to give it some definition, then in white
-                    Graphics.FromImage(.Image).DrawString(valKeys.ToString, fontSmallKeys, New SolidBrush(Color.Black), xPos - 1, 10)
-                    Graphics.FromImage(.Image).DrawString(valKeys.ToString, fontSmallKeys, New SolidBrush(Color.White), xPos, 11)
+                    Graphics.FromImage(.Image).DrawString(valKeys.ToString, fontSmallKeys, New SolidBrush(Color.Black), xPos - 1, 19)
+                    Graphics.FromImage(.Image).DrawString(valKeys.ToString, fontSmallKeys, New SolidBrush(Color.White), xPos, 20)
                     '.Invalidate()
                 End If
                 aDungeonKeys(i) = valKeys
@@ -941,18 +966,18 @@ Public Class frmTrackerOfTime
                 ' Reset the image to the default triforce piece to remove drawn numbers
                 .Image = My.Resources.triforce
 
-                ' 23 is the starting position for single digit numbers, but will be reducing it by 5 since byte varaibles cannot be negative and triple digits needs to start at -5
-                Dim xPos As Byte = 23
-                ' If double digits, set starting position to 12(-5 = 7)
-                If bTriforce > 9 Then xPos = 12
-                ' If triple digits, set starting position to 0(-5 = -5)
-                If bTriforce > 99 Then xPos = 0
+                ' If single digit
+                Dim xPos As Byte = 34
+                ' If double digits
+                If bTriforce > 9 Then xPos = 19
+                ' If triple digits
+                If bTriforce > 99 Then xPos = 3
                 ' Font for triforce numbers
-                Dim fontTriforce = New Font("Lucida Console", 18, FontStyle.Bold, GraphicsUnit.Pixel)
+                Dim fontTriforce = New Font("Lucida Console", 24, FontStyle.Bold, GraphicsUnit.Pixel)
 
                 ' Draw the value over the lower right of the triforce picturebox, first in black to give it some definition, then in white
-                Graphics.FromImage(.Image).DrawString(bTriforce.ToString, fontTriforce, New SolidBrush(Color.Black), xPos - 6, 17)
-                Graphics.FromImage(.Image).DrawString(bTriforce.ToString, fontTriforce, New SolidBrush(Color.White), xPos - 5, 18)
+                Graphics.FromImage(.Image).DrawString(bTriforce.ToString, fontTriforce, New SolidBrush(Color.Black), xPos - 6, 28)
+                Graphics.FromImage(.Image).DrawString(bTriforce.ToString, fontTriforce, New SolidBrush(Color.White), xPos - 5, 29)
             Else
                 If .Visible Then .Visible = False
             End If
@@ -2266,11 +2291,20 @@ Public Class frmTrackerOfTime
     End Sub
 
     Private Sub btnTest_Click(sender As Object, e As EventArgs) Handles btnTest.Click
-        'Dim test() As String = ".234..".Split(CChar("|"))
-        'MsgBox(test.Length)
-        'MsgBox(Mid("12345", 1, 3))
-        'MsgBox(checkBit(&H11B4FC, 0).ToString)
-        If True Then
+        makeKeysDekuTree(True)
+        makeKeysDodongosCavern(True)
+        makeKeysJabuJabusBelly(True)
+        makeKeysForestTemple(True)
+        makeKeysFireTemple(True)
+        makeKeysWaterTemple(True)
+        makeKeysSpiritTemple(True)
+        makeKeysShadowTemple(True)
+        makeKeysBottomOfTheWell(True)
+        makeKeysIceCavern(True)
+        makeKeysGerudoTrainingGround(True)
+        makeKeysGanonsCastle(True)
+        updateLabelsDungeons()
+        If False Then
             Dim outputXX As String = String.Empty
             outputXX = "Adult:"
             For i = 0 To aReachA.Length - 1
@@ -2282,16 +2316,7 @@ Public Class frmTrackerOfTime
             Next
             Clipboard.SetText(outputXX)
         End If
-        'Dim test As String = String.Empty
-        'Dim warpAdult As String = Hex(goRead(&H903D0, 15))
-        'Dim warpYoung As String = Hex(goRead(&H903E0, 15))
-        'Dim warpMinuet As String = Hex(goRead(&H3AB22C + 2, 15))
-        'Dim warpBolero As String = Hex(goRead(&H3AB22C, 15))
-        'Dim warpSerenade As String = Hex(goRead(&H3AB230 + 2, 15))
-        'Dim warpRequiem As String = Hex(goRead(&H3AB230, 15))
-        'Dim warpNocturne As String = Hex(goRead(&H3AB234 + 2, 15))
-        'Dim warpPrelude As String = Hex(goRead(&H3AB234, 15))
-        'MsgBox(item("bolero of fire").ToString)
+
     End Sub
     Private Sub changeTheme(Optional theme As Byte = 0)
         Dim cBack As Color = Control.DefaultBackColor
@@ -2349,35 +2374,46 @@ Public Class frmTrackerOfTime
         'updateSettingsPanel()
     End Sub
     Private Sub resizeForm()
-        If My.Settings.setMap Then
-            rtbOutputLeft.Top = 696
-            rtbOutputRight.Top = 696
+
+        If My.Settings.setExpand Then
+            pnlWorldMap.Height = 318
+            rtbLines = 14
+            rtbOutputLeft.Height = 196
+            rtbOutputRight.Height = 196
         Else
-            rtbOutputLeft.Top = 666
-            rtbOutputRight.Top = 666
+            rtbLines = 11
+            pnlWorldMap.Height = 300
+            rtbOutputLeft.Height = 157
+            rtbOutputRight.Height = 157
         End If
-        'Exit Sub
-        Dim pnFore As Pen = New Pen(Me.ForeColor, 1)
-        Dim pnBack As Pen = New Pen(Me.BackColor, 1)
-        Dim gfx As Graphics = Me.CreateGraphics
+
+        If My.Settings.setMap Then
+            rtbOutputLeft.Top = pnlWorldMap.Top + pnlWorldMap.Height + 1
+            rtbOutputRight.Top = rtbOutputLeft.Top
+        Else
+            rtbOutputLeft.Top = pnlDMCrater.Top + pnlDMCrater.Height
+            rtbOutputRight.Top = rtbOutputLeft.Top
+        End If
 
         pnlWorldMap.Visible = My.Settings.setMap
-        pnlHidden.Visible = False
-        Button2.Visible = False
 
-        Application.DoEvents()
-        If showSetting Then
-            Me.Width = pnlDekuTree.Location.X + pnlDekuTree.Width + 623
-        Else
-            Me.Width = pnlDekuTree.Location.X + pnlDekuTree.Width + 22
+        If True Then
+            pnlHidden.Visible = False
+            Button2.Visible = False
+
+            Application.DoEvents()
+            If showSetting Then
+                Me.Width = pnlDekuTree.Location.X + pnlDekuTree.Width + 623
+            Else
+                Me.Width = pnlDekuTree.Location.X + pnlDekuTree.Width + 22
+            End If
+            Me.Height = rtbOutputRight.Location.Y + rtbOutputRight.Height + 46
         End If
-        Me.Height = rtbOutputRight.Location.Y + rtbOutputRight.Height + 46
-
-        'If showSetting Then e.Graphics.DrawLine(pnFore, pnlDekuTree.Location.X + pnlDekuTree.Width + 6, 0, pnlDekuTree.Location.X + pnlDekuTree.Width + 6, Me.Height)
+        Dim gfx As Graphics = Me.CreateGraphics
         gfx = Me.CreateGraphics
         With rtbOutputLeft
-            gfx.DrawRectangle(pnBack, .Location.X - 1, .Location.Y - 1, .Width + 1, .Height + 20)
-            gfx.DrawRectangle(pnFore, .Location.X - 1, .Location.Y - 1, .Width + 1, .Height + 1)
+            gfx.DrawRectangle(New Pen(Me.BackColor, 1), .Location.X - 1, .Location.Y - 1, .Width + 1, .Height + 20)
+            gfx.DrawRectangle(New Pen(Me.ForeColor, 1), .Location.X - 1, .Location.Y - 1, .Width + 1, .Height + 1)
         End With
     End Sub
 
@@ -2468,12 +2504,12 @@ Public Class frmTrackerOfTime
 
         Select Case area
             Case "HF"
-                Do While outputLines.Count < 14
+                Do While outputLines.Count < rtbLines
                     outputLines.Add(String.Empty)
                 Loop
                 scanArea(outputLines, "QBPH", showChecked)
             Case "ZR"
-                Do While outputLines.Count < 14
+                Do While outputLines.Count < rtbLines
                     outputLines.Add(String.Empty)
                 Loop
                 scanArea(outputLines, "QF", showChecked)
@@ -2483,7 +2519,7 @@ Public Class frmTrackerOfTime
                     outputLines.Clear()
                     scanArea(outputLines, "MK", showChecked)
                     scanArea(outputLines, "QM", showChecked)
-                    Do While outputLines.Count < 14
+                    Do While outputLines.Count < rtbLines
                         outputLines.Add(String.Empty)
                     Loop
                     scanArea(outputLines, "TT", showChecked)
@@ -2493,7 +2529,7 @@ Public Class frmTrackerOfTime
                     emboldenList.Clear()
                     outputLines.Clear()
                     scanArea(outputLines, "HC", showChecked)
-                    Do While outputLines.Count < 14
+                    Do While outputLines.Count < rtbLines
                         outputLines.Add(String.Empty)
                     Loop
                     scanArea(outputLines, "OGC", showChecked)
@@ -2501,7 +2537,7 @@ Public Class frmTrackerOfTime
             Case "KV"
                 If My.Settings.setMap Then
                     scanArea(outputLines, "QGS", showChecked)
-                    Do While outputLines.Count > 28
+                    Do While outputLines.Count > (rtbLines * 2)
                         outputLines.RemoveAt(outputLines.Count - 1)
                     Loop
                 End If
@@ -2553,7 +2589,9 @@ Public Class frmTrackerOfTime
         Dim suffix As String = String.Empty
         ' Confirmation to add the check to the output list or not
         Dim addCheck As Boolean = False
-
+        ' If in compact mode, float checks to a readable location
+        Dim floatChecks As New List(Of String)
+        Dim doFloat As Boolean = False
         For i = 0 To aKeys.Length - 1
             With aKeys(i)
                 ' Stop if an empty key
@@ -2601,11 +2639,9 @@ Public Class frmTrackerOfTime
                             If .forced Then suffix = " (Forced)"
 
                             ' Do not bolden the checked list. This will still bolden the forced items in the check list
+                            doFloat = False
                             If Not .checked Then
                                 ' If logic is on, bold the ones that are accessable
-                                ' TESTLOGIC If My.Settings.setLogic And checkLogic(.logic, .zone) Then
-                                ' TESTLOGIC emboldenList.Add(prefix & .name & suffix)
-                                ' TESTLOGIC End If
                                 Dim logicResult As Byte = checkLogic(.logic, .zone)
                                 If My.Settings.setLogic And Not logicResult = 0 Then
                                     Select Case logicResult
@@ -2615,14 +2651,35 @@ Public Class frmTrackerOfTime
                                             suffix = " (A) " & suffix
                                     End Select
                                     emboldenList.Add(prefix & .name & suffix)
+                                    doFloat = True
                                 End If
                             End If
-                            If addCheck Then lines.Add(prefix & .name & suffix & Chr(32))
+                            If addCheck Then
+                                If lines.Count < (rtbLines * 2) Then
+                                    lines.Add(prefix & .name & suffix & Chr(32))
+                                ElseIf doFloat Then
+                                    floatChecks.Add(prefix & .name & suffix & Chr(32))
+                                End If
+                            End If
                         End If
                     End If
                 End If
             End With
         Next
+        If Not floatChecks.Count = 0 Then
+            Dim doRemove As Boolean = True
+            For i = lines.Count - 1 To 0 Step -1
+                doRemove = True
+                For j = 0 To emboldenList.Count - 1
+                    If lines(i) = emboldenList(j) & Chr(32) Then doRemove = False
+                Next
+                If doRemove Then lines.RemoveAt(i)
+                If lines.Count + floatChecks.Count <= rtbLines * 2 Then Exit For
+            Next
+            For Each line In floatChecks
+                lines.Add(line)
+            Next
+        End If
     End Sub
     Private Sub displayChecksDungeons(ByVal dungeon As Byte, ByVal showChecked As Boolean, Optional setCounter As Boolean = True)
         Dim displayName As String = String.Empty
@@ -12059,8 +12116,27 @@ Public Class frmTrackerOfTime
                 End If
             Next
             If addressDLL = 0 Then Exit Sub
-            romAddrStart64 = addressDLL + &H845000
-            SetProcessName("retroarch")
+
+            ' Prepare new address variable
+            Dim attemptOffset As Int64 = 0
+
+            For i = 0 To 1
+                Select Case i
+                    Case 0
+                        ' 1.9.0 - 1.10.2
+                        attemptOffset = &H845000
+                    Case 1
+                        ' 1.10.3+
+                        attemptOffset = &H844000
+                    Case Else
+                        Return
+                End Select
+                romAddrStart64 = addressDLL + attemptOffset
+                SetProcessName("retroarch")
+
+                If ReadMemory(Of Integer)(romAddrStart64 + &H11A5D0) = 529 Then Exit For
+            Next
+
             emulator = "retroarch - parallel"
         End If
 
@@ -12597,9 +12673,6 @@ Public Class frmTrackerOfTime
     Private Sub frmTrackerOfTime_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
         Dim pnFore As Pen = New Pen(Me.ForeColor, 1)
         If showSetting Then e.Graphics.DrawLine(pnFore, pnlDekuTree.Location.X + pnlDekuTree.Width + 6, 0, pnlDekuTree.Location.X + pnlDekuTree.Width + 6, Me.Height)
-        With rtbOutputLeft
-            'e.Graphics.DrawRectangle(pnFore, .Location.X - 1, .Location.Y - 1, .Width + 1, .Height + 1)
-        End With
         updateSettingsPanel()
     End Sub
     Private Sub frmTrackerOfTime_Resize(sender As Object, e As EventArgs) Handles Me.Resize
@@ -12744,8 +12817,14 @@ Public Class frmTrackerOfTime
                 My.Settings.setCucco = Not My.Settings.setCucco
             Case lcxShowMap.Text
                 My.Settings.setMap = Not My.Settings.setMap
+                resizeForm()
+            Case lcxExpand.Text
+                My.Settings.setExpand = Not My.Settings.setExpand
+                resizeForm()
                 'Case lcxxx.Text
                 'My.Settings.setxx = Not My.Settings.setxx
+            Case lblGoldSkulltulas.Text, lblShopsanity.Text, lblSmallKeys.Text, lblInfo.Text
+
             Case Else
                 rtbOutputLeft.Text = "Unhandled LCX: " & text
         End Select
@@ -12886,12 +12965,21 @@ Public Class frmTrackerOfTime
                 message = "As young Link, use a cucco to fly behind the water to enter Zora's Domain."
             Case lcxShowMap.Text
                 message = "Uses a visual map rather than text. You do not get to see the number of checks for each area, but it looks prettier for streaming."
+            Case lcxExpand.Text
+                message = "The application is trimmed down for 1920x1080 displays. This will expand the application to see the bottom part of the overwold map, and the output box will show all checks with no cut-off." & vbCrLf & vbCrLf & _
+                    "Note: Steps have been taken to reduce any cut-off of checks you can reach. It only happens in rare occasions, will be fixed once you collect a few checks from the area, and if they are reachable, they should show in place of ones you cannot reach."
+            Case lblInfo.Text
+                message = "A list of things to know."
                 'Case lcxxx.Text
                 'message = "."
         End Select
 
         If Not message = String.Empty Then
-            rtbOutputLeft.Text = text.Replace(":", "") & ":"
+            If text.Length < 100 Then
+                rtbOutputLeft.Text = text.Replace(":", "") & ":"
+            Else
+                rtbOutputLeft.Text = "Instructions:"
+            End If
             rtbAddLine("  " & message, True)
         End If
     End Sub
@@ -13144,7 +13232,8 @@ Public Class frmTrackerOfTime
                                 isTrue = My.Settings.setCucco
                             Case lcxShowMap.Name
                                 isTrue = My.Settings.setMap
-                                resizeForm()
+                            Case lcxExpand.Name
+                                isTrue = My.Settings.setExpand
                                 'Case lcxxx.Name
                                 'isTrue = My.Settings.setxx
                             Case Else
@@ -13349,9 +13438,14 @@ Public Class frmTrackerOfTime
         lastRoomScan = 0
         populateLocations()
     End Sub
+    Private Sub ExitScanToolStripMenuItem_Click(sender As Object, e As EventArgs)
+        Me.Close()
+    End Sub
+
     Private Sub ShowSettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ShowSettingsToolStripMenuItem.Click
         showSetting = Not showSetting
         updateShowSettings()
+        My.Settings.setFirstTime = False
     End Sub
 
     Private Sub changeAddedText(ByVal thisOne As Byte, Optional reverse As Boolean = False, Optional justRefresh As Boolean = False)
@@ -13391,19 +13485,19 @@ Public Class frmTrackerOfTime
             Dim xPos As Integer = 0
             Select Case outputText.Length
                 Case 2
-                    xPos = 6
+                    xPos = 11
                 Case 3
-                    xPos = 3
+                    xPos = 5
                 Case 4
-                    xPos = -1
+                    xPos = 0
             End Select
 
             ' Font for dungeon letters
-            Dim fontDungeon = New Font("Lucida Console", 12, FontStyle.Regular, GraphicsUnit.Pixel)
+            Dim fontDungeon = New Font("Lucida Console", 18, FontStyle.Regular, GraphicsUnit.Pixel)
 
             ' Draw the value over the lower right of the gold skulltula picturebox, first in black to give it some definition, then in white
-            Graphics.FromImage(.Image).DrawString(outputText, fontDungeon, New SolidBrush(Color.Black), xPos - 1, 20)
-            Graphics.FromImage(.Image).DrawString(outputText, fontDungeon, New SolidBrush(Color.White), xPos, 21)
+            Graphics.FromImage(.Image).DrawString(outputText, fontDungeon, New SolidBrush(Color.Black), xPos - 1, 31)
+            Graphics.FromImage(.Image).DrawString(outputText, fontDungeon, New SolidBrush(Color.White), xPos, 32)
         End With
     End Sub
     Private Function isWarpShuffle() As Boolean
@@ -13446,10 +13540,10 @@ Public Class frmTrackerOfTime
         With pnlDungeonItems
             ' Restore the background image and prepare the font for the player name
             .BackgroundImage = My.Resources.backgroundDungeonItems
-            Dim fontName As Font = New Font("Lucida Console", 26, FontStyle.Bold, GraphicsUnit.Pixel)
+            Dim fontName As Font = New Font("Lucida Console", 40, FontStyle.Bold, GraphicsUnit.Pixel)
 
             ' Draw the value over the lower right of the gold skulltula picturebox, first in black to give it some definition, then in white
-            Graphics.FromImage(.BackgroundImage).DrawString(sPlayerName2.TrimEnd, fontName, New SolidBrush(Color.White), -3, 90)
+            Graphics.FromImage(.BackgroundImage).DrawString(sPlayerName2.TrimEnd, fontName, New SolidBrush(Color.White), -3, 141)
         End With
     End Sub
     Private Function decodeLetter(ByRef valLetter As Byte) As String
@@ -13727,10 +13821,9 @@ Public Class frmTrackerOfTime
     End Function
     Private Sub displaySpawns(ByVal spawn As Byte)
         ' Font for the letters
-        Dim fontDungeon = New Font("Lucida Console", 16, FontStyle.Regular, GraphicsUnit.Pixel)
+        Dim fontDungeon = New Font("Lucida Console", 24, FontStyle.Regular, GraphicsUnit.Pixel)
         Dim text As String = aWarps(spawn)
         Dim xPos As Integer = 0
-
 
         Select Case spawn
             Case 0
@@ -13763,22 +13856,22 @@ Public Class frmTrackerOfTime
             Dim xPos As Integer = 0
             Select Case text.Length
                 Case 2
-                    xPos = 6
+                    xPos = 11
                 Case 3
-                    xPos = 3
+                    xPos = 5
                 Case 4
-                    xPos = -1
+                    xPos = 0
                 Case Else
                     ' Abort if not within the letter range
                     Exit Sub
             End Select
 
             ' Font for the letters
-            Dim fontDungeon = New Font("Lucida Console", 12, FontStyle.Regular, GraphicsUnit.Pixel)
+            Dim fontDungeon = New Font("Lucida Console", 18, FontStyle.Regular, GraphicsUnit.Pixel)
 
             ' Draw letters over with shadow first, then in white
-            Graphics.FromImage(.Image).DrawString(text, fontDungeon, New SolidBrush(Color.Black), xPos - 1, 20)
-            Graphics.FromImage(.Image).DrawString(text, fontDungeon, New SolidBrush(Color.White), xPos, 21)
+            Graphics.FromImage(.Image).DrawString(text, fontDungeon, New SolidBrush(Color.Black), xPos - 1, 31)
+            Graphics.FromImage(.Image).DrawString(text, fontDungeon, New SolidBrush(Color.White), xPos, 32)
         End With
     End Sub
     Private Sub getRandoVer()
@@ -13821,9 +13914,9 @@ Public Class frmTrackerOfTime
     End Sub
     Private Sub rtbAddLine(ByVal line As String, Optional hideRight As Boolean = False)
         rtbOutputRight.Visible = Not hideRight
-        If rtbOutputLeft.Lines.Count < 15 Then
+        If rtbOutputLeft.Lines.Count <= rtbLines Then
             rtbOutputLeft.AppendText(vbCrLf & line)
-        Else
+        ElseIf rtbOutputRight.Lines.Count <= rtbLines Then
             rtbOutputRight.AppendText(vbCrLf & line)
         End If
     End Sub
@@ -14072,6 +14165,18 @@ Public Class frmTrackerOfTime
     Private Sub zOGC_MouseClick(sender As Object, e As MouseEventArgs) Handles zIGC.MouseClick
         displayChecksDungeons(11, CBool(IIf(e.Button = Windows.Forms.MouseButtons.Right, True, False)))
     End Sub
+    Private Sub mnuOptions_MouseEnter(sender As Object, e As EventArgs) Handles mnuOptions.MouseEnter
+        mnuOptions.Height = 34
+    End Sub
+
+    Private Sub mnuOptions_MouseLeave(sender As Object, e As EventArgs) Handles mnuOptions.MouseLeave
+        mnuOptions.Height = 8
+    End Sub
+
+    Private Sub tmrFixIt_Tick(sender As Object, e As EventArgs) Handles tmrFixIt.Tick
+        updateSettingsPanel()
+        tmrFixIt.Enabled = False
+    End Sub
 End Class
 
 Public Class custMenu
@@ -14089,7 +14194,7 @@ Public Class custMenu
             Dim cBack As Color = CType(IIf(.Selected, highlight, backColour), Color)
             e.Graphics.FillRectangle(New SolidBrush(cBack), New Rectangle(Point.Empty, .Size))
             Select Case LCase(.Text)
-                Case "scan", "auto scan", "stop", "reset", "themes", "settings >", "settings <"
+                Case "scan", "auto scan", "stop", "reset", "exit", "themes", "settings >", "settings <"
                     e.Graphics.DrawRectangle(New Pen(foreColour, 1), New Rectangle(0, 0, .Width - 1, .Height - 1))
             End Select
             .ForeColor = foreColour

@@ -192,6 +192,8 @@ Partial Class frmTrackerOfTime
         Me.lcxTunic = New System.Windows.Forms.Label()
         Me.ltbShopsanity = New System.Windows.Forms.Label()
         Me.pnlSettings = New System.Windows.Forms.Panel()
+        Me.lcxExpand = New System.Windows.Forms.Label()
+        Me.lcxShowMap = New System.Windows.Forms.Label()
         Me.lcxIGCMQRustedSwitches = New System.Windows.Forms.Label()
         Me.lcxIGCLensless = New System.Windows.Forms.Label()
         Me.lcxBotWMQPits = New System.Windows.Forms.Label()
@@ -401,7 +403,8 @@ Partial Class frmTrackerOfTime
         Me.pbxMasterSword = New System.Windows.Forms.PictureBox()
         Me.pbxBrokenKnife = New System.Windows.Forms.PictureBox()
         Me.pbxBiggoronsSword = New System.Windows.Forms.PictureBox()
-        Me.lcxShowMap = New System.Windows.Forms.Label()
+        Me.lblInfo = New System.Windows.Forms.Label()
+        Me.tmrFixIt = New System.Windows.Forms.Timer(Me.components)
         Me.pnlDekuTree.SuspendLayout()
         Me.pnlDodongosCavern.SuspendLayout()
         Me.pnlKokiriForest.SuspendLayout()
@@ -615,7 +618,7 @@ Partial Class frmTrackerOfTime
         '
         'btnTest
         '
-        Me.btnTest.Location = New System.Drawing.Point(278, 939)
+        Me.btnTest.Location = New System.Drawing.Point(1085, 1075)
         Me.btnTest.Name = "btnTest"
         Me.btnTest.Size = New System.Drawing.Size(88, 23)
         Me.btnTest.TabIndex = 42
@@ -873,7 +876,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlDekuTree.Controls.Add(Me.lblDekuTree)
         Me.pnlDekuTree.Controls.Add(Me.checkMQ1)
-        Me.pnlDekuTree.Location = New System.Drawing.Point(380, 377)
+        Me.pnlDekuTree.Location = New System.Drawing.Point(380, 550)
         Me.pnlDekuTree.Name = "pnlDekuTree"
         Me.pnlDekuTree.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlDekuTree.Size = New System.Drawing.Size(188, 25)
@@ -883,7 +886,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlDodongosCavern.Controls.Add(Me.lblDodongosCavern)
         Me.pnlDodongosCavern.Controls.Add(Me.checkMQ2)
-        Me.pnlDodongosCavern.Location = New System.Drawing.Point(380, 401)
+        Me.pnlDodongosCavern.Location = New System.Drawing.Point(380, 574)
         Me.pnlDodongosCavern.Name = "pnlDodongosCavern"
         Me.pnlDodongosCavern.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlDodongosCavern.Size = New System.Drawing.Size(188, 25)
@@ -892,7 +895,7 @@ Partial Class frmTrackerOfTime
         'pnlKokiriForest
         '
         Me.pnlKokiriForest.Controls.Add(Me.lblKokiriForest)
-        Me.pnlKokiriForest.Location = New System.Drawing.Point(6, 377)
+        Me.pnlKokiriForest.Location = New System.Drawing.Point(6, 550)
         Me.pnlKokiriForest.Name = "pnlKokiriForest"
         Me.pnlKokiriForest.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlKokiriForest.Size = New System.Drawing.Size(188, 25)
@@ -901,7 +904,7 @@ Partial Class frmTrackerOfTime
         'pnlLostWoods
         '
         Me.pnlLostWoods.Controls.Add(Me.lblLostWoods)
-        Me.pnlLostWoods.Location = New System.Drawing.Point(6, 401)
+        Me.pnlLostWoods.Location = New System.Drawing.Point(6, 574)
         Me.pnlLostWoods.Name = "pnlLostWoods"
         Me.pnlLostWoods.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlLostWoods.Size = New System.Drawing.Size(188, 25)
@@ -910,7 +913,7 @@ Partial Class frmTrackerOfTime
         'pnlHyruleField
         '
         Me.pnlHyruleField.Controls.Add(Me.lblHyruleField)
-        Me.pnlHyruleField.Location = New System.Drawing.Point(6, 449)
+        Me.pnlHyruleField.Location = New System.Drawing.Point(6, 622)
         Me.pnlHyruleField.Name = "pnlHyruleField"
         Me.pnlHyruleField.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlHyruleField.Size = New System.Drawing.Size(188, 25)
@@ -919,7 +922,7 @@ Partial Class frmTrackerOfTime
         'pnlLonLonRanch
         '
         Me.pnlLonLonRanch.Controls.Add(Me.lblLonLonRanch)
-        Me.pnlLonLonRanch.Location = New System.Drawing.Point(6, 473)
+        Me.pnlLonLonRanch.Location = New System.Drawing.Point(6, 646)
         Me.pnlLonLonRanch.Name = "pnlLonLonRanch"
         Me.pnlLonLonRanch.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlLonLonRanch.Size = New System.Drawing.Size(188, 25)
@@ -928,7 +931,7 @@ Partial Class frmTrackerOfTime
         'pnlLakeHylia
         '
         Me.pnlLakeHylia.Controls.Add(Me.lblLakeHylia)
-        Me.pnlLakeHylia.Location = New System.Drawing.Point(193, 473)
+        Me.pnlLakeHylia.Location = New System.Drawing.Point(193, 646)
         Me.pnlLakeHylia.Name = "pnlLakeHylia"
         Me.pnlLakeHylia.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlLakeHylia.Size = New System.Drawing.Size(188, 25)
@@ -937,7 +940,7 @@ Partial Class frmTrackerOfTime
         'pnlGerudoValley
         '
         Me.pnlGerudoValley.Controls.Add(Me.lblGerudoValley)
-        Me.pnlGerudoValley.Location = New System.Drawing.Point(193, 497)
+        Me.pnlGerudoValley.Location = New System.Drawing.Point(193, 670)
         Me.pnlGerudoValley.Name = "pnlGerudoValley"
         Me.pnlGerudoValley.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlGerudoValley.Size = New System.Drawing.Size(188, 25)
@@ -946,7 +949,7 @@ Partial Class frmTrackerOfTime
         'pnlGerudoFortress
         '
         Me.pnlGerudoFortress.Controls.Add(Me.lblGerudoFortress)
-        Me.pnlGerudoFortress.Location = New System.Drawing.Point(193, 521)
+        Me.pnlGerudoFortress.Location = New System.Drawing.Point(193, 694)
         Me.pnlGerudoFortress.Name = "pnlGerudoFortress"
         Me.pnlGerudoFortress.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlGerudoFortress.Size = New System.Drawing.Size(188, 25)
@@ -964,7 +967,7 @@ Partial Class frmTrackerOfTime
         'pnlHauntedWasteland
         '
         Me.pnlHauntedWasteland.Controls.Add(Me.lblHauntedWasteland)
-        Me.pnlHauntedWasteland.Location = New System.Drawing.Point(193, 545)
+        Me.pnlHauntedWasteland.Location = New System.Drawing.Point(193, 718)
         Me.pnlHauntedWasteland.Name = "pnlHauntedWasteland"
         Me.pnlHauntedWasteland.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlHauntedWasteland.Size = New System.Drawing.Size(188, 25)
@@ -982,7 +985,7 @@ Partial Class frmTrackerOfTime
         'pnlDesertColossus
         '
         Me.pnlDesertColossus.Controls.Add(Me.lblDesertColossus)
-        Me.pnlDesertColossus.Location = New System.Drawing.Point(193, 569)
+        Me.pnlDesertColossus.Location = New System.Drawing.Point(193, 742)
         Me.pnlDesertColossus.Name = "pnlDesertColossus"
         Me.pnlDesertColossus.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlDesertColossus.Size = New System.Drawing.Size(188, 25)
@@ -1000,7 +1003,7 @@ Partial Class frmTrackerOfTime
         'pnlMarket
         '
         Me.pnlMarket.Controls.Add(Me.lblMarket)
-        Me.pnlMarket.Location = New System.Drawing.Point(6, 497)
+        Me.pnlMarket.Location = New System.Drawing.Point(6, 670)
         Me.pnlMarket.Name = "pnlMarket"
         Me.pnlMarket.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlMarket.Size = New System.Drawing.Size(188, 25)
@@ -1018,7 +1021,7 @@ Partial Class frmTrackerOfTime
         'pnlHyruleCastle
         '
         Me.pnlHyruleCastle.Controls.Add(Me.lblHyruleCastle)
-        Me.pnlHyruleCastle.Location = New System.Drawing.Point(6, 545)
+        Me.pnlHyruleCastle.Location = New System.Drawing.Point(6, 718)
         Me.pnlHyruleCastle.Name = "pnlHyruleCastle"
         Me.pnlHyruleCastle.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlHyruleCastle.Size = New System.Drawing.Size(188, 25)
@@ -1036,7 +1039,7 @@ Partial Class frmTrackerOfTime
         'pnlKakarikoVillage
         '
         Me.pnlKakarikoVillage.Controls.Add(Me.lblKakarikoVillage)
-        Me.pnlKakarikoVillage.Location = New System.Drawing.Point(6, 569)
+        Me.pnlKakarikoVillage.Location = New System.Drawing.Point(6, 742)
         Me.pnlKakarikoVillage.Name = "pnlKakarikoVillage"
         Me.pnlKakarikoVillage.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlKakarikoVillage.Size = New System.Drawing.Size(188, 25)
@@ -1045,7 +1048,7 @@ Partial Class frmTrackerOfTime
         'pnlGraveyard
         '
         Me.pnlGraveyard.Controls.Add(Me.lblGraveyard)
-        Me.pnlGraveyard.Location = New System.Drawing.Point(6, 593)
+        Me.pnlGraveyard.Location = New System.Drawing.Point(6, 766)
         Me.pnlGraveyard.Name = "pnlGraveyard"
         Me.pnlGraveyard.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlGraveyard.Size = New System.Drawing.Size(188, 25)
@@ -1054,7 +1057,7 @@ Partial Class frmTrackerOfTime
         'pnlDMTrail
         '
         Me.pnlDMTrail.Controls.Add(Me.lblDMTrail)
-        Me.pnlDMTrail.Location = New System.Drawing.Point(6, 617)
+        Me.pnlDMTrail.Location = New System.Drawing.Point(6, 790)
         Me.pnlDMTrail.Name = "pnlDMTrail"
         Me.pnlDMTrail.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlDMTrail.Size = New System.Drawing.Size(188, 25)
@@ -1063,7 +1066,7 @@ Partial Class frmTrackerOfTime
         'pnlDMCrater
         '
         Me.pnlDMCrater.Controls.Add(Me.lblDMCrater)
-        Me.pnlDMCrater.Location = New System.Drawing.Point(6, 641)
+        Me.pnlDMCrater.Location = New System.Drawing.Point(6, 814)
         Me.pnlDMCrater.Name = "pnlDMCrater"
         Me.pnlDMCrater.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlDMCrater.Size = New System.Drawing.Size(188, 25)
@@ -1072,7 +1075,7 @@ Partial Class frmTrackerOfTime
         'pnlGoronCity
         '
         Me.pnlGoronCity.Controls.Add(Me.lblGoronCity)
-        Me.pnlGoronCity.Location = New System.Drawing.Point(193, 377)
+        Me.pnlGoronCity.Location = New System.Drawing.Point(193, 550)
         Me.pnlGoronCity.Name = "pnlGoronCity"
         Me.pnlGoronCity.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlGoronCity.Size = New System.Drawing.Size(188, 25)
@@ -1081,7 +1084,7 @@ Partial Class frmTrackerOfTime
         'pnlZorasRiver
         '
         Me.pnlZorasRiver.Controls.Add(Me.lblZorasRiver)
-        Me.pnlZorasRiver.Location = New System.Drawing.Point(193, 401)
+        Me.pnlZorasRiver.Location = New System.Drawing.Point(193, 574)
         Me.pnlZorasRiver.Name = "pnlZorasRiver"
         Me.pnlZorasRiver.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlZorasRiver.Size = New System.Drawing.Size(188, 25)
@@ -1099,7 +1102,7 @@ Partial Class frmTrackerOfTime
         'pnlZorasDomain
         '
         Me.pnlZorasDomain.Controls.Add(Me.lblZorasDomain)
-        Me.pnlZorasDomain.Location = New System.Drawing.Point(193, 425)
+        Me.pnlZorasDomain.Location = New System.Drawing.Point(193, 598)
         Me.pnlZorasDomain.Name = "pnlZorasDomain"
         Me.pnlZorasDomain.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlZorasDomain.Size = New System.Drawing.Size(188, 25)
@@ -1109,7 +1112,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlForestTemple.Controls.Add(Me.lblForestTemple)
         Me.pnlForestTemple.Controls.Add(Me.checkMQ4)
-        Me.pnlForestTemple.Location = New System.Drawing.Point(380, 449)
+        Me.pnlForestTemple.Location = New System.Drawing.Point(380, 622)
         Me.pnlForestTemple.Name = "pnlForestTemple"
         Me.pnlForestTemple.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlForestTemple.Size = New System.Drawing.Size(188, 25)
@@ -1127,7 +1130,7 @@ Partial Class frmTrackerOfTime
         'pnlTempleOfTime
         '
         Me.pnlTempleOfTime.Controls.Add(Me.lblTempleOfTime)
-        Me.pnlTempleOfTime.Location = New System.Drawing.Point(6, 521)
+        Me.pnlTempleOfTime.Location = New System.Drawing.Point(6, 694)
         Me.pnlTempleOfTime.Name = "pnlTempleOfTime"
         Me.pnlTempleOfTime.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlTempleOfTime.Size = New System.Drawing.Size(188, 25)
@@ -1145,7 +1148,7 @@ Partial Class frmTrackerOfTime
         'pnlQuestGoldSkulltulas
         '
         Me.pnlQuestGoldSkulltulas.Controls.Add(Me.lblQuestGoldSkulltulas)
-        Me.pnlQuestGoldSkulltulas.Location = New System.Drawing.Point(193, 617)
+        Me.pnlQuestGoldSkulltulas.Location = New System.Drawing.Point(193, 790)
         Me.pnlQuestGoldSkulltulas.Name = "pnlQuestGoldSkulltulas"
         Me.pnlQuestGoldSkulltulas.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlQuestGoldSkulltulas.Size = New System.Drawing.Size(188, 25)
@@ -1163,7 +1166,7 @@ Partial Class frmTrackerOfTime
         'pnlZorasFountain
         '
         Me.pnlZorasFountain.Controls.Add(Me.lblZorasFountain)
-        Me.pnlZorasFountain.Location = New System.Drawing.Point(193, 449)
+        Me.pnlZorasFountain.Location = New System.Drawing.Point(193, 622)
         Me.pnlZorasFountain.Name = "pnlZorasFountain"
         Me.pnlZorasFountain.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlZorasFountain.Size = New System.Drawing.Size(188, 25)
@@ -1182,7 +1185,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlIceCavern.Controls.Add(Me.lblIceCavern)
         Me.pnlIceCavern.Controls.Add(Me.checkMQ10)
-        Me.pnlIceCavern.Location = New System.Drawing.Point(380, 593)
+        Me.pnlIceCavern.Location = New System.Drawing.Point(380, 766)
         Me.pnlIceCavern.Name = "pnlIceCavern"
         Me.pnlIceCavern.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlIceCavern.Size = New System.Drawing.Size(188, 25)
@@ -1200,7 +1203,7 @@ Partial Class frmTrackerOfTime
         'pnlQuestMasks
         '
         Me.pnlQuestMasks.Controls.Add(Me.lblQuestMasks)
-        Me.pnlQuestMasks.Location = New System.Drawing.Point(193, 641)
+        Me.pnlQuestMasks.Location = New System.Drawing.Point(193, 814)
         Me.pnlQuestMasks.Name = "pnlQuestMasks"
         Me.pnlQuestMasks.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlQuestMasks.Size = New System.Drawing.Size(188, 25)
@@ -1210,7 +1213,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlFireTemple.Controls.Add(Me.lblFireTemple)
         Me.pnlFireTemple.Controls.Add(Me.checkMQ5)
-        Me.pnlFireTemple.Location = New System.Drawing.Point(380, 473)
+        Me.pnlFireTemple.Location = New System.Drawing.Point(380, 646)
         Me.pnlFireTemple.Name = "pnlFireTemple"
         Me.pnlFireTemple.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlFireTemple.Size = New System.Drawing.Size(188, 25)
@@ -1220,7 +1223,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlGerudoTrainingGround.Controls.Add(Me.lblGerudoTrainingGround)
         Me.pnlGerudoTrainingGround.Controls.Add(Me.checkMQ11)
-        Me.pnlGerudoTrainingGround.Location = New System.Drawing.Point(380, 617)
+        Me.pnlGerudoTrainingGround.Location = New System.Drawing.Point(380, 790)
         Me.pnlGerudoTrainingGround.Name = "pnlGerudoTrainingGround"
         Me.pnlGerudoTrainingGround.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlGerudoTrainingGround.Size = New System.Drawing.Size(188, 25)
@@ -1240,7 +1243,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlJabuJabusBelly.Controls.Add(Me.lblJabuJabusBelly)
         Me.pnlJabuJabusBelly.Controls.Add(Me.checkMQ3)
-        Me.pnlJabuJabusBelly.Location = New System.Drawing.Point(380, 425)
+        Me.pnlJabuJabusBelly.Location = New System.Drawing.Point(380, 598)
         Me.pnlJabuJabusBelly.Name = "pnlJabuJabusBelly"
         Me.pnlJabuJabusBelly.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlJabuJabusBelly.Size = New System.Drawing.Size(188, 25)
@@ -1258,7 +1261,7 @@ Partial Class frmTrackerOfTime
         'pnlOutsideGanonsCastle
         '
         Me.pnlOutsideGanonsCastle.Controls.Add(Me.lblOutsideGanonsCastle)
-        Me.pnlOutsideGanonsCastle.Location = New System.Drawing.Point(193, 593)
+        Me.pnlOutsideGanonsCastle.Location = New System.Drawing.Point(193, 766)
         Me.pnlOutsideGanonsCastle.Name = "pnlOutsideGanonsCastle"
         Me.pnlOutsideGanonsCastle.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlOutsideGanonsCastle.Size = New System.Drawing.Size(188, 25)
@@ -1277,7 +1280,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlShadowTemple.Controls.Add(Me.lblShadowTemple)
         Me.pnlShadowTemple.Controls.Add(Me.checkMQ8)
-        Me.pnlShadowTemple.Location = New System.Drawing.Point(380, 545)
+        Me.pnlShadowTemple.Location = New System.Drawing.Point(380, 718)
         Me.pnlShadowTemple.Name = "pnlShadowTemple"
         Me.pnlShadowTemple.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlShadowTemple.Size = New System.Drawing.Size(188, 25)
@@ -1296,7 +1299,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlSpiritTemple.Controls.Add(Me.lblSpiritTemple)
         Me.pnlSpiritTemple.Controls.Add(Me.checkMQ7)
-        Me.pnlSpiritTemple.Location = New System.Drawing.Point(380, 521)
+        Me.pnlSpiritTemple.Location = New System.Drawing.Point(380, 694)
         Me.pnlSpiritTemple.Name = "pnlSpiritTemple"
         Me.pnlSpiritTemple.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlSpiritTemple.Size = New System.Drawing.Size(188, 25)
@@ -1315,7 +1318,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlBottomOfTheWell.Controls.Add(Me.lblBottomOfTheWell)
         Me.pnlBottomOfTheWell.Controls.Add(Me.checkMQ9)
-        Me.pnlBottomOfTheWell.Location = New System.Drawing.Point(380, 569)
+        Me.pnlBottomOfTheWell.Location = New System.Drawing.Point(380, 742)
         Me.pnlBottomOfTheWell.Name = "pnlBottomOfTheWell"
         Me.pnlBottomOfTheWell.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlBottomOfTheWell.Size = New System.Drawing.Size(188, 25)
@@ -1334,7 +1337,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlWaterTemple.Controls.Add(Me.lblWaterTemple)
         Me.pnlWaterTemple.Controls.Add(Me.checkMQ6)
-        Me.pnlWaterTemple.Location = New System.Drawing.Point(380, 497)
+        Me.pnlWaterTemple.Location = New System.Drawing.Point(380, 670)
         Me.pnlWaterTemple.Name = "pnlWaterTemple"
         Me.pnlWaterTemple.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlWaterTemple.Size = New System.Drawing.Size(188, 25)
@@ -1353,7 +1356,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlGanonsCastle.Controls.Add(Me.lblGanonsCastle)
         Me.pnlGanonsCastle.Controls.Add(Me.checkMQ12)
-        Me.pnlGanonsCastle.Location = New System.Drawing.Point(380, 641)
+        Me.pnlGanonsCastle.Location = New System.Drawing.Point(380, 814)
         Me.pnlGanonsCastle.Name = "pnlGanonsCastle"
         Me.pnlGanonsCastle.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlGanonsCastle.Size = New System.Drawing.Size(188, 25)
@@ -1372,7 +1375,7 @@ Partial Class frmTrackerOfTime
         '
         Me.rtbOutputLeft.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.rtbOutputLeft.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rtbOutputLeft.Location = New System.Drawing.Point(7, 666)
+        Me.rtbOutputLeft.Location = New System.Drawing.Point(7, 839)
         Me.rtbOutputLeft.MaxLength = 4096
         Me.rtbOutputLeft.Name = "rtbOutputLeft"
         Me.rtbOutputLeft.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
@@ -1383,7 +1386,7 @@ Partial Class frmTrackerOfTime
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(278, 917)
+        Me.Button2.Location = New System.Drawing.Point(1085, 1053)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(88, 23)
         Me.Button2.TabIndex = 221
@@ -1447,7 +1450,7 @@ Partial Class frmTrackerOfTime
         Me.pnlHidden.Controls.Add(Me.cb7417)
         Me.pnlHidden.Controls.Add(Me.cb7416)
         Me.pnlHidden.Controls.Add(Me.cb7722)
-        Me.pnlHidden.Location = New System.Drawing.Point(386, 917)
+        Me.pnlHidden.Location = New System.Drawing.Point(582, 1053)
         Me.pnlHidden.Name = "pnlHidden"
         Me.pnlHidden.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlHidden.Size = New System.Drawing.Size(574, 144)
@@ -2104,7 +2107,7 @@ Partial Class frmTrackerOfTime
         'pnlSacredForestMeadow
         '
         Me.pnlSacredForestMeadow.Controls.Add(Me.lblSacredForestMeadow)
-        Me.pnlSacredForestMeadow.Location = New System.Drawing.Point(6, 425)
+        Me.pnlSacredForestMeadow.Location = New System.Drawing.Point(6, 598)
         Me.pnlSacredForestMeadow.Name = "pnlSacredForestMeadow"
         Me.pnlSacredForestMeadow.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlSacredForestMeadow.Size = New System.Drawing.Size(188, 25)
@@ -2122,7 +2125,7 @@ Partial Class frmTrackerOfTime
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(13, 802)
+        Me.Label1.Location = New System.Drawing.Point(13, 877)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(128, 26)
         Me.Label1.TabIndex = 233
@@ -2130,7 +2133,7 @@ Partial Class frmTrackerOfTime
         '
         'btnFocus
         '
-        Me.btnFocus.Location = New System.Drawing.Point(278, 961)
+        Me.btnFocus.Location = New System.Drawing.Point(1085, 1097)
         Me.btnFocus.Name = "btnFocus"
         Me.btnFocus.Size = New System.Drawing.Size(88, 23)
         Me.btnFocus.TabIndex = 238
@@ -2140,7 +2143,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxCowShuffle
         '
-        Me.lcxCowShuffle.Location = New System.Drawing.Point(201, 22)
+        Me.lcxCowShuffle.Location = New System.Drawing.Point(201, 231)
         Me.lcxCowShuffle.Name = "lcxCowShuffle"
         Me.lcxCowShuffle.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxCowShuffle.Size = New System.Drawing.Size(137, 20)
@@ -2150,7 +2153,7 @@ Partial Class frmTrackerOfTime
         '
         'lblShopsanity
         '
-        Me.lblShopsanity.Location = New System.Drawing.Point(18, 40)
+        Me.lblShopsanity.Location = New System.Drawing.Point(18, 249)
         Me.lblShopsanity.Name = "lblShopsanity"
         Me.lblShopsanity.Size = New System.Drawing.Size(117, 20)
         Me.lblShopsanity.TabIndex = 242
@@ -2159,7 +2162,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxScrubShuffle
         '
-        Me.lcxScrubShuffle.Location = New System.Drawing.Point(201, 3)
+        Me.lcxScrubShuffle.Location = New System.Drawing.Point(201, 212)
         Me.lcxScrubShuffle.Name = "lcxScrubShuffle"
         Me.lcxScrubShuffle.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxScrubShuffle.Size = New System.Drawing.Size(137, 20)
@@ -2169,18 +2172,19 @@ Partial Class frmTrackerOfTime
         '
         'mnuOptions
         '
+        Me.mnuOptions.AutoSize = False
         Me.mnuOptions.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ScanToolStripMenuItem, Me.AutoScanToolStripMenuItem, Me.ResetToolStripMenuItem, Me.ShowSettingsToolStripMenuItem, Me.ThemesToolStripMenuItem})
         Me.mnuOptions.Location = New System.Drawing.Point(0, 0)
         Me.mnuOptions.Name = "mnuOptions"
         Me.mnuOptions.Padding = New System.Windows.Forms.Padding(6, 6, 0, 6)
-        Me.mnuOptions.Size = New System.Drawing.Size(1175, 34)
+        Me.mnuOptions.Size = New System.Drawing.Size(1175, 8)
         Me.mnuOptions.TabIndex = 243
         Me.mnuOptions.Text = "MenuStrip1"
         '
         'ScanToolStripMenuItem
         '
         Me.ScanToolStripMenuItem.AutoSize = False
-        Me.ScanToolStripMenuItem.Margin = New System.Windows.Forms.Padding(110, 0, 62, 0)
+        Me.ScanToolStripMenuItem.Margin = New System.Windows.Forms.Padding(1, 0, 24, 0)
         Me.ScanToolStripMenuItem.Name = "ScanToolStripMenuItem"
         Me.ScanToolStripMenuItem.Size = New System.Drawing.Size(73, 22)
         Me.ScanToolStripMenuItem.Text = "Scan"
@@ -2189,7 +2193,7 @@ Partial Class frmTrackerOfTime
         'AutoScanToolStripMenuItem
         '
         Me.AutoScanToolStripMenuItem.AutoSize = False
-        Me.AutoScanToolStripMenuItem.Margin = New System.Windows.Forms.Padding(0, 0, 62, 0)
+        Me.AutoScanToolStripMenuItem.Margin = New System.Windows.Forms.Padding(0, 0, 24, 0)
         Me.AutoScanToolStripMenuItem.Name = "AutoScanToolStripMenuItem"
         Me.AutoScanToolStripMenuItem.Size = New System.Drawing.Size(73, 22)
         Me.AutoScanToolStripMenuItem.Text = "Auto Scan"
@@ -2198,7 +2202,7 @@ Partial Class frmTrackerOfTime
         'ResetToolStripMenuItem
         '
         Me.ResetToolStripMenuItem.AutoSize = False
-        Me.ResetToolStripMenuItem.Margin = New System.Windows.Forms.Padding(0, 0, 36, 0)
+        Me.ResetToolStripMenuItem.Margin = New System.Windows.Forms.Padding(0, 0, 221, 0)
         Me.ResetToolStripMenuItem.Name = "ResetToolStripMenuItem"
         Me.ResetToolStripMenuItem.Size = New System.Drawing.Size(73, 22)
         Me.ResetToolStripMenuItem.Text = "Reset"
@@ -2260,7 +2264,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxLogic
         '
-        Me.lcxLogic.Location = New System.Drawing.Point(1, 98)
+        Me.lcxLogic.Location = New System.Drawing.Point(1, 307)
         Me.lcxLogic.Name = "lcxLogic"
         Me.lcxLogic.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxLogic.Size = New System.Drawing.Size(137, 20)
@@ -2270,7 +2274,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxBombchuLogic
         '
-        Me.lcxBombchuLogic.Location = New System.Drawing.Point(1, 193)
+        Me.lcxBombchuLogic.Location = New System.Drawing.Point(1, 402)
         Me.lcxBombchuLogic.Name = "lcxBombchuLogic"
         Me.lcxBombchuLogic.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxBombchuLogic.Size = New System.Drawing.Size(137, 20)
@@ -2280,7 +2284,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxLoTLogic
         '
-        Me.lcxLoTLogic.Location = New System.Drawing.Point(1, 174)
+        Me.lcxLoTLogic.Location = New System.Drawing.Point(1, 383)
         Me.lcxLoTLogic.Name = "lcxLoTLogic"
         Me.lcxLoTLogic.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxLoTLogic.Size = New System.Drawing.Size(134, 20)
@@ -2290,7 +2294,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSoALogic
         '
-        Me.lcxSoALogic.Location = New System.Drawing.Point(1, 155)
+        Me.lcxSoALogic.Location = New System.Drawing.Point(1, 364)
         Me.lcxSoALogic.Name = "lcxSoALogic"
         Me.lcxSoALogic.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSoALogic.Size = New System.Drawing.Size(151, 20)
@@ -2300,7 +2304,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxHoverTricks
         '
-        Me.lcxHoverTricks.Location = New System.Drawing.Point(201, 174)
+        Me.lcxHoverTricks.Location = New System.Drawing.Point(201, 383)
         Me.lcxHoverTricks.Name = "lcxHoverTricks"
         Me.lcxHoverTricks.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxHoverTricks.Size = New System.Drawing.Size(169, 20)
@@ -2310,7 +2314,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxTunic
         '
-        Me.lcxTunic.Location = New System.Drawing.Point(201, 193)
+        Me.lcxTunic.Location = New System.Drawing.Point(201, 402)
         Me.lcxTunic.Name = "lcxTunic"
         Me.lcxTunic.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxTunic.Size = New System.Drawing.Size(170, 20)
@@ -2320,7 +2324,7 @@ Partial Class frmTrackerOfTime
         '
         'ltbShopsanity
         '
-        Me.ltbShopsanity.Location = New System.Drawing.Point(21, 63)
+        Me.ltbShopsanity.Location = New System.Drawing.Point(21, 272)
         Me.ltbShopsanity.Name = "ltbShopsanity"
         Me.ltbShopsanity.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
         Me.ltbShopsanity.Size = New System.Drawing.Size(117, 15)
@@ -2330,6 +2334,8 @@ Partial Class frmTrackerOfTime
         '
         'pnlSettings
         '
+        Me.pnlSettings.Controls.Add(Me.lblInfo)
+        Me.pnlSettings.Controls.Add(Me.lcxExpand)
         Me.pnlSettings.Controls.Add(Me.lcxShowMap)
         Me.pnlSettings.Controls.Add(Me.lcxIGCMQRustedSwitches)
         Me.pnlSettings.Controls.Add(Me.lcxIGCLensless)
@@ -2406,15 +2412,35 @@ Partial Class frmTrackerOfTime
         Me.pnlSettings.Controls.Add(Me.lcxLogic)
         Me.pnlSettings.Controls.Add(Me.lcxScrubShuffle)
         Me.pnlSettings.Controls.Add(Me.lcxCowShuffle)
-        Me.pnlSettings.Location = New System.Drawing.Point(578, 34)
+        Me.pnlSettings.Location = New System.Drawing.Point(578, 8)
         Me.pnlSettings.Name = "pnlSettings"
         Me.pnlSettings.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlSettings.Size = New System.Drawing.Size(597, 877)
+        Me.pnlSettings.Size = New System.Drawing.Size(597, 1039)
         Me.pnlSettings.TabIndex = 253
+        '
+        'lcxExpand
+        '
+        Me.lcxExpand.Location = New System.Drawing.Point(401, 231)
+        Me.lcxExpand.Name = "lcxExpand"
+        Me.lcxExpand.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxExpand.Size = New System.Drawing.Size(155, 20)
+        Me.lcxExpand.TabIndex = 327
+        Me.lcxExpand.Text = "Expand Application"
+        Me.lcxExpand.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxShowMap
+        '
+        Me.lcxShowMap.Location = New System.Drawing.Point(401, 212)
+        Me.lcxShowMap.Name = "lcxShowMap"
+        Me.lcxShowMap.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxShowMap.Size = New System.Drawing.Size(155, 20)
+        Me.lcxShowMap.TabIndex = 326
+        Me.lcxShowMap.Text = "Show Map Instead of Text"
+        Me.lcxShowMap.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lcxIGCMQRustedSwitches
         '
-        Me.lcxIGCMQRustedSwitches.Location = New System.Drawing.Point(401, 799)
+        Me.lcxIGCMQRustedSwitches.Location = New System.Drawing.Point(401, 874)
         Me.lcxIGCMQRustedSwitches.Name = "lcxIGCMQRustedSwitches"
         Me.lcxIGCMQRustedSwitches.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxIGCMQRustedSwitches.Size = New System.Drawing.Size(195, 36)
@@ -2425,7 +2451,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxIGCLensless
         '
-        Me.lcxIGCLensless.Location = New System.Drawing.Point(401, 781)
+        Me.lcxIGCLensless.Location = New System.Drawing.Point(401, 856)
         Me.lcxIGCLensless.Name = "lcxIGCLensless"
         Me.lcxIGCLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxIGCLensless.Size = New System.Drawing.Size(190, 20)
@@ -2436,7 +2462,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxBotWMQPits
         '
-        Me.lcxBotWMQPits.Location = New System.Drawing.Point(401, 741)
+        Me.lcxBotWMQPits.Location = New System.Drawing.Point(401, 816)
         Me.lcxBotWMQPits.Name = "lcxBotWMQPits"
         Me.lcxBotWMQPits.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxBotWMQPits.Size = New System.Drawing.Size(159, 20)
@@ -2447,7 +2473,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTMQPit
         '
-        Me.lcxShTMQPit.Location = New System.Drawing.Point(401, 649)
+        Me.lcxShTMQPit.Location = New System.Drawing.Point(401, 724)
         Me.lcxShTMQPit.Name = "lcxShTMQPit"
         Me.lcxShTMQPit.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTMQPit.Size = New System.Drawing.Size(159, 36)
@@ -2458,7 +2484,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSpTLensless
         '
-        Me.lcxSpTLensless.Location = New System.Drawing.Point(401, 387)
+        Me.lcxSpTLensless.Location = New System.Drawing.Point(401, 462)
         Me.lcxSpTLensless.Name = "lcxSpTLensless"
         Me.lcxSpTLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSpTLensless.Size = New System.Drawing.Size(181, 20)
@@ -2469,7 +2495,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWaTDrgnSwitch
         '
-        Me.lcxWaTDrgnSwitch.Location = New System.Drawing.Point(201, 585)
+        Me.lcxWaTDrgnSwitch.Location = New System.Drawing.Point(201, 660)
         Me.lcxWaTDrgnSwitch.Name = "lcxWaTDrgnSwitch"
         Me.lcxWaTDrgnSwitch.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWaTDrgnSwitch.Size = New System.Drawing.Size(181, 36)
@@ -2480,7 +2506,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxCucco
         '
-        Me.lcxCucco.Location = New System.Drawing.Point(201, 155)
+        Me.lcxCucco.Location = New System.Drawing.Point(201, 364)
         Me.lcxCucco.Name = "lcxCucco"
         Me.lcxCucco.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxCucco.Size = New System.Drawing.Size(129, 20)
@@ -2490,7 +2516,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxHideSpoiler
         '
-        Me.lcxHideSpoiler.Location = New System.Drawing.Point(201, 98)
+        Me.lcxHideSpoiler.Location = New System.Drawing.Point(201, 307)
         Me.lcxHideSpoiler.Name = "lcxHideSpoiler"
         Me.lcxHideSpoiler.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxHideSpoiler.Size = New System.Drawing.Size(181, 20)
@@ -2502,7 +2528,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbGCTricks.AutoSize = True
         Me.nlbGCTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbGCTricks.Location = New System.Drawing.Point(401, 764)
+        Me.nlbGCTricks.Location = New System.Drawing.Point(401, 839)
         Me.nlbGCTricks.Name = "nlbGCTricks"
         Me.nlbGCTricks.Size = New System.Drawing.Size(135, 13)
         Me.nlbGCTricks.TabIndex = 317
@@ -2510,7 +2536,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTPlatform
         '
-        Me.lcxShTPlatform.Location = New System.Drawing.Point(401, 547)
+        Me.lcxShTPlatform.Location = New System.Drawing.Point(401, 622)
         Me.lcxShTPlatform.Name = "lcxShTPlatform"
         Me.lcxShTPlatform.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTPlatform.Size = New System.Drawing.Size(195, 36)
@@ -2523,7 +2549,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbWasteland.AutoSize = True
         Me.nlbWasteland.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbWasteland.Location = New System.Drawing.Point(1, 370)
+        Me.nlbWasteland.Location = New System.Drawing.Point(1, 445)
         Me.nlbWasteland.Name = "nlbWasteland"
         Me.nlbWasteland.Size = New System.Drawing.Size(162, 13)
         Me.nlbWasteland.TabIndex = 314
@@ -2531,7 +2557,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWastelandReverse
         '
-        Me.lcxWastelandReverse.Location = New System.Drawing.Point(1, 425)
+        Me.lcxWastelandReverse.Location = New System.Drawing.Point(1, 500)
         Me.lcxWastelandReverse.Name = "lcxWastelandReverse"
         Me.lcxWastelandReverse.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWastelandReverse.Size = New System.Drawing.Size(124, 20)
@@ -2542,7 +2568,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWastelandLensless
         '
-        Me.lcxWastelandLensless.Location = New System.Drawing.Point(1, 406)
+        Me.lcxWastelandLensless.Location = New System.Drawing.Point(1, 481)
         Me.lcxWastelandLensless.Name = "lcxWastelandLensless"
         Me.lcxWastelandLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWastelandLensless.Size = New System.Drawing.Size(124, 20)
@@ -2552,7 +2578,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWastelandBackstep
         '
-        Me.lcxWastelandBackstep.Location = New System.Drawing.Point(1, 387)
+        Me.lcxWastelandBackstep.Location = New System.Drawing.Point(1, 462)
         Me.lcxWastelandBackstep.Name = "lcxWastelandBackstep"
         Me.lcxWastelandBackstep.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWastelandBackstep.Size = New System.Drawing.Size(190, 20)
@@ -2562,7 +2588,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSaleman
         '
-        Me.lcxSaleman.Location = New System.Drawing.Point(201, 60)
+        Me.lcxSaleman.Location = New System.Drawing.Point(201, 269)
         Me.lcxSaleman.Name = "lcxSaleman"
         Me.lcxSaleman.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSaleman.Size = New System.Drawing.Size(109, 20)
@@ -2572,7 +2598,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxBeans
         '
-        Me.lcxBeans.Location = New System.Drawing.Point(201, 41)
+        Me.lcxBeans.Location = New System.Drawing.Point(201, 250)
         Me.lcxBeans.Name = "lcxBeans"
         Me.lcxBeans.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxBeans.Size = New System.Drawing.Size(119, 20)
@@ -2582,7 +2608,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxNavi
         '
-        Me.lcxNavi.Location = New System.Drawing.Point(201, 79)
+        Me.lcxNavi.Location = New System.Drawing.Point(201, 288)
         Me.lcxNavi.Name = "lcxNavi"
         Me.lcxNavi.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxNavi.Size = New System.Drawing.Size(97, 20)
@@ -2592,7 +2618,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxBotWDeadHand
         '
-        Me.lcxBotWDeadHand.Location = New System.Drawing.Point(401, 722)
+        Me.lcxBotWDeadHand.Location = New System.Drawing.Point(401, 797)
         Me.lcxBotWDeadHand.Name = "lcxBotWDeadHand"
         Me.lcxBotWDeadHand.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxBotWDeadHand.Size = New System.Drawing.Size(181, 20)
@@ -2605,7 +2631,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbBotWTricks.AutoSize = True
         Me.nlbBotWTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbBotWTricks.Location = New System.Drawing.Point(401, 686)
+        Me.nlbBotWTricks.Location = New System.Drawing.Point(401, 761)
         Me.nlbBotWTricks.Name = "nlbBotWTricks"
         Me.nlbBotWTricks.Size = New System.Drawing.Size(155, 13)
         Me.nlbBotWTricks.TabIndex = 304
@@ -2613,7 +2639,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxBotWLensless
         '
-        Me.lcxBotWLensless.Location = New System.Drawing.Point(401, 703)
+        Me.lcxBotWLensless.Location = New System.Drawing.Point(401, 778)
         Me.lcxBotWLensless.Name = "lcxBotWLensless"
         Me.lcxBotWLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxBotWLensless.Size = New System.Drawing.Size(159, 20)
@@ -2624,7 +2650,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTStatue
         '
-        Me.lcxShTStatue.Location = New System.Drawing.Point(401, 599)
+        Me.lcxShTStatue.Location = New System.Drawing.Point(401, 674)
         Me.lcxShTStatue.Name = "lcxShTStatue"
         Me.lcxShTStatue.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTStatue.Size = New System.Drawing.Size(159, 20)
@@ -2635,7 +2661,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTMQGap
         '
-        Me.lcxShTMQGap.Location = New System.Drawing.Point(401, 617)
+        Me.lcxShTMQGap.Location = New System.Drawing.Point(401, 692)
         Me.lcxShTMQGap.Name = "lcxShTMQGap"
         Me.lcxShTMQGap.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTMQGap.Size = New System.Drawing.Size(159, 36)
@@ -2646,7 +2672,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTUmbrella
         '
-        Me.lcxShTUmbrella.Location = New System.Drawing.Point(401, 580)
+        Me.lcxShTUmbrella.Location = New System.Drawing.Point(401, 655)
         Me.lcxShTUmbrella.Name = "lcxShTUmbrella"
         Me.lcxShTUmbrella.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTUmbrella.Size = New System.Drawing.Size(124, 20)
@@ -2659,7 +2685,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbShTTricks.AutoSize = True
         Me.nlbShTTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbShTTricks.Location = New System.Drawing.Point(401, 512)
+        Me.nlbShTTricks.Location = New System.Drawing.Point(401, 587)
         Me.nlbShTTricks.Name = "nlbShTTricks"
         Me.nlbShTTricks.Size = New System.Drawing.Size(140, 13)
         Me.nlbShTTricks.TabIndex = 299
@@ -2667,7 +2693,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTLensless
         '
-        Me.lcxShTLensless.Location = New System.Drawing.Point(401, 529)
+        Me.lcxShTLensless.Location = New System.Drawing.Point(401, 604)
         Me.lcxShTLensless.Name = "lcxShTLensless"
         Me.lcxShTLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTLensless.Size = New System.Drawing.Size(150, 20)
@@ -2678,7 +2704,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSpTMQSunRoom
         '
-        Me.lcxSpTMQSunRoom.Location = New System.Drawing.Point(401, 475)
+        Me.lcxSpTMQSunRoom.Location = New System.Drawing.Point(401, 550)
         Me.lcxSpTMQSunRoom.Name = "lcxSpTMQSunRoom"
         Me.lcxSpTMQSunRoom.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSpTMQSunRoom.Size = New System.Drawing.Size(195, 36)
@@ -2689,7 +2715,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSpTMQLowAdult
         '
-        Me.lcxSpTMQLowAdult.Location = New System.Drawing.Point(401, 457)
+        Me.lcxSpTMQLowAdult.Location = New System.Drawing.Point(401, 532)
         Me.lcxSpTMQLowAdult.Name = "lcxSpTMQLowAdult"
         Me.lcxSpTMQLowAdult.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSpTMQLowAdult.Size = New System.Drawing.Size(195, 20)
@@ -2700,7 +2726,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSpTBombchu
         '
-        Me.lcxSpTBombchu.Location = New System.Drawing.Point(401, 406)
+        Me.lcxSpTBombchu.Location = New System.Drawing.Point(401, 481)
         Me.lcxSpTBombchu.Name = "lcxSpTBombchu"
         Me.lcxSpTBombchu.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSpTBombchu.Size = New System.Drawing.Size(181, 20)
@@ -2713,7 +2739,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbSpTTricks.AutoSize = True
         Me.nlbSpTTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbSpTTricks.Location = New System.Drawing.Point(401, 370)
+        Me.nlbSpTTricks.Location = New System.Drawing.Point(401, 445)
         Me.nlbSpTTricks.Name = "nlbSpTTricks"
         Me.nlbSpTTricks.Size = New System.Drawing.Size(124, 13)
         Me.nlbSpTTricks.TabIndex = 294
@@ -2721,7 +2747,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSpTWall
         '
-        Me.lcxSpTWall.Location = New System.Drawing.Point(401, 424)
+        Me.lcxSpTWall.Location = New System.Drawing.Point(401, 499)
         Me.lcxSpTWall.Name = "lcxSpTWall"
         Me.lcxSpTWall.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSpTWall.Size = New System.Drawing.Size(182, 36)
@@ -2732,7 +2758,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWaTCrackHovers
         '
-        Me.lcxWaTCrackHovers.Location = New System.Drawing.Point(201, 669)
+        Me.lcxWaTCrackHovers.Location = New System.Drawing.Point(201, 744)
         Me.lcxWaTCrackHovers.Name = "lcxWaTCrackHovers"
         Me.lcxWaTCrackHovers.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWaTCrackHovers.Size = New System.Drawing.Size(181, 20)
@@ -2743,7 +2769,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWaTCrackNothing
         '
-        Me.lcxWaTCrackNothing.Location = New System.Drawing.Point(201, 636)
+        Me.lcxWaTCrackNothing.Location = New System.Drawing.Point(201, 711)
         Me.lcxWaTCrackNothing.Name = "lcxWaTCrackNothing"
         Me.lcxWaTCrackNothing.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWaTCrackNothing.Size = New System.Drawing.Size(181, 36)
@@ -2754,7 +2780,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWaTBKR
         '
-        Me.lcxWaTBKR.Location = New System.Drawing.Point(201, 618)
+        Me.lcxWaTBKR.Location = New System.Drawing.Point(201, 693)
         Me.lcxWaTBKR.Name = "lcxWaTBKR"
         Me.lcxWaTBKR.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWaTBKR.Size = New System.Drawing.Size(195, 20)
@@ -2765,7 +2791,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWaTDrgnDive
         '
-        Me.lcxWaTDrgnDive.Location = New System.Drawing.Point(201, 567)
+        Me.lcxWaTDrgnDive.Location = New System.Drawing.Point(201, 642)
         Me.lcxWaTDrgnDive.Name = "lcxWaTDrgnDive"
         Me.lcxWaTDrgnDive.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWaTDrgnDive.Size = New System.Drawing.Size(159, 20)
@@ -2778,7 +2804,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbWaTTricks.AutoSize = True
         Me.nlbWaTTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbWaTTricks.Location = New System.Drawing.Point(201, 531)
+        Me.nlbWaTTricks.Location = New System.Drawing.Point(201, 606)
         Me.nlbWaTTricks.Name = "nlbWaTTricks"
         Me.nlbWaTTricks.Size = New System.Drawing.Size(129, 13)
         Me.nlbWaTTricks.TabIndex = 287
@@ -2786,7 +2812,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWaTTorch
         '
-        Me.lcxWaTTorch.Location = New System.Drawing.Point(201, 548)
+        Me.lcxWaTTorch.Location = New System.Drawing.Point(201, 623)
         Me.lcxWaTTorch.Name = "lcxWaTTorch"
         Me.lcxWaTTorch.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWaTTorch.Size = New System.Drawing.Size(134, 20)
@@ -2797,7 +2823,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFiTMQMazeJump
         '
-        Me.lcxFiTMQMazeJump.Location = New System.Drawing.Point(201, 494)
+        Me.lcxFiTMQMazeJump.Location = New System.Drawing.Point(201, 569)
         Me.lcxFiTMQMazeJump.Name = "lcxFiTMQMazeJump"
         Me.lcxFiTMQMazeJump.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFiTMQMazeJump.Size = New System.Drawing.Size(200, 36)
@@ -2808,7 +2834,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFiTMQMazeHovers
         '
-        Me.lcxFiTMQMazeHovers.Location = New System.Drawing.Point(201, 462)
+        Me.lcxFiTMQMazeHovers.Location = New System.Drawing.Point(201, 537)
         Me.lcxFiTMQMazeHovers.Name = "lcxFiTMQMazeHovers"
         Me.lcxFiTMQMazeHovers.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFiTMQMazeHovers.Size = New System.Drawing.Size(190, 36)
@@ -2819,7 +2845,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFiTRustedSwitches
         '
-        Me.lcxFiTRustedSwitches.Location = New System.Drawing.Point(201, 425)
+        Me.lcxFiTRustedSwitches.Location = New System.Drawing.Point(201, 500)
         Me.lcxFiTRustedSwitches.Name = "lcxFiTRustedSwitches"
         Me.lcxFiTRustedSwitches.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFiTRustedSwitches.Size = New System.Drawing.Size(190, 20)
@@ -2830,7 +2856,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFiTMQClimb
         '
-        Me.lcxFiTMQClimb.Location = New System.Drawing.Point(201, 444)
+        Me.lcxFiTMQClimb.Location = New System.Drawing.Point(201, 519)
         Me.lcxFiTMQClimb.Name = "lcxFiTMQClimb"
         Me.lcxFiTMQClimb.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFiTMQClimb.Size = New System.Drawing.Size(169, 20)
@@ -2841,7 +2867,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFiTMaze
         '
-        Me.lcxFiTMaze.Location = New System.Drawing.Point(201, 406)
+        Me.lcxFiTMaze.Location = New System.Drawing.Point(201, 481)
         Me.lcxFiTMaze.Name = "lcxFiTMaze"
         Me.lcxFiTMaze.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFiTMaze.Size = New System.Drawing.Size(134, 20)
@@ -2854,7 +2880,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbFiTTricks.AutoSize = True
         Me.nlbFiTTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbFiTTricks.Location = New System.Drawing.Point(201, 370)
+        Me.nlbFiTTricks.Location = New System.Drawing.Point(201, 445)
         Me.nlbFiTTricks.Name = "nlbFiTTricks"
         Me.nlbFiTTricks.Size = New System.Drawing.Size(116, 13)
         Me.nlbFiTTricks.TabIndex = 280
@@ -2862,7 +2888,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFiTClimb
         '
-        Me.lcxFiTClimb.Location = New System.Drawing.Point(201, 387)
+        Me.lcxFiTClimb.Location = New System.Drawing.Point(201, 462)
         Me.lcxFiTClimb.Name = "lcxFiTClimb"
         Me.lcxFiTClimb.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFiTClimb.Size = New System.Drawing.Size(134, 20)
@@ -2873,7 +2899,7 @@ Partial Class frmTrackerOfTime
         '
         'ltbKeys
         '
-        Me.ltbKeys.Location = New System.Drawing.Point(21, 139)
+        Me.ltbKeys.Location = New System.Drawing.Point(21, 348)
         Me.ltbKeys.Name = "ltbKeys"
         Me.ltbKeys.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
         Me.ltbKeys.Size = New System.Drawing.Size(117, 15)
@@ -2883,7 +2909,7 @@ Partial Class frmTrackerOfTime
         '
         'lblSmallKeys
         '
-        Me.lblSmallKeys.Location = New System.Drawing.Point(18, 116)
+        Me.lblSmallKeys.Location = New System.Drawing.Point(18, 325)
         Me.lblSmallKeys.Name = "lblSmallKeys"
         Me.lblSmallKeys.Size = New System.Drawing.Size(117, 20)
         Me.lblSmallKeys.TabIndex = 277
@@ -2892,7 +2918,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFoTLedge
         '
-        Me.lcxFoTLedge.Location = New System.Drawing.Point(1, 685)
+        Me.lcxFoTLedge.Location = New System.Drawing.Point(1, 760)
         Me.lcxFoTLedge.Name = "lcxFoTLedge"
         Me.lcxFoTLedge.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFoTLedge.Size = New System.Drawing.Size(190, 20)
@@ -2903,7 +2929,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFoTMQWell
         '
-        Me.lcxFoTMQWell.Location = New System.Drawing.Point(1, 755)
+        Me.lcxFoTMQWell.Location = New System.Drawing.Point(1, 830)
         Me.lcxFoTMQWell.Name = "lcxFoTMQWell"
         Me.lcxFoTMQWell.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFoTMQWell.Size = New System.Drawing.Size(140, 20)
@@ -2916,7 +2942,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbFoTTricks.AutoSize = True
         Me.nlbFoTTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbFoTTricks.Location = New System.Drawing.Point(1, 598)
+        Me.nlbFoTTricks.Location = New System.Drawing.Point(1, 673)
         Me.nlbFoTTricks.Name = "nlbFoTTricks"
         Me.nlbFoTTricks.Size = New System.Drawing.Size(130, 13)
         Me.nlbFoTTricks.TabIndex = 273
@@ -2926,7 +2952,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbDDCTricks.AutoSize = True
         Me.nlbDDCTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbDDCTricks.Location = New System.Drawing.Point(1, 488)
+        Me.nlbDDCTricks.Location = New System.Drawing.Point(1, 563)
         Me.nlbDDCTricks.Name = "nlbDDCTricks"
         Me.nlbDDCTricks.Size = New System.Drawing.Size(154, 13)
         Me.nlbDDCTricks.TabIndex = 272
@@ -2936,7 +2962,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbDTTricks.AutoSize = True
         Me.nlbDTTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbDTTricks.Location = New System.Drawing.Point(1, 448)
+        Me.nlbDTTricks.Location = New System.Drawing.Point(1, 523)
         Me.nlbDTTricks.Name = "nlbDTTricks"
         Me.nlbDTTricks.Size = New System.Drawing.Size(110, 13)
         Me.nlbDTTricks.TabIndex = 271
@@ -2944,7 +2970,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFoTMQTwisted
         '
-        Me.lcxFoTMQTwisted.Location = New System.Drawing.Point(1, 722)
+        Me.lcxFoTMQTwisted.Location = New System.Drawing.Point(1, 797)
         Me.lcxFoTMQTwisted.Name = "lcxFoTMQTwisted"
         Me.lcxFoTMQTwisted.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFoTMQTwisted.Size = New System.Drawing.Size(190, 36)
@@ -2955,7 +2981,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFoTMQPuzzle
         '
-        Me.lcxFoTMQPuzzle.Location = New System.Drawing.Point(1, 704)
+        Me.lcxFoTMQPuzzle.Location = New System.Drawing.Point(1, 779)
         Me.lcxFoTMQPuzzle.Name = "lcxFoTMQPuzzle"
         Me.lcxFoTMQPuzzle.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFoTMQPuzzle.Size = New System.Drawing.Size(190, 20)
@@ -2966,7 +2992,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFoTBackdoor
         '
-        Me.lcxFoTBackdoor.Location = New System.Drawing.Point(1, 666)
+        Me.lcxFoTBackdoor.Location = New System.Drawing.Point(1, 741)
         Me.lcxFoTBackdoor.Name = "lcxFoTBackdoor"
         Me.lcxFoTBackdoor.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFoTBackdoor.Size = New System.Drawing.Size(190, 20)
@@ -2977,7 +3003,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFoTFrame
         '
-        Me.lcxFoTFrame.Location = New System.Drawing.Point(1, 633)
+        Me.lcxFoTFrame.Location = New System.Drawing.Point(1, 708)
         Me.lcxFoTFrame.Name = "lcxFoTFrame"
         Me.lcxFoTFrame.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFoTFrame.Size = New System.Drawing.Size(170, 36)
@@ -2988,7 +3014,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFoTVines
         '
-        Me.lcxFoTVines.Location = New System.Drawing.Point(1, 615)
+        Me.lcxFoTVines.Location = New System.Drawing.Point(1, 690)
         Me.lcxFoTVines.Name = "lcxFoTVines"
         Me.lcxFoTVines.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFoTVines.Size = New System.Drawing.Size(190, 20)
@@ -2999,7 +3025,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxDCLightEyes
         '
-        Me.lcxDCLightEyes.Location = New System.Drawing.Point(1, 575)
+        Me.lcxDCLightEyes.Location = New System.Drawing.Point(1, 650)
         Me.lcxDCLightEyes.Name = "lcxDCLightEyes"
         Me.lcxDCLightEyes.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxDCLightEyes.Size = New System.Drawing.Size(186, 20)
@@ -3010,7 +3036,7 @@ Partial Class frmTrackerOfTime
         '
         'ltbGoldSkulltulas
         '
-        Me.ltbGoldSkulltulas.Location = New System.Drawing.Point(21, 25)
+        Me.ltbGoldSkulltulas.Location = New System.Drawing.Point(21, 234)
         Me.ltbGoldSkulltulas.Name = "ltbGoldSkulltulas"
         Me.ltbGoldSkulltulas.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
         Me.ltbGoldSkulltulas.Size = New System.Drawing.Size(117, 15)
@@ -3020,7 +3046,7 @@ Partial Class frmTrackerOfTime
         '
         'lblGoldSkulltulas
         '
-        Me.lblGoldSkulltulas.Location = New System.Drawing.Point(18, 2)
+        Me.lblGoldSkulltulas.Location = New System.Drawing.Point(18, 211)
         Me.lblGoldSkulltulas.Name = "lblGoldSkulltulas"
         Me.lblGoldSkulltulas.Size = New System.Drawing.Size(117, 20)
         Me.lblGoldSkulltulas.TabIndex = 263
@@ -3029,7 +3055,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxDCSlingshotSkips
         '
-        Me.lcxDCSlingshotSkips.Location = New System.Drawing.Point(1, 556)
+        Me.lcxDCSlingshotSkips.Location = New System.Drawing.Point(1, 631)
         Me.lcxDCSlingshotSkips.Name = "lcxDCSlingshotSkips"
         Me.lcxDCSlingshotSkips.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxDCSlingshotSkips.Size = New System.Drawing.Size(137, 20)
@@ -3040,7 +3066,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxDCSpikeJump
         '
-        Me.lcxDCSpikeJump.Location = New System.Drawing.Point(1, 523)
+        Me.lcxDCSpikeJump.Location = New System.Drawing.Point(1, 598)
         Me.lcxDCSpikeJump.Name = "lcxDCSpikeJump"
         Me.lcxDCSpikeJump.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxDCSpikeJump.Size = New System.Drawing.Size(174, 36)
@@ -3051,7 +3077,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxDCStaircase
         '
-        Me.lcxDCStaircase.Location = New System.Drawing.Point(1, 505)
+        Me.lcxDCStaircase.Location = New System.Drawing.Point(1, 580)
         Me.lcxDCStaircase.Name = "lcxDCStaircase"
         Me.lcxDCStaircase.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxDCStaircase.Size = New System.Drawing.Size(137, 20)
@@ -3062,7 +3088,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxDekuB1Skip
         '
-        Me.lcxDekuB1Skip.Location = New System.Drawing.Point(1, 465)
+        Me.lcxDekuB1Skip.Location = New System.Drawing.Point(1, 540)
         Me.lcxDekuB1Skip.Name = "lcxDekuB1Skip"
         Me.lcxDekuB1Skip.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxDekuB1Skip.Size = New System.Drawing.Size(160, 20)
@@ -3072,7 +3098,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxOpenFountain
         '
-        Me.lcxOpenFountain.Location = New System.Drawing.Point(201, 136)
+        Me.lcxOpenFountain.Location = New System.Drawing.Point(201, 345)
         Me.lcxOpenFountain.Name = "lcxOpenFountain"
         Me.lcxOpenFountain.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxOpenFountain.Size = New System.Drawing.Size(170, 20)
@@ -3082,7 +3108,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxOpenForest
         '
-        Me.lcxOpenForest.Location = New System.Drawing.Point(201, 117)
+        Me.lcxOpenForest.Location = New System.Drawing.Point(201, 326)
         Me.lcxOpenForest.Name = "lcxOpenForest"
         Me.lcxOpenForest.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxOpenForest.Size = New System.Drawing.Size(137, 20)
@@ -3093,6 +3119,7 @@ Partial Class frmTrackerOfTime
         'pnlSongsMedals
         '
         Me.pnlSongsMedals.BackColor = System.Drawing.Color.Black
+        Me.pnlSongsMedals.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pnlSongsMedals.Controls.Add(Me.pbxSpawnAdult)
         Me.pnlSongsMedals.Controls.Add(Me.pbxSpawnYoung)
         Me.pnlSongsMedals.Controls.Add(Me.pbxSongOfStorms)
@@ -3116,30 +3143,28 @@ Partial Class frmTrackerOfTime
         Me.pnlSongsMedals.Controls.Add(Me.pbxBoleroOfFire)
         Me.pnlSongsMedals.Controls.Add(Me.pbxMinuetOfForest)
         Me.pnlSongsMedals.Controls.Add(Me.pbxZeldasLullaby)
-        Me.pnlSongsMedals.Location = New System.Drawing.Point(110, 162)
+        Me.pnlSongsMedals.Location = New System.Drawing.Point(6, 214)
         Me.pnlSongsMedals.Name = "pnlSongsMedals"
-        Me.pnlSongsMedals.Size = New System.Drawing.Size(355, 96)
+        Me.pnlSongsMedals.Size = New System.Drawing.Size(562, 150)
         Me.pnlSongsMedals.TabIndex = 225
         '
         'pbxSpawnAdult
         '
         Me.pbxSpawnAdult.AccessibleRole = System.Windows.Forms.AccessibleRole.None
-        Me.pbxSpawnAdult.Image = CType(resources.GetObject("pbxSpawnAdult.Image"), System.Drawing.Image)
-        Me.pbxSpawnAdult.Location = New System.Drawing.Point(129, 0)
+        Me.pbxSpawnAdult.Image = Global.Tracker_of_Time.My.Resources.Resources.spawnLocations
+        Me.pbxSpawnAdult.Location = New System.Drawing.Point(206, 0)
         Me.pbxSpawnAdult.Name = "pbxSpawnAdult"
-        Me.pbxSpawnAdult.Size = New System.Drawing.Size(96, 16)
-        Me.pbxSpawnAdult.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxSpawnAdult.Size = New System.Drawing.Size(150, 25)
         Me.pbxSpawnAdult.TabIndex = 44
         Me.pbxSpawnAdult.TabStop = False
         '
         'pbxSpawnYoung
         '
         Me.pbxSpawnYoung.AccessibleRole = System.Windows.Forms.AccessibleRole.None
-        Me.pbxSpawnYoung.Image = CType(resources.GetObject("pbxSpawnYoung.Image"), System.Drawing.Image)
-        Me.pbxSpawnYoung.Location = New System.Drawing.Point(2, 0)
+        Me.pbxSpawnYoung.Image = Global.Tracker_of_Time.My.Resources.Resources.spawnLocations
+        Me.pbxSpawnYoung.Location = New System.Drawing.Point(6, 0)
         Me.pbxSpawnYoung.Name = "pbxSpawnYoung"
-        Me.pbxSpawnYoung.Size = New System.Drawing.Size(96, 16)
-        Me.pbxSpawnYoung.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxSpawnYoung.Size = New System.Drawing.Size(150, 25)
         Me.pbxSpawnYoung.TabIndex = 43
         Me.pbxSpawnYoung.TabStop = False
         '
@@ -3147,10 +3172,9 @@ Partial Class frmTrackerOfTime
         '
         Me.pbxSongOfStorms.AccessibleRole = System.Windows.Forms.AccessibleRole.None
         Me.pbxSongOfStorms.Image = CType(resources.GetObject("pbxSongOfStorms.Image"), System.Drawing.Image)
-        Me.pbxSongOfStorms.Location = New System.Drawing.Point(178, 16)
+        Me.pbxSongOfStorms.Location = New System.Drawing.Point(281, 25)
         Me.pbxSongOfStorms.Name = "pbxSongOfStorms"
-        Me.pbxSongOfStorms.Size = New System.Drawing.Size(32, 32)
-        Me.pbxSongOfStorms.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxSongOfStorms.Size = New System.Drawing.Size(50, 50)
         Me.pbxSongOfStorms.TabIndex = 42
         Me.pbxSongOfStorms.TabStop = False
         '
@@ -3158,10 +3182,9 @@ Partial Class frmTrackerOfTime
         '
         Me.pbxSongOfTime.AccessibleRole = System.Windows.Forms.AccessibleRole.None
         Me.pbxSongOfTime.Image = CType(resources.GetObject("pbxSongOfTime.Image"), System.Drawing.Image)
-        Me.pbxSongOfTime.Location = New System.Drawing.Point(146, 16)
+        Me.pbxSongOfTime.Location = New System.Drawing.Point(231, 25)
         Me.pbxSongOfTime.Name = "pbxSongOfTime"
-        Me.pbxSongOfTime.Size = New System.Drawing.Size(32, 32)
-        Me.pbxSongOfTime.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxSongOfTime.Size = New System.Drawing.Size(50, 50)
         Me.pbxSongOfTime.TabIndex = 41
         Me.pbxSongOfTime.TabStop = False
         '
@@ -3169,10 +3192,9 @@ Partial Class frmTrackerOfTime
         '
         Me.pbxSunsSong.AccessibleRole = System.Windows.Forms.AccessibleRole.None
         Me.pbxSunsSong.Image = CType(resources.GetObject("pbxSunsSong.Image"), System.Drawing.Image)
-        Me.pbxSunsSong.Location = New System.Drawing.Point(114, 16)
+        Me.pbxSunsSong.Location = New System.Drawing.Point(181, 25)
         Me.pbxSunsSong.Name = "pbxSunsSong"
-        Me.pbxSunsSong.Size = New System.Drawing.Size(32, 32)
-        Me.pbxSunsSong.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxSunsSong.Size = New System.Drawing.Size(50, 50)
         Me.pbxSunsSong.TabIndex = 40
         Me.pbxSunsSong.TabStop = False
         '
@@ -3180,10 +3202,9 @@ Partial Class frmTrackerOfTime
         '
         Me.pbxSariasSong.AccessibleRole = System.Windows.Forms.AccessibleRole.None
         Me.pbxSariasSong.Image = CType(resources.GetObject("pbxSariasSong.Image"), System.Drawing.Image)
-        Me.pbxSariasSong.Location = New System.Drawing.Point(82, 16)
+        Me.pbxSariasSong.Location = New System.Drawing.Point(131, 25)
         Me.pbxSariasSong.Name = "pbxSariasSong"
-        Me.pbxSariasSong.Size = New System.Drawing.Size(32, 32)
-        Me.pbxSariasSong.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxSariasSong.Size = New System.Drawing.Size(50, 50)
         Me.pbxSariasSong.TabIndex = 39
         Me.pbxSariasSong.TabStop = False
         '
@@ -3191,160 +3212,144 @@ Partial Class frmTrackerOfTime
         '
         Me.pbxEponasSong.AccessibleRole = System.Windows.Forms.AccessibleRole.None
         Me.pbxEponasSong.Image = CType(resources.GetObject("pbxEponasSong.Image"), System.Drawing.Image)
-        Me.pbxEponasSong.Location = New System.Drawing.Point(50, 16)
+        Me.pbxEponasSong.Location = New System.Drawing.Point(81, 25)
         Me.pbxEponasSong.Name = "pbxEponasSong"
-        Me.pbxEponasSong.Size = New System.Drawing.Size(32, 32)
-        Me.pbxEponasSong.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxEponasSong.Size = New System.Drawing.Size(50, 50)
         Me.pbxEponasSong.TabIndex = 38
         Me.pbxEponasSong.TabStop = False
         '
         'pbxStoneZora
         '
         Me.pbxStoneZora.Image = Global.Tracker_of_Time.My.Resources.Resources.stoneZora
-        Me.pbxStoneZora.Location = New System.Drawing.Point(226, 64)
+        Me.pbxStoneZora.Location = New System.Drawing.Point(356, 100)
         Me.pbxStoneZora.Name = "pbxStoneZora"
-        Me.pbxStoneZora.Size = New System.Drawing.Size(32, 32)
-        Me.pbxStoneZora.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxStoneZora.Size = New System.Drawing.Size(50, 50)
         Me.pbxStoneZora.TabIndex = 37
         Me.pbxStoneZora.TabStop = False
         '
         'pbxStoneGoron
         '
         Me.pbxStoneGoron.Image = Global.Tracker_of_Time.My.Resources.Resources.stoneGoron
-        Me.pbxStoneGoron.Location = New System.Drawing.Point(226, 32)
+        Me.pbxStoneGoron.Location = New System.Drawing.Point(356, 50)
         Me.pbxStoneGoron.Name = "pbxStoneGoron"
-        Me.pbxStoneGoron.Size = New System.Drawing.Size(32, 32)
-        Me.pbxStoneGoron.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxStoneGoron.Size = New System.Drawing.Size(50, 50)
         Me.pbxStoneGoron.TabIndex = 36
         Me.pbxStoneGoron.TabStop = False
         '
         'pbxStoneKokiri
         '
         Me.pbxStoneKokiri.Image = Global.Tracker_of_Time.My.Resources.Resources.stoneKokiri
-        Me.pbxStoneKokiri.Location = New System.Drawing.Point(226, 0)
+        Me.pbxStoneKokiri.Location = New System.Drawing.Point(356, 0)
         Me.pbxStoneKokiri.Name = "pbxStoneKokiri"
-        Me.pbxStoneKokiri.Size = New System.Drawing.Size(32, 32)
-        Me.pbxStoneKokiri.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxStoneKokiri.Size = New System.Drawing.Size(50, 50)
         Me.pbxStoneKokiri.TabIndex = 35
         Me.pbxStoneKokiri.TabStop = False
         '
         'pbxMedalForest
         '
         Me.pbxMedalForest.Image = Global.Tracker_of_Time.My.Resources.Resources.medalForest
-        Me.pbxMedalForest.Location = New System.Drawing.Point(322, 16)
+        Me.pbxMedalForest.Location = New System.Drawing.Point(506, 25)
         Me.pbxMedalForest.Name = "pbxMedalForest"
-        Me.pbxMedalForest.Size = New System.Drawing.Size(32, 32)
-        Me.pbxMedalForest.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxMedalForest.Size = New System.Drawing.Size(50, 50)
         Me.pbxMedalForest.TabIndex = 34
         Me.pbxMedalForest.TabStop = False
         '
         'pbxMedalFire
         '
         Me.pbxMedalFire.Image = Global.Tracker_of_Time.My.Resources.Resources.medalFire
-        Me.pbxMedalFire.Location = New System.Drawing.Point(322, 48)
+        Me.pbxMedalFire.Location = New System.Drawing.Point(506, 75)
         Me.pbxMedalFire.Name = "pbxMedalFire"
-        Me.pbxMedalFire.Size = New System.Drawing.Size(32, 32)
-        Me.pbxMedalFire.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxMedalFire.Size = New System.Drawing.Size(50, 50)
         Me.pbxMedalFire.TabIndex = 33
         Me.pbxMedalFire.TabStop = False
         '
         'pbxMedalWater
         '
         Me.pbxMedalWater.Image = Global.Tracker_of_Time.My.Resources.Resources.medalWater
-        Me.pbxMedalWater.Location = New System.Drawing.Point(290, 64)
+        Me.pbxMedalWater.Location = New System.Drawing.Point(456, 100)
         Me.pbxMedalWater.Name = "pbxMedalWater"
-        Me.pbxMedalWater.Size = New System.Drawing.Size(32, 32)
-        Me.pbxMedalWater.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxMedalWater.Size = New System.Drawing.Size(50, 50)
         Me.pbxMedalWater.TabIndex = 32
         Me.pbxMedalWater.TabStop = False
         '
         'pbxMedalLight
         '
         Me.pbxMedalLight.Image = Global.Tracker_of_Time.My.Resources.Resources.medalLight
-        Me.pbxMedalLight.Location = New System.Drawing.Point(290, 0)
+        Me.pbxMedalLight.Location = New System.Drawing.Point(456, 0)
         Me.pbxMedalLight.Name = "pbxMedalLight"
-        Me.pbxMedalLight.Size = New System.Drawing.Size(32, 32)
-        Me.pbxMedalLight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxMedalLight.Size = New System.Drawing.Size(50, 50)
         Me.pbxMedalLight.TabIndex = 31
         Me.pbxMedalLight.TabStop = False
         '
         'pbxMedalShadow
         '
         Me.pbxMedalShadow.Image = Global.Tracker_of_Time.My.Resources.Resources.medalShadow
-        Me.pbxMedalShadow.Location = New System.Drawing.Point(258, 16)
+        Me.pbxMedalShadow.Location = New System.Drawing.Point(406, 25)
         Me.pbxMedalShadow.Name = "pbxMedalShadow"
-        Me.pbxMedalShadow.Size = New System.Drawing.Size(32, 32)
-        Me.pbxMedalShadow.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxMedalShadow.Size = New System.Drawing.Size(50, 50)
         Me.pbxMedalShadow.TabIndex = 30
         Me.pbxMedalShadow.TabStop = False
         '
         'pbxMedalSpirit
         '
         Me.pbxMedalSpirit.Image = Global.Tracker_of_Time.My.Resources.Resources.medalSpirit
-        Me.pbxMedalSpirit.Location = New System.Drawing.Point(258, 48)
+        Me.pbxMedalSpirit.Location = New System.Drawing.Point(406, 75)
         Me.pbxMedalSpirit.Name = "pbxMedalSpirit"
-        Me.pbxMedalSpirit.Size = New System.Drawing.Size(32, 32)
-        Me.pbxMedalSpirit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxMedalSpirit.Size = New System.Drawing.Size(50, 50)
         Me.pbxMedalSpirit.TabIndex = 29
         Me.pbxMedalSpirit.TabStop = False
         '
         'pbxPreludeOfLight
         '
         Me.pbxPreludeOfLight.Image = Global.Tracker_of_Time.My.Resources.Resources.songLight
-        Me.pbxPreludeOfLight.Location = New System.Drawing.Point(178, 48)
+        Me.pbxPreludeOfLight.Location = New System.Drawing.Point(281, 75)
         Me.pbxPreludeOfLight.Name = "pbxPreludeOfLight"
-        Me.pbxPreludeOfLight.Size = New System.Drawing.Size(32, 32)
-        Me.pbxPreludeOfLight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxPreludeOfLight.Size = New System.Drawing.Size(50, 50)
         Me.pbxPreludeOfLight.TabIndex = 28
         Me.pbxPreludeOfLight.TabStop = False
         '
         'pbxNocturneOfShadow
         '
         Me.pbxNocturneOfShadow.Image = Global.Tracker_of_Time.My.Resources.Resources.songShadow
-        Me.pbxNocturneOfShadow.Location = New System.Drawing.Point(146, 48)
+        Me.pbxNocturneOfShadow.Location = New System.Drawing.Point(231, 75)
         Me.pbxNocturneOfShadow.Name = "pbxNocturneOfShadow"
-        Me.pbxNocturneOfShadow.Size = New System.Drawing.Size(32, 32)
-        Me.pbxNocturneOfShadow.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxNocturneOfShadow.Size = New System.Drawing.Size(50, 50)
         Me.pbxNocturneOfShadow.TabIndex = 27
         Me.pbxNocturneOfShadow.TabStop = False
         '
         'pbxRequiemOfSpirit
         '
         Me.pbxRequiemOfSpirit.Image = Global.Tracker_of_Time.My.Resources.Resources.songSpirit
-        Me.pbxRequiemOfSpirit.Location = New System.Drawing.Point(114, 48)
+        Me.pbxRequiemOfSpirit.Location = New System.Drawing.Point(181, 75)
         Me.pbxRequiemOfSpirit.Name = "pbxRequiemOfSpirit"
-        Me.pbxRequiemOfSpirit.Size = New System.Drawing.Size(32, 32)
-        Me.pbxRequiemOfSpirit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxRequiemOfSpirit.Size = New System.Drawing.Size(50, 50)
         Me.pbxRequiemOfSpirit.TabIndex = 26
         Me.pbxRequiemOfSpirit.TabStop = False
         '
         'pbxSerenadeOfWater
         '
         Me.pbxSerenadeOfWater.Image = Global.Tracker_of_Time.My.Resources.Resources.songWater
-        Me.pbxSerenadeOfWater.Location = New System.Drawing.Point(82, 48)
+        Me.pbxSerenadeOfWater.Location = New System.Drawing.Point(131, 75)
         Me.pbxSerenadeOfWater.Name = "pbxSerenadeOfWater"
-        Me.pbxSerenadeOfWater.Size = New System.Drawing.Size(32, 32)
-        Me.pbxSerenadeOfWater.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxSerenadeOfWater.Size = New System.Drawing.Size(50, 50)
         Me.pbxSerenadeOfWater.TabIndex = 25
         Me.pbxSerenadeOfWater.TabStop = False
         '
         'pbxBoleroOfFire
         '
         Me.pbxBoleroOfFire.Image = Global.Tracker_of_Time.My.Resources.Resources.songFire
-        Me.pbxBoleroOfFire.Location = New System.Drawing.Point(50, 48)
+        Me.pbxBoleroOfFire.Location = New System.Drawing.Point(81, 75)
         Me.pbxBoleroOfFire.Name = "pbxBoleroOfFire"
-        Me.pbxBoleroOfFire.Size = New System.Drawing.Size(32, 32)
-        Me.pbxBoleroOfFire.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxBoleroOfFire.Size = New System.Drawing.Size(50, 50)
         Me.pbxBoleroOfFire.TabIndex = 24
         Me.pbxBoleroOfFire.TabStop = False
         '
         'pbxMinuetOfForest
         '
         Me.pbxMinuetOfForest.Image = Global.Tracker_of_Time.My.Resources.Resources.songForest
-        Me.pbxMinuetOfForest.Location = New System.Drawing.Point(18, 48)
+        Me.pbxMinuetOfForest.Location = New System.Drawing.Point(31, 75)
         Me.pbxMinuetOfForest.Name = "pbxMinuetOfForest"
-        Me.pbxMinuetOfForest.Size = New System.Drawing.Size(32, 32)
-        Me.pbxMinuetOfForest.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxMinuetOfForest.Size = New System.Drawing.Size(50, 50)
         Me.pbxMinuetOfForest.TabIndex = 23
         Me.pbxMinuetOfForest.TabStop = False
         '
@@ -3352,10 +3357,9 @@ Partial Class frmTrackerOfTime
         '
         Me.pbxZeldasLullaby.AccessibleRole = System.Windows.Forms.AccessibleRole.None
         Me.pbxZeldasLullaby.Image = CType(resources.GetObject("pbxZeldasLullaby.Image"), System.Drawing.Image)
-        Me.pbxZeldasLullaby.Location = New System.Drawing.Point(18, 16)
+        Me.pbxZeldasLullaby.Location = New System.Drawing.Point(31, 25)
         Me.pbxZeldasLullaby.Name = "pbxZeldasLullaby"
-        Me.pbxZeldasLullaby.Size = New System.Drawing.Size(32, 32)
-        Me.pbxZeldasLullaby.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxZeldasLullaby.Size = New System.Drawing.Size(50, 50)
         Me.pbxZeldasLullaby.TabIndex = 15
         Me.pbxZeldasLullaby.TabStop = False
         '
@@ -3363,7 +3367,7 @@ Partial Class frmTrackerOfTime
         '
         Me.rtbOutputRight.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.rtbOutputRight.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rtbOutputRight.Location = New System.Drawing.Point(285, 666)
+        Me.rtbOutputRight.Location = New System.Drawing.Point(285, 839)
         Me.rtbOutputRight.MaxLength = 4096
         Me.rtbOutputRight.Name = "rtbOutputRight"
         Me.rtbOutputRight.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
@@ -3407,7 +3411,7 @@ Partial Class frmTrackerOfTime
         Me.pnlWorldMap.Controls.Add(Me.zSFM)
         Me.pnlWorldMap.Controls.Add(Me.zLW)
         Me.pnlWorldMap.Controls.Add(Me.zKF)
-        Me.pnlWorldMap.Location = New System.Drawing.Point(6, 377)
+        Me.pnlWorldMap.Location = New System.Drawing.Point(6, 544)
         Me.pnlWorldMap.Name = "pnlWorldMap"
         Me.pnlWorldMap.Size = New System.Drawing.Size(562, 318)
         Me.pnlWorldMap.TabIndex = 326
@@ -3672,6 +3676,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlDungeonItems.BackColor = System.Drawing.Color.Black
         Me.pnlDungeonItems.BackgroundImage = Global.Tracker_of_Time.My.Resources.Resources.backgroundDungeonItems
+        Me.pnlDungeonItems.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pnlDungeonItems.Controls.Add(Me.pbxTriforce)
         Me.pnlDungeonItems.Controls.Add(Me.pbxGoldSkulltula)
         Me.pnlDungeonItems.Controls.Add(Me.pbxMagicBar)
@@ -3711,358 +3716,362 @@ Partial Class frmTrackerOfTime
         Me.pnlDungeonItems.Controls.Add(Me.pbxDCMap)
         Me.pnlDungeonItems.Controls.Add(Me.pbxDTCompass)
         Me.pnlDungeonItems.Controls.Add(Me.pbxDTMap)
-        Me.pnlDungeonItems.Location = New System.Drawing.Point(110, 258)
+        Me.pnlDungeonItems.Location = New System.Drawing.Point(6, 364)
         Me.pnlDungeonItems.Name = "pnlDungeonItems"
-        Me.pnlDungeonItems.Size = New System.Drawing.Size(355, 113)
+        Me.pnlDungeonItems.Size = New System.Drawing.Size(562, 180)
         Me.pnlDungeonItems.TabIndex = 244
         '
         'pbxTriforce
         '
+        Me.pbxTriforce.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbxTriforce.Image = Global.Tracker_of_Time.My.Resources.Resources.triforce
-        Me.pbxTriforce.Location = New System.Drawing.Point(34, 48)
+        Me.pbxTriforce.Location = New System.Drawing.Point(53, 75)
         Me.pbxTriforce.Name = "pbxTriforce"
-        Me.pbxTriforce.Size = New System.Drawing.Size(32, 32)
+        Me.pbxTriforce.Size = New System.Drawing.Size(50, 50)
         Me.pbxTriforce.TabIndex = 287
         Me.pbxTriforce.TabStop = False
         '
         'pbxGoldSkulltula
         '
+        Me.pbxGoldSkulltula.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbxGoldSkulltula.Image = Global.Tracker_of_Time.My.Resources.Resources.goldSkulltula
-        Me.pbxGoldSkulltula.Location = New System.Drawing.Point(2, 48)
+        Me.pbxGoldSkulltula.Location = New System.Drawing.Point(3, 75)
         Me.pbxGoldSkulltula.Name = "pbxGoldSkulltula"
-        Me.pbxGoldSkulltula.Size = New System.Drawing.Size(32, 32)
+        Me.pbxGoldSkulltula.Size = New System.Drawing.Size(50, 50)
         Me.pbxGoldSkulltula.TabIndex = 286
         Me.pbxGoldSkulltula.TabStop = False
         '
         'pbxMagicBar
         '
-        Me.pbxMagicBar.Location = New System.Drawing.Point(2, 32)
+        Me.pbxMagicBar.Location = New System.Drawing.Point(3, 50)
         Me.pbxMagicBar.Name = "pbxMagicBar"
-        Me.pbxMagicBar.Size = New System.Drawing.Size(64, 16)
+        Me.pbxMagicBar.Size = New System.Drawing.Size(100, 25)
         Me.pbxMagicBar.TabIndex = 285
         Me.pbxMagicBar.TabStop = False
         '
         'pbxPoH
         '
+        Me.pbxPoH.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbxPoH.Image = Global.Tracker_of_Time.My.Resources.Resources.poh0
-        Me.pbxPoH.Location = New System.Drawing.Point(34, 0)
+        Me.pbxPoH.Location = New System.Drawing.Point(53, 0)
         Me.pbxPoH.Name = "pbxPoH"
-        Me.pbxPoH.Size = New System.Drawing.Size(32, 32)
+        Me.pbxPoH.Size = New System.Drawing.Size(50, 50)
         Me.pbxPoH.TabIndex = 284
         Me.pbxPoH.TabStop = False
         '
         'pbxHeartContainer
         '
+        Me.pbxHeartContainer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbxHeartContainer.Image = Global.Tracker_of_Time.My.Resources.Resources.heartContainer
-        Me.pbxHeartContainer.Location = New System.Drawing.Point(2, 0)
+        Me.pbxHeartContainer.Location = New System.Drawing.Point(3, 0)
         Me.pbxHeartContainer.Name = "pbxHeartContainer"
-        Me.pbxHeartContainer.Size = New System.Drawing.Size(32, 32)
+        Me.pbxHeartContainer.Size = New System.Drawing.Size(50, 50)
         Me.pbxHeartContainer.TabIndex = 283
         Me.pbxHeartContainer.TabStop = False
         '
         'pbxGCBossKey
         '
         Me.pbxGCBossKey.Image = CType(resources.GetObject("pbxGCBossKey.Image"), System.Drawing.Image)
-        Me.pbxGCBossKey.Location = New System.Drawing.Point(330, 88)
+        Me.pbxGCBossKey.Location = New System.Drawing.Point(521, 139)
         Me.pbxGCBossKey.Name = "pbxGCBossKey"
-        Me.pbxGCBossKey.Size = New System.Drawing.Size(24, 24)
+        Me.pbxGCBossKey.Size = New System.Drawing.Size(38, 38)
         Me.pbxGCBossKey.TabIndex = 282
         Me.pbxGCBossKey.TabStop = False
         '
         'pbxGCSmallKey
         '
         Me.pbxGCSmallKey.Image = CType(resources.GetObject("pbxGCSmallKey.Image"), System.Drawing.Image)
-        Me.pbxGCSmallKey.Location = New System.Drawing.Point(330, 64)
+        Me.pbxGCSmallKey.Location = New System.Drawing.Point(521, 101)
         Me.pbxGCSmallKey.Name = "pbxGCSmallKey"
-        Me.pbxGCSmallKey.Size = New System.Drawing.Size(24, 24)
+        Me.pbxGCSmallKey.Size = New System.Drawing.Size(38, 38)
         Me.pbxGCSmallKey.TabIndex = 281
         Me.pbxGCSmallKey.TabStop = False
         '
         'pbxGTGSmallKey
         '
         Me.pbxGTGSmallKey.Image = CType(resources.GetObject("pbxGTGSmallKey.Image"), System.Drawing.Image)
-        Me.pbxGTGSmallKey.Location = New System.Drawing.Point(306, 64)
+        Me.pbxGTGSmallKey.Location = New System.Drawing.Point(483, 101)
         Me.pbxGTGSmallKey.Name = "pbxGTGSmallKey"
-        Me.pbxGTGSmallKey.Size = New System.Drawing.Size(24, 24)
+        Me.pbxGTGSmallKey.Size = New System.Drawing.Size(38, 38)
         Me.pbxGTGSmallKey.TabIndex = 279
         Me.pbxGTGSmallKey.TabStop = False
         '
         'pbxBotWSmallKey
         '
         Me.pbxBotWSmallKey.Image = CType(resources.GetObject("pbxBotWSmallKey.Image"), System.Drawing.Image)
-        Me.pbxBotWSmallKey.Location = New System.Drawing.Point(258, 64)
+        Me.pbxBotWSmallKey.Location = New System.Drawing.Point(407, 101)
         Me.pbxBotWSmallKey.Name = "pbxBotWSmallKey"
-        Me.pbxBotWSmallKey.Size = New System.Drawing.Size(24, 24)
+        Me.pbxBotWSmallKey.Size = New System.Drawing.Size(38, 38)
         Me.pbxBotWSmallKey.TabIndex = 275
         Me.pbxBotWSmallKey.TabStop = False
         '
         'pbxShTBossKey
         '
         Me.pbxShTBossKey.Image = CType(resources.GetObject("pbxShTBossKey.Image"), System.Drawing.Image)
-        Me.pbxShTBossKey.Location = New System.Drawing.Point(234, 88)
+        Me.pbxShTBossKey.Location = New System.Drawing.Point(369, 139)
         Me.pbxShTBossKey.Name = "pbxShTBossKey"
-        Me.pbxShTBossKey.Size = New System.Drawing.Size(24, 24)
+        Me.pbxShTBossKey.Size = New System.Drawing.Size(38, 38)
         Me.pbxShTBossKey.TabIndex = 274
         Me.pbxShTBossKey.TabStop = False
         '
         'pbxShTSmallKey
         '
         Me.pbxShTSmallKey.Image = CType(resources.GetObject("pbxShTSmallKey.Image"), System.Drawing.Image)
-        Me.pbxShTSmallKey.Location = New System.Drawing.Point(234, 64)
+        Me.pbxShTSmallKey.Location = New System.Drawing.Point(369, 101)
         Me.pbxShTSmallKey.Name = "pbxShTSmallKey"
-        Me.pbxShTSmallKey.Size = New System.Drawing.Size(24, 24)
+        Me.pbxShTSmallKey.Size = New System.Drawing.Size(38, 38)
         Me.pbxShTSmallKey.TabIndex = 273
         Me.pbxShTSmallKey.TabStop = False
         '
         'pbxSpTBossKey
         '
         Me.pbxSpTBossKey.Image = CType(resources.GetObject("pbxSpTBossKey.Image"), System.Drawing.Image)
-        Me.pbxSpTBossKey.Location = New System.Drawing.Point(210, 88)
+        Me.pbxSpTBossKey.Location = New System.Drawing.Point(331, 139)
         Me.pbxSpTBossKey.Name = "pbxSpTBossKey"
-        Me.pbxSpTBossKey.Size = New System.Drawing.Size(24, 24)
+        Me.pbxSpTBossKey.Size = New System.Drawing.Size(38, 38)
         Me.pbxSpTBossKey.TabIndex = 272
         Me.pbxSpTBossKey.TabStop = False
         '
         'pbxSpTSmallKey
         '
         Me.pbxSpTSmallKey.Image = CType(resources.GetObject("pbxSpTSmallKey.Image"), System.Drawing.Image)
-        Me.pbxSpTSmallKey.Location = New System.Drawing.Point(210, 64)
+        Me.pbxSpTSmallKey.Location = New System.Drawing.Point(331, 101)
         Me.pbxSpTSmallKey.Name = "pbxSpTSmallKey"
-        Me.pbxSpTSmallKey.Size = New System.Drawing.Size(24, 24)
+        Me.pbxSpTSmallKey.Size = New System.Drawing.Size(38, 38)
         Me.pbxSpTSmallKey.TabIndex = 271
         Me.pbxSpTSmallKey.TabStop = False
         '
         'pbxWTBossKey
         '
         Me.pbxWTBossKey.Image = CType(resources.GetObject("pbxWTBossKey.Image"), System.Drawing.Image)
-        Me.pbxWTBossKey.Location = New System.Drawing.Point(186, 88)
+        Me.pbxWTBossKey.Location = New System.Drawing.Point(293, 139)
         Me.pbxWTBossKey.Name = "pbxWTBossKey"
-        Me.pbxWTBossKey.Size = New System.Drawing.Size(24, 24)
+        Me.pbxWTBossKey.Size = New System.Drawing.Size(38, 38)
         Me.pbxWTBossKey.TabIndex = 270
         Me.pbxWTBossKey.TabStop = False
         '
         'pbxWTSmallKey
         '
         Me.pbxWTSmallKey.Image = CType(resources.GetObject("pbxWTSmallKey.Image"), System.Drawing.Image)
-        Me.pbxWTSmallKey.Location = New System.Drawing.Point(186, 64)
+        Me.pbxWTSmallKey.Location = New System.Drawing.Point(293, 101)
         Me.pbxWTSmallKey.Name = "pbxWTSmallKey"
-        Me.pbxWTSmallKey.Size = New System.Drawing.Size(24, 24)
+        Me.pbxWTSmallKey.Size = New System.Drawing.Size(38, 38)
         Me.pbxWTSmallKey.TabIndex = 269
         Me.pbxWTSmallKey.TabStop = False
         '
         'pbxFiTBossKey
         '
         Me.pbxFiTBossKey.Image = CType(resources.GetObject("pbxFiTBossKey.Image"), System.Drawing.Image)
-        Me.pbxFiTBossKey.Location = New System.Drawing.Point(162, 88)
+        Me.pbxFiTBossKey.Location = New System.Drawing.Point(255, 139)
         Me.pbxFiTBossKey.Name = "pbxFiTBossKey"
-        Me.pbxFiTBossKey.Size = New System.Drawing.Size(24, 24)
+        Me.pbxFiTBossKey.Size = New System.Drawing.Size(38, 38)
         Me.pbxFiTBossKey.TabIndex = 268
         Me.pbxFiTBossKey.TabStop = False
         '
         'pbxFiTSmallKey
         '
         Me.pbxFiTSmallKey.Image = CType(resources.GetObject("pbxFiTSmallKey.Image"), System.Drawing.Image)
-        Me.pbxFiTSmallKey.Location = New System.Drawing.Point(162, 64)
+        Me.pbxFiTSmallKey.Location = New System.Drawing.Point(255, 101)
         Me.pbxFiTSmallKey.Name = "pbxFiTSmallKey"
-        Me.pbxFiTSmallKey.Size = New System.Drawing.Size(24, 24)
+        Me.pbxFiTSmallKey.Size = New System.Drawing.Size(38, 38)
         Me.pbxFiTSmallKey.TabIndex = 267
         Me.pbxFiTSmallKey.TabStop = False
         '
         'pbxFoTBossKey
         '
         Me.pbxFoTBossKey.Image = CType(resources.GetObject("pbxFoTBossKey.Image"), System.Drawing.Image)
-        Me.pbxFoTBossKey.Location = New System.Drawing.Point(138, 88)
+        Me.pbxFoTBossKey.Location = New System.Drawing.Point(217, 139)
         Me.pbxFoTBossKey.Name = "pbxFoTBossKey"
-        Me.pbxFoTBossKey.Size = New System.Drawing.Size(24, 24)
+        Me.pbxFoTBossKey.Size = New System.Drawing.Size(38, 38)
         Me.pbxFoTBossKey.TabIndex = 266
         Me.pbxFoTBossKey.TabStop = False
         '
         'pbxFoTSmallKey
         '
         Me.pbxFoTSmallKey.Image = CType(resources.GetObject("pbxFoTSmallKey.Image"), System.Drawing.Image)
-        Me.pbxFoTSmallKey.Location = New System.Drawing.Point(138, 64)
+        Me.pbxFoTSmallKey.Location = New System.Drawing.Point(217, 101)
         Me.pbxFoTSmallKey.Name = "pbxFoTSmallKey"
-        Me.pbxFoTSmallKey.Size = New System.Drawing.Size(24, 24)
+        Me.pbxFoTSmallKey.Size = New System.Drawing.Size(38, 38)
         Me.pbxFoTSmallKey.TabIndex = 265
         Me.pbxFoTSmallKey.TabStop = False
         '
         'pbxICCompass
         '
         Me.pbxICCompass.Image = CType(resources.GetObject("pbxICCompass.Image"), System.Drawing.Image)
-        Me.pbxICCompass.Location = New System.Drawing.Point(282, 40)
+        Me.pbxICCompass.Location = New System.Drawing.Point(445, 63)
         Me.pbxICCompass.Name = "pbxICCompass"
-        Me.pbxICCompass.Size = New System.Drawing.Size(24, 24)
+        Me.pbxICCompass.Size = New System.Drawing.Size(38, 38)
         Me.pbxICCompass.TabIndex = 264
         Me.pbxICCompass.TabStop = False
         '
         'pbxICMap
         '
         Me.pbxICMap.Image = CType(resources.GetObject("pbxICMap.Image"), System.Drawing.Image)
-        Me.pbxICMap.Location = New System.Drawing.Point(282, 16)
+        Me.pbxICMap.Location = New System.Drawing.Point(445, 25)
         Me.pbxICMap.Name = "pbxICMap"
-        Me.pbxICMap.Size = New System.Drawing.Size(24, 24)
+        Me.pbxICMap.Size = New System.Drawing.Size(38, 38)
         Me.pbxICMap.TabIndex = 263
         Me.pbxICMap.TabStop = False
         '
         'pbxBotWCompass
         '
         Me.pbxBotWCompass.Image = CType(resources.GetObject("pbxBotWCompass.Image"), System.Drawing.Image)
-        Me.pbxBotWCompass.Location = New System.Drawing.Point(258, 40)
+        Me.pbxBotWCompass.Location = New System.Drawing.Point(407, 63)
         Me.pbxBotWCompass.Name = "pbxBotWCompass"
-        Me.pbxBotWCompass.Size = New System.Drawing.Size(24, 24)
+        Me.pbxBotWCompass.Size = New System.Drawing.Size(38, 38)
         Me.pbxBotWCompass.TabIndex = 262
         Me.pbxBotWCompass.TabStop = False
         '
         'pbxBotWMap
         '
         Me.pbxBotWMap.Image = CType(resources.GetObject("pbxBotWMap.Image"), System.Drawing.Image)
-        Me.pbxBotWMap.Location = New System.Drawing.Point(258, 16)
+        Me.pbxBotWMap.Location = New System.Drawing.Point(407, 25)
         Me.pbxBotWMap.Name = "pbxBotWMap"
-        Me.pbxBotWMap.Size = New System.Drawing.Size(24, 24)
+        Me.pbxBotWMap.Size = New System.Drawing.Size(38, 38)
         Me.pbxBotWMap.TabIndex = 261
         Me.pbxBotWMap.TabStop = False
         '
         'pbxShTCompass
         '
         Me.pbxShTCompass.Image = CType(resources.GetObject("pbxShTCompass.Image"), System.Drawing.Image)
-        Me.pbxShTCompass.Location = New System.Drawing.Point(234, 40)
+        Me.pbxShTCompass.Location = New System.Drawing.Point(369, 63)
         Me.pbxShTCompass.Name = "pbxShTCompass"
-        Me.pbxShTCompass.Size = New System.Drawing.Size(24, 24)
+        Me.pbxShTCompass.Size = New System.Drawing.Size(38, 38)
         Me.pbxShTCompass.TabIndex = 260
         Me.pbxShTCompass.TabStop = False
         '
         'pbxShTMap
         '
         Me.pbxShTMap.Image = CType(resources.GetObject("pbxShTMap.Image"), System.Drawing.Image)
-        Me.pbxShTMap.Location = New System.Drawing.Point(234, 16)
+        Me.pbxShTMap.Location = New System.Drawing.Point(369, 25)
         Me.pbxShTMap.Name = "pbxShTMap"
-        Me.pbxShTMap.Size = New System.Drawing.Size(24, 24)
+        Me.pbxShTMap.Size = New System.Drawing.Size(38, 38)
         Me.pbxShTMap.TabIndex = 259
         Me.pbxShTMap.TabStop = False
         '
         'pbxSpTCompass
         '
         Me.pbxSpTCompass.Image = CType(resources.GetObject("pbxSpTCompass.Image"), System.Drawing.Image)
-        Me.pbxSpTCompass.Location = New System.Drawing.Point(210, 40)
+        Me.pbxSpTCompass.Location = New System.Drawing.Point(331, 63)
         Me.pbxSpTCompass.Name = "pbxSpTCompass"
-        Me.pbxSpTCompass.Size = New System.Drawing.Size(24, 24)
+        Me.pbxSpTCompass.Size = New System.Drawing.Size(38, 38)
         Me.pbxSpTCompass.TabIndex = 258
         Me.pbxSpTCompass.TabStop = False
         '
         'pbxSpTMap
         '
         Me.pbxSpTMap.Image = CType(resources.GetObject("pbxSpTMap.Image"), System.Drawing.Image)
-        Me.pbxSpTMap.Location = New System.Drawing.Point(210, 16)
+        Me.pbxSpTMap.Location = New System.Drawing.Point(331, 25)
         Me.pbxSpTMap.Name = "pbxSpTMap"
-        Me.pbxSpTMap.Size = New System.Drawing.Size(24, 24)
+        Me.pbxSpTMap.Size = New System.Drawing.Size(38, 38)
         Me.pbxSpTMap.TabIndex = 257
         Me.pbxSpTMap.TabStop = False
         '
         'pbxWTCompass
         '
         Me.pbxWTCompass.Image = CType(resources.GetObject("pbxWTCompass.Image"), System.Drawing.Image)
-        Me.pbxWTCompass.Location = New System.Drawing.Point(186, 40)
+        Me.pbxWTCompass.Location = New System.Drawing.Point(293, 63)
         Me.pbxWTCompass.Name = "pbxWTCompass"
-        Me.pbxWTCompass.Size = New System.Drawing.Size(24, 24)
+        Me.pbxWTCompass.Size = New System.Drawing.Size(38, 38)
         Me.pbxWTCompass.TabIndex = 256
         Me.pbxWTCompass.TabStop = False
         '
         'pbxWTMap
         '
         Me.pbxWTMap.Image = CType(resources.GetObject("pbxWTMap.Image"), System.Drawing.Image)
-        Me.pbxWTMap.Location = New System.Drawing.Point(186, 16)
+        Me.pbxWTMap.Location = New System.Drawing.Point(293, 25)
         Me.pbxWTMap.Name = "pbxWTMap"
-        Me.pbxWTMap.Size = New System.Drawing.Size(24, 24)
+        Me.pbxWTMap.Size = New System.Drawing.Size(38, 38)
         Me.pbxWTMap.TabIndex = 255
         Me.pbxWTMap.TabStop = False
         '
         'pbxFiTCompass
         '
         Me.pbxFiTCompass.Image = CType(resources.GetObject("pbxFiTCompass.Image"), System.Drawing.Image)
-        Me.pbxFiTCompass.Location = New System.Drawing.Point(162, 40)
+        Me.pbxFiTCompass.Location = New System.Drawing.Point(255, 63)
         Me.pbxFiTCompass.Name = "pbxFiTCompass"
-        Me.pbxFiTCompass.Size = New System.Drawing.Size(24, 24)
+        Me.pbxFiTCompass.Size = New System.Drawing.Size(38, 38)
         Me.pbxFiTCompass.TabIndex = 254
         Me.pbxFiTCompass.TabStop = False
         '
         'pbxFiTMap
         '
         Me.pbxFiTMap.Image = CType(resources.GetObject("pbxFiTMap.Image"), System.Drawing.Image)
-        Me.pbxFiTMap.Location = New System.Drawing.Point(162, 16)
+        Me.pbxFiTMap.Location = New System.Drawing.Point(255, 25)
         Me.pbxFiTMap.Name = "pbxFiTMap"
-        Me.pbxFiTMap.Size = New System.Drawing.Size(24, 24)
+        Me.pbxFiTMap.Size = New System.Drawing.Size(38, 38)
         Me.pbxFiTMap.TabIndex = 253
         Me.pbxFiTMap.TabStop = False
         '
         'pbxFoTCompass
         '
         Me.pbxFoTCompass.Image = CType(resources.GetObject("pbxFoTCompass.Image"), System.Drawing.Image)
-        Me.pbxFoTCompass.Location = New System.Drawing.Point(138, 40)
+        Me.pbxFoTCompass.Location = New System.Drawing.Point(217, 63)
         Me.pbxFoTCompass.Name = "pbxFoTCompass"
-        Me.pbxFoTCompass.Size = New System.Drawing.Size(24, 24)
+        Me.pbxFoTCompass.Size = New System.Drawing.Size(38, 38)
         Me.pbxFoTCompass.TabIndex = 252
         Me.pbxFoTCompass.TabStop = False
         '
         'pbxFotMap
         '
         Me.pbxFotMap.Image = CType(resources.GetObject("pbxFotMap.Image"), System.Drawing.Image)
-        Me.pbxFotMap.Location = New System.Drawing.Point(138, 16)
+        Me.pbxFotMap.Location = New System.Drawing.Point(217, 25)
         Me.pbxFotMap.Name = "pbxFotMap"
-        Me.pbxFotMap.Size = New System.Drawing.Size(24, 24)
+        Me.pbxFotMap.Size = New System.Drawing.Size(38, 38)
         Me.pbxFotMap.TabIndex = 251
         Me.pbxFotMap.TabStop = False
         '
         'pbxJBCompass
         '
         Me.pbxJBCompass.Image = CType(resources.GetObject("pbxJBCompass.Image"), System.Drawing.Image)
-        Me.pbxJBCompass.Location = New System.Drawing.Point(114, 40)
+        Me.pbxJBCompass.Location = New System.Drawing.Point(179, 63)
         Me.pbxJBCompass.Name = "pbxJBCompass"
-        Me.pbxJBCompass.Size = New System.Drawing.Size(24, 24)
+        Me.pbxJBCompass.Size = New System.Drawing.Size(38, 38)
         Me.pbxJBCompass.TabIndex = 250
         Me.pbxJBCompass.TabStop = False
         '
         'pbxJBMap
         '
         Me.pbxJBMap.Image = CType(resources.GetObject("pbxJBMap.Image"), System.Drawing.Image)
-        Me.pbxJBMap.Location = New System.Drawing.Point(114, 16)
+        Me.pbxJBMap.Location = New System.Drawing.Point(179, 25)
         Me.pbxJBMap.Name = "pbxJBMap"
-        Me.pbxJBMap.Size = New System.Drawing.Size(24, 24)
+        Me.pbxJBMap.Size = New System.Drawing.Size(38, 38)
         Me.pbxJBMap.TabIndex = 249
         Me.pbxJBMap.TabStop = False
         '
         'pbxDCCompass
         '
         Me.pbxDCCompass.Image = CType(resources.GetObject("pbxDCCompass.Image"), System.Drawing.Image)
-        Me.pbxDCCompass.Location = New System.Drawing.Point(90, 40)
+        Me.pbxDCCompass.Location = New System.Drawing.Point(141, 63)
         Me.pbxDCCompass.Name = "pbxDCCompass"
-        Me.pbxDCCompass.Size = New System.Drawing.Size(24, 24)
+        Me.pbxDCCompass.Size = New System.Drawing.Size(38, 38)
         Me.pbxDCCompass.TabIndex = 248
         Me.pbxDCCompass.TabStop = False
         '
         'pbxDCMap
         '
         Me.pbxDCMap.Image = CType(resources.GetObject("pbxDCMap.Image"), System.Drawing.Image)
-        Me.pbxDCMap.Location = New System.Drawing.Point(90, 16)
+        Me.pbxDCMap.Location = New System.Drawing.Point(141, 25)
         Me.pbxDCMap.Name = "pbxDCMap"
-        Me.pbxDCMap.Size = New System.Drawing.Size(24, 24)
+        Me.pbxDCMap.Size = New System.Drawing.Size(38, 38)
         Me.pbxDCMap.TabIndex = 247
         Me.pbxDCMap.TabStop = False
         '
         'pbxDTCompass
         '
         Me.pbxDTCompass.Image = CType(resources.GetObject("pbxDTCompass.Image"), System.Drawing.Image)
-        Me.pbxDTCompass.Location = New System.Drawing.Point(66, 40)
+        Me.pbxDTCompass.Location = New System.Drawing.Point(103, 63)
         Me.pbxDTCompass.Name = "pbxDTCompass"
-        Me.pbxDTCompass.Size = New System.Drawing.Size(24, 24)
+        Me.pbxDTCompass.Size = New System.Drawing.Size(38, 38)
         Me.pbxDTCompass.TabIndex = 246
         Me.pbxDTCompass.TabStop = False
         '
         'pbxDTMap
         '
         Me.pbxDTMap.Image = CType(resources.GetObject("pbxDTMap.Image"), System.Drawing.Image)
-        Me.pbxDTMap.Location = New System.Drawing.Point(66, 16)
+        Me.pbxDTMap.Location = New System.Drawing.Point(103, 25)
         Me.pbxDTMap.Name = "pbxDTMap"
-        Me.pbxDTMap.Size = New System.Drawing.Size(24, 24)
+        Me.pbxDTMap.Size = New System.Drawing.Size(38, 38)
         Me.pbxDTMap.TabIndex = 245
         Me.pbxDTMap.TabStop = False
         '
@@ -4094,248 +4103,248 @@ Partial Class frmTrackerOfTime
         Me.pnlItems.Controls.Add(Me.pbx03)
         Me.pnlItems.Controls.Add(Me.pbx02)
         Me.pnlItems.Controls.Add(Me.pbx01)
-        Me.pnlItems.Location = New System.Drawing.Point(271, 34)
+        Me.pnlItems.Location = New System.Drawing.Point(262, 8)
         Me.pnlItems.Name = "pnlItems"
-        Me.pnlItems.Size = New System.Drawing.Size(194, 128)
+        Me.pnlItems.Size = New System.Drawing.Size(306, 206)
         Me.pnlItems.TabIndex = 229
         '
         'pbx24
         '
+        Me.pbx24.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx24.Image = Global.Tracker_of_Time.My.Resources.Resources.youngMaskOfTruth
-        Me.pbx24.Location = New System.Drawing.Point(161, 96)
+        Me.pbx24.Location = New System.Drawing.Point(250, 156)
         Me.pbx24.Name = "pbx24"
-        Me.pbx24.Size = New System.Drawing.Size(32, 32)
-        Me.pbx24.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx24.Size = New System.Drawing.Size(50, 50)
         Me.pbx24.TabIndex = 25
         Me.pbx24.TabStop = False
         '
         'pbx23
         '
+        Me.pbx23.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx23.Image = Global.Tracker_of_Time.My.Resources.Resources.adultClaimCheck
-        Me.pbx23.Location = New System.Drawing.Point(129, 96)
+        Me.pbx23.Location = New System.Drawing.Point(200, 156)
         Me.pbx23.Name = "pbx23"
-        Me.pbx23.Size = New System.Drawing.Size(32, 32)
-        Me.pbx23.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx23.Size = New System.Drawing.Size(50, 50)
         Me.pbx23.TabIndex = 24
         Me.pbx23.TabStop = False
         '
         'pbx22
         '
+        Me.pbx22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx22.Image = CType(resources.GetObject("pbx22.Image"), System.Drawing.Image)
-        Me.pbx22.Location = New System.Drawing.Point(97, 96)
+        Me.pbx22.Location = New System.Drawing.Point(150, 156)
         Me.pbx22.Name = "pbx22"
-        Me.pbx22.Size = New System.Drawing.Size(32, 32)
-        Me.pbx22.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx22.Size = New System.Drawing.Size(50, 50)
         Me.pbx22.TabIndex = 23
         Me.pbx22.TabStop = False
         '
         'pbx21
         '
+        Me.pbx21.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx21.Image = CType(resources.GetObject("pbx21.Image"), System.Drawing.Image)
-        Me.pbx21.Location = New System.Drawing.Point(65, 96)
+        Me.pbx21.Location = New System.Drawing.Point(100, 156)
         Me.pbx21.Name = "pbx21"
-        Me.pbx21.Size = New System.Drawing.Size(32, 32)
-        Me.pbx21.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx21.Size = New System.Drawing.Size(50, 50)
         Me.pbx21.TabIndex = 22
         Me.pbx21.TabStop = False
         '
         'pbx20
         '
-        Me.pbx20.Image = CType(resources.GetObject("pbx20.Image"), System.Drawing.Image)
-        Me.pbx20.Location = New System.Drawing.Point(33, 96)
+        Me.pbx20.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.pbx20.Image = Global.Tracker_of_Time.My.Resources.Resources.bottleEmpty
+        Me.pbx20.Location = New System.Drawing.Point(50, 156)
         Me.pbx20.Name = "pbx20"
-        Me.pbx20.Size = New System.Drawing.Size(32, 32)
-        Me.pbx20.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx20.Size = New System.Drawing.Size(50, 50)
         Me.pbx20.TabIndex = 21
         Me.pbx20.TabStop = False
         '
         'pbx19
         '
+        Me.pbx19.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx19.Image = Global.Tracker_of_Time.My.Resources.Resources.bottleEmpty
-        Me.pbx19.Location = New System.Drawing.Point(1, 96)
+        Me.pbx19.Location = New System.Drawing.Point(0, 156)
         Me.pbx19.Name = "pbx19"
-        Me.pbx19.Size = New System.Drawing.Size(32, 32)
-        Me.pbx19.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx19.Size = New System.Drawing.Size(50, 50)
         Me.pbx19.TabIndex = 20
         Me.pbx19.TabStop = False
         '
         'pbx18
         '
+        Me.pbx18.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx18.Image = Global.Tracker_of_Time.My.Resources.Resources.nayrusLove
-        Me.pbx18.Location = New System.Drawing.Point(161, 64)
+        Me.pbx18.Location = New System.Drawing.Point(250, 106)
         Me.pbx18.Name = "pbx18"
-        Me.pbx18.Size = New System.Drawing.Size(32, 32)
-        Me.pbx18.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx18.Size = New System.Drawing.Size(50, 50)
         Me.pbx18.TabIndex = 19
         Me.pbx18.TabStop = False
         '
         'pbx17
         '
+        Me.pbx17.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx17.Image = Global.Tracker_of_Time.My.Resources.Resources.lightArrows
-        Me.pbx17.Location = New System.Drawing.Point(129, 64)
+        Me.pbx17.Location = New System.Drawing.Point(200, 106)
         Me.pbx17.Name = "pbx17"
-        Me.pbx17.Size = New System.Drawing.Size(32, 32)
-        Me.pbx17.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx17.Size = New System.Drawing.Size(50, 50)
         Me.pbx17.TabIndex = 18
         Me.pbx17.TabStop = False
         '
         'pbx16
         '
+        Me.pbx16.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx16.Image = Global.Tracker_of_Time.My.Resources.Resources.megatonHammer
-        Me.pbx16.Location = New System.Drawing.Point(97, 64)
+        Me.pbx16.Location = New System.Drawing.Point(150, 106)
         Me.pbx16.Name = "pbx16"
-        Me.pbx16.Size = New System.Drawing.Size(32, 32)
-        Me.pbx16.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx16.Size = New System.Drawing.Size(50, 50)
         Me.pbx16.TabIndex = 17
         Me.pbx16.TabStop = False
         '
         'pbx15
         '
+        Me.pbx15.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx15.Image = Global.Tracker_of_Time.My.Resources.Resources.magicBeans
-        Me.pbx15.Location = New System.Drawing.Point(65, 64)
+        Me.pbx15.Location = New System.Drawing.Point(100, 106)
         Me.pbx15.Name = "pbx15"
-        Me.pbx15.Size = New System.Drawing.Size(32, 32)
-        Me.pbx15.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx15.Size = New System.Drawing.Size(50, 50)
         Me.pbx15.TabIndex = 16
         Me.pbx15.TabStop = False
         '
         'pbx14
         '
+        Me.pbx14.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx14.Image = Global.Tracker_of_Time.My.Resources.Resources.lensOfTruth
-        Me.pbx14.Location = New System.Drawing.Point(33, 64)
+        Me.pbx14.Location = New System.Drawing.Point(50, 106)
         Me.pbx14.Name = "pbx14"
-        Me.pbx14.Size = New System.Drawing.Size(32, 32)
-        Me.pbx14.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx14.Size = New System.Drawing.Size(50, 50)
         Me.pbx14.TabIndex = 15
         Me.pbx14.TabStop = False
         '
         'pbx13
         '
+        Me.pbx13.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx13.Image = Global.Tracker_of_Time.My.Resources.Resources.boomerang
-        Me.pbx13.Location = New System.Drawing.Point(1, 64)
+        Me.pbx13.Location = New System.Drawing.Point(0, 106)
         Me.pbx13.Name = "pbx13"
-        Me.pbx13.Size = New System.Drawing.Size(32, 32)
-        Me.pbx13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx13.Size = New System.Drawing.Size(50, 50)
         Me.pbx13.TabIndex = 14
         Me.pbx13.TabStop = False
         '
         'pbx10
         '
+        Me.pbx10.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx10.Image = Global.Tracker_of_Time.My.Resources.Resources.longshot
-        Me.pbx10.Location = New System.Drawing.Point(97, 32)
+        Me.pbx10.Location = New System.Drawing.Point(150, 56)
         Me.pbx10.Name = "pbx10"
-        Me.pbx10.Size = New System.Drawing.Size(32, 32)
-        Me.pbx10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx10.Size = New System.Drawing.Size(50, 50)
         Me.pbx10.TabIndex = 13
         Me.pbx10.TabStop = False
         '
         'pbx08
         '
+        Me.pbx08.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx08.Image = Global.Tracker_of_Time.My.Resources.Resources.ocarinaOfTime
-        Me.pbx08.Location = New System.Drawing.Point(33, 32)
+        Me.pbx08.Location = New System.Drawing.Point(50, 56)
         Me.pbx08.Name = "pbx08"
-        Me.pbx08.Size = New System.Drawing.Size(32, 32)
-        Me.pbx08.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx08.Size = New System.Drawing.Size(50, 50)
         Me.pbx08.TabIndex = 12
         Me.pbx08.TabStop = False
         '
         'pbx12
         '
+        Me.pbx12.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx12.Image = Global.Tracker_of_Time.My.Resources.Resources.faroresWind
-        Me.pbx12.Location = New System.Drawing.Point(161, 32)
+        Me.pbx12.Location = New System.Drawing.Point(250, 56)
         Me.pbx12.Name = "pbx12"
-        Me.pbx12.Size = New System.Drawing.Size(32, 32)
-        Me.pbx12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx12.Size = New System.Drawing.Size(50, 50)
         Me.pbx12.TabIndex = 11
         Me.pbx12.TabStop = False
         '
         'pbx11
         '
+        Me.pbx11.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx11.Image = Global.Tracker_of_Time.My.Resources.Resources.iceArrows
-        Me.pbx11.Location = New System.Drawing.Point(129, 32)
+        Me.pbx11.Location = New System.Drawing.Point(200, 56)
         Me.pbx11.Name = "pbx11"
-        Me.pbx11.Size = New System.Drawing.Size(32, 32)
-        Me.pbx11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx11.Size = New System.Drawing.Size(50, 50)
         Me.pbx11.TabIndex = 10
         Me.pbx11.TabStop = False
         '
         'pbx09
         '
+        Me.pbx09.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx09.Image = Global.Tracker_of_Time.My.Resources.Resources.bombchus
-        Me.pbx09.Location = New System.Drawing.Point(65, 32)
+        Me.pbx09.Location = New System.Drawing.Point(100, 56)
         Me.pbx09.Name = "pbx09"
-        Me.pbx09.Size = New System.Drawing.Size(32, 32)
-        Me.pbx09.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx09.Size = New System.Drawing.Size(50, 50)
         Me.pbx09.TabIndex = 8
         Me.pbx09.TabStop = False
         '
         'pbx07
         '
+        Me.pbx07.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx07.Image = Global.Tracker_of_Time.My.Resources.Resources.fairySlingshot
-        Me.pbx07.Location = New System.Drawing.Point(1, 32)
+        Me.pbx07.Location = New System.Drawing.Point(0, 56)
         Me.pbx07.Name = "pbx07"
-        Me.pbx07.Size = New System.Drawing.Size(32, 32)
-        Me.pbx07.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx07.Size = New System.Drawing.Size(50, 50)
         Me.pbx07.TabIndex = 6
         Me.pbx07.TabStop = False
         '
         'pbx06
         '
+        Me.pbx06.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx06.Image = Global.Tracker_of_Time.My.Resources.Resources.dinsFire
-        Me.pbx06.Location = New System.Drawing.Point(161, 0)
+        Me.pbx06.Location = New System.Drawing.Point(250, 6)
         Me.pbx06.Name = "pbx06"
-        Me.pbx06.Size = New System.Drawing.Size(32, 32)
-        Me.pbx06.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx06.Size = New System.Drawing.Size(50, 50)
         Me.pbx06.TabIndex = 5
         Me.pbx06.TabStop = False
         '
         'pbx05
         '
+        Me.pbx05.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx05.Image = Global.Tracker_of_Time.My.Resources.Resources.fireArrow
-        Me.pbx05.Location = New System.Drawing.Point(129, 0)
+        Me.pbx05.Location = New System.Drawing.Point(200, 6)
         Me.pbx05.Name = "pbx05"
-        Me.pbx05.Size = New System.Drawing.Size(32, 32)
-        Me.pbx05.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx05.Size = New System.Drawing.Size(50, 50)
         Me.pbx05.TabIndex = 4
         Me.pbx05.TabStop = False
         '
         'pbx04
         '
+        Me.pbx04.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx04.Image = Global.Tracker_of_Time.My.Resources.Resources.bow
-        Me.pbx04.Location = New System.Drawing.Point(97, 0)
+        Me.pbx04.Location = New System.Drawing.Point(150, 6)
         Me.pbx04.Name = "pbx04"
-        Me.pbx04.Size = New System.Drawing.Size(32, 32)
-        Me.pbx04.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx04.Size = New System.Drawing.Size(50, 50)
         Me.pbx04.TabIndex = 3
         Me.pbx04.TabStop = False
         '
         'pbx03
         '
+        Me.pbx03.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx03.Image = Global.Tracker_of_Time.My.Resources.Resources.bombs
-        Me.pbx03.Location = New System.Drawing.Point(65, 0)
+        Me.pbx03.Location = New System.Drawing.Point(100, 6)
         Me.pbx03.Name = "pbx03"
-        Me.pbx03.Size = New System.Drawing.Size(32, 32)
-        Me.pbx03.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx03.Size = New System.Drawing.Size(50, 50)
         Me.pbx03.TabIndex = 2
         Me.pbx03.TabStop = False
         '
         'pbx02
         '
+        Me.pbx02.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx02.Image = Global.Tracker_of_Time.My.Resources.Resources.dekuNut
-        Me.pbx02.Location = New System.Drawing.Point(33, 0)
+        Me.pbx02.Location = New System.Drawing.Point(50, 6)
         Me.pbx02.Name = "pbx02"
-        Me.pbx02.Size = New System.Drawing.Size(32, 32)
-        Me.pbx02.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx02.Size = New System.Drawing.Size(50, 50)
         Me.pbx02.TabIndex = 1
         Me.pbx02.TabStop = False
         '
         'pbx01
         '
+        Me.pbx01.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
         Me.pbx01.Image = Global.Tracker_of_Time.My.Resources.Resources.dekuStick
-        Me.pbx01.Location = New System.Drawing.Point(1, 0)
+        Me.pbx01.Location = New System.Drawing.Point(0, 6)
         Me.pbx01.Name = "pbx01"
-        Me.pbx01.Size = New System.Drawing.Size(32, 32)
-        Me.pbx01.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbx01.Size = New System.Drawing.Size(50, 50)
         Me.pbx01.TabIndex = 0
         Me.pbx01.TabStop = False
         '
@@ -4364,236 +4373,220 @@ Partial Class frmTrackerOfTime
         Me.pnlEquips.Controls.Add(Me.pbxMasterSword)
         Me.pnlEquips.Controls.Add(Me.pbxBrokenKnife)
         Me.pnlEquips.Controls.Add(Me.pbxBiggoronsSword)
-        Me.pnlEquips.Location = New System.Drawing.Point(110, 34)
+        Me.pnlEquips.Location = New System.Drawing.Point(6, 8)
         Me.pnlEquips.Name = "pnlEquips"
-        Me.pnlEquips.Size = New System.Drawing.Size(161, 128)
+        Me.pnlEquips.Size = New System.Drawing.Size(256, 206)
         Me.pnlEquips.TabIndex = 224
         '
         'pbxGerudosCard
         '
         Me.pbxGerudosCard.Image = Global.Tracker_of_Time.My.Resources.Resources.gerudosCard
-        Me.pbxGerudosCard.Location = New System.Drawing.Point(2, 96)
+        Me.pbxGerudosCard.Location = New System.Drawing.Point(6, 156)
         Me.pbxGerudosCard.Name = "pbxGerudosCard"
-        Me.pbxGerudosCard.Size = New System.Drawing.Size(32, 32)
-        Me.pbxGerudosCard.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxGerudosCard.Size = New System.Drawing.Size(50, 50)
         Me.pbxGerudosCard.TabIndex = 21
         Me.pbxGerudosCard.TabStop = False
         '
         'pbxScale
         '
         Me.pbxScale.Image = Global.Tracker_of_Time.My.Resources.Resources.upgradeGoldenScale
-        Me.pbxScale.Location = New System.Drawing.Point(34, 96)
+        Me.pbxScale.Location = New System.Drawing.Point(56, 156)
         Me.pbxScale.Name = "pbxScale"
-        Me.pbxScale.Size = New System.Drawing.Size(32, 32)
-        Me.pbxScale.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxScale.Size = New System.Drawing.Size(50, 50)
         Me.pbxScale.TabIndex = 20
         Me.pbxScale.TabStop = False
         '
         'pbxStoneOfAgony
         '
         Me.pbxStoneOfAgony.Image = Global.Tracker_of_Time.My.Resources.Resources.stoneOfAgony
-        Me.pbxStoneOfAgony.Location = New System.Drawing.Point(2, 64)
+        Me.pbxStoneOfAgony.Location = New System.Drawing.Point(6, 106)
         Me.pbxStoneOfAgony.Name = "pbxStoneOfAgony"
-        Me.pbxStoneOfAgony.Size = New System.Drawing.Size(32, 32)
-        Me.pbxStoneOfAgony.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxStoneOfAgony.Size = New System.Drawing.Size(50, 50)
         Me.pbxStoneOfAgony.TabIndex = 19
         Me.pbxStoneOfAgony.TabStop = False
         '
         'pbxGauntlet
         '
         Me.pbxGauntlet.Image = Global.Tracker_of_Time.My.Resources.Resources.upgradeGoldenGauntlets
-        Me.pbxGauntlet.Location = New System.Drawing.Point(34, 64)
+        Me.pbxGauntlet.Location = New System.Drawing.Point(56, 106)
         Me.pbxGauntlet.Name = "pbxGauntlet"
-        Me.pbxGauntlet.Size = New System.Drawing.Size(32, 32)
-        Me.pbxGauntlet.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxGauntlet.Size = New System.Drawing.Size(50, 50)
         Me.pbxGauntlet.TabIndex = 18
         Me.pbxGauntlet.TabStop = False
         '
         'pbxWallet
         '
         Me.pbxWallet.Image = Global.Tracker_of_Time.My.Resources.Resources.upgradeWallet2
-        Me.pbxWallet.Location = New System.Drawing.Point(2, 32)
+        Me.pbxWallet.Location = New System.Drawing.Point(6, 56)
         Me.pbxWallet.Name = "pbxWallet"
-        Me.pbxWallet.Size = New System.Drawing.Size(32, 32)
-        Me.pbxWallet.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxWallet.Size = New System.Drawing.Size(50, 50)
         Me.pbxWallet.TabIndex = 17
         Me.pbxWallet.TabStop = False
         '
         'pbxBombBag
         '
         Me.pbxBombBag.Image = Global.Tracker_of_Time.My.Resources.Resources.upgradeBombBag3
-        Me.pbxBombBag.Location = New System.Drawing.Point(34, 32)
+        Me.pbxBombBag.Location = New System.Drawing.Point(56, 56)
         Me.pbxBombBag.Name = "pbxBombBag"
-        Me.pbxBombBag.Size = New System.Drawing.Size(32, 32)
-        Me.pbxBombBag.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxBombBag.Size = New System.Drawing.Size(50, 50)
         Me.pbxBombBag.TabIndex = 16
         Me.pbxBombBag.TabStop = False
         '
         'pbxQuiver
         '
         Me.pbxQuiver.Image = Global.Tracker_of_Time.My.Resources.Resources.upgradeQuiver3
-        Me.pbxQuiver.Location = New System.Drawing.Point(2, 0)
+        Me.pbxQuiver.Location = New System.Drawing.Point(6, 6)
         Me.pbxQuiver.Name = "pbxQuiver"
-        Me.pbxQuiver.Size = New System.Drawing.Size(32, 32)
-        Me.pbxQuiver.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxQuiver.Size = New System.Drawing.Size(50, 50)
         Me.pbxQuiver.TabIndex = 15
         Me.pbxQuiver.TabStop = False
         '
         'pbxBulletBag
         '
         Me.pbxBulletBag.Image = Global.Tracker_of_Time.My.Resources.Resources.upgradeBulletBag3
-        Me.pbxBulletBag.Location = New System.Drawing.Point(34, 0)
+        Me.pbxBulletBag.Location = New System.Drawing.Point(56, 6)
         Me.pbxBulletBag.Name = "pbxBulletBag"
-        Me.pbxBulletBag.Size = New System.Drawing.Size(32, 32)
-        Me.pbxBulletBag.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxBulletBag.Size = New System.Drawing.Size(50, 50)
         Me.pbxBulletBag.TabIndex = 14
         Me.pbxBulletBag.TabStop = False
         '
         'pbxHoverBoots
         '
         Me.pbxHoverBoots.Image = Global.Tracker_of_Time.My.Resources.Resources.equipHoverBoots
-        Me.pbxHoverBoots.Location = New System.Drawing.Point(130, 96)
+        Me.pbxHoverBoots.Location = New System.Drawing.Point(206, 156)
         Me.pbxHoverBoots.Name = "pbxHoverBoots"
-        Me.pbxHoverBoots.Size = New System.Drawing.Size(32, 32)
-        Me.pbxHoverBoots.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxHoverBoots.Size = New System.Drawing.Size(50, 50)
         Me.pbxHoverBoots.TabIndex = 13
         Me.pbxHoverBoots.TabStop = False
         '
         'pbxKokiriBoots
         '
         Me.pbxKokiriBoots.Image = Global.Tracker_of_Time.My.Resources.Resources.equipKokiriBoots
-        Me.pbxKokiriBoots.Location = New System.Drawing.Point(66, 96)
+        Me.pbxKokiriBoots.Location = New System.Drawing.Point(106, 156)
         Me.pbxKokiriBoots.Name = "pbxKokiriBoots"
-        Me.pbxKokiriBoots.Size = New System.Drawing.Size(32, 32)
-        Me.pbxKokiriBoots.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxKokiriBoots.Size = New System.Drawing.Size(50, 50)
         Me.pbxKokiriBoots.TabIndex = 12
         Me.pbxKokiriBoots.TabStop = False
         '
         'pbxIronBoots
         '
         Me.pbxIronBoots.Image = Global.Tracker_of_Time.My.Resources.Resources.equipIronBoots
-        Me.pbxIronBoots.Location = New System.Drawing.Point(98, 96)
+        Me.pbxIronBoots.Location = New System.Drawing.Point(156, 156)
         Me.pbxIronBoots.Name = "pbxIronBoots"
-        Me.pbxIronBoots.Size = New System.Drawing.Size(32, 32)
-        Me.pbxIronBoots.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxIronBoots.Size = New System.Drawing.Size(50, 50)
         Me.pbxIronBoots.TabIndex = 11
         Me.pbxIronBoots.TabStop = False
         '
         'pbxZoraTunic
         '
         Me.pbxZoraTunic.Image = Global.Tracker_of_Time.My.Resources.Resources.equipZoraTunic
-        Me.pbxZoraTunic.Location = New System.Drawing.Point(130, 64)
+        Me.pbxZoraTunic.Location = New System.Drawing.Point(206, 106)
         Me.pbxZoraTunic.Name = "pbxZoraTunic"
-        Me.pbxZoraTunic.Size = New System.Drawing.Size(32, 32)
-        Me.pbxZoraTunic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxZoraTunic.Size = New System.Drawing.Size(50, 50)
         Me.pbxZoraTunic.TabIndex = 10
         Me.pbxZoraTunic.TabStop = False
         '
         'pbxKokiriTunic
         '
         Me.pbxKokiriTunic.Image = Global.Tracker_of_Time.My.Resources.Resources.equipKokiriTunic
-        Me.pbxKokiriTunic.Location = New System.Drawing.Point(66, 64)
+        Me.pbxKokiriTunic.Location = New System.Drawing.Point(106, 106)
         Me.pbxKokiriTunic.Name = "pbxKokiriTunic"
-        Me.pbxKokiriTunic.Size = New System.Drawing.Size(32, 32)
-        Me.pbxKokiriTunic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxKokiriTunic.Size = New System.Drawing.Size(50, 50)
         Me.pbxKokiriTunic.TabIndex = 9
         Me.pbxKokiriTunic.TabStop = False
         '
         'pbxGoronTunic
         '
         Me.pbxGoronTunic.Image = Global.Tracker_of_Time.My.Resources.Resources.equipGoronTunic
-        Me.pbxGoronTunic.Location = New System.Drawing.Point(98, 64)
+        Me.pbxGoronTunic.Location = New System.Drawing.Point(156, 106)
         Me.pbxGoronTunic.Name = "pbxGoronTunic"
-        Me.pbxGoronTunic.Size = New System.Drawing.Size(32, 32)
-        Me.pbxGoronTunic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxGoronTunic.Size = New System.Drawing.Size(50, 50)
         Me.pbxGoronTunic.TabIndex = 8
         Me.pbxGoronTunic.TabStop = False
         '
         'pbxMirrorShield
         '
         Me.pbxMirrorShield.Image = Global.Tracker_of_Time.My.Resources.Resources.equipMirrorShield
-        Me.pbxMirrorShield.Location = New System.Drawing.Point(130, 32)
+        Me.pbxMirrorShield.Location = New System.Drawing.Point(206, 56)
         Me.pbxMirrorShield.Name = "pbxMirrorShield"
-        Me.pbxMirrorShield.Size = New System.Drawing.Size(32, 32)
-        Me.pbxMirrorShield.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxMirrorShield.Size = New System.Drawing.Size(50, 50)
         Me.pbxMirrorShield.TabIndex = 7
         Me.pbxMirrorShield.TabStop = False
         '
         'pbxDekuShield
         '
         Me.pbxDekuShield.Image = Global.Tracker_of_Time.My.Resources.Resources.equipDekuShield
-        Me.pbxDekuShield.Location = New System.Drawing.Point(66, 32)
+        Me.pbxDekuShield.Location = New System.Drawing.Point(106, 56)
         Me.pbxDekuShield.Name = "pbxDekuShield"
-        Me.pbxDekuShield.Size = New System.Drawing.Size(32, 32)
-        Me.pbxDekuShield.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxDekuShield.Size = New System.Drawing.Size(50, 50)
         Me.pbxDekuShield.TabIndex = 6
         Me.pbxDekuShield.TabStop = False
         '
         'pbxHylianShield
         '
         Me.pbxHylianShield.Image = Global.Tracker_of_Time.My.Resources.Resources.equipHylianShield
-        Me.pbxHylianShield.Location = New System.Drawing.Point(98, 32)
+        Me.pbxHylianShield.Location = New System.Drawing.Point(156, 56)
         Me.pbxHylianShield.Name = "pbxHylianShield"
-        Me.pbxHylianShield.Size = New System.Drawing.Size(32, 32)
-        Me.pbxHylianShield.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxHylianShield.Size = New System.Drawing.Size(50, 50)
         Me.pbxHylianShield.TabIndex = 5
         Me.pbxHylianShield.TabStop = False
         '
         'pbxKokiriSword
         '
         Me.pbxKokiriSword.Image = Global.Tracker_of_Time.My.Resources.Resources.equipKokiriSword
-        Me.pbxKokiriSword.Location = New System.Drawing.Point(66, 0)
+        Me.pbxKokiriSword.Location = New System.Drawing.Point(106, 6)
         Me.pbxKokiriSword.Name = "pbxKokiriSword"
-        Me.pbxKokiriSword.Size = New System.Drawing.Size(32, 32)
-        Me.pbxKokiriSword.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxKokiriSword.Size = New System.Drawing.Size(50, 50)
         Me.pbxKokiriSword.TabIndex = 4
         Me.pbxKokiriSword.TabStop = False
         '
         'pbxMasterSword
         '
         Me.pbxMasterSword.Image = Global.Tracker_of_Time.My.Resources.Resources.equipMasterSword
-        Me.pbxMasterSword.Location = New System.Drawing.Point(98, 0)
+        Me.pbxMasterSword.Location = New System.Drawing.Point(156, 6)
         Me.pbxMasterSword.Name = "pbxMasterSword"
-        Me.pbxMasterSword.Size = New System.Drawing.Size(32, 32)
-        Me.pbxMasterSword.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxMasterSword.Size = New System.Drawing.Size(50, 50)
         Me.pbxMasterSword.TabIndex = 3
         Me.pbxMasterSword.TabStop = False
         '
         'pbxBrokenKnife
         '
         Me.pbxBrokenKnife.Image = Global.Tracker_of_Time.My.Resources.Resources.equipBrokenKnife
-        Me.pbxBrokenKnife.Location = New System.Drawing.Point(130, 0)
+        Me.pbxBrokenKnife.Location = New System.Drawing.Point(206, 6)
         Me.pbxBrokenKnife.Name = "pbxBrokenKnife"
-        Me.pbxBrokenKnife.Size = New System.Drawing.Size(32, 32)
-        Me.pbxBrokenKnife.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxBrokenKnife.Size = New System.Drawing.Size(50, 50)
         Me.pbxBrokenKnife.TabIndex = 2
         Me.pbxBrokenKnife.TabStop = False
         '
         'pbxBiggoronsSword
         '
         Me.pbxBiggoronsSword.Image = Global.Tracker_of_Time.My.Resources.Resources.equipBiggoronsSword
-        Me.pbxBiggoronsSword.Location = New System.Drawing.Point(130, 0)
+        Me.pbxBiggoronsSword.Location = New System.Drawing.Point(206, 6)
         Me.pbxBiggoronsSword.Name = "pbxBiggoronsSword"
-        Me.pbxBiggoronsSword.Size = New System.Drawing.Size(32, 32)
-        Me.pbxBiggoronsSword.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbxBiggoronsSword.Size = New System.Drawing.Size(50, 50)
         Me.pbxBiggoronsSword.TabIndex = 1
         Me.pbxBiggoronsSword.TabStop = False
         '
-        'lcxShowMap
+        'lblInfo
         '
-        Me.lcxShowMap.Location = New System.Drawing.Point(401, 3)
-        Me.lcxShowMap.Name = "lcxShowMap"
-        Me.lcxShowMap.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
-        Me.lcxShowMap.Size = New System.Drawing.Size(155, 20)
-        Me.lcxShowMap.TabIndex = 326
-        Me.lcxShowMap.Text = "Show Map Instead of Text"
-        Me.lcxShowMap.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lblInfo.AutoSize = True
+        Me.lblInfo.Location = New System.Drawing.Point(10, 24)
+        Me.lblInfo.Name = "lblInfo"
+        Me.lblInfo.Size = New System.Drawing.Size(573, 156)
+        Me.lblInfo.TabIndex = 328
+        Me.lblInfo.Text = resources.GetString("lblInfo.Text")
+        '
+        'tmrFixIt
+        '
+        Me.tmrFixIt.Enabled = True
+        Me.tmrFixIt.Interval = 1000
         '
         'frmTrackerOfTime
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1175, 1067)
+        Me.ClientSize = New System.Drawing.Size(1175, 1209)
+        Me.Controls.Add(Me.mnuOptions)
         Me.Controls.Add(Me.rtbOutputRight)
         Me.Controls.Add(Me.rtbOutputLeft)
         Me.Controls.Add(Me.pnlWorldMap)
@@ -4642,7 +4635,6 @@ Partial Class frmTrackerOfTime
         Me.Controls.Add(Me.pnlDekuTree)
         Me.Controls.Add(Me.btnTest)
         Me.Controls.Add(Me.pnlHidden)
-        Me.Controls.Add(Me.mnuOptions)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MainMenuStrip = Me.mnuOptions
         Me.MaximizeBox = False
@@ -4839,7 +4831,6 @@ Partial Class frmTrackerOfTime
         CType(Me.pbxBrokenKnife, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbxBiggoronsSword, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents lblDekuTree As System.Windows.Forms.Label
@@ -5220,5 +5211,8 @@ Partial Class frmTrackerOfTime
     Friend WithEvents zLW As System.Windows.Forms.Label
     Friend WithEvents zFiT As System.Windows.Forms.Label
     Friend WithEvents lcxShowMap As System.Windows.Forms.Label
+    Friend WithEvents lcxExpand As System.Windows.Forms.Label
+    Friend WithEvents lblInfo As System.Windows.Forms.Label
+    Friend WithEvents tmrFixIt As System.Windows.Forms.Timer
 
 End Class

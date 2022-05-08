@@ -116,7 +116,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
         Public Property setLogic() As Boolean
             Get
                 Return CType(Me("setLogic"),Boolean)
@@ -819,6 +819,30 @@ Namespace My
             End Get
             Set
                 Me("setMap") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setExpand() As Boolean
+            Get
+                Return CType(Me("setExpand"),Boolean)
+            End Get
+            Set
+                Me("setExpand") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property setFirstTime() As Boolean
+            Get
+                Return CType(Me("setFirstTime"),Boolean)
+            End Get
+            Set
+                Me("setFirstTime") = value
             End Set
         End Property
     End Class

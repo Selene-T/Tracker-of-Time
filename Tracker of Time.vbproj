@@ -334,7 +334,6 @@
     <None Include="additional\backgroundEquipment.bmp" />
     <None Include="additional\backgroundInventory.bmp" />
     <None Include="additional\backgroundDungeonItems.bmp" />
-    <None Include="additional\backgroundQuestItems.bmp" />
     <Content Include="additional\bottleBigPoe.bmp" />
     <Content Include="additional\bottleBlueFire.bmp" />
     <Content Include="additional\bottleBluePotion.bmp" />
