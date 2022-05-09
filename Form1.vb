@@ -10,7 +10,7 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 116
     Private Const IS_64BIT As Boolean = False
-    Private Const VER As String = "3.1.0"
+    Private Const VER As String = "3.1.1"
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private Const romAddrStart As Integer = &HDFE40000
@@ -13093,7 +13093,9 @@ Public Class frmTrackerOfTime
     End Sub
     Private Sub lblDrawBorder(sender As Object, e As PaintEventArgs)
         Dim pnl As Label = CType(sender, Label)
-        e.Graphics.DrawRectangle(New Pen(Color.Black, 2), 1, 1, pnl.Width - 2, pnl.Height - 2)
+        'e.Graphics.DrawRectangle(New Pen(Color.Black, 2), 1, 1, pnl.Width - 2, pnl.Height - 2)
+        e.Graphics.DrawRectangle(New Pen(Color.Black, 1), 0, 0, pnl.Width - 1, pnl.Height - 1)
+        e.Graphics.DrawRectangle(New Pen(Color.White, 1), 1, 1, pnl.Width - 3, pnl.Height - 3)
     End Sub
 
 
@@ -14175,6 +14177,7 @@ Public Class frmTrackerOfTime
 
     Private Sub tmrFixIt_Tick(sender As Object, e As EventArgs) Handles tmrFixIt.Tick
         updateSettingsPanel()
+        resizeForm()
         tmrFixIt.Enabled = False
     End Sub
 End Class
