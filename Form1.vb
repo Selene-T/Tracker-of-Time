@@ -9,8 +9,8 @@ Public Class frmTrackerOfTime
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 116
-    Private Const IS_64BIT As Boolean = False
-    Private Const VER As String = "3.1.1"
+    Private Const IS_64BIT As Boolean = True
+    Private Const VER As String = "3.2.0"
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private Const romAddrStart As Integer = &HDFE40000
@@ -30,6 +30,7 @@ Public Class frmTrackerOfTime
     Private keyCount As Integer = 337
     Private aKeys(keyCount) As keyCheck
     Private aKeysDungeons(11)() As keyCheck
+    Private canDungeon(11) As Boolean
     Private aQuestRewardsCollected(22) As Boolean
     Private aQIChecks(22) As Boolean
 
@@ -423,6 +424,9 @@ Public Class frmTrackerOfTime
             aBossKeys(i) = False
             aWarps(i) = String.Empty
         Next
+        For i = 0 To 11
+            canDungeon(i) = False
+        Next
         For i = 0 To aReachA.Length - 1
             aReachA(i) = False
             aReachY(i) = False
@@ -435,6 +439,8 @@ Public Class frmTrackerOfTime
         setupKeys()
         updateLabels()
         updateLabelsDungeons()
+        pbxSpawnYoung.Image = My.Resources.spawnLocations
+        pbxSpawnAdult.Image = My.Resources.spawnLocations
 
         ' Process the high/lows, but only the first time
         If firstRun Then
@@ -566,40 +572,6 @@ Public Class frmTrackerOfTime
         updateShoppes()
 
     End Sub
-
-    Private Function checkSunSong(Optional flipOn As Boolean = False) As Boolean
-        checkSunSong = False
-        Dim sunCheck As Double = goRead(&H11B4AC) 'romAddrStart + arrLocation(64))
-        If sunCheck = 0 Then Return False
-        Dim sunSongHex As String = Hex(sunCheck)
-        While sunSongHex.Length < 8
-            sunSongHex = "0" & sunSongHex
-        End While
-        Dim sunSongBit = Mid(sunSongHex, 6, 1)
-        Select Case sunSongBit
-            Case "4", "5", "6", "7", "C", "D", "E", "F"
-                Return True
-        End Select
-        If Not flipOn Then Return False
-        sunCheck = CInt("&H" & sunSongBit)
-        sunCheck = sunCheck + 4
-        sunSongBit = Hex(sunCheck)
-        sunSongHex = Mid(sunSongHex, 1, 5) & sunSongBit & Mid(sunSongHex, 7)
-        sunCheck = CDbl("&H" & sunSongHex)
-        If sunCheck > 2147483648 Then
-            sunCheck = sunCheck - 2147483648 - 2147483648
-        End If
-        If emulator = "variousX64" Then
-            Try
-                WriteMemory(Of Integer)(romAddrStart64 + &H11B4AC, CInt(sunCheck))
-            Catch ex As Exception
-                stopScanning()
-                MessageBox.Show("checkSunSong Problem: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            End Try
-        ElseIf emulator = "project64" Then
-            If IS_64BIT = False Then quickWrite(romAddrStart + &H11B4AC, CInt(sunCheck))
-        End If
-    End Function
 
     Private Sub getAge()
         ' Checks for the current age variable, starts off with setting ages to not accessable
@@ -1085,20 +1057,6 @@ Public Class frmTrackerOfTime
                     doMath = (locationCode * 28) + 212 + &H11A5D0
                     tempVar = &H1CA1D8
 
-                    ' Royal Tomb Only
-                    If locationCode = 65 And randoVer = "OOTR" Then
-                        If Not cb6410.Checked Then
-                            If royalSongScan = 0 Then royalSongScan = goRead(&H11A674)
-                            If Not royalSongScan = goRead(&H11A674) Then
-                                royalSongScan = 0
-                                cb6410.Checked = True
-                                checkSunSong(True)
-                            End If
-                        End If
-                    ElseIf royalSongScan > 0 Then
-                        royalSongScan = 0
-                    End If
-
                     Select Case i
                         Case 0 To 2, 103 To 113, 115 To 116
                             ' Scene Checks
@@ -1442,12 +1400,22 @@ Public Class frmTrackerOfTime
 
         Dim workLabel As Label = zKF
         If My.Settings.setMap Then
+            ' Connect The Market, Masks, and Temple of Time together
+            inc(aCheck(5), aCheck(23))
             inc(aCheck(5), aCheck(6))
+            inc(aTotal(5), aTotal(23))
             inc(aTotal(5), aTotal(6))
-            If aBoldLabels(6) Then aBoldLabels(5) = True
+            If aBoldLabels(23) Or aBoldLabels(6) Then aBoldLabels(5) = True
+
+            ' Connect Hyrule Castle and Outside Ganon's Castle together
             inc(aCheck(7), aCheck(21))
             inc(aTotal(7), aTotal(21))
             If aBoldLabels(21) Then aBoldLabels(7) = True
+
+            ' Connect Kakariko Village and Gold Skulltulas together
+            inc(aCheck(8), aCheck(22))
+            inc(aTotal(8), aTotal(22))
+            If aBoldLabels(22) Then aBoldLabels(8) = True
             For i = 0 To 20
                 Select Case i
                     Case 0
@@ -1501,6 +1469,7 @@ Public Class frmTrackerOfTime
                     Else
                         workLabel.BackColor = Color.Red
                     End If
+
                 End If
                 If i = 5 Then inc(i)
             Next
@@ -1657,9 +1626,13 @@ Public Class frmTrackerOfTime
                     workLabel.Visible = True
                     If aBoldLabels(i) Then
                         workLabel.BackColor = Color.Lime
+                        If canDungeon(i) Then
+                            workLabel.CreateGraphics.DrawRectangle(New Pen(Color.Yellow, 2), 2, 2, workLabel.Width - 4, workLabel.Height - 4)
+                            workLabel.CreateGraphics.DrawRectangle(New Pen(Color.White, 1), 3, 3, workLabel.Width - 7, workLabel.Height - 7)
+                        End If
                     Else
                         workLabel.BackColor = Color.Red
-                    End If
+                End If
                 End If
             Next
         Else
@@ -3460,6 +3433,7 @@ Public Class frmTrackerOfTime
                 ' JB MQ: Boss Area to Main
                 addArea(84, asAdult)
             Case 88
+                canDungeon(3) = False
                 If Not aMQ(3) Then
                     ' 88	FoT Lobby
                     ' 89	FoT NW Outdoors
@@ -3472,12 +3446,17 @@ Public Class frmTrackerOfTime
                     ' 96	FoT Bow Region
                     ' 97	FoT Boss Region
 
+                    ' FoT Keys in Dungeon
+                    If asAdult And My.Settings.setSmallKeys = 0 Then
+                        If item("lift", 1) And item("bow") And ((item("hover boots") And item("hookshot")) Or Not My.Settings.setFoTFrame) Then canDungeon(3) = True
+                    End If
+
                     ' FoT: Lobby to Block Push Room, NW Outdoors, NE Outdoors, Boss Region
                     If dungeonKeyCounter(3, "01") Then addArea(93, asAdult)
                     If asAdult Then
                         If item("song of time") Then addArea(89, asAdult)
                         If item("bow") Then addArea(90, asAdult)
-                        If checkLoc("10628") Or (checkLoc("10629") And checkLoc("10630") And checkLoc("10631") And item("bow")) Then addArea(97, asAdult)
+                        If canDungeon(3) Or checkLoc("10628") Or (checkLoc("10629") And checkLoc("10630") And checkLoc("10631") And item("bow")) Then addArea(97, asAdult)
                     Else
                         addArea(89, asAdult)
                         If item("slingshot") Then addArea(90, asAdult)
@@ -3496,6 +3475,12 @@ Public Class frmTrackerOfTime
                     ' 106	FoT MQ Falling Room
                     ' 107	FoT MQ Boss Region
 
+                    ' FoT MQ Keys in Dungeon
+                    If asAdult And My.Settings.setSmallKeys = 0 Then
+                        If item("bow") And item("song of time") And ((item("lift") And Not My.Settings.setFoTMQPuzzle) Or (My.Settings.setFoTMQPuzzle And item("bombchu") And item("hookshot"))) And _
+                            ((item("hover boots") And (item("hookshot") Or Not My.Settings.setFoTBackdoor)) Or Not My.Settings.setFoTMQTwisted) Then canDungeon(3) = True
+                    End If
+
                     ' FoT MQ: Lobby to Central Area
                     If asAdult Then
                         If dungeonKeyCounter(3, "06") Then addArea(98, asAdult)
@@ -3504,37 +3489,37 @@ Public Class frmTrackerOfTime
                     End If
                 End If
             Case 89
-                ' FoT: NW Outdoors to NE Outdoors, Outdoors High Balconies
-                If item("dive", 2) Then addArea(90, asAdult)
-                If asAdult Then
-                    addArea(91, asAdult)
-                Else
-                    If canExplode() Or ((item("boomerang") Or item("deku nuts") Or item("deku shield")) And (item("deku stick") Or item("kokiri sword") Or item("slingshot"))) Then addArea(91, asAdult)
-                End If
+                    ' FoT: NW Outdoors to NE Outdoors, Outdoors High Balconies
+                    If item("dive", 2) Then addArea(90, asAdult)
+                    If asAdult Then
+                        addArea(91, asAdult)
+                    Else
+                        If canExplode() Or ((item("boomerang") Or item("deku nuts") Or item("deku shield")) And (item("deku stick") Or item("kokiri sword") Or item("slingshot"))) Then addArea(91, asAdult)
+                    End If
             Case 90
-                ' FoT: NE Outdoors to Lobby, Outdoors High Balconies, NW Outdoors
-                addArea(88, asAdult)
-                If asAdult Then
-                    If item("longshot") Or (My.Settings.setFoTVines And item("hookshot")) Then addArea(91, asAdult)
-                    If item("iron boots") Or item("dive", 2) Then addArea(89, asAdult)
-                Else
-                    If item("dive", 2) Then addArea(89, asAdult)
-                End If
+                    ' FoT: NE Outdoors to Lobby, Outdoors High Balconies, NW Outdoors
+                    addArea(88, asAdult)
+                    If asAdult Then
+                        If item("longshot") Or (My.Settings.setFoTVines And item("hookshot")) Then addArea(91, asAdult)
+                        If item("iron boots") Or item("dive", 2) Then addArea(89, asAdult)
+                    Else
+                        If item("dive", 2) Then addArea(89, asAdult)
+                    End If
             Case 91
-                ' FoT: Outdoors High Balconies to NW Outdoors, NE Outdoors, Falling Room
-                addArea(89, asAdult)
-                addArea(90, asAdult)
-                If asAdult And My.Settings.setFoTLedge And item("hover boots") And item("scarecrow") Then addArea(92, asAdult)
+                    ' FoT: Outdoors High Balconies to NW Outdoors, NE Outdoors, Falling Room
+                    addArea(89, asAdult)
+                    addArea(90, asAdult)
+                    If asAdult And My.Settings.setFoTLedge And item("hover boots") And item("scarecrow") Then addArea(92, asAdult)
             Case 92
-                ' FoT: Falling room to NE Outdoors
-                addArea(90, asAdult)
+                    ' FoT: Falling room to NE Outdoors
+                    addArea(90, asAdult)
             Case 93
-                ' FoT: Block Push Room to Outside Upper Ledge, Bow Region, Straightened Hall
-                If asAdult Then
-                    If item("hover boots") Or (My.Settings.setFoTBackdoor And item("lift")) Then addArea(95, asAdult)
-                    If item("lift") And dungeonKeyCounter(3, "010203") Then addArea(96, asAdult)
-                    If item("lift") And dungeonKeyCounter(3, "0102") And item("bow") Then addArea(94, asAdult)
-                End If
+                    ' FoT: Block Push Room to Outside Upper Ledge, Bow Region, Straightened Hall
+                    If asAdult Then
+                        If item("hover boots") Or (My.Settings.setFoTBackdoor And item("lift")) Then addArea(95, asAdult)
+                        If item("lift") And dungeonKeyCounter(3, "010203") Then addArea(96, asAdult)
+                        If item("lift") And dungeonKeyCounter(3, "0102") And item("bow") Then addArea(94, asAdult)
+                    End If
             Case 94
                 ' FoT: Straightened Hallway to Outside Upper Ledge
                 addArea(95, asAdult)
@@ -3600,12 +3585,19 @@ Public Class frmTrackerOfTime
                 ' FoT MQ: Falling Room to NE Outdoors Ledge
                 addArea(104, asAdult)
             Case 108
+                canDungeon(4) = False
                 If Not aMQ(4) Then
                     ' 108	FiT Lower
                     ' 109	FiT Big Lava Room
                     ' 110	FiT Middle
                     ' 111	FiT Upper
                     ' 112	FiT Boss Loop
+
+                    ' FiT Keys in Dungeon
+                    If asAdult And My.Settings.setSmallKeys = 0 Then
+                        If item("goron tunic") And item("hammer") And item("bow") And canExplode() And (item("lift") Or My.Settings.setFiTClimb) And _
+                            (item("scarecrow") Or (My.Settings.setFiTScarecrow And item("longshot"))) And (item("hover boots") Or Not My.Settings.setFiTMaze) Then canDungeon(4) = True
+                    End If
 
                     ' FiT: Lower to Big Lava Room, Boss Loop
                     If dungeonKeyCounter(4, "29") And canFewerGoron() Then addArea(109, asAdult)
@@ -3618,6 +3610,11 @@ Public Class frmTrackerOfTime
                     ' 116	FiT MQ Upper Maze
                     ' 117	FiT MQ Upper
                     ' 118	FiT MQ Boss Room
+
+                    ' FiT MQ Keys in Dungeon
+                    If asAdult And My.Settings.setSmallKeys = 0 Then
+                        If item("goron tunic") And item("hammer") And item("hover boots") And item("bow") And item("hookshot") And canExplode() And canBurnAdult() Then canDungeon(4) = True
+                    End If
 
                     ' FiT MQ: Lower to Boss Room, Big Lava Room, Lower Locked Door
                     If asAdult Then
@@ -3651,7 +3648,9 @@ Public Class frmTrackerOfTime
                 ' This is not normally there, but this will prevent failed checks
                 If asAdult And item("goron tunic") And item("hammer") Then addArea(118, asAdult)
             Case 119
+                canDungeon(5) = False
                 If Not aMQ(5) Then
+
                     ' 119	WaT Lobby
                     ' 120	WaT Highest Water Level
                     ' 121	WaT Dive
@@ -3661,6 +3660,11 @@ Public Class frmTrackerOfTime
                     ' 125	WaT Middle Water Level
                     ' 126	WaT Falling Platform Room
                     ' 127	WaT Dark Link Region
+
+                    ' WaT Keys in Dungeon
+                    If asAdult And My.Settings.setSmallKeys = 0 Then
+                        If item("longshot") And item("zelda's lullaby") And item("song of time") And item("lift") And item("bow") And item("iron boots") And item("zora tunic") And canExplode() Then canDungeon(5) = True
+                    End If
 
                     ' WaT: Lobby to Highest Water Level, Dive
                     If asAdult Then
@@ -3675,6 +3679,11 @@ Public Class frmTrackerOfTime
                     ' 129	WaT MQ Lowered Water Levels
                     ' 130	WaT MQ Dark Link Region
                     ' 131	WaT MQ Basement Grated Areas
+
+                    ' WaT MQ Keys in Dungeon
+                    If asAdult And My.Settings.setSmallKeys = 0 Then
+                        If item("longshot") And item("din's fire") And item("zora tunic") And item("song of time") And item("zelda's lullaby") And item("iron boots") And (item("hover boots") Or item("scarecrow")) Then canDungeon(5) = True
+                    End If
 
                     ' WaT MQ: Lobby to Dive, Dark Link Region
                     If asAdult Then
@@ -3714,6 +3723,7 @@ Public Class frmTrackerOfTime
                 ' WaT MQ: Dark Link Region to Basement Grated Areas
                 If asAdult And canFewerZora() And item("din's fire") And item("iron boots") Then addArea(131, asAdult)
             Case 132
+                canDungeon(6) = False
                 If Not aMQ(6) Then
                     ' 132	SpT Lobby
                     ' 133	SpT Child
@@ -3725,6 +3735,12 @@ Public Class frmTrackerOfTime
                     ' 139	SpT Beyond Central Locked Door
                     ' 140	SpT Beyond Final Locked Door
                     ' 141	SpT Boss Platform
+
+                    ' SpT Keys in Dungeon
+                    If aReachY(132) And aReachA(132) And My.Settings.setSmallKeys = 0 Then
+                        If item("lift", 2) And canExplode() And item("hookshot") And item("zelda's lullaby") And item("hover boots") And item("mirror shield") And (My.Settings.setSpTLensless Or item("lens of truth")) And _
+                            canProjectile(1) And (item("boomerang") Or item("slingshot")) And (item("din's fire") Or item("fire arrows")) Then canDungeon(6) = True
+                    End If
 
                     ' SpT: Lobby to Early Adult, Central Chamber, Child 
                     If asAdult Then
@@ -3743,6 +3759,13 @@ Public Class frmTrackerOfTime
                     ' 147	SpT MQ Boss Platform
                     ' 148	SpT MQ Shield Hand
                     ' 149	SpT MQ Silver Gauntlets Hand
+
+                    ' SpT MQ Keys in Dungeon
+                    If aReachY(132) And aReachA(132) And My.Settings.setSmallKeys = 0 Then
+                        If item("longshot") And item("bombchus") And item("slingshot") And item("din's fire") And item("zelda's lullaby") And item("song of time") And item("hammer") And item("mirror shield") And item("bow") And _
+                            (My.Settings.setSpTLensless Or item("lens of truth")) And (item("fire arrows") Or My.Settings.setSpTMQLowAdult) And _
+                            (item("deku sticks") Or item("kokiri sword") Or item("bombs")) Then canDungeon(6) = True
+                    End If
 
                     ' SpT MQ: Lobby to Child, Adult
                     If asAdult Then
@@ -3809,6 +3832,7 @@ Public Class frmTrackerOfTime
                 ' SpT MQ: Silver Gauntlets Hand to DC
                 addArea(50, asAdult)
             Case 150
+                canDungeon(7) = False
                 If Not aMQ(7) Then
                     ' 150	ShT Entryway
                     ' 151	ShT Beginning
@@ -3820,6 +3844,13 @@ Public Class frmTrackerOfTime
                     ' 157	ShT Boat
                     ' 158	ShT Beyond Boat
                     ' 159	ShT Boss Room
+
+                    ' ShT Keys in Dungeon
+                    If asAdult And My.Settings.setSmallKeys = 0 Then
+                        If item("hover boots") And item("hookshot") And item("zelda's lullaby") And item("din's fire") And canExplode() And (item("lift") Or My.Settings.setShTUmbrella) And _
+                            (item("lens of truth") Or (My.Settings.setShTLensless And My.Settings.setShTPlatform)) And _
+                            ((item("bow") Or item("scarecrow", 2)) And (item("bombchus") Or Not My.Settings.setShTStatue)) Then canDungeon(7) = True
+                    End If
 
                     ' ShT: Entry to Beginning
                     If asAdult And (My.Settings.setShTLensless Or item("lens of truth")) And (item("hover boots") Or item("hookshot")) Then addArea(151, asAdult)
@@ -3839,6 +3870,12 @@ Public Class frmTrackerOfTime
                     ' 171	ShT MQ Beyond Boat
                     ' 172	ShT MQ Invisible Maze
                     ' 173	ShT MQ Near Boss
+
+                    ' ShT MQ Keys in Dungeon
+                    If asAdult And My.Settings.setSmallKeys = 0 Then
+                        If item("bow") And item("hover boots") And item("longshot") And item("song of time") And item("zelda's lullaby") And canExplode() And (item("lift") Or My.Settings.setShTUmbrella) And _
+                            (canBurnAdult() Or My.Settings.setShTMQPit) And (item("lens of truth") Or (My.Settings.setShTLensless And My.Settings.setShTPlatform)) Then canDungeon(7) = True
+                    End If
 
                     ' ShT MQ: Entry to Beginning
                     If asAdult And (My.Settings.setShTLensless Or item("lens of truth")) And (item("hover boots") Or item("hookshot")) Then addArea(160, asAdult)
@@ -3917,16 +3954,29 @@ Public Class frmTrackerOfTime
                     If (item("bow") Or (My.Settings.setShTStatue And item("bombchu")) Or checkLoc("11016")) And item("hover boots") Then addArea(173, asAdult)
                 End If
             Case 174
+                canDungeon(8) = False
                 If Not aMQ(8) Then
                     ' 174	BotW Entrance
                     ' 175	BotW Main Area
                     ' 176	BotW Main Area with Lens of Truth Check
+
+                    ' BotW Keys in Dungeon
+                    If Not asAdult And My.Settings.setSmallKeys = 0 Then
+                        If item("zelda's lullaby") And canExplode() And (item("lens of truth") Or My.Settings.setBotWLensless) And (item("deku stick") Or item("din's fire")) And _
+                            (item("kokiri sword") Or (item("deku stick") And My.Settings.setBotWDeadHand)) Then canDungeon(8) = True
+                    End If
 
                     ' BotW: Entrance to Main Area
                     If Not asAdult And canAttackYoung(True) Or item("deku nuts") Then addArea(175, asAdult)
                 Else
                     ' 174	BotW Entrance and Perimeter
                     ' 177	BotW Middle
+
+                    ' BotW MQ Keys in Dungeon
+                    If Not asAdult And My.Settings.setSmallKeys = 0 Then
+                        If canExplode() And (item("lens of truth") Or My.Settings.setBotWLensless) And (item("kokiri sword") Or (item("deku stick") And My.Settings.setBotWDeadHand)) And _
+                            (item("zelda's lullaby") Or My.Settings.setBotWMQPits) Then canDungeon(8) = True
+                    End If
 
                     ' BotW MQ: Entrance and Perimeter to Middle
                     If Not asAdult And item("zelda's lullaby") Or (My.Settings.setBotWMQPits And canExplode()) Then addArea(177, asAdult)
@@ -3935,6 +3985,7 @@ Public Class frmTrackerOfTime
                 ' BotW: Main Area Main Area with Lens of Truth Check
                 If My.Settings.setBotWLensless Or item("lens of truth") Then addArea(176, asAdult)
             Case 179
+                canDungeon(10) = False
                 If Not aMQ(10) Then
                     ' 179	GTG Lobby and Central Maze
                     ' 180	GTG Central Maze Right
@@ -3944,6 +3995,12 @@ Public Class frmTrackerOfTime
                     ' 184	GTG Eye Statue Upper
                     ' 185	GTG Heavy Block Room
                     ' 186	GTG Like Like Room
+
+                    ' GTG Keys in Dungeon
+                    If asAdult And My.Settings.setSmallKeys = 0 Then
+                        If item("bow") And item("hammer") And item("hookshot") And item("iron boots") And item("song of time") And item("lift", 2) And canExplode() And canFewerZora() And _
+                            (item("lens of truth") Or My.Settings.setLensOfTruth) Then canDungeon(10) = True
+                    End If
 
                     ' GTG: Lobby and Central Maze to Central Maze Right, Lava Room, Heavy Block Room
                     If dungeonKeyCounter(10, "1003") Then addArea(180, asAdult)
@@ -3961,6 +4018,12 @@ Public Class frmTrackerOfTime
                     ' 190	GTG MQ Stalfos Room
                     ' 191	GTG MQ Back Areas
                     ' 192	GTG MQ Central Maze Right
+
+                    ' GTG MQ Keys in Dungeon
+                    If asAdult And My.Settings.setSmallKeys = 0 Then
+                        If item("bottle") And item("bow") And item("hammer") And item("hover boots") And item("iron boots") And item("longshot") And item("song of time") And _
+                            item("lift", 2) And canBurnAdult() And canFewerZora() And (item("lens of truth") Or My.Settings.setLensOfTruth) Then canDungeon(10) = True
+                    End If
 
                     ' GTG MQ: Lobby to Left Side, Right Side
                     If asAdult Then
@@ -4053,7 +4116,7 @@ Public Class frmTrackerOfTime
         Dim countDoors As Byte = 0
 
         ' If set to remove small keys, always true. This setting is only for OOTR, as AP handles bit flags better
-        If My.Settings.setSmallKeys = 2 Then Return True
+        If My.Settings.setSmallKeys = 2 Or canDungeon(dungeon) Then Return True
 
         ' Use the dungeon to set variabled to refocus on dungeon keys array and checkloc for door
         Dim dunKeys As Byte = 0
@@ -4133,7 +4196,7 @@ Public Class frmTrackerOfTime
             Case "hover boots"
                 If canAdult And checkLoc("7430") Then Return True
             Case "blue fire"
-                If allItems.Contains("u") And (allItems.Contains("w") Or aReachA(41) Or (aReachA(193) And (Not My.Settings.setHideSpoiler Or checkLoc("6429")))) Then Return True
+                If allItems.Contains("u") And (allItems.Contains("w") Or aReachA(41) Or aReachA(190) Or (aReachA(193) And (Not My.Settings.setHideSpoiler Or checkLoc("6429")))) Then Return True
             Case "bomb", "bombs"
                 If allItems.Contains("c") Then Return True
             Case "bombchu", "bombchus"
@@ -4488,7 +4551,7 @@ Public Class frmTrackerOfTime
             Return True
         End If
         ' If young Link can reach ZR Main, and the salesman is not shuffled, you can buy beans
-        If aReachY(35) And Not My.Settings.setSalesman Then
+        If aReachY(35) And Not My.Settings.setBeans Then
             'MsgBox("aReachY(35): " & aReachY(35).ToString)
             Return True
         End If
@@ -4601,7 +4664,7 @@ Public Class frmTrackerOfTime
                     '                   A# = Logics
                     '
                     '                   A0 = DC Jump        A1 = FoT Ledge          A2 = FoT Doorframe      A3 = FiT Rusted Switches        A4 = FiT Flame Maze Skip        A5 = SpT Young Bombchu          A6 = SpT MQ Sun Block without Song
-                    '                   A7 = ShT Umbrella   A8 = BotW Dead Hand     A9 - MQ Spirit Trial Rusted Switches                    AA = BotW MQ Pits               AB = Ganon's Castle Lensess
+                    '                   A7 = ShT Umbrella   A8 = BotW Dead Hand     A9 - MQ Spirit Trial Rusted Switches                    AA = BotW MQ Pits               AB = Ganon's Castle Lensess     AC = FiT Scarecrow
                     '
                     '                   B# = Boss Key: # Dungeon
                     '                   C0 = Fire Temple Keys: 3        C1 = Fire Temple Keys: 4    C2 = Fire Temple Keys: 5    C3 = Fire Temple MQ Keys: 3     C4 = Fire Temple MQ Keys: 4     C5 = Water Temple Pillar
@@ -4689,21 +4752,23 @@ Public Class frmTrackerOfTime
                             canDoThis = My.Settings.setBotWMQPits
                         Case "AB"
                             If My.Settings.setIGCLensless Or item("lens of truth") Then canDoThis = True
+                        Case "AC"
+                            If item("scarecrow") Or (My.Settings.setFiTScarecrow And item("longshot")) Then canDoThis = True
                         Case "B0", "B1", "B2", "B3", "B4"
                             canDoThis = aBossKeys(CByte(Mid(tempString, 2)))
                             If Not canDoThis Then
                                 ' If the key was not found, check each boss door
                                 Select Case Mid(tempString, 2)
                                     Case "0"    ' Forest
-                                        canDoThis = checkLoc("10620")
+                                        If checkLoc("10620") Then canDoThis = True
                                     Case "1"    ' Fire
-                                        canDoThis = checkLoc("10720")
+                                        If checkLoc("10720") Then canDoThis = True
                                     Case "2"    ' Water
-                                        canDoThis = checkLoc("10820")
+                                        If checkLoc("10820") Then canDoThis = True
                                     Case "3"    ' Spirit
-                                        canDoThis = checkLoc("10920")
+                                        If checkLoc("10920") Then canDoThis = True
                                     Case "4"    ' Shadow
-                                        canDoThis = checkLoc("11020")
+                                        If checkLoc("11020") Then canDoThis = True
                                     Case Else
                                         MsgBox("G" & tempString)
                                 End Select
@@ -5146,7 +5211,7 @@ Public Class frmTrackerOfTime
             .area = "LW"
             .zone = 3
             .name = "Deku Theatre Skull Mask"
-            .logic = "YLL6920.Yy5"
+            .logic = "YLL6908.Yy5"
         End With
         inc(tK)
         With aKeys(tK)
@@ -5154,7 +5219,7 @@ Public Class frmTrackerOfTime
             .area = "LW"
             .zone = 3
             .name = "Deku Theatre Mask of Truth"
-            .logic = "YLL6920.YyB"
+            .logic = "YLL6911.YyB"
         End With
         inc(tK)
         With aKeys(tK)
@@ -5571,7 +5636,7 @@ Public Class frmTrackerOfTime
             .loc = "7201"
             .area = "MK"
             .zone = 10
-            .name = "Lost Dog"
+            .name = "Lost Dog (N)"
             .logic = "YN"
         End With
         inc(tk)
@@ -5848,7 +5913,7 @@ Public Class frmTrackerOfTime
             .loc = "2208"
             .area = "GY"
             .zone = 18
-            .name = "Dampe's Gravedigging Tour"
+            .name = "Dampe's Gravedigging Tour (N)"
             .logic = "YN"
         End With
         inc(tk)
@@ -5865,7 +5930,7 @@ Public Class frmTrackerOfTime
             .area = "GY"
             .zone = 18
             .name = "Ledge Piece of Heart"
-            .logic = "YZG34.Zl"
+            .logic = "ZG34.Zl"
         End With
         inc(tk)
         With aKeys(tk)
@@ -6059,7 +6124,7 @@ Public Class frmTrackerOfTime
             .area = "DMC"
             .zone = 26
             .name = "Volcano Piece of Heart"
-            .logic = "YZG33.ZH"
+            .logic = "ZG33.ZH"
         End With
         inc(tk)
         With aKeys(tk)
@@ -6516,7 +6581,7 @@ Public Class frmTrackerOfTime
             .loc = "7316"
             .area = "LH"
             .zone = 42
-            .name = "Scarecrow"
+            .name = "Scarecrow Bonooru"
             .logic = "Yh"
         End With
         inc(tk)
@@ -6524,7 +6589,7 @@ Public Class frmTrackerOfTime
             .loc = "6512"
             .area = "LH"
             .zone = 42
-            .name = "Scarecrow"
+            .name = "Scarecrow Pierre"
             .logic = "YLL7316"
         End With
         inc(tk)
@@ -6540,7 +6605,7 @@ Public Class frmTrackerOfTime
             .loc = "6110"
             .area = "LH"
             .zone = 43
-            .name = "Big Fish"
+            .name = "Big Fish First"
             .logic = "Y"
         End With
         inc(tk)
@@ -6548,7 +6613,7 @@ Public Class frmTrackerOfTime
             .loc = "6111"
             .area = "LH"
             .zone = 43
-            .name = "Big Fish"
+            .name = "Big Fish Second"
             .logic = "Z"
         End With
         inc(tk)
@@ -6573,7 +6638,7 @@ Public Class frmTrackerOfTime
             .area = "LH"
             .zone = 42
             .name = "Shoot the Sun"
-            .logic = "ZdlhLL6512.ZdG15"
+            .logic = "ZdlhLL6512.ZdG16"
         End With
         inc(tk)
         With aKeys(tk)
@@ -7201,7 +7266,7 @@ Public Class frmTrackerOfTime
             .area = "QM"
             .zone = 10
             .name = "Sell Skull Mask"
-            .logic = "YLL6920"
+            .logic = "YLL6908"
         End With
         inc(tk)
         With aKeys(tk)
@@ -7217,7 +7282,7 @@ Public Class frmTrackerOfTime
             .area = "QM"
             .zone = 10
             .name = "Sell Bunny Hood"
-            .logic = "YLL6910"
+            .logic = "YLL6910LL6625"
         End With
         inc(tk)
     End Sub
@@ -8822,7 +8887,7 @@ Public Class frmTrackerOfTime
                 .area = "FIT2"
                 .zone = 110
                 .name = "Scarecrow Chest"
-                .logic = "ZGC2hkLL6512"
+                .logic = "ZGC2GAC"
             End With
             With aKeysDungeons(4)(11)
                 .loc = "3507"
@@ -8881,7 +8946,7 @@ Public Class frmTrackerOfTime
                 .zone = 110
                 .name = "Scarecrow Climb"
                 .gs = True
-                .logic = "ZGC2hkLL6512"
+                .logic = "ZGC2GAC"
             End With
             With aKeysDungeons(4)(19)
                 .loc = "7903"
@@ -8889,7 +8954,7 @@ Public Class frmTrackerOfTime
                 .zone = 110
                 .name = "Scarecrow Top"
                 .gs = True
-                .logic = "ZGC2hkLL6512"
+                .logic = "ZGC2GAC"
             End With
             With aKeysDungeons(4)(20)
                 .loc = "10729"
@@ -9508,14 +9573,16 @@ Public Class frmTrackerOfTime
                 .area = "SPT5"
                 .zone = 137
                 .name = "Statue Room Hand Chest"
-                .logic = "ZQ1141hLL7712.ZLL7430hLL7712"
+                '.logic = "ZQ1141hLL7712.ZLL7430hLL7712"
+                .logic = "ZG14khLL7712.ZV02hLL7712"
             End With
             With aKeysDungeons(6)(12)
                 .loc = "3715"
                 .area = "SPT5"
                 .zone = 137
                 .name = "Statue Room Northeast Chest"
-                .logic = "ZQ1141hLL7712k.ZhLL7712LL7430"
+                '.logic = "ZQ1141hLL7712k.ZhLL7712LL7430"
+                .logic = "ZG14khLL7712.ZV02hLL7712LL7430"
             End With
             With aKeysDungeons(6)(13)
                 .loc = "3705"
@@ -12559,7 +12626,9 @@ Public Class frmTrackerOfTime
 
     Private Sub outputSong(ByVal title As String, ByVal notes As String)
         rtbRefresh = 2
+        lastOutput.Clear()
         rtbOutputLeft.Text = title & ":"
+        rtbOutputRight.Clear()
         Dim outSong As String = "  "
         For i = 1 To notes.Length
             Select Case LCase(Mid(notes, i, 1))
@@ -12745,6 +12814,8 @@ Public Class frmTrackerOfTime
                 My.Settings.setFoTMQWell = Not My.Settings.setFoTMQWell
             Case lcxFiTClimb.Text
                 My.Settings.setFiTClimb = Not My.Settings.setFiTClimb
+            Case lcxFiTScarecrow.Text
+                My.Settings.setFiTScarecrow = Not My.Settings.setFiTScarecrow
             Case lcxFiTMaze.Text
                 My.Settings.setFiTMaze = Not My.Settings.setFiTMaze
             Case lcxFiTMQClimb.Text
@@ -12895,6 +12966,8 @@ Public Class frmTrackerOfTime
                 message = "In Master Quest version, use the Hookshot swim through the well before draining it."
             Case lcxFiTClimb.Text
                 message = "Skip needing to push the block to reach grate."
+            Case lcxFiTScarecrow.Text
+                message = "Reach the elevator target with the Longshot, skipping the need for the scarecrow song."
             Case lcxFiTMaze.Text
                 message = "Quickly move past the edge of the flame wall before it can block you. Both in normal and MQ versions."
             Case lcxFiTMQClimb.Text
@@ -13045,6 +13118,28 @@ Public Class frmTrackerOfTime
                     My.Settings.setSmallKeys = CByte(My.Settings.setSmallKeys + addVal)
                     If My.Settings.setSmallKeys > 2 Then My.Settings.setSmallKeys = 0
                 End If
+
+                Dim lbl As New Label
+                For i = 3 To 10
+                    If i = 9 Then i = 10
+                    Select Case i
+                        Case 3
+                            lbl = zFoT
+                        Case 4
+                            lbl = zFiT
+                        Case 5
+                            lbl = zWaT
+                        Case 6
+                            lbl = zSpT
+                        Case 7
+                            lbl = zShT
+                        Case 8
+                            lbl = zBotW
+                        Case 10
+                            lbl = zGTG
+                    End Select
+                    If canDungeon(i) Then lbl.Refresh()
+                Next
         End Select
         updateLTB(sName)
     End Sub
@@ -13092,10 +13187,9 @@ Public Class frmTrackerOfTime
         e.Graphics.DrawRectangle(New Pen(Me.ForeColor, 1), 0, 0, pnl.Width - 1, pnl.Height - 1)
     End Sub
     Private Sub lblDrawBorder(sender As Object, e As PaintEventArgs)
-        Dim pnl As Label = CType(sender, Label)
-        'e.Graphics.DrawRectangle(New Pen(Color.Black, 2), 1, 1, pnl.Width - 2, pnl.Height - 2)
-        e.Graphics.DrawRectangle(New Pen(Color.Black, 1), 0, 0, pnl.Width - 1, pnl.Height - 1)
-        e.Graphics.DrawRectangle(New Pen(Color.White, 1), 1, 1, pnl.Width - 3, pnl.Height - 3)
+        Dim lbl As Label = CType(sender, Label)
+        e.Graphics.DrawRectangle(New Pen(Color.Black, 1), 0, 0, lbl.Width - 1, lbl.Height - 1)
+        e.Graphics.DrawRectangle(New Pen(Color.White, 1), 1, 1, lbl.Width - 3, lbl.Height - 3)
     End Sub
 
 
@@ -13164,6 +13258,8 @@ Public Class frmTrackerOfTime
                                 isTrue = My.Settings.setFoTMQWell
                             Case lcxFiTClimb.Name
                                 isTrue = My.Settings.setFiTClimb
+                            Case lcxFiTScarecrow.Name
+                                isTrue = My.Settings.setFiTScarecrow
                             Case lcxFiTMaze.Name
                                 isTrue = My.Settings.setFiTMaze
                             Case lcxFiTMQClimb.Name
@@ -13798,7 +13894,7 @@ Public Class frmTrackerOfTime
                     reachAreas(warp, False)
                 End If
             Case Else
-                If aQIChecks(type + 4) Then
+                If aQIChecks(type + 4) And allItems.Contains("h") Then
                     If canAdult Then
                         aReachA(warp) = True
                         reachAreas(warp, True)

@@ -123,6 +123,20 @@
   <metadata name="mnuOptions.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>140, 17</value>
   </metadata>
+  <data name="lblInfo.Text" xml:space="preserve">
+    <value>Instructions:
+- Mouse-over the top window to display controls for a single scan, auto-scanning, reset, show/hide this settings page,
+     and for changing themes.
+- Clicking on any of the songs will show the song notes at the bottom of the application, in case you forget.
+- Left- or right-clicking on the Sacred Stones of Medallions with allow you to set reminders for yourself as to which
+     dungeon they are in. 
+- Left-clicking on a region will show you what checks are left in that area. Right-clicking shows already found checks.
+- You can double-click on a line in the output box to force it to be counted as checked. Hide those pesky
+     freestanding items.
+- Use the settings below to enable tracking of specific things like Deku Scrubs and Cows. All settings save automatically.
+- Use the tricks settings to have logic better show what checks you can reach.
+- Right-click on anything on the settings page to display more info.</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="pbxSongOfStorms.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -3865,20 +3879,6 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
 </value>
-  </data>
-  <data name="lblInfo.Text" xml:space="preserve">
-    <value>Instructions:
-- Mouse-over the top window to display controls for a single scan, auto-scanning, reset, show/hide this settings page,
-     and for changing themes.
-- Clicking on any of the songs will show the song notes at the bottom of the application, in case you forget.
-- Left- or right-clicking on the Sacred Stones of Medallions with allow you to set reminders for yourself as to which
-     dungeon they are in. 
-- Left-clicking on a region will show you what checks are left in that area. Right-clicking shows already found checks.
-- You can double-click on a line in the output box to force it to be counted as checked. Hide those pesky
-     freestanding items.
-- Use the settings below to enable tracking of specific things like Deku Scrubs and Cows. All settings save automatically.
-- Use the tricks settings to have logic better show what checks you can reach.
-- Right-click on anything on the settings page to display more info.</value>
   </data>
   <metadata name="tmrFixIt.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>259, 17</value>
