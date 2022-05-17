@@ -10,10 +10,10 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 116
     Private Const IS_64BIT As Boolean = True
-    Private Const VER As String = "3.2.0"
+    Private Const VER As String = "3.3.0"
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
-    Private Const romAddrStart As Integer = &HDFE40000
+    Private romAddrStart As Integer = &HDFE40000
     Private romAddrStart64 As Int64 = 0
     Private emulator As String = String.Empty
     Private keepRunning As Boolean = False
@@ -149,7 +149,7 @@ Public Class frmTrackerOfTime
             AddHandler Label.Paint, AddressOf drawArrows
         Next
         ' Used to give a border to each panel below the item display
-        For Each Panel In Me.Controls.OfType(Of Panel)().Where(Function(pnl As Panel) pnl.Height < 50)
+        For Each Panel In pnlMain.Controls.OfType(Of Panel)().Where(Function(pnl As Panel) pnl.Height < 50)
             AddHandler Panel.Paint, AddressOf pnlDrawBorder
         Next
         ' Used to give a border to each panel below the item display
@@ -1007,7 +1007,8 @@ Public Class frmTrackerOfTime
     Private Sub readChestData()
         If emulator = String.Empty Then
             If IS_64BIT = False Then
-                emulator = "project64"
+                attachToProject64()
+                If emulator = String.Empty Then attachToM64PY()
             Else
                 attachToBizHawk()
                 If emulator = String.Empty Then attachToRMG()
@@ -1033,6 +1034,7 @@ Public Class frmTrackerOfTime
             Exit Sub
         End If
         Dim locationCode As Integer = goRead(CUR_ROOM_ADDR + 2, 15)
+        'Me.Text = locationCode.ToString
         Dim doMath As Integer = 0
         If Not keepRunning Then
             stopScanning()
@@ -1102,10 +1104,10 @@ Public Class frmTrackerOfTime
                     stopScanning()
                     Exit Sub
                 End If
-                If Not chestCheck = arrChests(i) Then
-                    arrChests(i) = chestCheck
-                    parseChestData(i)
-                End If
+                'If Not chestCheck = arrChests(i) Then
+                arrChests(i) = chestCheck
+                parseChestData(i)
+                'End If
             End If
         Next
         scanSingleChecks()
@@ -1843,31 +1845,33 @@ Public Class frmTrackerOfTime
         keepRunning = False
         tmrAutoScan.Enabled = False
         AutoScanToolStripMenuItem.Text = "Auto Scan"
-        'Me.Controls.Find("xButtonAutoScan", True)(0).Text = "Auto Scan"
         Me.Text = "Tracker of Time v" & VER
         emulator = String.Empty
     End Sub
 
     Private Function goRead(ByVal offsetAddress As Integer, Optional bitType As Byte = 31) As Integer
         goRead = 0
-        If emulator = "variousX64" Then
-            Try
-                Select Case bitType
-                    Case 0 To 7
-                        goRead = ReadMemory(Of Byte)(romAddrStart64 + offsetAddress)
-                    Case 8 To 15
-                        goRead = ReadMemory(Of Int16)(romAddrStart64 + offsetAddress)
-                    Case Else
-                        goRead = ReadMemory(Of Integer)(romAddrStart64 + offsetAddress)
-                End Select
-            Catch ex As Exception
-                stopScanning()
-                If Not ex.Message = "External component has thrown an exception." Then
-                    MessageBox.Show("goRead Problem: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                End If
-            End Try
-        ElseIf emulator = "project64" Then
-            If IS_64BIT = False Then
+        Select Case emulator
+            Case String.Empty
+                Exit Function
+            Case "variousX64"
+                Try
+                    Select Case bitType
+                        Case 0 To 7
+                            goRead = ReadMemory(Of Byte)(romAddrStart64 + offsetAddress)
+                        Case 8 To 15
+                            goRead = ReadMemory(Of Int16)(romAddrStart64 + offsetAddress)
+                        Case Else
+                            goRead = ReadMemory(Of Integer)(romAddrStart64 + offsetAddress)
+                    End Select
+                Catch ex As Exception
+                    stopScanning()
+                    If Not ex.Message = "External component has thrown an exception." Then
+                        MessageBox.Show("goRead Problem: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    End If
+                End Try
+            Case Else
+                If IS_64BIT Then Exit Function
                 Select Case bitType
                     Case 0 To 7
                         goRead = quickRead8(romAddrStart + offsetAddress, emulator)
@@ -1876,10 +1880,9 @@ Public Class frmTrackerOfTime
                     Case Else
                         goRead = quickRead32(romAddrStart + offsetAddress, emulator)
                 End Select
-            End If
-        End If
+        End Select
     End Function
-    Private Function quickRead8(ByVal readAddress As Integer, Optional ByVal sTarget As String = "project64") As Integer
+    Private Function quickRead8(ByVal readAddress As Integer, ByVal sTarget As String) As Integer
         quickRead8 = 0
 
         Dim p As Process = Nothing
@@ -1887,7 +1890,7 @@ Public Class frmTrackerOfTime
             p = Process.GetProcessesByName(sTarget)(0)
         Else
             stopScanning()
-            MessageBox.Show(sTarget & " is not open!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            'MessageBox.Show(sTarget & " is not open!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Function
         End If
         Try
@@ -1897,7 +1900,7 @@ Public Class frmTrackerOfTime
             MessageBox.Show("quickRead Problem: " & vbCrLf & ex.Message & vbCrLf & readAddress.ToString, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End Try
     End Function
-    Private Function quickRead16(ByVal readAddress As Integer, Optional ByVal sTarget As String = "project64") As Integer
+    Private Function quickRead16(ByVal readAddress As Integer, ByVal sTarget As String) As Integer
         quickRead16 = 0
 
         Dim p As Process = Nothing
@@ -1905,7 +1908,7 @@ Public Class frmTrackerOfTime
             p = Process.GetProcessesByName(sTarget)(0)
         Else
             stopScanning()
-            MessageBox.Show(sTarget & " is not open!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            'MessageBox.Show(sTarget & " is not open!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Function
         End If
         Try
@@ -1915,31 +1918,31 @@ Public Class frmTrackerOfTime
             MessageBox.Show("quickRead Problem: " & vbCrLf & ex.Message & vbCrLf & readAddress.ToString, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End Try
     End Function
-    Private Function quickRead32(ByVal readAddress As Integer, Optional ByVal sTarget As String = "project64") As Integer
+    Private Function quickRead32(ByVal readAddress As Integer, ByVal sTarget As String, Optional doStopScanning As Boolean = True) As Integer
         quickRead32 = 0
 
         Dim p As Process = Nothing
         If Process.GetProcessesByName(sTarget).Count > 0 Then
             p = Process.GetProcessesByName(sTarget)(0)
         Else
-            stopScanning()
-            MessageBox.Show(sTarget & " is not open!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            If doStopScanning Then stopScanning()
+            'MessageBox.Show(sTarget & " is not open!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Function
         End If
         Try
             quickRead32 = Memory.ReadInt32(p, readAddress)
         Catch ex As Exception
-            stopScanning()
+            If doStopScanning Then stopScanning()
             MessageBox.Show("quickRead Problem: " & vbCrLf & ex.Message & vbCrLf & readAddress.ToString, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End Try
     End Function
-    Private Sub quickWrite16(ByVal writeAddress As Integer, ByVal writeValue As Int16, Optional ByVal sTarget As String = "project64")
+    Private Sub quickWrite16(ByVal writeAddress As Integer, ByVal writeValue As Int16, ByVal sTarget As String)
         writeAddress = romAddrStart + writeAddress
         Dim p As Process = Nothing
         If Process.GetProcessesByName(sTarget).Count > 0 Then
             p = Process.GetProcessesByName(sTarget)(0)
         Else
-            MessageBox.Show(sTarget & " is not open!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            'MessageBox.Show(sTarget & " is not open!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
         Try
@@ -1948,12 +1951,12 @@ Public Class frmTrackerOfTime
             MessageBox.Show("quickWrite Problem: " & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End Try
     End Sub
-    Private Sub quickWrite(ByVal writeAddress As Integer, ByVal writeValue As Integer, Optional ByVal sTarget As String = "project64")
+    Private Sub quickWrite(ByVal writeAddress As Integer, ByVal writeValue As Integer, ByVal sTarget As String)
         Dim p As Process = Nothing
         If Process.GetProcessesByName(sTarget).Count > 0 Then
             p = Process.GetProcessesByName(sTarget)(0)
         Else
-            MessageBox.Show(sTarget & " is not open!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            'MessageBox.Show(sTarget & " is not open!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
         Try
@@ -2036,6 +2039,13 @@ Public Class frmTrackerOfTime
         ' Check both and if they are proper, 2 for full-true
         If zeldaz1 = 1514490948 Then
             If zeldaz2 = 16730 Then checkZeldaz = 2
+            '        ElseIf emulator = "project64" And False Then
+            '            Select Case romAddrStart
+            '                Case &HDFE40000 ' Rupees at DFF5A606
+            '                    romAddrStart = &HDFFB0000
+            '                Case &HDFFB0000 ' Rupees at E00CA606
+            '                    romAddrStart = &HDFE40000
+            '            End Select
         End If
 
         ' Check for the rando version only if a full-true
@@ -2052,7 +2062,8 @@ Public Class frmTrackerOfTime
     Private Sub debugInfo()
         emulator = String.Empty
         If IS_64BIT = False Then
-            emulator = "project64"
+            attachToProject64()
+            If emulator = String.Empty Then attachToM64PY()
         Else
             attachToBizHawk()
             If emulator = String.Empty Then attachToRMG()
@@ -2142,7 +2153,7 @@ Public Class frmTrackerOfTime
                 aMQ(3) = True
             End If
 
-            MQs = Hex(goRead(testSpot))
+            MQs = Hex(goRead(testSpot + 4))
             If Not keepRunning Then
                 stopScanning()
                 Exit Sub
@@ -2168,7 +2179,7 @@ Public Class frmTrackerOfTime
                 aMQ(7) = True
             End If
 
-            MQs = Hex(goRead(testSpot))
+            MQs = Hex(goRead(testSpot + 8))
             If Not keepRunning Then
                 stopScanning()
                 Exit Sub
@@ -2190,7 +2201,7 @@ Public Class frmTrackerOfTime
                 aMQ(10) = True
             End If
 
-            MQs = Hex(goRead(testSpot))
+            MQs = Hex(goRead(testSpot + 12))
             If Not keepRunning Then
                 stopScanning()
                 Exit Sub
@@ -2205,7 +2216,7 @@ Public Class frmTrackerOfTime
             End If
 
             If hits > 0 Or allZeros = 4 Then Exit For
-            If randoVer = "OOTR" Then Exit For
+            If randoVer = "OOTR6.2" Then Exit For
         Next
 
         updateMQs()
@@ -2256,27 +2267,18 @@ Public Class frmTrackerOfTime
     End Sub
     Private Sub shutupNavi()
         ' With great power, comes little care for what others have to day. Shut up Navi's timed complaints.
-        If emulator = "project64" Then
-            quickWrite16(&H11A608 + 2, 0)
-        ElseIf emulator = "variousX64" Then
-            WriteMemory(Of Int16)(romAddrStart64 + &H11A608 + 2, 0)
-        End If
+        Select Case emulator
+            Case String.Empty
+                Exit Sub
+            Case "variousX64"
+                WriteMemory(Of Int16)(romAddrStart64 + &H11A608 + 2, 0)
+            Case Else
+                quickWrite16(&H11A608 + 2, 0, emulator)
+        End Select
     End Sub
 
     Private Sub btnTest_Click(sender As Object, e As EventArgs) Handles btnTest.Click
-        makeKeysDekuTree(True)
-        makeKeysDodongosCavern(True)
-        makeKeysJabuJabusBelly(True)
-        makeKeysForestTemple(True)
-        makeKeysFireTemple(True)
-        makeKeysWaterTemple(True)
-        makeKeysSpiritTemple(True)
-        makeKeysShadowTemple(True)
-        makeKeysBottomOfTheWell(True)
-        makeKeysIceCavern(True)
-        makeKeysGerudoTrainingGround(True)
-        makeKeysGanonsCastle(True)
-        updateLabelsDungeons()
+        'debugInfo()
         If False Then
             Dim outputXX As String = String.Empty
             outputXX = "Adult:"
@@ -2347,7 +2349,24 @@ Public Class frmTrackerOfTime
         'updateSettingsPanel()
     End Sub
     Private Sub resizeForm()
+        btnTest.Visible = False
+        Button2.Visible = False
 
+        Dim setHeight As Integer = 990
+        If My.Settings.setShortForm Then
+            pnlMain.VerticalScroll.Visible = True
+            setHeight = 688
+            pnlSettings.Left = 578 + 33
+            pnlSettings.Width = 597 + 33
+        Else
+            pnlSettings.Left = 578
+            pnlSettings.Width = 597
+            pnlMain.VerticalScroll.Visible = False
+            If My.Settings.setMap Then inc(setHeight, 6)
+            If My.Settings.setExpand Then inc(setHeight, 39)
+            If My.Settings.setMap And My.Settings.setExpand Then inc(setHeight, 18)
+        End If
+        pnlMain.Width = 564 + CByte(IIf(My.Settings.setShortForm, 33, 0))
         If My.Settings.setExpand Then
             pnlWorldMap.Height = 318
             rtbLines = 14
@@ -2359,7 +2378,9 @@ Public Class frmTrackerOfTime
             rtbOutputLeft.Height = 157
             rtbOutputRight.Height = 157
         End If
-
+        pnlMain.Height = setHeight
+        pnlSettings.VerticalScroll.Visible = pnlMain.VerticalScroll.Visible
+        pnlSettings.Height = setHeight
         If My.Settings.setMap Then
             rtbOutputLeft.Top = pnlWorldMap.Top + pnlWorldMap.Height + 1
             rtbOutputRight.Top = rtbOutputLeft.Top
@@ -2367,28 +2388,32 @@ Public Class frmTrackerOfTime
             rtbOutputLeft.Top = pnlDMCrater.Top + pnlDMCrater.Height
             rtbOutputRight.Top = rtbOutputLeft.Top
         End If
-
         pnlWorldMap.Visible = My.Settings.setMap
-
-        If True Then
-            pnlHidden.Visible = False
-            Button2.Visible = False
-
-            Application.DoEvents()
-            If showSetting Then
-                Me.Width = pnlDekuTree.Location.X + pnlDekuTree.Width + 623
-            Else
-                Me.Width = pnlDekuTree.Location.X + pnlDekuTree.Width + 22
-            End If
-            Me.Height = rtbOutputRight.Location.Y + rtbOutputRight.Height + 46
+        pnlHidden.Visible = False
+        Application.DoEvents()
+        If showSetting Then
+            Me.Width = pnlMain.Width + 627 + CByte(IIf(My.Settings.setShortForm, 33, 0))
+        Else
+            Me.Width = pnlMain.Width + 26
         End If
+            Me.Height = pnlMain.Height + 52 '+ CByte(IIf(My.Settings.setMap, 0, 1))
+        redrawOutputBoarder()
+        If My.Settings.setShortForm Then ' pnlMain.VerticalScroll.Value >= pnlMain.VerticalScroll.Maximum - pnlMain.Height Then
+            Me.CreateGraphics.DrawLine(New Pen(Me.ForeColor, 1), 6, Me.Height - 45, rtbOutputLeft.Width + 7, Me.Height - 45)
+        Else
+            Me.CreateGraphics.DrawLine(New Pen(Me.BackColor, 1), 6, Me.Height - 45, rtbOutputLeft.Width + 7, Me.Height - 45)
+        End If
+    End Sub
+    Private Sub redrawOutputBoarder()
         Dim gfx As Graphics = Me.CreateGraphics
-        gfx = Me.CreateGraphics
+        gfx = pnlMain.CreateGraphics
         With rtbOutputLeft
             gfx.DrawRectangle(New Pen(Me.BackColor, 1), .Location.X - 1, .Location.Y - 1, .Width + 1, .Height + 20)
             gfx.DrawRectangle(New Pen(Me.ForeColor, 1), .Location.X - 1, .Location.Y - 1, .Width + 1, .Height + 1)
         End With
     End Sub
+
+
 
     Private Sub displayChecks(ByVal area As String, ByVal showChecked As Boolean, Optional setCounter As Boolean = True)
         'getWarps()
@@ -3165,7 +3190,7 @@ Public Class frmTrackerOfTime
                 addArea(7, asAdult)
                 addArea(56, asAdult)
                 If asAdult Then
-                    If item("epona") Or item("longshot") Or checkLoc("6208") Or checkLoc("CARD") Then addArea(45, asAdult)
+                    If item("epona") Or item("longshot") Or checkLoc("CARD") Then addArea(45, asAdult)
                     If item("longshot") Then addArea(57, asAdult)
                 Else
                     addArea(57, asAdult)
@@ -3175,7 +3200,7 @@ Public Class frmTrackerOfTime
                 addArea(46, asAdult)
                 addArea(56, asAdult)
                 If asAdult Then
-                    If item("epona") Or item("longshot") Or checkLoc("6208") Or checkLoc("CARD") Then addArea(44, asAdult)
+                    If item("epona") Or item("longshot") Or checkLoc("CARD") Then addArea(44, asAdult)
                     If canHoverTricks() Then addArea(57, asAdult)
                 Else
                     addArea(44, asAdult)
@@ -3366,7 +3391,7 @@ Public Class frmTrackerOfTime
                     If canExplode() Or (item("lift") And My.Settings.setDCLightEyes And (item("din's fire") Or My.Settings.setDCSpikeJump Or item("hammer") Or item("hover boots") Or item("hookshot"))) Then addArea(78, asAdult)
                 Else
                     If (item("deku stick") Or item("din's fire")) And item("lift") Then addArea(75, asAdult)
-                    If canExplode() Or (item("lift") And My.Settings.setDCLightEyes And (item("deku stick") Or item("din's fire"))) Then addArea(78, asAdult)
+                    If canExplode() Or (item("lift") And My.Settings.setDCLightEyes And (item("deku stick") Or item("din's fire"))) Then addArea(77, asAdult)
                 End If
             Case 75
                 ' DC MQ: Lower Right Side to Bomb Bag Area
@@ -3433,7 +3458,6 @@ Public Class frmTrackerOfTime
                 ' JB MQ: Boss Area to Main
                 addArea(84, asAdult)
             Case 88
-                canDungeon(3) = False
                 If Not aMQ(3) Then
                     ' 88	FoT Lobby
                     ' 89	FoT NW Outdoors
@@ -3448,7 +3472,11 @@ Public Class frmTrackerOfTime
 
                     ' FoT Keys in Dungeon
                     If asAdult And My.Settings.setSmallKeys = 0 Then
-                        If item("lift", 1) And item("bow") And ((item("hover boots") And item("hookshot")) Or Not My.Settings.setFoTFrame) Then canDungeon(3) = True
+                        If item("lift", 1) And item("bow") And ((item("hover boots") And item("hookshot")) Or Not My.Settings.setFoTFrame) Then
+                            canDungeon(3) = True
+                        Else
+                            canDungeon(3) = False
+                        End If
                     End If
 
                     ' FoT: Lobby to Block Push Room, NW Outdoors, NE Outdoors, Boss Region
@@ -3478,7 +3506,11 @@ Public Class frmTrackerOfTime
                     ' FoT MQ Keys in Dungeon
                     If asAdult And My.Settings.setSmallKeys = 0 Then
                         If item("bow") And item("song of time") And ((item("lift") And Not My.Settings.setFoTMQPuzzle) Or (My.Settings.setFoTMQPuzzle And item("bombchu") And item("hookshot"))) And _
-                            ((item("hover boots") And (item("hookshot") Or Not My.Settings.setFoTBackdoor)) Or Not My.Settings.setFoTMQTwisted) Then canDungeon(3) = True
+                            ((item("hover boots") And (item("hookshot") Or Not My.Settings.setFoTBackdoor)) Or Not My.Settings.setFoTMQTwisted) Then
+                            canDungeon(3) = True
+                        Else
+                            canDungeon(3) = False
+                        End If
                     End If
 
                     ' FoT MQ: Lobby to Central Area
@@ -3540,7 +3572,7 @@ Public Class frmTrackerOfTime
                         addArea(101, asAdult)
                         addArea(102, asAdult)
                     End If
-                    If checkLoc("10628") Or (checkLoc("10629") And checkLoc("10630") And checkLoc("10631") And item("bow")) Then addArea(107, asAdult)
+                    If canDungeon(3) Or checkLoc("10628") Or (checkLoc("10629") And checkLoc("10630") And checkLoc("10631") And item("bow")) Then addArea(107, asAdult)
                     If item("lift") Or (My.Settings.setFoTMQPuzzle And item("bombchu") And item("hookshot")) Then addArea(99, asAdult)
                     If My.Settings.setFoTMQTwisted And item("hover boots") Then addArea(100, asAdult)
                 Else
@@ -3585,7 +3617,6 @@ Public Class frmTrackerOfTime
                 ' FoT MQ: Falling Room to NE Outdoors Ledge
                 addArea(104, asAdult)
             Case 108
-                canDungeon(4) = False
                 If Not aMQ(4) Then
                     ' 108	FiT Lower
                     ' 109	FiT Big Lava Room
@@ -3596,7 +3627,11 @@ Public Class frmTrackerOfTime
                     ' FiT Keys in Dungeon
                     If asAdult And My.Settings.setSmallKeys = 0 Then
                         If item("goron tunic") And item("hammer") And item("bow") And canExplode() And (item("lift") Or My.Settings.setFiTClimb) And _
-                            (item("scarecrow") Or (My.Settings.setFiTScarecrow And item("longshot"))) And (item("hover boots") Or Not My.Settings.setFiTMaze) Then canDungeon(4) = True
+                            (item("scarecrow") Or (My.Settings.setFiTScarecrow And item("longshot"))) And (item("hover boots") Or Not My.Settings.setFiTMaze) Then
+                            canDungeon(4) = True
+                        Else
+                            canDungeon(4) = False
+                        End If
                     End If
 
                     ' FiT: Lower to Big Lava Room, Boss Loop
@@ -3613,7 +3648,11 @@ Public Class frmTrackerOfTime
 
                     ' FiT MQ Keys in Dungeon
                     If asAdult And My.Settings.setSmallKeys = 0 Then
-                        If item("goron tunic") And item("hammer") And item("hover boots") And item("bow") And item("hookshot") And canExplode() And canBurnAdult() Then canDungeon(4) = True
+                        If item("goron tunic") And item("hammer") And item("hover boots") And item("bow") And item("hookshot") And canExplode() And canBurnAdult() Then
+                            canDungeon(4) = True
+                        Else
+                            canDungeon(4) = False
+                        End If
                     End If
 
                     ' FiT MQ: Lower to Boss Room, Big Lava Room, Lower Locked Door
@@ -3648,9 +3687,7 @@ Public Class frmTrackerOfTime
                 ' This is not normally there, but this will prevent failed checks
                 If asAdult And item("goron tunic") And item("hammer") Then addArea(118, asAdult)
             Case 119
-                canDungeon(5) = False
                 If Not aMQ(5) Then
-
                     ' 119	WaT Lobby
                     ' 120	WaT Highest Water Level
                     ' 121	WaT Dive
@@ -3663,7 +3700,12 @@ Public Class frmTrackerOfTime
 
                     ' WaT Keys in Dungeon
                     If asAdult And My.Settings.setSmallKeys = 0 Then
-                        If item("longshot") And item("zelda's lullaby") And item("song of time") And item("lift") And item("bow") And item("iron boots") And item("zora tunic") And canExplode() Then canDungeon(5) = True
+                        If item("longshot") And item("zelda's lullaby") And item("song of time") And item("lift") And item("bow") And item("iron boots") And item("zora tunic") And canExplode() Then
+                            canDungeon(5) = True
+                        Else
+                            canDungeon(5) = False
+                        End If
+
                     End If
 
                     ' WaT: Lobby to Highest Water Level, Dive
@@ -3682,7 +3724,11 @@ Public Class frmTrackerOfTime
 
                     ' WaT MQ Keys in Dungeon
                     If asAdult And My.Settings.setSmallKeys = 0 Then
-                        If item("longshot") And item("din's fire") And item("zora tunic") And item("song of time") And item("zelda's lullaby") And item("iron boots") And (item("hover boots") Or item("scarecrow")) Then canDungeon(5) = True
+                        If item("longshot") And item("din's fire") And item("zora tunic") And item("song of time") And item("zelda's lullaby") And item("iron boots") And (item("hover boots") Or item("scarecrow")) Then
+                            canDungeon(5) = True
+                        Else
+                            canDungeon(5) = False
+                        End If
                     End If
 
                     ' WaT MQ: Lobby to Dive, Dark Link Region
@@ -3723,7 +3769,6 @@ Public Class frmTrackerOfTime
                 ' WaT MQ: Dark Link Region to Basement Grated Areas
                 If asAdult And canFewerZora() And item("din's fire") And item("iron boots") Then addArea(131, asAdult)
             Case 132
-                canDungeon(6) = False
                 If Not aMQ(6) Then
                     ' 132	SpT Lobby
                     ' 133	SpT Child
@@ -3739,7 +3784,12 @@ Public Class frmTrackerOfTime
                     ' SpT Keys in Dungeon
                     If aReachY(132) And aReachA(132) And My.Settings.setSmallKeys = 0 Then
                         If item("lift", 2) And canExplode() And item("hookshot") And item("zelda's lullaby") And item("hover boots") And item("mirror shield") And (My.Settings.setSpTLensless Or item("lens of truth")) And _
-                            canProjectile(1) And (item("boomerang") Or item("slingshot")) And (item("din's fire") Or item("fire arrows")) Then canDungeon(6) = True
+                            canProjectile(1) And (item("boomerang") Or item("slingshot")) And (item("din's fire") Or item("fire arrows")) Then
+                            canDungeon(6) = True
+                        Else
+                            canDungeon(6) = False
+                        End If
+
                     End If
 
                     ' SpT: Lobby to Early Adult, Central Chamber, Child 
@@ -3764,7 +3814,12 @@ Public Class frmTrackerOfTime
                     If aReachY(132) And aReachA(132) And My.Settings.setSmallKeys = 0 Then
                         If item("longshot") And item("bombchus") And item("slingshot") And item("din's fire") And item("zelda's lullaby") And item("song of time") And item("hammer") And item("mirror shield") And item("bow") And _
                             (My.Settings.setSpTLensless Or item("lens of truth")) And (item("fire arrows") Or My.Settings.setSpTMQLowAdult) And _
-                            (item("deku sticks") Or item("kokiri sword") Or item("bombs")) Then canDungeon(6) = True
+                            (item("deku sticks") Or item("kokiri sword") Or item("bombs")) Then
+                            canDungeon(6) = True
+                        Else
+                            canDungeon(6) = False
+                        End If
+
                     End If
 
                     ' SpT MQ: Lobby to Child, Adult
@@ -3832,7 +3887,6 @@ Public Class frmTrackerOfTime
                 ' SpT MQ: Silver Gauntlets Hand to DC
                 addArea(50, asAdult)
             Case 150
-                canDungeon(7) = False
                 If Not aMQ(7) Then
                     ' 150	ShT Entryway
                     ' 151	ShT Beginning
@@ -3849,7 +3903,11 @@ Public Class frmTrackerOfTime
                     If asAdult And My.Settings.setSmallKeys = 0 Then
                         If item("hover boots") And item("hookshot") And item("zelda's lullaby") And item("din's fire") And canExplode() And (item("lift") Or My.Settings.setShTUmbrella) And _
                             (item("lens of truth") Or (My.Settings.setShTLensless And My.Settings.setShTPlatform)) And _
-                            ((item("bow") Or item("scarecrow", 2)) And (item("bombchus") Or Not My.Settings.setShTStatue)) Then canDungeon(7) = True
+                            ((item("bow") Or item("scarecrow", 2)) And (item("bombchus") Or Not My.Settings.setShTStatue)) Then
+                            canDungeon(7) = True
+                        Else
+                            canDungeon(7) = False
+                        End If
                     End If
 
                     ' ShT: Entry to Beginning
@@ -3874,7 +3932,11 @@ Public Class frmTrackerOfTime
                     ' ShT MQ Keys in Dungeon
                     If asAdult And My.Settings.setSmallKeys = 0 Then
                         If item("bow") And item("hover boots") And item("longshot") And item("song of time") And item("zelda's lullaby") And canExplode() And (item("lift") Or My.Settings.setShTUmbrella) And _
-                            (canBurnAdult() Or My.Settings.setShTMQPit) And (item("lens of truth") Or (My.Settings.setShTLensless And My.Settings.setShTPlatform)) Then canDungeon(7) = True
+                            (canBurnAdult() Or My.Settings.setShTMQPit) And (item("lens of truth") Or (My.Settings.setShTLensless And My.Settings.setShTPlatform)) Then
+                            canDungeon(7) = True
+                        Else
+                            canDungeon(7) = False
+                        End If
                     End If
 
                     ' ShT MQ: Entry to Beginning
@@ -3954,7 +4016,6 @@ Public Class frmTrackerOfTime
                     If (item("bow") Or (My.Settings.setShTStatue And item("bombchu")) Or checkLoc("11016")) And item("hover boots") Then addArea(173, asAdult)
                 End If
             Case 174
-                canDungeon(8) = False
                 If Not aMQ(8) Then
                     ' 174	BotW Entrance
                     ' 175	BotW Main Area
@@ -3963,7 +4024,11 @@ Public Class frmTrackerOfTime
                     ' BotW Keys in Dungeon
                     If Not asAdult And My.Settings.setSmallKeys = 0 Then
                         If item("zelda's lullaby") And canExplode() And (item("lens of truth") Or My.Settings.setBotWLensless) And (item("deku stick") Or item("din's fire")) And _
-                            (item("kokiri sword") Or (item("deku stick") And My.Settings.setBotWDeadHand)) Then canDungeon(8) = True
+                            (item("kokiri sword") Or (item("deku stick") And My.Settings.setBotWDeadHand)) Then
+                            canDungeon(8) = True
+                        Else
+                            canDungeon(8) = False
+                        End If
                     End If
 
                     ' BotW: Entrance to Main Area
@@ -3975,7 +4040,11 @@ Public Class frmTrackerOfTime
                     ' BotW MQ Keys in Dungeon
                     If Not asAdult And My.Settings.setSmallKeys = 0 Then
                         If canExplode() And (item("lens of truth") Or My.Settings.setBotWLensless) And (item("kokiri sword") Or (item("deku stick") And My.Settings.setBotWDeadHand)) And _
-                            (item("zelda's lullaby") Or My.Settings.setBotWMQPits) Then canDungeon(8) = True
+                            (item("zelda's lullaby") Or My.Settings.setBotWMQPits) Then
+                            canDungeon(8) = True
+                        Else
+                            canDungeon(8) = False
+                        End If
                     End If
 
                     ' BotW MQ: Entrance and Perimeter to Middle
@@ -3985,7 +4054,6 @@ Public Class frmTrackerOfTime
                 ' BotW: Main Area Main Area with Lens of Truth Check
                 If My.Settings.setBotWLensless Or item("lens of truth") Then addArea(176, asAdult)
             Case 179
-                canDungeon(10) = False
                 If Not aMQ(10) Then
                     ' 179	GTG Lobby and Central Maze
                     ' 180	GTG Central Maze Right
@@ -3999,7 +4067,11 @@ Public Class frmTrackerOfTime
                     ' GTG Keys in Dungeon
                     If asAdult And My.Settings.setSmallKeys = 0 Then
                         If item("bow") And item("hammer") And item("hookshot") And item("iron boots") And item("song of time") And item("lift", 2) And canExplode() And canFewerZora() And _
-                            (item("lens of truth") Or My.Settings.setLensOfTruth) Then canDungeon(10) = True
+                            (item("lens of truth") Or My.Settings.setLensOfTruth) Then
+                            canDungeon(10) = True
+                        Else
+                            canDungeon(10) = False
+                        End If
                     End If
 
                     ' GTG: Lobby and Central Maze to Central Maze Right, Lava Room, Heavy Block Room
@@ -4022,7 +4094,11 @@ Public Class frmTrackerOfTime
                     ' GTG MQ Keys in Dungeon
                     If asAdult And My.Settings.setSmallKeys = 0 Then
                         If item("bottle") And item("bow") And item("hammer") And item("hover boots") And item("iron boots") And item("longshot") And item("song of time") And _
-                            item("lift", 2) And canBurnAdult() And canFewerZora() And (item("lens of truth") Or My.Settings.setLensOfTruth) Then canDungeon(10) = True
+                            item("lift", 2) And canBurnAdult() And canFewerZora() And (item("lens of truth") Or My.Settings.setLensOfTruth) Then
+                            canDungeon(10) = True
+                        Else
+                            canDungeon(10) = False
+                        End If
                     End If
 
                     ' GTG MQ: Lobby to Left Side, Right Side
@@ -4417,9 +4493,6 @@ Public Class frmTrackerOfTime
         If randoVer = "AP" Then
             ' AP is offset by 16 bytes
             inc(startAddress, 16)
-        ElseIf Not randoVer = "OOTR" Then
-            ' If not AP or OOTR, abort this check
-            Return False
         End If
 
         Dim conditionLACS As Byte = CByte(goRead(startAddress, 1))
@@ -4622,7 +4695,6 @@ Public Class frmTrackerOfTime
         End If
 
         Dim tempString As String = String.Empty
-
 
         ' Step through the a-w for the basic inventory check
         For i = 97 To 119
@@ -6812,7 +6884,7 @@ Public Class frmTrackerOfTime
             .name = "Storms Grotto Front"
             .zone = 45
             .scrub = True
-            .logic = "Z"
+            .logic = "ZG02"
         End With
         inc(tk)
         With aKeys(tk)
@@ -6821,7 +6893,7 @@ Public Class frmTrackerOfTime
             .zone = 45
             .name = "Storms Grotto Back"
             .scrub = True
-            .logic = "Z"
+            .logic = "ZG02"
         End With
         inc(tk)
     End Sub
@@ -10313,14 +10385,14 @@ Public Class frmTrackerOfTime
                 .area = "SHTD"
                 .zone = 172
                 .name = "Spike Walls Left Chest"
-                .logic = "fGCE"
+                .logic = "ZfGCE"
             End With
             With aKeysDungeons(7)(17)
                 .loc = "3811"
                 .area = "SHTD"
                 .zone = 172
                 .name = "Boss Key Chest"
-                .logic = "fGCE"
+                .logic = "ZfGCE"
             End With
             With aKeysDungeons(7)(18)
                 .loc = "3813"
@@ -12110,7 +12182,7 @@ Public Class frmTrackerOfTime
                 ' Convert to hex and attach to first half
                 hexR15 = Hex(readR15) & hexR15
                 romAddrStart64 = CLng("&H" & hexR15) + attemptAdded
-                If ReadMemory(Of Integer)(romAddrStart64 + &H11A5D0) = 529 Then nextAttempt = False
+                If ReadMemory(Of Integer)(romAddrStart64 + &H11A5EC) = 1514490948 Then nextAttempt = False
             End If
         End If
         If nextAttempt Then attachToM64P(CByte(attempt + 1))
@@ -12200,50 +12272,99 @@ Public Class frmTrackerOfTime
                 End Select
                 romAddrStart64 = addressDLL + attemptOffset
                 SetProcessName("retroarch")
-
-                If ReadMemory(Of Integer)(romAddrStart64 + &H11A5D0) = 529 Then Exit For
+                If ReadMemory(Of Integer)(romAddrStart64 + &H11A5EC) = 1514490948 Then Exit For
             Next
 
             emulator = "retroarch - parallel"
         End If
 
     End Sub
+    Private Sub attachToProject64()
+        emulator = String.Empty
+        If IS_64BIT Then Exit Sub
+        For i = 0 To 1
+            Select Case i
+                Case 0
+                    romAddrStart = &HDFE40000
+                Case 1
+                    romAddrStart = &HDFFB0000
+                Case Else
+                    Exit Sub
+            End Select
+            If quickRead32(romAddrStart + &H11A5EC, "project64", False) = 1514490948 Then
+                emulator = "project64"
+                Exit For
+            End If
+        Next
+    End Sub
+    Private Sub attachToM64PY()
+        emulator = String.Empty
+        If IS_64BIT Then Exit Sub
+        Dim target As Process = Nothing
+        Try
+            ' Try to attach to application
+            target = Process.GetProcessesByName("m64py")(0)
+        Catch ex As Exception
+            If ex.Message = "Index was outside the bounds of the array." Then
+                ' This is the expected error if process was not found, just return
+                Return
+            Else
+                ' Any other error, output error message to textbox
+                rtbOutputLeft.Text = "Attachment Problem: " & ex.Message & vbCrLf
+                Return
+            End If
+        End Try
+
+        ' Prepare new address variable
+        Dim addressDLL As Int64 = 0
+
+        For Each mo As ProcessModule In target.Modules
+            If LCase(mo.ModuleName) = "mupen64plus-audio-sdl.dll" Then
+                addressDLL = mo.BaseAddress.ToInt64
+                Exit For
+            End If
+        Next
+
+        If addressDLL <> 0 Then
+            SetProcessName("m64py")
+            romAddrStart = ReadMemory(Of Integer)(addressDLL + &H172060)
+            If ReadMemory(Of Integer)(romAddrStart + &H11A5EC) = 1514490948 Then emulator = "m64py"
+        End If
+    End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        'updateItems()
-        'Exit Sub
-
-        'attachToBizHawk()
-        If emulator = "variousX64" Then
-            'WriteMemory(Of Integer)(romAddrStart64 + &H11B4AC, &H10203)
-            WriteMemory(Of Integer)(romAddrStart64 + &H11A644, &H10203)
-            WriteMemory(Of Integer)(romAddrStart64 + &H11A648, &H4050608)
-            WriteMemory(Of Integer)(romAddrStart64 + &H11A64C, &H90B0C0D)
-            WriteMemory(Of Integer)(romAddrStart64 + &H11A650, &HE0F1011)
-            WriteMemory(Of Integer)(romAddrStart64 + &H11A654, &H12131818)
-            WriteMemory(Of Integer)(romAddrStart64 + &H11A658, &H1418372B)
-            WriteMemory(Of Integer)(romAddrStart64 + &H11A65C, &H1E28281B)
-            WriteMemory(Of Integer)(romAddrStart64 + &H11A660, &H2B00)
-            WriteMemory(Of Integer)(romAddrStart64 + &H11A664, &H2B000000)
-            WriteMemory(Of Integer)(romAddrStart64 + &H11A668, &HA0A)
-            WriteMemory(Of Integer)(romAddrStart64 + &H11A66C, &H77770000)
-            WriteMemory(Of Integer)(romAddrStart64 + &H11A670, &H36E4DB)
-            WriteMemory(Of Integer)(romAddrStart64 + &H11A674, &H7FFFFF)
-        ElseIf emulator = "project64" And IS_64BIT = False Then
-            quickWrite(romAddrStart + &H11A644, &H10203)
-            quickWrite(romAddrStart + &H11A648, &H4050608)
-            quickWrite(romAddrStart + &H11A64C, &H90B0C0D)
-            quickWrite(romAddrStart + &H11A650, &HE0F1011)
-            quickWrite(romAddrStart + &H11A654, &H12131818)
-            quickWrite(romAddrStart + &H11A658, &H1818372B)
-            quickWrite(romAddrStart + &H11A65C, &H1E28281B)
-            quickWrite(romAddrStart + &H11A660, &H2B00)
-            quickWrite(romAddrStart + &H11A664, &H2B000000)
-            quickWrite(romAddrStart + &H11A668, &HA0A)
-            quickWrite(romAddrStart + &H11A66C, &H77770000)
-            quickWrite(romAddrStart + &H11A670, &H36E4DB)
-            quickWrite(romAddrStart + &H11A674, &H7FFFFF)
-        End If
+        Select Case emulator
+            Case String.Empty
+                Exit Sub
+            Case "variousX64"
+                WriteMemory(Of Integer)(romAddrStart64 + &H11A644, &H10203)
+                WriteMemory(Of Integer)(romAddrStart64 + &H11A648, &H4050608)
+                WriteMemory(Of Integer)(romAddrStart64 + &H11A64C, &H90B0C0D)
+                WriteMemory(Of Integer)(romAddrStart64 + &H11A650, &HE0F1011)
+                WriteMemory(Of Integer)(romAddrStart64 + &H11A654, &H12131818)
+                WriteMemory(Of Integer)(romAddrStart64 + &H11A658, &H1418372B)
+                WriteMemory(Of Integer)(romAddrStart64 + &H11A65C, &H1E28281B)
+                WriteMemory(Of Integer)(romAddrStart64 + &H11A660, &H2B00)
+                WriteMemory(Of Integer)(romAddrStart64 + &H11A664, &H2B000000)
+                WriteMemory(Of Integer)(romAddrStart64 + &H11A668, &HA0A)
+                WriteMemory(Of Integer)(romAddrStart64 + &H11A66C, &H77770000)
+                WriteMemory(Of Integer)(romAddrStart64 + &H11A670, &H36E4DB)
+                WriteMemory(Of Integer)(romAddrStart64 + &H11A674, &H7FFFFF)
+            Case Else
+                quickWrite(romAddrStart + &H11A644, &H10203, emulator)
+                quickWrite(romAddrStart + &H11A648, &H4050608, emulator)
+                quickWrite(romAddrStart + &H11A64C, &H90B0C0D, emulator)
+                quickWrite(romAddrStart + &H11A650, &HE0F1011, emulator)
+                quickWrite(romAddrStart + &H11A654, &H12131818, emulator)
+                quickWrite(romAddrStart + &H11A658, &H1818372B, emulator)
+                quickWrite(romAddrStart + &H11A65C, &H1E28281B, emulator)
+                quickWrite(romAddrStart + &H11A660, &H2B00, emulator)
+                quickWrite(romAddrStart + &H11A664, &H2B000000, emulator)
+                quickWrite(romAddrStart + &H11A668, &HA0A, emulator)
+                quickWrite(romAddrStart + &H11A66C, &H77770000, emulator)
+                quickWrite(romAddrStart + &H11A670, &H36E4DB, emulator)
+                quickWrite(romAddrStart + &H11A674, &H7FFFFF, emulator)
+        End Select
     End Sub
 
     Private Sub clearItems()
@@ -12530,6 +12651,7 @@ Public Class frmTrackerOfTime
         rtbDoubleClicks(rtb, e, True)
     End Sub
     Private Sub rtbDoubleClicks(ByVal rtb As RichTextBox, e As MouseEventArgs, Optional right As Boolean = False)
+        If rtbOutputLeft.Text = Nothing Then Return
         With rtb
             ' Get the double-clicked location
             Dim clickPos As Integer = .GetCharIndexFromPosition(e.Location)
@@ -12741,7 +12863,7 @@ Public Class frmTrackerOfTime
     End Sub
     Private Sub frmTrackerOfTime_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
         Dim pnFore As Pen = New Pen(Me.ForeColor, 1)
-        If showSetting Then e.Graphics.DrawLine(pnFore, pnlDekuTree.Location.X + pnlDekuTree.Width + 6, 0, pnlDekuTree.Location.X + pnlDekuTree.Width + 6, Me.Height)
+        If showSetting Then e.Graphics.DrawLine(pnFore, pnlMain.Width + 10, 0, pnlMain.Width + 10, Me.Height)
         updateSettingsPanel()
     End Sub
     Private Sub frmTrackerOfTime_Resize(sender As Object, e As EventArgs) Handles Me.Resize
@@ -12889,9 +13011,30 @@ Public Class frmTrackerOfTime
             Case lcxShowMap.Text
                 My.Settings.setMap = Not My.Settings.setMap
                 resizeForm()
+                If My.Settings.setShortForm Then
+                    showSetting = Not showSetting
+                    updateShowSettings()
+                    showSetting = Not showSetting
+                    updateShowSettings()
+                End If
             Case lcxExpand.Text
                 My.Settings.setExpand = Not My.Settings.setExpand
                 resizeForm()
+                If My.Settings.setShortForm Then
+                    showSetting = Not showSetting
+                    updateShowSettings()
+                    showSetting = Not showSetting
+                    updateShowSettings()
+                End If
+                tmrFixIt.Enabled = True
+            Case lcxShortForm.Text
+                My.Settings.setShortForm = Not My.Settings.setShortForm
+                resizeForm()
+                tmrFixIt.Enabled = True
+                showSetting = Not showSetting
+                updateShowSettings()
+                showSetting = Not showSetting
+                updateShowSettings()
                 'Case lcxxx.Text
                 'My.Settings.setxx = Not My.Settings.setxx
             Case lblGoldSkulltulas.Text, lblShopsanity.Text, lblSmallKeys.Text, lblInfo.Text
@@ -13041,6 +13184,8 @@ Public Class frmTrackerOfTime
             Case lcxExpand.Text
                 message = "The application is trimmed down for 1920x1080 displays. This will expand the application to see the bottom part of the overwold map, and the output box will show all checks with no cut-off." & vbCrLf & vbCrLf & _
                     "Note: Steps have been taken to reduce any cut-off of checks you can reach. It only happens in rare occasions, will be fixed once you collect a few checks from the area, and if they are reachable, they should show in place of ones you cannot reach."
+            Case lcxShortForm.Text
+                message = "Shorten the application height and adds scrollbars to allow it to fit into 1366x768 resolutions."
             Case lblInfo.Text
                 message = "A list of things to know."
                 'Case lcxxx.Text
@@ -13332,6 +13477,8 @@ Public Class frmTrackerOfTime
                                 isTrue = My.Settings.setMap
                             Case lcxExpand.Name
                                 isTrue = My.Settings.setExpand
+                            Case lcxShortForm.Name
+                                isTrue = My.Settings.setShortForm
                                 'Case lcxxx.Name
                                 'isTrue = My.Settings.setxx
                             Case Else
@@ -13976,19 +14123,27 @@ Public Class frmTrackerOfTime
         ' Checks for different rom generators
         Dim isOOTR As Boolean = False
         Dim isAP As Boolean = False
-
-        ' Both use the pattern of "0032####" for thieir requirement check location
-        If goRead(&H40B668 + 2, 15) = 50 Then isOOTR = True
-
-        ' If not OOTR, check for AP
-        If Not isOOTR Then
-            If goRead(&H40B1B0 + 2, 15) = 50 Then isAP = True
-        End If
+        Dim isRoman As Boolean = False
 
         randoVer = String.Empty
-        If isOOTR And Not isAP Then randoVer = "OOTR"
-        If isAP And Not isOOTR Then randoVer = "AP"
-        If Not isOOTR And Not isAP Then randoVer = "NONE"
+
+        ' Both use the pattern of "0032####" for thieir requirement check location
+        If goRead(&H40B668 + 2, 15) = 50 Then
+            randoVer = "OOTR6.2"
+            Return
+        End If
+        If goRead(&H40BD38 + 2, 15) = 50 Then
+            randoVer = "OOTR6.2.72"
+            Return
+        End If
+        If goRead(&H40BF80 + 2, 15) = 50 Then
+            randoVer = "ROMAN6.2.43"
+            Return
+        End If
+        If goRead(&H40B1B0 + 2, 15) = 50 Then
+            randoVer = "AP"
+            Return
+        End If
     End Sub
     Private Sub getRainbowBridge()
         ' Determine what is needed for Rainbow Bridge
@@ -13996,9 +14151,6 @@ Public Class frmTrackerOfTime
         If randoVer = "AP" Then
             ' AP is offset by 16 bytes
             inc(startAddress, 16)
-        ElseIf Not randoVer = "OOTR" Then
-            ' If not AP or OOTR, abort this check
-            Exit Sub
         End If
 
         ' Rainbow Bridge Condition
@@ -14274,7 +14426,12 @@ Public Class frmTrackerOfTime
     Private Sub tmrFixIt_Tick(sender As Object, e As EventArgs) Handles tmrFixIt.Tick
         updateSettingsPanel()
         resizeForm()
+        redrawOutputBoarder()
         tmrFixIt.Enabled = False
+    End Sub
+
+    Private Sub pnlMain_Paint(sender As Object, e As PaintEventArgs) Handles pnlMain.Paint
+        redrawOutputBoarder()
     End Sub
 End Class
 

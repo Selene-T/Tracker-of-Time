@@ -192,6 +192,7 @@ Partial Class frmTrackerOfTime
         Me.lcxTunic = New System.Windows.Forms.Label()
         Me.ltbShopsanity = New System.Windows.Forms.Label()
         Me.pnlSettings = New System.Windows.Forms.Panel()
+        Me.lcxShortForm = New System.Windows.Forms.Label()
         Me.lcxFiTScarecrow = New System.Windows.Forms.Label()
         Me.lblInfo = New System.Windows.Forms.Label()
         Me.lcxExpand = New System.Windows.Forms.Label()
@@ -406,6 +407,7 @@ Partial Class frmTrackerOfTime
         Me.pbxBrokenKnife = New System.Windows.Forms.PictureBox()
         Me.pbxBiggoronsSword = New System.Windows.Forms.PictureBox()
         Me.tmrFixIt = New System.Windows.Forms.Timer(Me.components)
+        Me.pnlMain = New System.Windows.Forms.Panel()
         Me.pnlDekuTree.SuspendLayout()
         Me.pnlDodongosCavern.SuspendLayout()
         Me.pnlKokiriForest.SuspendLayout()
@@ -557,6 +559,7 @@ Partial Class frmTrackerOfTime
         CType(Me.pbxMasterSword, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbxBrokenKnife, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbxBiggoronsSword, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pnlMain.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblDekuTree
@@ -619,7 +622,7 @@ Partial Class frmTrackerOfTime
         '
         'btnTest
         '
-        Me.btnTest.Location = New System.Drawing.Point(1085, 1075)
+        Me.btnTest.Location = New System.Drawing.Point(433, 340)
         Me.btnTest.Name = "btnTest"
         Me.btnTest.Size = New System.Drawing.Size(88, 23)
         Me.btnTest.TabIndex = 42
@@ -877,7 +880,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlDekuTree.Controls.Add(Me.lblDekuTree)
         Me.pnlDekuTree.Controls.Add(Me.checkMQ1)
-        Me.pnlDekuTree.Location = New System.Drawing.Point(380, 550)
+        Me.pnlDekuTree.Location = New System.Drawing.Point(375, 543)
         Me.pnlDekuTree.Name = "pnlDekuTree"
         Me.pnlDekuTree.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlDekuTree.Size = New System.Drawing.Size(188, 25)
@@ -887,7 +890,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlDodongosCavern.Controls.Add(Me.lblDodongosCavern)
         Me.pnlDodongosCavern.Controls.Add(Me.checkMQ2)
-        Me.pnlDodongosCavern.Location = New System.Drawing.Point(380, 574)
+        Me.pnlDodongosCavern.Location = New System.Drawing.Point(375, 567)
         Me.pnlDodongosCavern.Name = "pnlDodongosCavern"
         Me.pnlDodongosCavern.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlDodongosCavern.Size = New System.Drawing.Size(188, 25)
@@ -896,7 +899,7 @@ Partial Class frmTrackerOfTime
         'pnlKokiriForest
         '
         Me.pnlKokiriForest.Controls.Add(Me.lblKokiriForest)
-        Me.pnlKokiriForest.Location = New System.Drawing.Point(6, 550)
+        Me.pnlKokiriForest.Location = New System.Drawing.Point(1, 543)
         Me.pnlKokiriForest.Name = "pnlKokiriForest"
         Me.pnlKokiriForest.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlKokiriForest.Size = New System.Drawing.Size(188, 25)
@@ -905,7 +908,7 @@ Partial Class frmTrackerOfTime
         'pnlLostWoods
         '
         Me.pnlLostWoods.Controls.Add(Me.lblLostWoods)
-        Me.pnlLostWoods.Location = New System.Drawing.Point(6, 574)
+        Me.pnlLostWoods.Location = New System.Drawing.Point(1, 567)
         Me.pnlLostWoods.Name = "pnlLostWoods"
         Me.pnlLostWoods.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlLostWoods.Size = New System.Drawing.Size(188, 25)
@@ -914,7 +917,7 @@ Partial Class frmTrackerOfTime
         'pnlHyruleField
         '
         Me.pnlHyruleField.Controls.Add(Me.lblHyruleField)
-        Me.pnlHyruleField.Location = New System.Drawing.Point(6, 622)
+        Me.pnlHyruleField.Location = New System.Drawing.Point(1, 615)
         Me.pnlHyruleField.Name = "pnlHyruleField"
         Me.pnlHyruleField.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlHyruleField.Size = New System.Drawing.Size(188, 25)
@@ -923,7 +926,7 @@ Partial Class frmTrackerOfTime
         'pnlLonLonRanch
         '
         Me.pnlLonLonRanch.Controls.Add(Me.lblLonLonRanch)
-        Me.pnlLonLonRanch.Location = New System.Drawing.Point(6, 646)
+        Me.pnlLonLonRanch.Location = New System.Drawing.Point(1, 639)
         Me.pnlLonLonRanch.Name = "pnlLonLonRanch"
         Me.pnlLonLonRanch.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlLonLonRanch.Size = New System.Drawing.Size(188, 25)
@@ -932,7 +935,7 @@ Partial Class frmTrackerOfTime
         'pnlLakeHylia
         '
         Me.pnlLakeHylia.Controls.Add(Me.lblLakeHylia)
-        Me.pnlLakeHylia.Location = New System.Drawing.Point(193, 646)
+        Me.pnlLakeHylia.Location = New System.Drawing.Point(188, 639)
         Me.pnlLakeHylia.Name = "pnlLakeHylia"
         Me.pnlLakeHylia.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlLakeHylia.Size = New System.Drawing.Size(188, 25)
@@ -941,7 +944,7 @@ Partial Class frmTrackerOfTime
         'pnlGerudoValley
         '
         Me.pnlGerudoValley.Controls.Add(Me.lblGerudoValley)
-        Me.pnlGerudoValley.Location = New System.Drawing.Point(193, 670)
+        Me.pnlGerudoValley.Location = New System.Drawing.Point(188, 663)
         Me.pnlGerudoValley.Name = "pnlGerudoValley"
         Me.pnlGerudoValley.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlGerudoValley.Size = New System.Drawing.Size(188, 25)
@@ -950,7 +953,7 @@ Partial Class frmTrackerOfTime
         'pnlGerudoFortress
         '
         Me.pnlGerudoFortress.Controls.Add(Me.lblGerudoFortress)
-        Me.pnlGerudoFortress.Location = New System.Drawing.Point(193, 694)
+        Me.pnlGerudoFortress.Location = New System.Drawing.Point(188, 687)
         Me.pnlGerudoFortress.Name = "pnlGerudoFortress"
         Me.pnlGerudoFortress.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlGerudoFortress.Size = New System.Drawing.Size(188, 25)
@@ -968,7 +971,7 @@ Partial Class frmTrackerOfTime
         'pnlHauntedWasteland
         '
         Me.pnlHauntedWasteland.Controls.Add(Me.lblHauntedWasteland)
-        Me.pnlHauntedWasteland.Location = New System.Drawing.Point(193, 718)
+        Me.pnlHauntedWasteland.Location = New System.Drawing.Point(188, 711)
         Me.pnlHauntedWasteland.Name = "pnlHauntedWasteland"
         Me.pnlHauntedWasteland.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlHauntedWasteland.Size = New System.Drawing.Size(188, 25)
@@ -986,7 +989,7 @@ Partial Class frmTrackerOfTime
         'pnlDesertColossus
         '
         Me.pnlDesertColossus.Controls.Add(Me.lblDesertColossus)
-        Me.pnlDesertColossus.Location = New System.Drawing.Point(193, 742)
+        Me.pnlDesertColossus.Location = New System.Drawing.Point(188, 735)
         Me.pnlDesertColossus.Name = "pnlDesertColossus"
         Me.pnlDesertColossus.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlDesertColossus.Size = New System.Drawing.Size(188, 25)
@@ -1004,7 +1007,7 @@ Partial Class frmTrackerOfTime
         'pnlMarket
         '
         Me.pnlMarket.Controls.Add(Me.lblMarket)
-        Me.pnlMarket.Location = New System.Drawing.Point(6, 670)
+        Me.pnlMarket.Location = New System.Drawing.Point(1, 663)
         Me.pnlMarket.Name = "pnlMarket"
         Me.pnlMarket.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlMarket.Size = New System.Drawing.Size(188, 25)
@@ -1022,7 +1025,7 @@ Partial Class frmTrackerOfTime
         'pnlHyruleCastle
         '
         Me.pnlHyruleCastle.Controls.Add(Me.lblHyruleCastle)
-        Me.pnlHyruleCastle.Location = New System.Drawing.Point(6, 718)
+        Me.pnlHyruleCastle.Location = New System.Drawing.Point(1, 711)
         Me.pnlHyruleCastle.Name = "pnlHyruleCastle"
         Me.pnlHyruleCastle.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlHyruleCastle.Size = New System.Drawing.Size(188, 25)
@@ -1040,7 +1043,7 @@ Partial Class frmTrackerOfTime
         'pnlKakarikoVillage
         '
         Me.pnlKakarikoVillage.Controls.Add(Me.lblKakarikoVillage)
-        Me.pnlKakarikoVillage.Location = New System.Drawing.Point(6, 742)
+        Me.pnlKakarikoVillage.Location = New System.Drawing.Point(1, 735)
         Me.pnlKakarikoVillage.Name = "pnlKakarikoVillage"
         Me.pnlKakarikoVillage.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlKakarikoVillage.Size = New System.Drawing.Size(188, 25)
@@ -1049,7 +1052,7 @@ Partial Class frmTrackerOfTime
         'pnlGraveyard
         '
         Me.pnlGraveyard.Controls.Add(Me.lblGraveyard)
-        Me.pnlGraveyard.Location = New System.Drawing.Point(6, 766)
+        Me.pnlGraveyard.Location = New System.Drawing.Point(1, 759)
         Me.pnlGraveyard.Name = "pnlGraveyard"
         Me.pnlGraveyard.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlGraveyard.Size = New System.Drawing.Size(188, 25)
@@ -1058,7 +1061,7 @@ Partial Class frmTrackerOfTime
         'pnlDMTrail
         '
         Me.pnlDMTrail.Controls.Add(Me.lblDMTrail)
-        Me.pnlDMTrail.Location = New System.Drawing.Point(6, 790)
+        Me.pnlDMTrail.Location = New System.Drawing.Point(1, 783)
         Me.pnlDMTrail.Name = "pnlDMTrail"
         Me.pnlDMTrail.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlDMTrail.Size = New System.Drawing.Size(188, 25)
@@ -1067,7 +1070,7 @@ Partial Class frmTrackerOfTime
         'pnlDMCrater
         '
         Me.pnlDMCrater.Controls.Add(Me.lblDMCrater)
-        Me.pnlDMCrater.Location = New System.Drawing.Point(6, 814)
+        Me.pnlDMCrater.Location = New System.Drawing.Point(1, 807)
         Me.pnlDMCrater.Name = "pnlDMCrater"
         Me.pnlDMCrater.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlDMCrater.Size = New System.Drawing.Size(188, 25)
@@ -1076,7 +1079,7 @@ Partial Class frmTrackerOfTime
         'pnlGoronCity
         '
         Me.pnlGoronCity.Controls.Add(Me.lblGoronCity)
-        Me.pnlGoronCity.Location = New System.Drawing.Point(193, 550)
+        Me.pnlGoronCity.Location = New System.Drawing.Point(188, 543)
         Me.pnlGoronCity.Name = "pnlGoronCity"
         Me.pnlGoronCity.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlGoronCity.Size = New System.Drawing.Size(188, 25)
@@ -1085,7 +1088,7 @@ Partial Class frmTrackerOfTime
         'pnlZorasRiver
         '
         Me.pnlZorasRiver.Controls.Add(Me.lblZorasRiver)
-        Me.pnlZorasRiver.Location = New System.Drawing.Point(193, 574)
+        Me.pnlZorasRiver.Location = New System.Drawing.Point(188, 567)
         Me.pnlZorasRiver.Name = "pnlZorasRiver"
         Me.pnlZorasRiver.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlZorasRiver.Size = New System.Drawing.Size(188, 25)
@@ -1103,7 +1106,7 @@ Partial Class frmTrackerOfTime
         'pnlZorasDomain
         '
         Me.pnlZorasDomain.Controls.Add(Me.lblZorasDomain)
-        Me.pnlZorasDomain.Location = New System.Drawing.Point(193, 598)
+        Me.pnlZorasDomain.Location = New System.Drawing.Point(188, 591)
         Me.pnlZorasDomain.Name = "pnlZorasDomain"
         Me.pnlZorasDomain.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlZorasDomain.Size = New System.Drawing.Size(188, 25)
@@ -1113,7 +1116,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlForestTemple.Controls.Add(Me.lblForestTemple)
         Me.pnlForestTemple.Controls.Add(Me.checkMQ4)
-        Me.pnlForestTemple.Location = New System.Drawing.Point(380, 622)
+        Me.pnlForestTemple.Location = New System.Drawing.Point(375, 615)
         Me.pnlForestTemple.Name = "pnlForestTemple"
         Me.pnlForestTemple.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlForestTemple.Size = New System.Drawing.Size(188, 25)
@@ -1131,7 +1134,7 @@ Partial Class frmTrackerOfTime
         'pnlTempleOfTime
         '
         Me.pnlTempleOfTime.Controls.Add(Me.lblTempleOfTime)
-        Me.pnlTempleOfTime.Location = New System.Drawing.Point(6, 694)
+        Me.pnlTempleOfTime.Location = New System.Drawing.Point(1, 687)
         Me.pnlTempleOfTime.Name = "pnlTempleOfTime"
         Me.pnlTempleOfTime.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlTempleOfTime.Size = New System.Drawing.Size(188, 25)
@@ -1149,7 +1152,7 @@ Partial Class frmTrackerOfTime
         'pnlQuestGoldSkulltulas
         '
         Me.pnlQuestGoldSkulltulas.Controls.Add(Me.lblQuestGoldSkulltulas)
-        Me.pnlQuestGoldSkulltulas.Location = New System.Drawing.Point(193, 790)
+        Me.pnlQuestGoldSkulltulas.Location = New System.Drawing.Point(188, 783)
         Me.pnlQuestGoldSkulltulas.Name = "pnlQuestGoldSkulltulas"
         Me.pnlQuestGoldSkulltulas.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlQuestGoldSkulltulas.Size = New System.Drawing.Size(188, 25)
@@ -1167,7 +1170,7 @@ Partial Class frmTrackerOfTime
         'pnlZorasFountain
         '
         Me.pnlZorasFountain.Controls.Add(Me.lblZorasFountain)
-        Me.pnlZorasFountain.Location = New System.Drawing.Point(193, 622)
+        Me.pnlZorasFountain.Location = New System.Drawing.Point(188, 615)
         Me.pnlZorasFountain.Name = "pnlZorasFountain"
         Me.pnlZorasFountain.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlZorasFountain.Size = New System.Drawing.Size(188, 25)
@@ -1186,7 +1189,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlIceCavern.Controls.Add(Me.lblIceCavern)
         Me.pnlIceCavern.Controls.Add(Me.checkMQ10)
-        Me.pnlIceCavern.Location = New System.Drawing.Point(380, 766)
+        Me.pnlIceCavern.Location = New System.Drawing.Point(375, 759)
         Me.pnlIceCavern.Name = "pnlIceCavern"
         Me.pnlIceCavern.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlIceCavern.Size = New System.Drawing.Size(188, 25)
@@ -1204,7 +1207,7 @@ Partial Class frmTrackerOfTime
         'pnlQuestMasks
         '
         Me.pnlQuestMasks.Controls.Add(Me.lblQuestMasks)
-        Me.pnlQuestMasks.Location = New System.Drawing.Point(193, 814)
+        Me.pnlQuestMasks.Location = New System.Drawing.Point(188, 807)
         Me.pnlQuestMasks.Name = "pnlQuestMasks"
         Me.pnlQuestMasks.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlQuestMasks.Size = New System.Drawing.Size(188, 25)
@@ -1214,7 +1217,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlFireTemple.Controls.Add(Me.lblFireTemple)
         Me.pnlFireTemple.Controls.Add(Me.checkMQ5)
-        Me.pnlFireTemple.Location = New System.Drawing.Point(380, 646)
+        Me.pnlFireTemple.Location = New System.Drawing.Point(375, 639)
         Me.pnlFireTemple.Name = "pnlFireTemple"
         Me.pnlFireTemple.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlFireTemple.Size = New System.Drawing.Size(188, 25)
@@ -1224,7 +1227,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlGerudoTrainingGround.Controls.Add(Me.lblGerudoTrainingGround)
         Me.pnlGerudoTrainingGround.Controls.Add(Me.checkMQ11)
-        Me.pnlGerudoTrainingGround.Location = New System.Drawing.Point(380, 790)
+        Me.pnlGerudoTrainingGround.Location = New System.Drawing.Point(375, 783)
         Me.pnlGerudoTrainingGround.Name = "pnlGerudoTrainingGround"
         Me.pnlGerudoTrainingGround.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlGerudoTrainingGround.Size = New System.Drawing.Size(188, 25)
@@ -1244,7 +1247,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlJabuJabusBelly.Controls.Add(Me.lblJabuJabusBelly)
         Me.pnlJabuJabusBelly.Controls.Add(Me.checkMQ3)
-        Me.pnlJabuJabusBelly.Location = New System.Drawing.Point(380, 598)
+        Me.pnlJabuJabusBelly.Location = New System.Drawing.Point(375, 591)
         Me.pnlJabuJabusBelly.Name = "pnlJabuJabusBelly"
         Me.pnlJabuJabusBelly.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlJabuJabusBelly.Size = New System.Drawing.Size(188, 25)
@@ -1262,7 +1265,7 @@ Partial Class frmTrackerOfTime
         'pnlOutsideGanonsCastle
         '
         Me.pnlOutsideGanonsCastle.Controls.Add(Me.lblOutsideGanonsCastle)
-        Me.pnlOutsideGanonsCastle.Location = New System.Drawing.Point(193, 766)
+        Me.pnlOutsideGanonsCastle.Location = New System.Drawing.Point(188, 759)
         Me.pnlOutsideGanonsCastle.Name = "pnlOutsideGanonsCastle"
         Me.pnlOutsideGanonsCastle.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlOutsideGanonsCastle.Size = New System.Drawing.Size(188, 25)
@@ -1281,7 +1284,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlShadowTemple.Controls.Add(Me.lblShadowTemple)
         Me.pnlShadowTemple.Controls.Add(Me.checkMQ8)
-        Me.pnlShadowTemple.Location = New System.Drawing.Point(380, 718)
+        Me.pnlShadowTemple.Location = New System.Drawing.Point(375, 711)
         Me.pnlShadowTemple.Name = "pnlShadowTemple"
         Me.pnlShadowTemple.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlShadowTemple.Size = New System.Drawing.Size(188, 25)
@@ -1300,7 +1303,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlSpiritTemple.Controls.Add(Me.lblSpiritTemple)
         Me.pnlSpiritTemple.Controls.Add(Me.checkMQ7)
-        Me.pnlSpiritTemple.Location = New System.Drawing.Point(380, 694)
+        Me.pnlSpiritTemple.Location = New System.Drawing.Point(375, 687)
         Me.pnlSpiritTemple.Name = "pnlSpiritTemple"
         Me.pnlSpiritTemple.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlSpiritTemple.Size = New System.Drawing.Size(188, 25)
@@ -1319,7 +1322,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlBottomOfTheWell.Controls.Add(Me.lblBottomOfTheWell)
         Me.pnlBottomOfTheWell.Controls.Add(Me.checkMQ9)
-        Me.pnlBottomOfTheWell.Location = New System.Drawing.Point(380, 742)
+        Me.pnlBottomOfTheWell.Location = New System.Drawing.Point(375, 735)
         Me.pnlBottomOfTheWell.Name = "pnlBottomOfTheWell"
         Me.pnlBottomOfTheWell.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlBottomOfTheWell.Size = New System.Drawing.Size(188, 25)
@@ -1338,7 +1341,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlWaterTemple.Controls.Add(Me.lblWaterTemple)
         Me.pnlWaterTemple.Controls.Add(Me.checkMQ6)
-        Me.pnlWaterTemple.Location = New System.Drawing.Point(380, 670)
+        Me.pnlWaterTemple.Location = New System.Drawing.Point(375, 663)
         Me.pnlWaterTemple.Name = "pnlWaterTemple"
         Me.pnlWaterTemple.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlWaterTemple.Size = New System.Drawing.Size(188, 25)
@@ -1357,7 +1360,7 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlGanonsCastle.Controls.Add(Me.lblGanonsCastle)
         Me.pnlGanonsCastle.Controls.Add(Me.checkMQ12)
-        Me.pnlGanonsCastle.Location = New System.Drawing.Point(380, 814)
+        Me.pnlGanonsCastle.Location = New System.Drawing.Point(375, 807)
         Me.pnlGanonsCastle.Name = "pnlGanonsCastle"
         Me.pnlGanonsCastle.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlGanonsCastle.Size = New System.Drawing.Size(188, 25)
@@ -1376,7 +1379,7 @@ Partial Class frmTrackerOfTime
         '
         Me.rtbOutputLeft.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.rtbOutputLeft.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rtbOutputLeft.Location = New System.Drawing.Point(7, 839)
+        Me.rtbOutputLeft.Location = New System.Drawing.Point(2, 832)
         Me.rtbOutputLeft.MaxLength = 4096
         Me.rtbOutputLeft.Name = "rtbOutputLeft"
         Me.rtbOutputLeft.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
@@ -1387,7 +1390,7 @@ Partial Class frmTrackerOfTime
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(1085, 1053)
+        Me.Button2.Location = New System.Drawing.Point(433, 369)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(88, 23)
         Me.Button2.TabIndex = 221
@@ -2108,7 +2111,7 @@ Partial Class frmTrackerOfTime
         'pnlSacredForestMeadow
         '
         Me.pnlSacredForestMeadow.Controls.Add(Me.lblSacredForestMeadow)
-        Me.pnlSacredForestMeadow.Location = New System.Drawing.Point(6, 598)
+        Me.pnlSacredForestMeadow.Location = New System.Drawing.Point(1, 591)
         Me.pnlSacredForestMeadow.Name = "pnlSacredForestMeadow"
         Me.pnlSacredForestMeadow.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlSacredForestMeadow.Size = New System.Drawing.Size(188, 25)
@@ -2335,9 +2338,11 @@ Partial Class frmTrackerOfTime
         '
         'pnlSettings
         '
+        Me.pnlSettings.Controls.Add(Me.lcxShortForm)
         Me.pnlSettings.Controls.Add(Me.lcxFiTScarecrow)
         Me.pnlSettings.Controls.Add(Me.lblInfo)
         Me.pnlSettings.Controls.Add(Me.lcxExpand)
+        Me.pnlSettings.Controls.Add(Me.Button2)
         Me.pnlSettings.Controls.Add(Me.lcxShowMap)
         Me.pnlSettings.Controls.Add(Me.lcxIGCMQRustedSwitches)
         Me.pnlSettings.Controls.Add(Me.lcxIGCLensless)
@@ -2382,6 +2387,7 @@ Partial Class frmTrackerOfTime
         Me.pnlSettings.Controls.Add(Me.lcxFiTMaze)
         Me.pnlSettings.Controls.Add(Me.nlbFiTTricks)
         Me.pnlSettings.Controls.Add(Me.lcxFiTClimb)
+        Me.pnlSettings.Controls.Add(Me.btnTest)
         Me.pnlSettings.Controls.Add(Me.ltbKeys)
         Me.pnlSettings.Controls.Add(Me.lblSmallKeys)
         Me.pnlSettings.Controls.Add(Me.lcxFoTLedge)
@@ -2420,6 +2426,16 @@ Partial Class frmTrackerOfTime
         Me.pnlSettings.Size = New System.Drawing.Size(597, 1039)
         Me.pnlSettings.TabIndex = 253
         '
+        'lcxShortForm
+        '
+        Me.lcxShortForm.Location = New System.Drawing.Point(401, 250)
+        Me.lcxShortForm.Name = "lcxShortForm"
+        Me.lcxShortForm.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxShortForm.Size = New System.Drawing.Size(155, 20)
+        Me.lcxShortForm.TabIndex = 330
+        Me.lcxShortForm.Text = "Short Application"
+        Me.lcxShortForm.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
         'lcxFiTScarecrow
         '
         Me.lcxFiTScarecrow.Location = New System.Drawing.Point(201, 480)
@@ -2447,7 +2463,7 @@ Partial Class frmTrackerOfTime
         Me.lcxExpand.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxExpand.Size = New System.Drawing.Size(155, 20)
         Me.lcxExpand.TabIndex = 327
-        Me.lcxExpand.Text = "Expand Application"
+        Me.lcxExpand.Text = "Expand Map and Output"
         Me.lcxExpand.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lcxShowMap
@@ -3165,7 +3181,7 @@ Partial Class frmTrackerOfTime
         Me.pnlSongsMedals.Controls.Add(Me.pbxBoleroOfFire)
         Me.pnlSongsMedals.Controls.Add(Me.pbxMinuetOfForest)
         Me.pnlSongsMedals.Controls.Add(Me.pbxZeldasLullaby)
-        Me.pnlSongsMedals.Location = New System.Drawing.Point(6, 214)
+        Me.pnlSongsMedals.Location = New System.Drawing.Point(1, 207)
         Me.pnlSongsMedals.Name = "pnlSongsMedals"
         Me.pnlSongsMedals.Size = New System.Drawing.Size(562, 150)
         Me.pnlSongsMedals.TabIndex = 225
@@ -3389,7 +3405,7 @@ Partial Class frmTrackerOfTime
         '
         Me.rtbOutputRight.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.rtbOutputRight.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rtbOutputRight.Location = New System.Drawing.Point(285, 839)
+        Me.rtbOutputRight.Location = New System.Drawing.Point(280, 832)
         Me.rtbOutputRight.MaxLength = 4096
         Me.rtbOutputRight.Name = "rtbOutputRight"
         Me.rtbOutputRight.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
@@ -3433,7 +3449,7 @@ Partial Class frmTrackerOfTime
         Me.pnlWorldMap.Controls.Add(Me.zSFM)
         Me.pnlWorldMap.Controls.Add(Me.zLW)
         Me.pnlWorldMap.Controls.Add(Me.zKF)
-        Me.pnlWorldMap.Location = New System.Drawing.Point(6, 544)
+        Me.pnlWorldMap.Location = New System.Drawing.Point(1, 537)
         Me.pnlWorldMap.Name = "pnlWorldMap"
         Me.pnlWorldMap.Size = New System.Drawing.Size(562, 318)
         Me.pnlWorldMap.TabIndex = 326
@@ -3745,7 +3761,7 @@ Partial Class frmTrackerOfTime
         Me.pnlDungeonItems.Controls.Add(Me.pbxDCMap)
         Me.pnlDungeonItems.Controls.Add(Me.pbxDTCompass)
         Me.pnlDungeonItems.Controls.Add(Me.pbxDTMap)
-        Me.pnlDungeonItems.Location = New System.Drawing.Point(6, 364)
+        Me.pnlDungeonItems.Location = New System.Drawing.Point(1, 357)
         Me.pnlDungeonItems.Name = "pnlDungeonItems"
         Me.pnlDungeonItems.Size = New System.Drawing.Size(562, 180)
         Me.pnlDungeonItems.TabIndex = 244
@@ -4132,7 +4148,7 @@ Partial Class frmTrackerOfTime
         Me.pnlItems.Controls.Add(Me.pbx03)
         Me.pnlItems.Controls.Add(Me.pbx02)
         Me.pnlItems.Controls.Add(Me.pbx01)
-        Me.pnlItems.Location = New System.Drawing.Point(262, 8)
+        Me.pnlItems.Location = New System.Drawing.Point(257, 1)
         Me.pnlItems.Name = "pnlItems"
         Me.pnlItems.Size = New System.Drawing.Size(306, 206)
         Me.pnlItems.TabIndex = 229
@@ -4402,7 +4418,7 @@ Partial Class frmTrackerOfTime
         Me.pnlEquips.Controls.Add(Me.pbxMasterSword)
         Me.pnlEquips.Controls.Add(Me.pbxBrokenKnife)
         Me.pnlEquips.Controls.Add(Me.pbxBiggoronsSword)
-        Me.pnlEquips.Location = New System.Drawing.Point(6, 8)
+        Me.pnlEquips.Location = New System.Drawing.Point(1, 1)
         Me.pnlEquips.Name = "pnlEquips"
         Me.pnlEquips.Size = New System.Drawing.Size(256, 206)
         Me.pnlEquips.TabIndex = 224
@@ -4601,59 +4617,66 @@ Partial Class frmTrackerOfTime
         Me.tmrFixIt.Enabled = True
         Me.tmrFixIt.Interval = 1000
         '
+        'pnlMain
+        '
+        Me.pnlMain.AllowDrop = True
+        Me.pnlMain.Controls.Add(Me.rtbOutputRight)
+        Me.pnlMain.Controls.Add(Me.rtbOutputLeft)
+        Me.pnlMain.Controls.Add(Me.pnlWorldMap)
+        Me.pnlMain.Controls.Add(Me.pnlEquips)
+        Me.pnlMain.Controls.Add(Me.pnlItems)
+        Me.pnlMain.Controls.Add(Me.pnlSongsMedals)
+        Me.pnlMain.Controls.Add(Me.pnlDekuTree)
+        Me.pnlMain.Controls.Add(Me.pnlDodongosCavern)
+        Me.pnlMain.Controls.Add(Me.pnlLostWoods)
+        Me.pnlMain.Controls.Add(Me.pnlDungeonItems)
+        Me.pnlMain.Controls.Add(Me.pnlHyruleField)
+        Me.pnlMain.Controls.Add(Me.pnlLonLonRanch)
+        Me.pnlMain.Controls.Add(Me.pnlKokiriForest)
+        Me.pnlMain.Controls.Add(Me.pnlLakeHylia)
+        Me.pnlMain.Controls.Add(Me.pnlSacredForestMeadow)
+        Me.pnlMain.Controls.Add(Me.pnlGerudoFortress)
+        Me.pnlMain.Controls.Add(Me.pnlHauntedWasteland)
+        Me.pnlMain.Controls.Add(Me.pnlMarket)
+        Me.pnlMain.Controls.Add(Me.pnlGanonsCastle)
+        Me.pnlMain.Controls.Add(Me.pnlHyruleCastle)
+        Me.pnlMain.Controls.Add(Me.pnlWaterTemple)
+        Me.pnlMain.Controls.Add(Me.pnlGraveyard)
+        Me.pnlMain.Controls.Add(Me.pnlIceCavern)
+        Me.pnlMain.Controls.Add(Me.pnlDMCrater)
+        Me.pnlMain.Controls.Add(Me.pnlForestTemple)
+        Me.pnlMain.Controls.Add(Me.pnlGoronCity)
+        Me.pnlMain.Controls.Add(Me.pnlBottomOfTheWell)
+        Me.pnlMain.Controls.Add(Me.pnlGerudoValley)
+        Me.pnlMain.Controls.Add(Me.pnlSpiritTemple)
+        Me.pnlMain.Controls.Add(Me.pnlZorasRiver)
+        Me.pnlMain.Controls.Add(Me.pnlShadowTemple)
+        Me.pnlMain.Controls.Add(Me.pnlZorasDomain)
+        Me.pnlMain.Controls.Add(Me.pnlOutsideGanonsCastle)
+        Me.pnlMain.Controls.Add(Me.pnlTempleOfTime)
+        Me.pnlMain.Controls.Add(Me.pnlQuestGoldSkulltulas)
+        Me.pnlMain.Controls.Add(Me.pnlDMTrail)
+        Me.pnlMain.Controls.Add(Me.pnlJabuJabusBelly)
+        Me.pnlMain.Controls.Add(Me.pnlDesertColossus)
+        Me.pnlMain.Controls.Add(Me.pnlGerudoTrainingGround)
+        Me.pnlMain.Controls.Add(Me.pnlZorasFountain)
+        Me.pnlMain.Controls.Add(Me.pnlKakarikoVillage)
+        Me.pnlMain.Controls.Add(Me.pnlQuestMasks)
+        Me.pnlMain.Controls.Add(Me.pnlFireTemple)
+        Me.pnlMain.Location = New System.Drawing.Point(5, 7)
+        Me.pnlMain.Name = "pnlMain"
+        Me.pnlMain.Size = New System.Drawing.Size(564, 1113)
+        Me.pnlMain.TabIndex = 327
+        '
         'frmTrackerOfTime
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1175, 1209)
         Me.Controls.Add(Me.mnuOptions)
-        Me.Controls.Add(Me.rtbOutputRight)
-        Me.Controls.Add(Me.rtbOutputLeft)
-        Me.Controls.Add(Me.pnlWorldMap)
+        Me.Controls.Add(Me.pnlMain)
         Me.Controls.Add(Me.pnlSettings)
-        Me.Controls.Add(Me.pnlDungeonItems)
         Me.Controls.Add(Me.btnFocus)
-        Me.Controls.Add(Me.pnlItems)
-        Me.Controls.Add(Me.pnlKokiriForest)
-        Me.Controls.Add(Me.pnlSacredForestMeadow)
-        Me.Controls.Add(Me.pnlSongsMedals)
-        Me.Controls.Add(Me.pnlEquips)
-        Me.Controls.Add(Me.Button2)
-        Me.Controls.Add(Me.pnlGanonsCastle)
-        Me.Controls.Add(Me.pnlWaterTemple)
-        Me.Controls.Add(Me.pnlIceCavern)
-        Me.Controls.Add(Me.pnlForestTemple)
-        Me.Controls.Add(Me.pnlBottomOfTheWell)
-        Me.Controls.Add(Me.pnlSpiritTemple)
-        Me.Controls.Add(Me.pnlShadowTemple)
-        Me.Controls.Add(Me.pnlOutsideGanonsCastle)
-        Me.Controls.Add(Me.pnlQuestGoldSkulltulas)
-        Me.Controls.Add(Me.pnlJabuJabusBelly)
-        Me.Controls.Add(Me.pnlGerudoTrainingGround)
-        Me.Controls.Add(Me.pnlKakarikoVillage)
-        Me.Controls.Add(Me.pnlFireTemple)
-        Me.Controls.Add(Me.pnlQuestMasks)
-        Me.Controls.Add(Me.pnlZorasFountain)
-        Me.Controls.Add(Me.pnlDesertColossus)
-        Me.Controls.Add(Me.pnlDMTrail)
-        Me.Controls.Add(Me.pnlTempleOfTime)
-        Me.Controls.Add(Me.pnlZorasDomain)
-        Me.Controls.Add(Me.pnlZorasRiver)
-        Me.Controls.Add(Me.pnlGerudoValley)
-        Me.Controls.Add(Me.pnlGoronCity)
-        Me.Controls.Add(Me.pnlDMCrater)
-        Me.Controls.Add(Me.pnlGraveyard)
-        Me.Controls.Add(Me.pnlHyruleCastle)
-        Me.Controls.Add(Me.pnlMarket)
-        Me.Controls.Add(Me.pnlHauntedWasteland)
-        Me.Controls.Add(Me.pnlGerudoFortress)
-        Me.Controls.Add(Me.pnlLakeHylia)
-        Me.Controls.Add(Me.pnlLonLonRanch)
-        Me.Controls.Add(Me.pnlHyruleField)
-        Me.Controls.Add(Me.pnlLostWoods)
-        Me.Controls.Add(Me.pnlDodongosCavern)
-        Me.Controls.Add(Me.pnlDekuTree)
-        Me.Controls.Add(Me.btnTest)
         Me.Controls.Add(Me.pnlHidden)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MainMenuStrip = Me.mnuOptions
@@ -4850,6 +4873,7 @@ Partial Class frmTrackerOfTime
         CType(Me.pbxMasterSword, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbxBrokenKnife, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbxBiggoronsSword, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pnlMain.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -5235,5 +5259,7 @@ Partial Class frmTrackerOfTime
     Friend WithEvents lblInfo As System.Windows.Forms.Label
     Friend WithEvents tmrFixIt As System.Windows.Forms.Timer
     Friend WithEvents lcxFiTScarecrow As System.Windows.Forms.Label
+    Friend WithEvents pnlMain As System.Windows.Forms.Panel
+    Friend WithEvents lcxShortForm As System.Windows.Forms.Label
 
 End Class
