@@ -261,6 +261,7 @@ Partial Class frmTrackerOfTime
         Me.lcxDekuB1Skip = New System.Windows.Forms.Label()
         Me.lcxOpenFountain = New System.Windows.Forms.Label()
         Me.lcxOpenForest = New System.Windows.Forms.Label()
+        Me.rtbDebug = New System.Windows.Forms.RichTextBox()
         Me.pnlSongsMedals = New System.Windows.Forms.Panel()
         Me.pbxSpawnAdult = New System.Windows.Forms.PictureBox()
         Me.pbxSpawnYoung = New System.Windows.Forms.PictureBox()
@@ -2420,6 +2421,7 @@ Partial Class frmTrackerOfTime
         Me.pnlSettings.Controls.Add(Me.lcxLogic)
         Me.pnlSettings.Controls.Add(Me.lcxScrubShuffle)
         Me.pnlSettings.Controls.Add(Me.lcxCowShuffle)
+        Me.pnlSettings.Controls.Add(Me.rtbDebug)
         Me.pnlSettings.Location = New System.Drawing.Point(578, 8)
         Me.pnlSettings.Name = "pnlSettings"
         Me.pnlSettings.Padding = New System.Windows.Forms.Padding(1)
@@ -2559,7 +2561,7 @@ Partial Class frmTrackerOfTime
         Me.lcxHideSpoiler.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxHideSpoiler.Size = New System.Drawing.Size(181, 20)
         Me.lcxHideSpoiler.TabIndex = 318
-        Me.lcxHideSpoiler.Text = "Hide Various Spoiler Information"
+        Me.lcxHideSpoiler.Text = "Hide Rainbow Bridge and LAC"
         Me.lcxHideSpoiler.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'nlbGCTricks
@@ -3153,6 +3155,21 @@ Partial Class frmTrackerOfTime
         Me.lcxOpenForest.TabIndex = 256
         Me.lcxOpenForest.Text = "Open Kokiri Forest"
         Me.lcxOpenForest.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'rtbDebug
+        '
+        Me.rtbDebug.BackColor = System.Drawing.SystemColors.Control
+        Me.rtbDebug.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.rtbDebug.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.rtbDebug.Location = New System.Drawing.Point(4, 437)
+        Me.rtbDebug.MaxLength = 4096
+        Me.rtbDebug.Name = "rtbDebug"
+        Me.rtbDebug.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical
+        Me.rtbDebug.Size = New System.Drawing.Size(587, 473)
+        Me.rtbDebug.TabIndex = 331
+        Me.rtbDebug.TabStop = False
+        Me.rtbDebug.Text = ""
+        Me.rtbDebug.Visible = False
         '
         'pnlSongsMedals
         '
@@ -5261,5 +5278,6 @@ Partial Class frmTrackerOfTime
     Friend WithEvents lcxFiTScarecrow As System.Windows.Forms.Label
     Friend WithEvents pnlMain As System.Windows.Forms.Panel
     Friend WithEvents lcxShortForm As System.Windows.Forms.Label
+    Friend WithEvents rtbDebug As System.Windows.Forms.RichTextBox
 
 End Class
