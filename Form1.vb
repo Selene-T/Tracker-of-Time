@@ -9,8 +9,8 @@ Public Class frmTrackerOfTime
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 116
-    Private Const IS_64BIT As Boolean = True
-    Private Const VER As String = "3.3.1"
+    Private Const IS_64BIT As Boolean = False
+    Private Const VER As String = "3.3.2"
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private romAddrStart As Integer = &HDFE40000
@@ -2094,7 +2094,7 @@ Public Class frmTrackerOfTime
             Case "AP"
                 testSpot = &H40B220
                 startAt = 1
-            Case "OOTR6.2.72", "ROMAN6.2.43"
+            Case "OOTR6.2.72", "ROMAN6.2.43", "ROMAN6.2.72R2"
                 testSpot = &H400CF8
                 startAt = 5
             Case Else
@@ -2899,8 +2899,9 @@ Public Class frmTrackerOfTime
                 addArea(10, asAdult)
                 If item("song of time") Or checkLoc("6427") Then addArea(12, asAdult)
             Case 12
-                ' ToT Behind Door to ToT Front
+                ' ToT Behind Door to ToT Front, ToT Behind Door Both Ages
                 If checkLoc("6427") Then addArea(11, asAdult)
+                addArea(12, Not asAdult)
             Case 13
                 ' HC to MK, GFF
                 addArea(10, asAdult)
@@ -4184,7 +4185,7 @@ Public Class frmTrackerOfTime
             Case "hover boots"
                 If canAdult And checkLoc("7430") Then Return True
             Case "blue fire"
-                If allItems.Contains("u") And (allItems.Contains("w") Or aReachA(41) Or aReachA(190) Or (aReachA(193) And (Not My.Settings.setHideSpoiler Or checkLoc("6429")))) Then Return True
+                If allItems.Contains("u") And (allItems.Contains("w") Or aReachA(41) Or aReachA(190) Or aReachA(193)) Then Return True
             Case "bomb", "bombs"
                 If allItems.Contains("c") Then Return True
             Case "bombchu", "bombchus"
@@ -4339,7 +4340,7 @@ Public Class frmTrackerOfTime
         ' OGC access
         If Not aReachA(51) Then Return False
         ' If blocked by spoiler guard
-        If My.Settings.setHideSpoiler And Not checkLoc("6429") Then Return False
+        'If My.Settings.setHideSpoiler And Not checkLoc("6429") Then Return False
         ' Check if the rainbow bridge is there
         If checkLoc("6429") Then Return True
         ' Will be counting various checks
@@ -4411,7 +4412,7 @@ Public Class frmTrackerOfTime
         Select Case randoVer
             Case "AP"
                 startAddress = &H400CC4
-            Case "OOTR6.2", "ROMAN6.2.43"
+            Case "OOTR6.2", "OOTR6.2.72", "ROMAN6.2.43", "ROMAN6.2.72R2"
                 startAddress = &H400CB4
             Case Else
                 ' Unknown, will treat as Vanilla
@@ -13118,7 +13119,7 @@ Public Class frmTrackerOfTime
             Case lcxIGCLensless.Text
                 message = "Navigate Ganon's Castle and Ganon's Castle MQ without Lens of Truth."
             Case lcxHideSpoiler.Text
-                message = "Hide information that might be spoilers, such as bolding the Light Arrow Cutscene when it is ready, Ganon's Castle before triggering Rainbow Bridge, or your adult/young Link spawn locations before collecting the Song from Sheik at the pedestal."
+                message = "This will treat your Rainbow Bridge and Light Arrows Cutscene (LAC) as vanilla. Uncheck if you wish the tracker to detect and use your settings to determin logic. This will not tell you what you need to get the checks, just if you can."
             Case lcxCucco.Text
                 message = "As young Link, use a cucco to fly behind the water to enter Zora's Domain."
             Case lcxShowMap.Text
@@ -14016,12 +14017,14 @@ Public Class frmTrackerOfTime
             Case 0
                 With pbxSpawnAdult
                     .Image = My.Resources.spawnLocations
-                    If isAdult Or checkLoc("6405") Or Not My.Settings.setHideSpoiler Then Graphics.FromImage(.Image).DrawString("Adult: " & text, fontDungeon, New SolidBrush(Color.White), 0, 0)
+                    'If isAdult Or checkLoc("6405") Or Not My.Settings.setHideSpoiler Then Graphics.FromImage(.Image).DrawString("Adult: " & text, fontDungeon, New SolidBrush(Color.White), 0, 0)
+                    If isAdult Or aReachA(12) Then Graphics.FromImage(.Image).DrawString("Adult: " & text, fontDungeon, New SolidBrush(Color.White), 0, 0)
                 End With
             Case 1
                 With pbxSpawnYoung
                     .Image = My.Resources.spawnLocations
-                    If Not isAdult Or checkLoc("6405") Or Not My.Settings.setHideSpoiler Then Graphics.FromImage(.Image).DrawString("Young: " & text, fontDungeon, New SolidBrush(Color.White), 0, 0)
+                    'If Not isAdult Or checkLoc("6405") Or Not My.Settings.setHideSpoiler Then Graphics.FromImage(.Image).DrawString("Young: " & text, fontDungeon, New SolidBrush(Color.White), 0, 0)
+                    If Not isAdult Or aReachY(12) Then Graphics.FromImage(.Image).DrawString("Young: " & text, fontDungeon, New SolidBrush(Color.White), 0, 0)
                 End With
         End Select
     End Sub
@@ -14072,8 +14075,8 @@ Public Class frmTrackerOfTime
         randoVer = String.Empty
 
         ' The pattern for the Triforce Hunt is "0032####". #### is number of pieces needed to win, or 'FFFF' is not enabled
-        Dim ver() As String = {"AP", "OOTR6.2", "OOTR6.2.72", "ROMAN6.2.43"}
-        Dim addr() As Integer = {&H40B1B0, &H40B668, &H40BD38, &H40BF80}
+        Dim ver() As String = {"AP", "OOTR6.2", "OOTR6.2.72", "ROMAN6.2.43", "ROMAN6.2.72R2"}
+        Dim addr() As Integer = {&H40B1B0, &H40B668, &H40BD38, &H40BF80, &H40C3D8}
         Dim readA As Integer = 0
         Dim readB As Integer = 0
         For i = 0 To ver.Length - 1
@@ -14094,7 +14097,7 @@ Public Class frmTrackerOfTime
         Select Case randoVer
             Case "AP"
                 startAddress = &H400CC0
-            Case "OOTR6.2", "OOTR6.2.72", "ROMAN6.2.43"
+            Case "OOTR6.2", "OOTR6.2.72", "ROMAN6.2.43", "ROMAN6.2.72R2"
                 startAddress = &H400CB0
             Case Else
                 ' Unknown, will treat as Vanilla
