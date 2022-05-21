@@ -9,8 +9,8 @@ Public Class frmTrackerOfTime
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 116
-    Private Const IS_64BIT As Boolean = False
-    Private Const VER As String = "3.3.2"
+    Private Const IS_64BIT As Boolean = True
+    Private Const VER As String = "3.3.3"
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private romAddrStart As Integer = &HDFE40000
@@ -1200,7 +1200,7 @@ Public Class frmTrackerOfTime
     End Sub
     Private Sub scanSingleChecks()
         ' LW Bean Planted
-        If My.Settings.setSkulltula > 0 Then setLoc("B0", checkBit(&H11B09C, 22))
+        If My.Settings.setSkulltula > 0 And My.Settings.setGSLoc >= 1 Then setLoc("B0", checkBit(&H11B09C, 22))
         ' DC Bean Planted
         setLoc("B1", checkBit(&H11B0B8, 24))
         ' DMT Bean Planted
@@ -1330,14 +1330,16 @@ Public Class frmTrackerOfTime
                 If .scan = True And Not .area = "EVENT" Then
                     countCheck = False
                     If .gs Then
-                        Select Case My.Settings.setSkulltula
-                            Case 0
-                                countCheck = False
-                            Case 1
-                                countCheck = True
-                            Case Else
-                                countCheck = CBool(IIf(goldSkulltulas < 50, True, False))
-                        End Select
+                        If My.Settings.setGSLoc >= 1 Then
+                            Select Case My.Settings.setSkulltula
+                                Case 0
+                                    countCheck = False
+                                Case 1
+                                    countCheck = True
+                                Case Else
+                                    countCheck = CBool(IIf(goldSkulltulas < 50, True, False))
+                            End Select
+                        End If
                     ElseIf .cow Then
                         If My.Settings.setCow Then countCheck = True
                     ElseIf .scrub Then
@@ -1525,14 +1527,16 @@ Public Class frmTrackerOfTime
                     If .scan = True And Not .area = "EVENT" Then
                         countCheck = False
                         If .gs Then
-                            Select Case My.Settings.setSkulltula
-                                Case 0
-                                    countCheck = False
-                                Case 1
-                                    countCheck = True
-                                Case Else
-                                    countCheck = CBool(IIf(goldSkulltulas < 50, True, False))
-                            End Select
+                            If My.Settings.setGSLoc <= 1 Then
+                                Select Case My.Settings.setSkulltula
+                                    Case 0
+                                        countCheck = False
+                                    Case 1
+                                        countCheck = True
+                                    Case Else
+                                        countCheck = CBool(IIf(goldSkulltulas < 50, True, False))
+                                End Select
+                            End If
                         ElseIf .cow Then
                             If My.Settings.setCow Then countCheck = True
                         ElseIf .scrub Then
@@ -2262,7 +2266,7 @@ Public Class frmTrackerOfTime
     End Sub
     Private Sub resizeForm()
         btnTest.Visible = False
-        Button2.Visible = False
+        'Button2.Visible = False
 
         Dim setHeight As Integer = 990
         If My.Settings.setShortForm Then
@@ -2524,14 +2528,16 @@ Public Class frmTrackerOfTime
                         If .checked = showChecked Or (showChecked And .forced) Then
                             addCheck = False
                             If .gs Then
-                                Select Case My.Settings.setSkulltula
-                                    Case 0
-                                        addCheck = False
-                                    Case 1
-                                        addCheck = True
-                                    Case Else
-                                        addCheck = CBool(IIf(goldSkulltulas < 50, True, False))
-                                End Select
+                                If My.Settings.setGSLoc >= 1 Then
+                                    Select Case My.Settings.setSkulltula
+                                        Case 0
+                                            addCheck = False
+                                        Case 1
+                                            addCheck = True
+                                        Case Else
+                                            addCheck = CBool(IIf(goldSkulltulas < 50, True, False))
+                                    End Select
+                                End If
                             ElseIf .cow Then
                                 addCheck = My.Settings.setCow
                             ElseIf .scrub Then
@@ -2671,14 +2677,16 @@ Public Class frmTrackerOfTime
                     If .checked = showChecked Or (showChecked And .forced) Then
                         addCheck = False
                         If .gs Then
-                            Select Case My.Settings.setSkulltula
-                                Case 0
-                                    addCheck = False
-                                Case 1
-                                    addCheck = True
-                                Case Else
-                                    addCheck = CBool(IIf(goldSkulltulas < 50, True, False))
-                            End Select
+                            If My.Settings.setGSLoc <= 1 Then
+                                Select Case My.Settings.setSkulltula
+                                    Case 0
+                                        addCheck = False
+                                    Case 1
+                                        addCheck = True
+                                    Case Else
+                                        addCheck = CBool(IIf(goldSkulltulas < 50, True, False))
+                                End Select
+                            End If
                         ElseIf .cow Then
                             addCheck = My.Settings.setCow
                         ElseIf .scrub Then
@@ -11088,18 +11096,21 @@ Public Class frmTrackerOfTime
                 .area = "GTG2"
                 .zone = 188
                 .name = "Underwater Silver Rupee Chest"
+                .logic = "ZG24LL7429G0A"
             End With
             With aKeysDungeons(10)(8)
                 .loc = "4200"
                 .area = "GTG3"
                 .zone = 189
                 .name = "First Iron Knuckle Chest"
+                .logic = "Z"
             End With
             With aKeysDungeons(10)(9)
                 .loc = "4217"
                 .area = "GTG4"
                 .zone = 190
                 .name = "Before Heavy Block Chest"
+                .logic = "Z"
             End With
             With aKeysDungeons(10)(10)
                 .loc = "4202"
@@ -13199,6 +13210,13 @@ Public Class frmTrackerOfTime
                     My.Settings.setSkulltula = CByte(My.Settings.setSkulltula + addVal)
                     If My.Settings.setSkulltula > 2 Then My.Settings.setSkulltula = 0
                 End If
+            Case ltbGSLocation.Name
+                If My.Settings.setGSLoc = 0 And lower Then
+                    My.Settings.setGSLoc = 2
+                Else
+                    My.Settings.setGSLoc = CByte(My.Settings.setGSLoc + addVal)
+                    If My.Settings.setGSLoc > 2 Then My.Settings.setGSLoc = 0
+                End If
             Case ltbKeys.Name
                 If My.Settings.setSmallKeys = 0 And lower Then
                     My.Settings.setSmallKeys = 2
@@ -13249,6 +13267,15 @@ Public Class frmTrackerOfTime
                         ltbGoldSkulltulas.Text = "On"
                     Case Else
                         ltbGoldSkulltulas.Text = "Stop at 50"
+                End Select
+            Case ltbGSLocation.Name
+                Select Case My.Settings.setGSLoc
+                    Case 0
+                        ltbGSLocation.Text = "Only Dungeons"
+                    Case 1
+                        ltbGSLocation.Text = "Everywhere"
+                    Case Else
+                        ltbGSLocation.Text = "Only Overworld"
                 End Select
             Case ltbKeys.Name
                 Select Case My.Settings.setSmallKeys

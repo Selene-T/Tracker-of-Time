@@ -409,6 +409,7 @@ Partial Class frmTrackerOfTime
         Me.pbxBiggoronsSword = New System.Windows.Forms.PictureBox()
         Me.tmrFixIt = New System.Windows.Forms.Timer(Me.components)
         Me.pnlMain = New System.Windows.Forms.Panel()
+        Me.ltbGSLocation = New System.Windows.Forms.Label()
         Me.pnlDekuTree.SuspendLayout()
         Me.pnlDodongosCavern.SuspendLayout()
         Me.pnlKokiriForest.SuspendLayout()
@@ -2158,7 +2159,7 @@ Partial Class frmTrackerOfTime
         '
         'lblShopsanity
         '
-        Me.lblShopsanity.Location = New System.Drawing.Point(18, 249)
+        Me.lblShopsanity.Location = New System.Drawing.Point(18, 268)
         Me.lblShopsanity.Name = "lblShopsanity"
         Me.lblShopsanity.Size = New System.Drawing.Size(117, 20)
         Me.lblShopsanity.TabIndex = 242
@@ -2329,7 +2330,7 @@ Partial Class frmTrackerOfTime
         '
         'ltbShopsanity
         '
-        Me.ltbShopsanity.Location = New System.Drawing.Point(21, 272)
+        Me.ltbShopsanity.Location = New System.Drawing.Point(21, 291)
         Me.ltbShopsanity.Name = "ltbShopsanity"
         Me.ltbShopsanity.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
         Me.ltbShopsanity.Size = New System.Drawing.Size(117, 15)
@@ -2339,6 +2340,7 @@ Partial Class frmTrackerOfTime
         '
         'pnlSettings
         '
+        Me.pnlSettings.Controls.Add(Me.ltbGSLocation)
         Me.pnlSettings.Controls.Add(Me.lcxShortForm)
         Me.pnlSettings.Controls.Add(Me.lcxFiTScarecrow)
         Me.pnlSettings.Controls.Add(Me.lblInfo)
@@ -4685,6 +4687,16 @@ Partial Class frmTrackerOfTime
         Me.pnlMain.Size = New System.Drawing.Size(564, 1113)
         Me.pnlMain.TabIndex = 327
         '
+        'ltbGSLocation
+        '
+        Me.ltbGSLocation.Location = New System.Drawing.Point(21, 253)
+        Me.ltbGSLocation.Name = "ltbGSLocation"
+        Me.ltbGSLocation.Padding = New System.Windows.Forms.Padding(3, 0, 0, 0)
+        Me.ltbGSLocation.Size = New System.Drawing.Size(117, 15)
+        Me.ltbGSLocation.TabIndex = 332
+        Me.ltbGSLocation.Text = "Everywhere"
+        Me.ltbGSLocation.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
         'frmTrackerOfTime
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -5279,5 +5291,6 @@ Partial Class frmTrackerOfTime
     Friend WithEvents pnlMain As System.Windows.Forms.Panel
     Friend WithEvents lcxShortForm As System.Windows.Forms.Label
     Friend WithEvents rtbDebug As System.Windows.Forms.RichTextBox
+    Friend WithEvents ltbGSLocation As System.Windows.Forms.Label
 
 End Class

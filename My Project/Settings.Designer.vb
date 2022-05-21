@@ -869,6 +869,18 @@ Namespace My
                 Me("setShortForm") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
+        Public Property setGSLoc() As Byte
+            Get
+                Return CType(Me("setGSLoc"),Byte)
+            End Get
+            Set
+                Me("setGSLoc") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
