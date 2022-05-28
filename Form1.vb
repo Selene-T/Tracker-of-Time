@@ -10,7 +10,7 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 116
     Private Const IS_64BIT As Boolean = True
-    Private Const VER As String = "3.3.3"
+    Private Const VER As String = "3.3.4"
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private romAddrStart As Integer = &HDFE40000
@@ -2265,7 +2265,7 @@ Public Class frmTrackerOfTime
         'updateSettingsPanel()
     End Sub
     Private Sub resizeForm()
-        btnTest.Visible = False
+        'btnTest.Visible = False
         'Button2.Visible = False
 
         Dim setHeight As Integer = 990
@@ -13245,6 +13245,9 @@ Public Class frmTrackerOfTime
                             lbl = zGTG
                     End Select
                     If canDungeon(i) Then lbl.Refresh()
+                Next
+                For i = 0 To canDungeon.Length - 1
+                    canDungeon(i) = False
                 Next
         End Select
         updateLTB(sName)
