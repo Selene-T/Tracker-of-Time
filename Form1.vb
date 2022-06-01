@@ -9,8 +9,8 @@ Public Class frmTrackerOfTime
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 116
-    Private Const IS_64BIT As Boolean = True
-    Private Const VER As String = "3.3.4"
+    Private Const IS_64BIT As Boolean = False
+    Private Const VER As String = "3.3.6"
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private romAddrStart As Integer = &HDFE40000
@@ -69,12 +69,13 @@ Public Class frmTrackerOfTime
     Private aDungeonKeys(7) As Byte
     Private aBossKeys(7) As Boolean
     Private aWarps(7) As String
+    Private aDungeonRewards(7) As Byte
     Private aReachA(196) As Boolean
     Private aReachY(196) As Boolean
     Private bSpawnWarps As Boolean = False
     Private bSongWarps As Boolean = False
     Private maxLife As Byte = 0
-    Private isTriforceHunt As Boolean = False
+    Private aAddresses(17) As Integer
 
     ' Variables for detecting room info
     Private Const CUR_ROOM_ADDR As Integer = &H1C8544
@@ -418,12 +419,13 @@ Public Class frmTrackerOfTime
         maxLife = 0
         lastArea = String.Empty
         lastOutput.Clear()
-        isTriforceHunt = False
+        'isTriforceHunt = False
 
         For i = 0 To 7
             aDungeonKeys(i) = 0
             aBossKeys(i) = False
             aWarps(i) = String.Empty
+            aDungeonRewards(i) = 100
         Next
         For i = 0 To 11
             canDungeon(i) = False
@@ -432,6 +434,10 @@ Public Class frmTrackerOfTime
             aReachA(i) = False
             aReachY(i) = False
         Next
+        For i = 0 To aAddresses.Length - 1
+            aAddresses(i) = 0
+        Next
+
         bSpawnWarps = False
         bSongWarps = False
 
@@ -656,6 +662,8 @@ Public Class frmTrackerOfTime
 
             End Select
         Next
+
+        If Not aAddresses(9) = 0 Then scanDungeonRewards()
     End Sub
     Private Sub getGoldSkulltulas()
         ' Get gold skulltula count
@@ -1221,9 +1229,87 @@ Public Class frmTrackerOfTime
         ' Deliver Zelda's Letter | Unlock Mask Shoppe
         setLoc("C05", checkBit(&H11B4D4, 6))
 
+        ' Bombchu's in Logic setting
+        Dim updateSetting As Boolean = False
+        If Not aAddresses(7) = 0 Then
+            If goRead(aAddresses(7), 1) = 1 Then updateSetting = True
+            If Not My.Settings.setBombchus = updateSetting Then
+                My.Settings.setBombchus = updateSetting
+                updateSettingsPanel()
+            End If
+        End If
 
+        ' Cow Shuffle setting
+        If Not aAddresses(8) = 0 Then
+            updateSetting = False
+            If goRead(aAddresses(8), 1) = 1 Then updateSetting = True
+            If Not My.Settings.setCow = updateSetting Then
+                My.Settings.setCow = updateSetting
+                updateSettingsPanel()
+            End If
+        End If
+
+        ' Scrub Shuffle setting
+        If Not aAddresses(10) = 0 Then
+            updateSetting = False
+            If goRead(aAddresses(10), 1) = 1 Then updateSetting = True
+            If Not My.Settings.setScrub = updateSetting Then
+                My.Settings.setScrub = updateSetting
+                updateSettingsPanel()
+            End If
+        End If
+
+        ' Small Keys setting
+        If Not aAddresses(11) = 0 Then
+            Dim tempRead As Byte = CByte(goRead(aAddresses(11), 1))
+            ' Autotracker info uses 2 for keysanity and 1 for removed, I use 1 for keysanity and 2 for removed. 
+            ' This flips those two so it fits into the tracker correctly
+            Select Case tempRead
+                Case 1
+                    tempRead = 2
+                Case 2
+                    tempRead = 1
+            End Select
+            If Not My.Settings.setSmallKeys = tempRead Then
+                My.Settings.setSmallKeys = tempRead
+                updateLTB("ltbKeys")
+                updateSmallKeys()
+            End If
+        End If
+        ' Kokiri Forest setting
+        If Not aAddresses(15) = 0 Then
+            Dim tempRead As Byte = CByte(goRead(aAddresses(15), 1))
+            ' 0 and 1 are 'Open' and 'Closed Deku', both resulting in the KF being open for out settings, since the tracker auto-detects Mido at the Deku Tree
+            ' 2 is 'Closed' and the only one where the kid by the exit is there
+            Select Case tempRead
+                Case 0, 1
+                    updateSetting = True
+                Case Else
+                    updateSetting = False
+            End Select
+            If Not My.Settings.setOpenKF = updateSetting Then
+                My.Settings.setOpenKF = updateSetting
+                updateSettingsPanel()
+            End If
+        End If
+
+        ' Zora's Fountain setting
+        If Not aAddresses(16) = 0 Then
+            Dim tempRead As Byte = CByte(goRead(aAddresses(16), 1))
+            ' 0 is 'Closed' and the only one where adult Link cannot get through
+            ' 1 and 2 are 'Open' and 'Adult', both resulting in ZF being open for adult
+            Select Case tempRead
+                Case 0
+                    updateSetting = False
+                Case Else
+                    updateSetting = True
+            End Select
+            If Not My.Settings.setOpenZF = updateSetting Then
+                My.Settings.setOpenZF = updateSetting
+                updateSettingsPanel()
+            End If
+        End If
     End Sub
-
     Private Sub parseChestData(ByVal loc As Integer)
         Dim foundChests As Double = arrChests(loc)
         Dim compareTo As Double = 2147483648
@@ -2081,37 +2167,26 @@ Public Class frmTrackerOfTime
    Private Sub checkMQs()
         If Not isLoadedGame() Then Exit Sub
 
-        ' Update the MQ Dungeons
-        Dim MQs As String = String.Empty
-        Dim tempRead As String = String.Empty
-        Dim testSpot As Integer = 0
-        Dim startAt As Byte = 1
-
         For i = 0 To aMQ.Length - 1
             aMQ(i) = False
         Next
 
-        Select Case randoVer
-            Case "OOTR6.2"
-                testSpot = &H40B6E0
-                startAt = 1
-            Case "AP"
-                testSpot = &H40B220
-                startAt = 1
-            Case "OOTR6.2.72", "ROMAN6.2.43", "ROMAN6.2.72R2"
-                testSpot = &H400CF8
-                startAt = 5
-            Case Else
-                updateMQs()
-                Exit Sub
-        End Select
+        If aAddresses(0) = 0 Then
+            updateMQs()
+            Exit Sub
+        End If
+
+        ' Update the MQ Dungeons
+        Dim MQs As String = String.Empty
+        Dim tempRead As String = String.Empty
+        Dim startAt As Byte = 1
 
         For i = 0 To 12 Step 4
-            tempRead = Hex(goRead(testSpot + i))
+            tempRead = Hex(goRead(aAddresses(0) + i))
             fixHex(tempRead)
             MQs = MQs & tempRead
         Next
-
+        If Mid(MQs, 1, 4) = "FFFF" Then startAt = 5
         MQs = Mid(MQs, startAt, 28)
 
         If Not MQs.Replace("0", "").Replace("1", "") = "" Then Exit Sub
@@ -2184,14 +2259,13 @@ Public Class frmTrackerOfTime
     End Sub
 
     Private Sub btnTest_Click(sender As Object, e As EventArgs) Handles btnTest.Click
-        rtbDebug.Visible = True
-        rtbDebug.BringToFront()
-        rtbDebug.Clear()
-        For i = aKeys.Count - 32 To aKeys.Count - 1
-            With aKeys(i)
-                rtbDebug.AppendText(.loc & ": " & .area & " " & .name & ": " & .checked & vbCrLf)
-            End With
-        Next
+        'rtbOutputLeft.Clear()
+        MsgBox(Hex(goRead(&H400CEE, 1)))
+        'MsgBox(Hex(goRead(&H400CEB, 1)))
+        'MsgBox(My.Settings.setSmallKeys.ToString)
+        'For Each i As Integer In aAddresses
+        'rtbAddLine(Hex(i))
+        'Next
         'debugInfo()goRead(&H40BF80 + 2, 15)
         'Dim test As Integer = goRead(&H40BF80 + 1, 1)
         'MsgBox(test.ToString)
@@ -2265,8 +2339,8 @@ Public Class frmTrackerOfTime
         'updateSettingsPanel()
     End Sub
     Private Sub resizeForm()
-        'btnTest.Visible = False
-        'Button2.Visible = False
+        btnTest.Visible = False
+        Button2.Visible = False
 
         Dim setHeight As Integer = 990
         If My.Settings.setShortForm Then
@@ -4414,22 +4488,16 @@ Public Class frmTrackerOfTime
             If checkLoc("7703") And checkLoc("7704") Then Return True
             Return False
         End If
+
         ' Determine what is needed for LACS
-        Dim startAddress As Integer = 0
+        If aAddresses(1) = 0 Then
+            ' No address entered, treat as default
+            If checkLoc("7703") And checkLoc("7704") Then Return True
+            Return False
+        End If
 
-        Select Case randoVer
-            Case "AP"
-                startAddress = &H400CC4
-            Case "OOTR6.2", "OOTR6.2.72", "ROMAN6.2.43", "ROMAN6.2.72R2"
-                startAddress = &H400CB4
-            Case Else
-                ' Unknown, will treat as Vanilla
-                If checkLoc("7703") And checkLoc("7704") Then Return True
-                Return False
-        End Select
-
-        Dim conditionLACS As Byte = CByte(goRead(startAddress, 1))
-        Dim countLACS As Byte = CByte(goRead(startAddress + 12, 1))
+        Dim conditionLACS As Byte = CByte(goRead(aAddresses(1), 1))
+        Dim countLACS As Byte = CByte(goRead(aAddresses(2), 1))
         Dim countChecks As Byte = 0
         Select Case conditionLACS
             Case 0
@@ -7590,8 +7658,8 @@ Public Class frmTrackerOfTime
     End Sub
 
     Private Sub updateShoppes()
-        Select Case randoVer
-            Case "AP"
+        Select Case aAddresses(6)
+            Case 1
                 generateShoppeKeys(4)
                 ' For Archipelago, once we have a full shopsanity key set, disable the unneccessary ones
                 For i = keyCount - 31 To keyCount
@@ -12581,18 +12649,7 @@ Public Class frmTrackerOfTime
         getHearts()
         getMagic()
         getGoldSkulltulas()
-
-        ' This is for detecting if it is a triforce hunt, which people did not want. Oddly enough it is also the only solid check for OOTR vs AP, might use it later.
-        'With pbxTriforce
-        'If isTriforceHunt() Then
-        ' Make sure the triforce is visible
-        'If Not .Visible Then .Visible = True
-        If isTriforceHunt Then getTriforce()
-        'Else
-        ' If not a triforce hunt, hide the triforce picturebox
-        'If .Visible Then .Visible = False
-        'End If
-        'End With
+        getTriforce()
         getPlayerName()
     End Sub
 
@@ -13224,33 +13281,35 @@ Public Class frmTrackerOfTime
                     My.Settings.setSmallKeys = CByte(My.Settings.setSmallKeys + addVal)
                     If My.Settings.setSmallKeys > 2 Then My.Settings.setSmallKeys = 0
                 End If
-
-                Dim lbl As New Label
-                For i = 3 To 10
-                    If i = 9 Then i = 10
-                    Select Case i
-                        Case 3
-                            lbl = zFoT
-                        Case 4
-                            lbl = zFiT
-                        Case 5
-                            lbl = zWaT
-                        Case 6
-                            lbl = zSpT
-                        Case 7
-                            lbl = zShT
-                        Case 8
-                            lbl = zBotW
-                        Case 10
-                            lbl = zGTG
-                    End Select
-                    If canDungeon(i) Then lbl.Refresh()
-                Next
-                For i = 0 To canDungeon.Length - 1
-                    canDungeon(i) = False
-                Next
+                updateSmallKeys()
         End Select
         updateLTB(sName)
+    End Sub
+    Private Sub updateSmallKeys()
+        Dim lbl As New Label
+        For i = 3 To 10
+            If i = 9 Then i = 10
+            Select Case i
+                Case 3
+                    lbl = zFoT
+                Case 4
+                    lbl = zFiT
+                Case 5
+                    lbl = zWaT
+                Case 6
+                    lbl = zSpT
+                Case 7
+                    lbl = zShT
+                Case 8
+                    lbl = zBotW
+                Case 10
+                    lbl = zGTG
+            End Select
+            If canDungeon(i) Then lbl.Refresh()
+        Next
+        For i = 0 To canDungeon.Length - 1
+            canDungeon(i) = False
+        Next
     End Sub
     Private Sub updateLTB(ByVal ltbName As String)
         Select Case ltbName
@@ -13718,6 +13777,90 @@ Public Class frmTrackerOfTime
             Graphics.FromImage(.Image).DrawString(outputText, fontDungeon, New SolidBrush(Color.White), xPos, 32)
         End With
     End Sub
+    Private Sub scanDungeonRewards()
+        ' If either are blank, abort
+        If aAddresses(12) = 0 Or aAddresses(13) = 0 Then Return
+
+        ' Start and finish range for reading the rewards
+        Dim lowScan As Byte = 3
+        Dim highScan As Byte = 2
+        ' The dungeon rewards in string form
+        Dim rewards As String = String.Empty
+        Dim useCompass As Boolean = False
+
+        ' Compass Info On
+        If goRead(aAddresses(13), 1) = 1 Then
+            useCompass = True
+        Else
+            ' Compass Info Off and Hint Info On
+            If goRead(aAddresses(12), 1) = 1 Then
+                Dim pedestal As Byte = CByte(goRead(&H11B4FC, 1))
+                If pedestal = 1 Or pedestal = 3 Then highScan = 8
+                If pedestal = 2 Or pedestal = 3 Then lowScan = 0
+            End If
+        End If
+
+        ' Check for OOTRs odd byte check
+        If Not aAddresses(17) = 0 Then
+            If goRead(aAddresses(17), 1) = 0 Then
+                ' If it is 0, then no info, and revert back to paradox range
+                lowScan = 3
+                highScan = 2
+            End If
+        End If
+
+        Dim tempValue As Byte = 0
+        Dim newValue As Byte = 0
+        Dim findFree As String = "012345678"
+        Dim iNew As Byte = 0
+
+        rewards = Hex(goRead(aAddresses(9) + 4))
+        fixHex(rewards)
+        rewards = Hex(goRead(aAddresses(9))) & rewards
+        fixHex(rewards, 16)
+
+        For i = 0 To 7
+            ' Store the dungeon reward value
+            tempValue = CByte(Mid(rewards, (i * 2) + 1, 2))
+            findFree = findFree.Replace(tempValue.ToString, "")
+            iNew = CByte(i + 2)
+
+            ' Convert the value to the autotrackers picturebox
+            Select Case tempValue
+                Case 0 To 2
+                    ' Stones need to be converted to 18 to 20
+                    newValue = CByte(tempValue + 18)
+                Case 3 To 8
+                    ' Medallions need to be converted to 0 to 4
+                    newValue = CByte(tempValue - 3)
+                    ' Flip the Spirit and Shadow Temple
+            End Select
+
+            If useCompass Then
+                ' For compass info, if compass is not visible, set the reward to 0
+                If Not aoCompasses(i).Visible Then iNew = 0
+                aQuestRewardsText(newValue) = CByte(iNew)
+                changeAddedText(newValue, , True)
+            Else
+                If tempValue < lowScan Or tempValue > highScan Then iNew = 0
+                aQuestRewardsText(newValue) = CByte(iNew)
+                changeAddedText(newValue, , True)
+            End If
+        Next
+
+        ' Find the free dungeon reward
+        If findFree.Length = 1 Then
+            Dim freeValue = CByte(findFree)
+            Select Case freeValue
+                Case 0 To 2
+                    incB(freeValue, 18)
+                Case Else
+                    decB(freeValue, 3)
+            End Select
+            aQuestRewardsText(freeValue) = 1
+            changeAddedText(freeValue, , True)
+        End If
+    End Sub
     Private Function isWarpShuffle() As Boolean
         ' Checks to see if any warp songs have had optional settings. If so, then return true
         isWarpShuffle = False
@@ -14095,52 +14238,125 @@ Public Class frmTrackerOfTime
         End With
     End Sub
     Private Sub getRandoVer()
-        ' New version checklist:
-        '   getRandoVer()
-        '   checkMQs()
-        '   Rainbow Bridge And LACs
-        '   Shopsanity()
-        '   check getTriforce
 
         randoVer = String.Empty
 
-        ' The pattern for the Triforce Hunt is "0032####". #### is number of pieces needed to win, or 'FFFF' is not enabled
-        Dim ver() As String = {"AP", "OOTR6.2", "OOTR6.2.72", "ROMAN6.2.43", "ROMAN6.2.72R2"}
-        Dim addr() As Integer = {&H40B1B0, &H40B668, &H40BD38, &H40BF80, &H40C3D8}
-        Dim readA As Integer = 0
-        Dim readB As Integer = 0
-        For i = 0 To ver.Length - 1
-            readA = goRead(addr(i) + 2, 15)
-            readB = goRead(addr(i) + 1, 1)
-            If readA = 50 And (readB = 0 Or readB = 255) Then
-                randoVer = ver(i)
-                ' If Triforce Hunt is enabled
-                isTriforceHunt = (readB = 0)
-                Return
-            End If
-        Next
+
+        ' Only using C as there are no duplicates of it yet. Should it occur, can uncomment one and start using it
+
+        'Dim readA As String = Hex(goRead(&H400000))
+        'Dim readB As String = Hex(goRead(&H400004))
+        Dim readC As String = Hex(goRead(&H400008))
+        'Dim readD As String = Hex(goRead(&H40000C))
+        'fixHex(readA)
+        'fixHex(readB)
+        fixHex(readC)
+        'fixHex(readD)
+
+
+
+        'Addr:              80400000 80400004 80400008 8040000C
+        'AP1:               80400020 80400844 80409FD4 00000000
+        'AP2:               80400020 80400844 8040A334 00000000
+        'OOTR 6.2:          80400020 80400834 8040A474 00000000
+        'OOTR 6.2.72:       80400020 80400834 8040AA7C 80400CD0
+        'Roman 6.2.43:      80400020 80400834 8040ACC4 80400CD0
+        'ROMAN 6.2.72-R2:   80400020 80400834 8040B11C 80400CD0
+
+        Select Case readC
+            Case "80409FD4"
+                ' AP 0.3.1
+                aAddresses(0) = &H40B220    ' MQs Addr
+                aAddresses(1) = &H400CC4    ' LAC1 Addr
+                aAddresses(2) = &H400CD0    ' LAC2 Addr
+                aAddresses(3) = &H40B1B0    ' TH Addr
+                aAddresses(4) = &H400CC0    ' RB1 Addr
+                aAddresses(5) = &H400CD2    ' RB2 Addr
+                aAddresses(6) = 1           ' Shopsanity Style
+                aAddresses(7) = &H400CBC    ' Bombchu's in Logic
+                aAddresses(8) = &H400CD4    ' Cow Shuffle
+            Case "8040A334"
+                ' AP 0.3.2
+                aAddresses(0) = &H40B5C8    ' MQs Addr
+                aAddresses(1) = &H400CC4    ' LAC1 Addr
+                aAddresses(2) = &H400CD0    ' LAC2 Addr
+                aAddresses(3) = &H40B550    ' TH Addr
+                aAddresses(4) = &H400CC0    ' RB1 Addr
+                aAddresses(5) = &H400CD2    ' RB2 Addr
+                aAddresses(6) = 1           ' Shopsanity
+                aAddresses(7) = &H400CBC    ' Bombchu's in Logic
+                aAddresses(8) = &H400CD4    ' Cow Shuffle
+                aAddresses(9) = &H40A274    ' Dungeon Rewards
+                aAddresses(10) = &H400CE8   ' Scrub Shuffle
+                aAddresses(11) = &H400CE9   ' Key Mode
+                aAddresses(12) = &H400CEA   ' Pedestal DRs
+                aAddresses(13) = &H400CEB   ' Compass DRs
+                aAddresses(14) = &H400CED   ' Big Poe Goal
+                aAddresses(15) = &H400CEF   ' KF | 0: Open | 1: Closed Deku | 2: Closed
+                aAddresses(16) = &H400CEE   ' ZF | 0: Closed | 1: Adult | 2: Open
+            Case "8040A474"
+                ' OOTR 6.2
+                aAddresses(0) = &H40B6E0    ' MQs Addr
+                aAddresses(1) = &H400CB4    ' LAC1 Addr
+                aAddresses(2) = &H400CC0    ' LAC2 Addr
+                aAddresses(3) = &H40B668    ' TH Addr
+                aAddresses(4) = &H400CB0    ' RB1 Addr
+                aAddresses(5) = &H400CC2    ' RB2 Addr
+                aAddresses(7) = &H400CAC    ' Bombchu's in Logic
+                aAddresses(8) = &H400CC4    ' Cow Shuffle
+                'aAddresses(9) = &H40A3B4    ' Dungeon Rewards
+            Case "8040AA7C"
+                ' OOTR 6.2.72
+                aAddresses(0) = &H400CF8    ' MQs Addr
+                aAddresses(1) = &H400CB4    ' LAC1 Addr
+                aAddresses(2) = &H400CC0    ' LAC2 Addr
+                aAddresses(3) = &H40BD38    ' TH Addr
+                aAddresses(4) = &H400CB0    ' RB1 Addr
+                aAddresses(5) = &H400CC2    ' RB2 Addr
+                aAddresses(7) = &H400CAC    ' Bombchu's in Logic
+                aAddresses(8) = &H400CC4    ' Cow Shuffle
+                aAddresses(9) = &H400CEC    ' Dungeon Rewards
+                'aAddresses(10) = &H   ' Scrub Shuffle
+                'aAddresses(11) = &H   ' Key Mode
+                aAddresses(12) = &H400CE8   ' Pedestal DRs
+                aAddresses(13) = &H400CE4   ' Compass DRs
+                'aAddresses(14) = &H   ' Big Poe Goal
+                'aAddresses(15) = &H   ' KF | 0: Open | 1: Closed Deku | 2: Closed
+                'aAddresses(16) = &H   ' ZF | 0: Closed | 1: Adult | 2: Open
+                aAddresses(17) = &H400CE0   ' OOTR Info On/Off
+            Case "8040ACC4"
+                ' ROMAN 6.2.43
+                aAddresses(0) = &H400CF8    ' MQs Addr
+                aAddresses(1) = &H400CB4    ' LAC1 Addr
+                aAddresses(2) = &H400CC0    ' LAC2 Addr
+                aAddresses(3) = &H40BF80    ' TH Addr
+                aAddresses(4) = &H400CB0    ' RB1 Addr
+                aAddresses(5) = &H400CC2    ' RB2 Addr
+                aAddresses(7) = &H400CAC    ' Bombchu's in Logic
+                aAddresses(8) = &H400CC4    ' Cow Shuffle
+            Case "8040B11C"
+                ' ROMAN 6.2.72-R2
+                aAddresses(0) = &H400CF8    ' MQs Addr
+                aAddresses(1) = &H400CB4    ' LAC1 Addr
+                aAddresses(2) = &H400CC0    ' LAC2 Addr
+                aAddresses(3) = &H40C3D8    ' TH Addr
+                aAddresses(4) = &H400CB0    ' RB1 Addr
+                aAddresses(5) = &H400CC2    ' RB2 Addr
+                aAddresses(7) = &H400CAC    ' Bombchu's in Logic
+                aAddresses(8) = &H400CC4    ' Cow Shuffle
+        End Select
     End Sub
     Private Sub getRainbowBridge()
-        ' Determine what is needed for Rainbow Bridge
-        Dim startAddress As Integer = &H400CB0
-
-        Select Case randoVer
-            Case "AP"
-                startAddress = &H400CC0
-            Case "OOTR6.2", "OOTR6.2.72", "ROMAN6.2.43", "ROMAN6.2.72R2"
-                startAddress = &H400CB0
-            Case Else
-                ' Unknown, will treat as Vanilla
-                rainbowBridge(0) = 4
-                Exit Sub
-        End Select
-
+        ' If Not detected, then set to default
+        If aAddresses(4) = 0 Then
+            rainbowBridge(0) = 4
+            Exit Sub
+        End If
         ' Rainbow Bridge Condition
-        rainbowBridge(0) = CByte(goRead(startAddress, 1))
+        rainbowBridge(0) = CByte(goRead(aAddresses(4), 1))
         ' Rainbow Bridge Condition Count
-        rainbowBridge(1) = CByte(goRead(startAddress + 18, 1))
+        rainbowBridge(1) = CByte(goRead(aAddresses(5), 1))
     End Sub
-
     Private Sub pnlSettings_Paint(sender As Object, e As PaintEventArgs) Handles pnlSettings.Paint
         updateSettingsPanel()
     End Sub
