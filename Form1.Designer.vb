@@ -2466,7 +2466,7 @@ Partial Class frmTrackerOfTime
         Me.lblInfo.AutoSize = True
         Me.lblInfo.Location = New System.Drawing.Point(10, 24)
         Me.lblInfo.Name = "lblInfo"
-        Me.lblInfo.Size = New System.Drawing.Size(573, 156)
+        Me.lblInfo.Size = New System.Drawing.Size(587, 156)
         Me.lblInfo.TabIndex = 328
         Me.lblInfo.Text = resources.GetString("lblInfo.Text")
         '

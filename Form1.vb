@@ -9,8 +9,8 @@ Public Class frmTrackerOfTime
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 116
-    Private Const IS_64BIT As Boolean = False
-    Private Const VER As String = "3.3.6"
+    Private Const IS_64BIT As Boolean = True
+    Private Const VER As String = "3.3.7"
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private romAddrStart As Integer = &HDFE40000
@@ -1296,10 +1296,10 @@ Public Class frmTrackerOfTime
         ' Zora's Fountain setting
         If Not aAddresses(16) = 0 Then
             Dim tempRead As Byte = CByte(goRead(aAddresses(16), 1))
-            ' 0 is 'Closed' and the only one where adult Link cannot get through
-            ' 1 and 2 are 'Open' and 'Adult', both resulting in ZF being open for adult
+            ' 2 is 'Closed' and the only one where adult Link cannot get through
+            ' 0 and 1 are 'Open' and 'Adult', both resulting in ZF being open for adult
             Select Case tempRead
-                Case 0
+                Case 2
                     updateSetting = False
                 Case Else
                     updateSetting = True
@@ -14293,7 +14293,7 @@ Public Class frmTrackerOfTime
                 aAddresses(13) = &H400CEB   ' Compass DRs
                 aAddresses(14) = &H400CED   ' Big Poe Goal
                 aAddresses(15) = &H400CEF   ' KF | 0: Open | 1: Closed Deku | 2: Closed
-                aAddresses(16) = &H400CEE   ' ZF | 0: Closed | 1: Adult | 2: Open
+                aAddresses(16) = &H400CEE   ' ZF | 0: Open | 1: Adult | 2: Closed
             Case "8040A474"
                 ' OOTR 6.2
                 aAddresses(0) = &H40B6E0    ' MQs Addr

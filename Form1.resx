@@ -125,7 +125,7 @@
   </metadata>
   <data name="lblInfo.Text" xml:space="preserve">
     <value>Instructions:
-- Mouse-over the top window to display controls for a single scan, auto-scanning, reset, show/hide this settings page,
+- Mouse-over the top of the window to display controls for a single scan, auto-scanning, reset, show/hide this settings page,
      and for changing theme.
 - Clicking on any of the songs will show the song notes at the bottom of the application, in case you forget.
 - Left- or right-clicking on the Sacred Stones of Medallions with allow you to set reminders for yourself as to which
