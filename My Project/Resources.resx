@@ -118,421 +118,532 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="medalShadow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\medalShadow.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bottleBottledFairy" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bottleBottledFairy.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="stoneKokiriEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\stoneKokiriEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ocarinaOfTime" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\ocarinaOfTime.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="upgradeQuiver2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeQuiver2.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="enhancedDefence" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\enhancedDefence.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="youngWeirdEgg" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\youngWeirdEgg.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="youngSkullMask" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\youngSkullMask.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="songEmptyNormal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\songEmptyNormal.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="upgradeSilverScale" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeSilverScale.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="songShadow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\songShadow.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="stoneKokiri" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\stoneKokiri.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="fairySlingshot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\fairySlingshot.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="youngChicken" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\youngChicken.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bottleEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bottleEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="upgradeBombBag3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeBombBag3.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="magicBar2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\magicBar2.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="poh4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\poh4.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="magicBar1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\magicBar1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="equipKokiriSword" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\equipKokiriSword.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="goldSkulltula" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\goldSkulltula.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="youngSpookyMask" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\youngSpookyMask.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="upgradeBulletBag3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeBulletBag3.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="equipBiggoronsSword" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\equipBiggoronsSword.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="medalForestEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\additional\medalForestEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="heartContainer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\heartContainer.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="adultCojiro" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\adultCojiro.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="equipBiggoronsSword" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\equipBiggoronsSword.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="poh0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\poh0.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="songLight" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\songLight.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="adultOddPotion" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\adultOddPotion.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="dungeonMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\dungeonMap.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="worldMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\worldMap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="equipZoraTunic" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\equipZoraTunic.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bottleBlueFire" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bottleBlueFire.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="medalWater" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\medalWater.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="iceArrows" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\iceArrows.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="youngMaskOfTruth" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\youngMaskOfTruth.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="stoneZora" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\stoneZora.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="mapDMT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapDMT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="stoneGoron" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\additional\stoneGoron.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="dekuStick" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\dekuStick.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bombs" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bombs.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="bottleLonLonMilk" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bottleLonLonMilk.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="youngBunnyHood" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\additional\youngBunnyHood.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="medalForest" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\medalForest.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="medalLightEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\medalLightEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="adultPocketEgg" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\adultPocketEgg.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bottleRedPotion" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bottleRedPotion.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="lightArrows" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\lightArrows.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bow.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="medalFireEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\medalFireEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="songForest" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\songForest.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="upgradeBombBag1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeBombBag1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="upgradeSilverGauntlets" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeSilverGauntlets.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="adultPrescription" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\adultPrescription.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="upgradeBulletBag2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeBulletBag2.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="backgroundDungeonItems" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\backgroundDungeonItems.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="upgradeBulletBag1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeBulletBag1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="upgradeQuiver3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeQuiver3.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="stoneGoronEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\stoneGoronEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="equipMirrorShield" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\equipMirrorShield.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="nayrusLove" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\naryusLove.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="fireArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\fireArrow.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="upgradeGoronsBracelet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeGoronsBracelet.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="equipKokiriBoots" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\equipKokiriBoots.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="songFire" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\songFire.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="upgradeGoldenGauntlets" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeGoldenGauntlets.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="poh3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\poh3.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="equipKokiriTunic" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\equipKokiriTunic.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="youngKeatonMask" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\youngKeatonMask.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="medalSpirit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\medalSpirit.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="equipIronBoots" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\equipIronBoots.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="equipBrokenKnife" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\equipBrokenKnife.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="equipHoverBoots" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\equipHoverBoots.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="fairyOcarina" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\fairyOcarina.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="gerudosCard" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\gerudosCard.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="medalFire" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\medalFire.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bottleFish" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bottleFish.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="hookshot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\hookshot.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="dungeonSmallKey" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\dungeonSmallKey.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="dekuNut" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\dekuNut.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="spawnLocations" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\spawnLocations.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="youngGerudoMask" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\youngGerudoMask.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="upgradeBombBag2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeBombBag2.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="stoneZoraEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\stoneZoraEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="triforce" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\triforce.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bottleLetter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bottleLetter.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="equipDekuShield" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\equipDekuShield.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="upgradeQuiver2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeQuiver2.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="faroresWind" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\additional\faroresWind.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="bottleLonLonMilk" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bottleLonLonMilk.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bottleBigPoe" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bottleBigPoe.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bottleBluePotion" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bottleBluePotion.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bottleGreenPotion" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bottleGreenPotion.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="stoneOfAgonyEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\stoneOfAgonyEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="equipHylianShield" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\equipHylianShield.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="dungeonCompass" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\dungeonCompass.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="megatonHammer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\megatonHammer.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="medalShadowEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\medalShadowEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="emptySlot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\nothing.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="magicBar0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\magicBar0.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="equipMasterSword" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\equipMasterSword.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="adultOddMushroom" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\adultOddMushroom.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="backgroundEquipment" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\backgroundEquipment.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="stoneOfAgony" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\stoneOfAgony.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="poh2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\poh2.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="bottleBug" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bottleBug.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="adultClaimCheck" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\additional\adultClaimCheck.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="poh1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\poh1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="longshot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\longshot.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="songNormal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\songNormal.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="boomerang" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\boomerang.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="adultPoachersSaw" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\adultPoachersSaw.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="lensOfTruth" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\lensOfTruth.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="songSpirit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\songSpirit.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="medalSpiritEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\medalSpiritEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="youngSoldOut" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\youngSoldOut.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bottleBug" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bottleBug.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="medalLight" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\medalLight.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="dungeonBossKey" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\dungeonBossKey.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="dinsFire" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\dinsFire.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="adultEyeDrops" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\adultEyeDrops.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bottlePoe" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bottlePoe.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="upgradeWallet3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\additional\upgradeWallet3.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="backgroundInventory" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\backgroundInventory.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="magicBeans" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\magicBeans.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="youngZeldasLetter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\youngZeldasLetter.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="adultPocketCucco" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\adultPocketCucco.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="upgradeWallet1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeWallet1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bombchus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bombchus.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="youngZoraMask" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\youngZoraMask.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="bottleLonLonMilkHalf" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\bottleLonLonMilkHalf.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="adultGoronsSwordBroken" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\adultGoronsSwordBroken.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="upgradeQuiver1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeQuiver1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="adultEyeballFrog" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\adultEyeballFrog.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="mapHF" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapHF.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="gerudosCardEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\additional\gerudosCardEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="songEmptyWarp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\songEmptyWarp.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="upgradeWallet1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeWallet1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="songWater" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\songWater.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="stoneKokiri" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\stoneKokiri.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="upgradeGoldenScale" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeGoldenScale.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="dekuNut" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\dekuNut.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="medalWaterEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\medalWaterEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="youngZeldasLetter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\youngZeldasLetter.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="equipKokiriSword" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\equipKokiriSword.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="stoneOfAgony" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\stoneOfAgony.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="youngZoraMask" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\youngZoraMask.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="upgradeSilverScale" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeSilverScale.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dungeonSmallKey" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\dungeonSmallKey.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="upgradeGoldenGauntlets" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeGoldenGauntlets.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="stoneGoronEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\stoneGoronEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="songEmptyNormal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\songEmptyNormal.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bombchus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bombchus.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bottleGreenPotion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bottleGreenPotion.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hookshot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\hookshot.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="medalForest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\medalForest.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bottlePoe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bottlePoe.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapGF" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapGF.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="upgradeWallet2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeWallet2.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapFoT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapFoT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="adultOddPotion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\adultOddPotion.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ocarinaOfTime" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\ocarinaOfTime.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fairySlingshot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\fairySlingshot.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="equipGoronTunic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\additional\equipGoronTunic.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="enhancedDefence" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\enhancedDefence.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bow.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="triforce" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\triforce.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="backgroundEquipment" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\backgroundEquipment.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="adultPocketEgg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\adultPocketEgg.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bottleBottledFairy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bottleBottledFairy.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="spawnLocations" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\spawnLocations.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fairyOcarina" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\fairyOcarina.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapBotW" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapBotW.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="megatonHammer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\megatonHammer.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="adultPrescription" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\adultPrescription.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="magicBar1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\magicBar1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="songShadow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\songShadow.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="upgradeQuiver1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeQuiver1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="equipIronBoots" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\equipIronBoots.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="youngKeatonMask" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\youngKeatonMask.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="upgradeBulletBag2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeBulletBag2.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="longshot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\longshot.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapToT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapToT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapKV" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapKV.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="upgradeBombBag1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeBombBag1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="equipKokiriTunic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\equipKokiriTunic.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="backgroundInventory" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\backgroundInventory.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="songEmptyWarp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\songEmptyWarp.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bottleBigPoe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bottleBigPoe.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapGC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapGC.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="upgradeBulletBag3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeBulletBag3.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="equipBrokenKnife" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\equipBrokenKnife.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapLLR" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapLLR.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="boomerang" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\boomerang.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="medalLightEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\medalLightEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="upgradeBombBag3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeBombBag3.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="songLight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\songLight.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="medalSpiritEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\medalSpiritEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dungeonBossKey" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\dungeonBossKey.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapHC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapHC.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="equipMirrorShield" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\equipMirrorShield.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="songNormal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\songNormal.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="youngGerudoMask" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\youngGerudoMask.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="adultGoronsSwordBroken" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\adultGoronsSwordBroken.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapDMC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapDMC.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="magicBar2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\magicBar2.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bottleRedPotion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bottleRedPotion.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="stoneOfAgonyEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\stoneOfAgonyEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="medalFire" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\medalFire.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="adultEyeballFrog" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\adultEyeballFrog.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="equipHoverBoots" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\equipHoverBoots.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="poh0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\poh0.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="songForest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\songForest.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="upgradeBombBag2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeBombBag2.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapMK2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapMK2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="youngSkullMask" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\youngSkullMask.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="magicBar0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\magicBar0.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapZF" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapZF.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapZD" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapZD.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapShT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapShT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapSpT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapSpT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="equipZoraTunic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\equipZoraTunic.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="poh2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\poh2.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="upgradeGoronsBracelet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeGoronsBracelet.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="adultEyeDrops" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\adultEyeDrops.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="iceArrows" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\iceArrows.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="nayrusLove" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\naryusLove.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="songFire" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\songFire.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="adultPoachersSaw" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\adultPoachersSaw.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapFiT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapFiT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="adultOddMushroom" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\adultOddMushroom.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapMK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapMK.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapZR" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapZR.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fireArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\fireArrow.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lensOfTruth" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\lensOfTruth.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapToTOutside2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapToTOutside2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="equipMasterSword" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\equipMasterSword.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="gerudosCard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\gerudosCard.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="equipHylianShield" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\equipHylianShield.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="adultCojiro" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\adultCojiro.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="medalLight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\medalLight.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapDDC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapDDC.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapMKEntrance" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapMKEntrance.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapKF" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapKF.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="songSpirit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\songSpirit.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="youngSoldOut" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\youngSoldOut.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dungeonMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\dungeonMap.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapWaT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapWaT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapDT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapDT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bottleBlueFire" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bottleBlueFire.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="equipDekuShield" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\equipDekuShield.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bottleLetter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bottleLetter.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="poh1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\poh1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bottleEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bottleEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bottleFish" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bottleFish.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="upgradeSilverGauntlets" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeSilverGauntlets.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dekuStick" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\dekuStick.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="youngMaskOfTruth" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\youngMaskOfTruth.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="medalShadow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\medalShadow.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bottleLonLonMilkHalf" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bottleLonLonMilkHalf.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="backgroundDungeonItems" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\backgroundDungeonItems.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="medalFireEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\medalFireEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapLH" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapLH.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="poh3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\poh3.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="stoneZoraEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\stoneZoraEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="medalShadowEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\medalShadowEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="equipKokiriBoots" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\equipKokiriBoots.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="youngWeirdEgg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\youngWeirdEgg.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="goldSkulltula" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\goldSkulltula.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapGV" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapGV.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="upgradeGoldenScale" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeGoldenScale.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapBlank" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapBlank.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="upgradeQuiver3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeQuiver3.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bombs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bombs.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapToTOutside" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapToTOutside.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dinsFire" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\dinsFire.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lightArrows" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\lightArrows.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="youngChicken" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\youngChicken.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapGY" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapGY.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="magicBeans" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\magicBeans.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapMKEntrance2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapMKEntrance2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="adultPocketCucco" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\adultPocketCucco.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="emptySlot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\nothing.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="medalWater" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\medalWater.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapJB" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapJB.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapMKBackAlley" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapMKBackAlley.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="stoneZora" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\stoneZora.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bottleBluePotion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\bottleBluePotion.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapDC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapDC.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="stoneKokiriEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\stoneKokiriEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="worldMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\worldMap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapSFM" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapSFM.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapIC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapIC.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="heartContainer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\heartContainer.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dungeonCompass" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\dungeonCompass.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="youngGoronMask" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\additional\youngGoronMask.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="upgradeWallet2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\additional\upgradeWallet2.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="poh4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\poh4.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="songWater" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\songWater.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="medalSpirit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\medalSpirit.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="upgradeBulletBag1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\upgradeBulletBag1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="youngSpookyMask" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\youngSpookyMask.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="medalWaterEmpty" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\medalWaterEmpty.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapOGC" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\additional\mapOGC.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

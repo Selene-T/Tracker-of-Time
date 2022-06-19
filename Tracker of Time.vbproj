@@ -40,7 +40,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
@@ -229,6 +229,43 @@
     <None Include="additional\naryusLove.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="additional\mapOGC.png" />
+    <None Include="additional\mapToTOutside2.png" />
+    <None Include="additional\mapMKEntrance2.png" />
+    <None Include="additional\mapMK2.png" />
+    <None Include="additional\mapSpT.png" />
+    <None Include="additional\mapDC.png" />
+    <None Include="additional\mapGF.png" />
+    <None Include="additional\mapGV.png" />
+    <None Include="additional\mapWaT.png" />
+    <None Include="additional\mapLH.png" />
+    <None Include="additional\mapIC.png" />
+    <None Include="additional\mapJB.png" />
+    <None Include="additional\mapZF.png" />
+    <None Include="additional\mapZD.png" />
+    <None Include="additional\mapZR.png" />
+    <None Include="additional\mapFiT.png" />
+    <None Include="additional\mapDMC.png" />
+    <None Include="additional\mapGC.png" />
+    <None Include="additional\mapDDC.png" />
+    <None Include="additional\mapDMT.png" />
+    <None Include="additional\mapShT.png" />
+    <None Include="additional\mapGY.png" />
+    <None Include="additional\mapBotW.png" />
+    <None Include="additional\mapKV.png" />
+    <None Include="additional\mapHC.png" />
+    <None Include="additional\mapToT.png" />
+    <None Include="additional\mapMK.png" />
+    <None Include="additional\mapToTOutside.png" />
+    <None Include="additional\mapMKBackAlley.png" />
+    <None Include="additional\mapMKEntrance.png" />
+    <None Include="additional\mapLLR.png" />
+    <None Include="additional\mapHF.png" />
+    <None Include="additional\mapDT.png" />
+    <None Include="additional\mapFoT.png" />
+    <None Include="additional\mapSFM.png" />
+    <None Include="additional\mapBlank.png" />
+    <None Include="additional\mapKF.png" />
     <None Include="additional\worldMap.png" />
     <None Include="additional\spawnLocations.bmp" />
     <None Include="additional\upgradeWallet3.bmp" />

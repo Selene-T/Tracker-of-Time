@@ -9,8 +9,8 @@ Public Class frmTrackerOfTime
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 116
-    Private Const IS_64BIT As Boolean = True
-    Private Const VER As String = "3.3.7"
+    Private Const IS_64BIT As Boolean = False
+    Private Const VER As String = "4.0.0"
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private romAddrStart As Integer = &HDFE40000
@@ -70,12 +70,19 @@ Public Class frmTrackerOfTime
     Private aBossKeys(7) As Boolean
     Private aWarps(7) As String
     Private aDungeonRewards(7) As Byte
-    Private aReachA(196) As Boolean
-    Private aReachY(196) As Boolean
+    Private aReachA(255) As Boolean
+    Private aReachY(255) As Boolean
+    Private aExitMap(36)() As Byte
+    Private aVisited(36) As Boolean
+    Private iER As Byte = 0
+    ' Old ER is for detecting if there is an ER change, thus triggering the clearing of exits.
+    ' It will not be reset when stopping the scan, as I do not want people's ER progress to reset randomly.
+    ' This may be used later for an 'Entrance Reset' option.
+    Private iOldER As Byte = 255
     Private bSpawnWarps As Boolean = False
     Private bSongWarps As Boolean = False
     Private maxLife As Byte = 0
-    Private aAddresses(17) As Integer
+    Private aAddresses(19) As Integer
 
     ' Variables for detecting room info
     Private Const CUR_ROOM_ADDR As Integer = &H1C8544
@@ -114,6 +121,7 @@ Public Class frmTrackerOfTime
         Next
 
         makeArrayObjects()
+        redimArrayExits()
         custMenu.highlight = Me.ForeColor
         custMenu.backColour = Me.BackColor
         custMenu.foreColour = Me.ForeColor
@@ -394,6 +402,270 @@ Public Class frmTrackerOfTime
         ShowSettingsToolStripMenuItem.Text = "Settings " & IIf(showSetting, "<", ">").ToString
         resizeForm()
     End Sub
+    Private Sub redimArrayExits()
+        ' Create default arrays. 255 is blank because 0 is used for KF Main. Also start with all true because we will false out the ones after depending on the ER settings
+        For i = 0 To aExitMap.Length - 1
+            ReDim aExitMap(i)(6)
+            aVisited(i) = True
+            For ii = 0 To 6
+                aExitMap(i)(ii) = 255
+            Next
+        Next
+        createArrayExits()
+    End Sub
+
+    Private Sub createArrayExits(Optional typeOfER As Byte = 0)
+        ' Populates the exits with the default exits
+
+        ' Overworld Exits
+        ' MK Entrance (27-29)
+        aExitMap(0)(0) = 7      ' HF
+        aExitMap(0)(1) = 10     ' MK
+        ' MK Back Alley (30-31)
+        aExitMap(1)(0) = 10     ' MK
+        aExitMap(1)(1) = 10     ' MK
+        ' MK (Young) (32-33)
+        aExitMap(2)(0) = 13     ' HC
+        aExitMap(2)(1) = 197    ' MK Entrance
+        aExitMap(2)(2) = 11     ' Outside ToT
+        aExitMap(2)(3) = 199    ' MK Back Alley (right)
+        aExitMap(2)(4) = 198    ' MK Back Alley (left)
+        ' MK (Adult) (34)
+        aExitMap(3)(0) = 51     ' OGC
+        aExitMap(3)(1) = 197    ' MK Entrance
+        aExitMap(3)(2) = 11     ' Outside ToT
+        ' Outside ToT (35-37)
+        aExitMap(4)(0) = 200    ' ToT Front
+        aExitMap(4)(1) = 10     ' MK
+        ' ToT (67)
+        aExitMap(5)(0) = 11     ' Outside ToT
+        ' HF (81)
+        aExitMap(6)(0) = 15     ' KV Main
+        aExitMap(6)(1) = 4      ' LW Bridge
+        aExitMap(6)(2) = 34     ' ZR Front
+        aExitMap(6)(3) = 44     ' GV Hyrule Side
+        aExitMap(6)(4) = 197    ' MK Entrance
+        aExitMap(6)(5) = 9      ' LLR
+        aExitMap(6)(6) = 42     ' LH Main
+        ' KV (82)
+        aExitMap(7)(0) = 20     ' DMT Lower
+        aExitMap(7)(1) = 7      ' HF
+        aExitMap(7)(2) = 18     ' GY Lower
+        ' GY (83)
+        aExitMap(8)(1) = 15     ' KV Main
+        ' ZR (84)
+        aExitMap(9)(0) = 7      ' HF
+        aExitMap(9)(1) = 37     ' ZD Main
+        aExitMap(9)(2) = 2      ' LW Front
+        ' KF (85)
+        aExitMap(10)(1) = 4      ' LW Bridge
+        aExitMap(10)(2) = 2      ' LW Front
+        ' SFM (86)
+        aExitMap(11)(1) = 3     ' LW Behind Mido
+        ' LH (87)
+        aExitMap(12)(0) = 7     ' HF
+        aExitMap(12)(2) = 37    ' ZD Main
+        ' ZD (88)
+        aExitMap(13)(0) = 40    ' ZF Main
+        aExitMap(13)(1) = 36    ' ZR Behind Waterfall
+        aExitMap(13)(2) = 42    ' LH Main
+        ' ZF (89)
+        aExitMap(14)(2) = 38    ' ZD Behind King
+        ' GV (90)
+        aExitMap(15)(0) = 42    ' LH Main
+        aExitMap(15)(1) = 7     ' HF
+        aExitMap(15)(2) = 46    ' GF Main
+        ' LW (91)
+        aExitMap(16)(0) = 5     ' SFM Main
+        aExitMap(16)(1) = 0     ' KF Main
+        aExitMap(16)(2) = 35    ' ZR Main
+        aExitMap(16)(3) = 30    ' GC Shortcut
+        aExitMap(16)(4) = 0     ' KF Main
+        aExitMap(16)(5) = 7     ' HF
+        ' DC (92)
+        aExitMap(17)(1) = 49    ' HW Colossus Side
+        ' GF (93)
+        aExitMap(18)(0) = 45    ' GV Gerudo Side
+        aExitMap(18)(1) = 47    ' HW Gerudo Side
+        ' HW (94)
+        aExitMap(19)(0) = 50    ' DC
+        aExitMap(19)(1) = 47    ' GF Behind Gate
+        ' HC (95)
+        aExitMap(20)(0) = 10    ' MK
+        ' DMT (96)
+        aExitMap(21)(0) = 29    ' GC Main
+        aExitMap(21)(1) = 17    ' KV Behind Gate
+        aExitMap(21)(3) = 22    ' DMC Upper
+        ' DMC (97)
+        aExitMap(22)(0) = 31    ' GC Darunia
+        aExitMap(22)(1) = 21    ' DMT Upper
+        ' GC (98)
+        aExitMap(23)(0) = 25    ' DMC Lower Local
+        aExitMap(23)(1) = 20    ' DMT Lower
+        aExitMap(23)(2) = 2     ' LW Front
+        ' LLR (99)
+        aExitMap(24)(0) = 7     ' HF
+        ' OGC (100)
+        aExitMap(25)(0) = 10    ' MK
+
+        ' Dungeon Exits
+        aExitMap(10)(0) = 60    ' Deku Tree
+        aExitMap(26)(0) = 1
+        aExitMap(21)(2) = 69    ' Dodongo's Cavern
+        aExitMap(27)(0) = 20
+        aExitMap(14)(0) = 79    ' Jabu-Jabu's Belly
+        aExitMap(28)(0) = 40
+        aExitMap(11)(0) = 88    ' Forest Temple
+        aExitMap(29)(0) = 6
+        aExitMap(22)(2) = 108   ' Fire Temple
+        aExitMap(30)(0) = 28
+        aExitMap(12)(1) = 119   ' Water Temple
+        aExitMap(31)(0) = 42
+        aExitMap(17)(0) = 132   ' Spirit Temple
+        aExitMap(32)(0) = 50
+        aExitMap(8)(0) = 150    ' Shadow Temple
+        aExitMap(33)(0) = 19
+        aExitMap(7)(3) = 174    ' BotW
+        aExitMap(34)(0) = 15
+        aExitMap(14)(1) = 178   ' Ice Cavern
+        aExitMap(35)(0) = 41
+        aExitMap(18)(2) = 179   ' Gerudo Training Ground
+        aExitMap(36)(0) = 46
+    End Sub
+    Private Sub clearArrayExitsOverworld()
+        ' Make sure Overworld ER is active
+        If iER Mod 2 = 0 Then Exit Sub
+
+        ' Clear visits to overworld maps
+        For i = 0 To 26
+            aVisited(i) = False
+        Next
+
+        ' Unlink all the overworld map exits
+        ' MK Entrance (27-29)
+        aExitMap(0)(0) = 255    ' HF
+        aExitMap(0)(1) = 255    ' MK
+        ' MK Back Alley (30-31)
+        aExitMap(1)(0) = 255    ' MK
+        aExitMap(1)(1) = 255    ' MK
+        ' MK (Young) (32-33)
+        aExitMap(2)(0) = 255    ' HC
+        aExitMap(2)(1) = 255    ' MK Entrance
+        aExitMap(2)(2) = 255    ' Outside ToT
+        aExitMap(2)(3) = 255    ' MK Back Alley (right)
+        aExitMap(2)(4) = 255    ' MK Back Alley (left)
+        ' MK (Adult) (34)
+        aExitMap(3)(0) = 255    ' OGC
+        aExitMap(3)(1) = 255    ' MK Entrance
+        aExitMap(3)(2) = 255    ' Outside ToT
+        ' Outside ToT (35-37)
+        aExitMap(4)(0) = 255    ' ToT Front
+        aExitMap(4)(1) = 255    ' MK
+        ' ToT (67)
+        aExitMap(5)(0) = 255    ' Outside ToT
+        ' HF (81)
+        aExitMap(6)(0) = 255    ' KV Main
+        aExitMap(6)(1) = 255    ' LW Bridge
+        aExitMap(6)(2) = 255    ' ZR Front
+        aExitMap(6)(3) = 255    ' GV Hyrule Side
+        aExitMap(6)(4) = 255    ' MK Entrance
+        aExitMap(6)(5) = 255    ' LLR
+        aExitMap(6)(6) = 255    ' LH Main
+        ' KV (82)
+        aExitMap(7)(0) = 255    ' DMT Lower
+        aExitMap(7)(1) = 255    ' HF
+        aExitMap(7)(2) = 255    ' GY Lower
+        ' GY (83)
+        aExitMap(8)(1) = 255    ' KV Main
+        ' ZR (84)
+        aExitMap(9)(0) = 255    ' HF
+        aExitMap(9)(1) = 255    ' ZD Main
+        aExitMap(9)(2) = 255    ' LW Front
+        ' KF (85)
+        aExitMap(10)(1) = 255    ' LW Bridge
+        aExitMap(10)(2) = 255    ' LW Front
+        ' SFM (86)
+        aExitMap(11)(1) = 255    ' LW Behind Mido
+        ' LH (87)
+        aExitMap(12)(0) = 255    ' HF
+        aExitMap(12)(2) = 255    ' ZD Main
+        ' ZD (88)
+        aExitMap(13)(0) = 255    ' ZF Main
+        aExitMap(13)(1) = 255    ' ZR Behind Waterfall
+        aExitMap(13)(2) = 255    ' LH Main
+        ' ZF (89)
+        aExitMap(14)(2) = 255    ' ZD Behind King
+        ' GV (90)
+        aExitMap(15)(0) = 255    ' LH Main
+        aExitMap(15)(1) = 255    ' HF
+        aExitMap(15)(2) = 255    ' GF Main
+        ' LW (91)
+        aExitMap(16)(0) = 255    ' SFM Main
+        aExitMap(16)(1) = 255    ' KF Main
+        aExitMap(16)(2) = 255    ' ZR Main
+        aExitMap(16)(3) = 255    ' GC Shortcut
+        aExitMap(16)(4) = 255    ' KF Main
+        aExitMap(16)(5) = 255    ' HF
+        ' DC (92)
+        aExitMap(17)(1) = 255    ' HW Colossus Side
+        ' GF (93)
+        aExitMap(18)(0) = 255    ' GV Gerudo Side
+        aExitMap(18)(1) = 255    ' HW Gerudo Side
+        ' HW (94)
+        aExitMap(19)(0) = 255    ' DC
+        aExitMap(19)(1) = 255    ' GF Behind Gate
+        ' HC (95)
+        aExitMap(20)(0) = 255    ' MK
+        ' DMT (96)
+        aExitMap(21)(0) = 255    ' GC Main
+        aExitMap(21)(1) = 255    ' KV Behind Gate
+        aExitMap(21)(3) = 255    ' DMC Upper
+        ' DMC (97)
+        aExitMap(22)(0) = 255    ' GC Darunia
+        aExitMap(22)(1) = 255    ' DMT Upper
+        ' GC (98)
+        aExitMap(23)(0) = 255    ' DMC Lower Local
+        aExitMap(23)(1) = 255    ' DMT Lower
+        aExitMap(23)(2) = 255    ' LW Front
+        ' LLR (99)
+        aExitMap(24)(0) = 255    ' HF
+        ' OGC (100)
+        aExitMap(25)(0) = 255    ' MK
+    End Sub
+    Private Sub clearArrayExitsDungeons()
+        ' Make sure Dungeon ER is active
+        If iER <= 2 Then Exit Sub
+
+        ' Clear visits to overworld maps
+        For i = 27 To 36
+            aVisited(i) = False
+        Next
+
+        ' Unlink all the dungeon related exits
+        aExitMap(10)(0) = 255   ' Deku Tree
+        aExitMap(26)(1) = 255
+        aExitMap(21)(2) = 255   ' Dodongo's Cavern
+        aExitMap(27)(1) = 255
+        aExitMap(14)(0) = 255   ' Jabu-Jabu's Belly
+        aExitMap(28)(1) = 255
+        aExitMap(11)(0) = 255   ' Forest Temple
+        aExitMap(29)(1) = 255
+        aExitMap(22)(2) = 255   ' Fire Temple
+        aExitMap(30)(1) = 255
+        aExitMap(12)(1) = 255   ' Water Temple
+        aExitMap(31)(1) = 255
+        aExitMap(17)(0) = 255   ' Spirit Temple
+        aExitMap(32)(1) = 255
+        aExitMap(8)(0) = 255    ' Shadow Temple
+        aExitMap(33)(1) = 255
+        aExitMap(7)(3) = 255    ' BotW
+        aExitMap(34)(1) = 255
+        aExitMap(14)(1) = 255   ' Ice Cavern
+        aExitMap(35)(1) = 255
+        aExitMap(18)(2) = 255   ' Gerudo Training Ground
+        aExitMap(36)(1) = 255
+    End Sub
+
 
     Private Sub populateLocations()
         ' Populate location's addresses and clear up the chest data
@@ -417,6 +689,7 @@ Public Class frmTrackerOfTime
         magicBeans = 0
         goldSkulltulas = 0
         maxLife = 0
+        iER = 0
         lastArea = String.Empty
         lastOutput.Clear()
         'isTriforceHunt = False
@@ -440,6 +713,8 @@ Public Class frmTrackerOfTime
 
         bSpawnWarps = False
         bSongWarps = False
+        'clearArrayExits()
+        createArrayExits()
 
         ' Clean up the UI
         clearItems()
@@ -975,6 +1250,1050 @@ Public Class frmTrackerOfTime
         End Select
     End Function
 
+    Private Sub scanER()
+        ' ER scanning
+        'If iER = 0 Then Exit Sub
+
+        Dim isOverworld As Boolean = False
+        Dim isDungeon As Boolean = False
+
+        ' Split the ER value into separate checks
+        If iER Mod 2 = 1 Then isOverworld = True
+        If iER > 1 Then isDungeon = True
+
+        ' For building the arrays for scenes with Dungeon entrances
+        Dim ent As Byte = 0
+
+        Dim locationCode As Integer = goRead(CUR_ROOM_ADDR + 2, 15)
+        Dim locationArray As Byte = 255
+        Dim readExits(6) As Integer     ' Exits read for current map
+        Dim aAlign(6) As Byte           ' Sets text alignment: 0 = Left | 1 = Centre | 2 = Right
+        Dim lPoints As New List(Of Point)
+        For i = 0 To aAlign.Length - 1
+            aAlign(i) = 0
+            readExits(i) = 0
+        Next
+        getAge()
+        ' Dungeon only checks
+        If isDungeon Then
+            Select Case locationCode
+                Case 0
+                    pbxMap.Image = My.Resources.mapDT
+                    readExits(0) = &H377116     ' KF from Deku Tree
+                    If aMQ(0) Then readExits(0) = &H3770B6 ' MQ version
+                    lPoints.Add(New Point(278, 390))
+                    aAlign(0) = 1
+                    'readExits(1) = &H377114     ' Queen Gohma from Deku Tree
+                    'lPoints.Add(New Point(278, 3))
+                    'aAlign(1) = 1
+                    locationArray = 26
+                Case 1
+                    pbxMap.Image = My.Resources.mapDDC
+                    readExits(0) = &H36FABE     ' DMT from Dodongo's Cavern
+                    If aMQ(1) Then readExits(0) = &H36FA8E ' MQ version
+                    lPoints.Add(New Point(278, 390))
+                    aAlign(0) = 1
+                    'readExits(1) = &H36FABC     ' King Dodongo from Dodongo's Cavern
+                    'lPoints.Add(New Point(278, 3))
+                    'aAlign(1) = 1
+                    locationArray = 27
+                Case 2
+                    pbxMap.Image = My.Resources.mapJB
+                    readExits(0) = &H36F43E     ' ZD from Jabu-Jabu's Belly
+                    If aMQ(2) Then readExits(0) = &H36F40E ' MQ version
+                    lPoints.Add(New Point(278, 390))
+                    aAlign(0) = 1
+                    'readExits(1) = &H36F43C     ' Barinade from Jabu-Jabu's Belly
+                    'lPoints.Add(New Point(278, 3))
+                    'aAlign(1) = 1
+                    locationArray = 28
+                Case 3
+                    pbxMap.Image = My.Resources.mapFoT
+                    readExits(0) = &H36ED12     ' SFM from Forest Temple
+                    If aMQ(3) Then readExits(0) = &H36ED12 ' MQ version
+                    lPoints.Add(New Point(278, 390))
+                    aAlign(0) = 1
+                    'readExits(1) = &H36ED10     ' Phantom Ganon from Forest Temple
+                    'lPoints.Add(New Point(278, 3))
+                    'aAlign(1) = 1
+                    locationArray = 29
+                Case 4
+                    pbxMap.Image = My.Resources.mapFoT
+                    readExits(0) = &H36A3C6     ' DMC from Fire Temple
+                    If aMQ(4) Then readExits(0) = &H36A376 ' MQ version
+                    lPoints.Add(New Point(278, 390))
+                    aAlign(0) = 1
+                    'readExits(1) = &H36A3C4     ' Volvagia from Fire Temple
+                    'lPoints.Add(New Point(278, 3))
+                    'aAlign(1) = 1
+                    locationArray = 30
+                Case 5
+                    pbxMap.Image = My.Resources.mapWaT
+                    readExits(0) = &H36EF76     ' LH from Water Temple
+                    If aMQ(5) Then readExits(0) = &H36EF36 ' MQ version
+                    lPoints.Add(New Point(278, 390))
+                    aAlign(0) = 1
+                    'readExits(1) = &H36EF74     ' Morpha from Temple
+                    'lPoints.Add(New Point(278, 3))
+                    'aAlign(1) = 1
+                    locationArray = 31
+                Case 6
+                    pbxMap.Image = My.Resources.mapSpT
+                    readExits(0) = &H36B1EA     ' DC from Spirit Temple
+                    If aMQ(6) Then readExits(0) = &H36B12A ' MQ version
+                    lPoints.Add(New Point(278, 390))
+                    aAlign(0) = 1
+                    'readExits(1) = &H36B1E8     ' Twinrova from Spirit Temple
+                    'lPoints.Add(New Point(278, 3))
+                    'aAlign(1) = 1
+                    'readExits(2) = &H36B1EC     ' DC Statue Hand Right from Spirit Temple
+                    'lPoints.Add(New Point(99, 332))
+                    'aAlign(2) = 2
+                    'readExits(3) = &H36B1EE     ' DC Statue Hand Left from Spirit Temple
+                    'lPoints.Add(New Point(482, 357))
+                    locationArray = 32
+                Case 7
+                    pbxMap.Image = My.Resources.mapShT
+                    readExits(0) = &H36C86E     ' GY from Shadow Temple
+                    If aMQ(7) Then readExits(0) = &H36C86E ' MQ version
+                    lPoints.Add(New Point(278, 390))
+                    aAlign(0) = 1
+                    'readExits(1) = &H36C86C     ' Bongo Bongo from Shadow Temple
+                    'lPoints.Add(New Point(278, 3))
+                    'aAlign(1) = 1
+                    locationArray = 33
+                Case 8
+                    pbxMap.Image = My.Resources.mapBotW
+                    readExits(0) = &H3785C6     ' KV from BotW
+                    If aMQ(8) Then readExits(0) = &H378566 ' MQ version
+                    lPoints.Add(New Point(278, 390))
+                    aAlign(0) = 1
+                    locationArray = 34
+                Case 9
+                    pbxMap.Image = My.Resources.mapIC
+                    readExits(0) = &H37352E     ' ZF from Ice Cavern
+                    If aMQ(9) Then readExits(0) = &H37344E ' MQ version
+                    lPoints.Add(New Point(278, 390))
+                    aAlign(0) = 1
+                    locationArray = 35
+                Case 10
+                    pbxMap.Image = My.Resources.mapBlank
+                    readExits(0) = &H374348     ' Ganon's Castle from Ganon's Tower
+                    lPoints.Add(New Point(278, 3))
+                    aAlign(0) = 1
+                    'readExits(1) = &H37434A     ' Ganon from Ganon's Tower
+                    'lPoints.Add(New Point(278, 390))
+                    'aAlign(1) = 1
+                Case 11
+                    pbxMap.Image = My.Resources.mapBlank
+                    readExits(0) = &H373686     ' GF from GTG
+                    If aMQ(10) Then readExits(0) = &H373686 ' MQ version
+                    lPoints.Add(New Point(278, 390))
+                    aAlign(0) = 1
+                    locationArray = 36
+                Case 13
+                    pbxMap.Image = My.Resources.mapBlank
+                    readExits(0) = &H3634BC     ' Ganon's Tower from Ganon's Castle
+                    lPoints.Add(New Point(278, 3))
+                    aAlign(0) = 1
+                    readExits(1) = &H3634BE     ' OGC from Ganon's Castle
+                    lPoints.Add(New Point(278, 390))
+                    aAlign(1) = 1
+            End Select
+        End If
+
+        Select Case locationCode
+            Case 0
+                pbxMap.Image = My.Resources.mapDT
+                locationArray = 26
+            Case 1
+                pbxMap.Image = My.Resources.mapDDC
+                locationArray = 27
+            Case 2
+                pbxMap.Image = My.Resources.mapJB
+                locationArray = 28
+            Case 3
+                pbxMap.Image = My.Resources.mapFoT
+                locationArray = 29
+            Case 4
+                pbxMap.Image = My.Resources.mapFoT
+                locationArray = 30
+            Case 5
+                pbxMap.Image = My.Resources.mapWaT
+                locationArray = 31
+            Case 6
+                pbxMap.Image = My.Resources.mapSpT
+                locationArray = 32
+            Case 7
+                pbxMap.Image = My.Resources.mapShT
+                locationArray = 33
+            Case 8
+                pbxMap.Image = My.Resources.mapBotW
+                locationArray = 34
+            Case 9
+                pbxMap.Image = My.Resources.mapIC
+                locationArray = 35
+            Case 10
+                pbxMap.Image = My.Resources.mapBlank
+            Case 11
+                pbxMap.Image = My.Resources.mapBlank
+                locationArray = 36
+            Case 13
+                pbxMap.Image = My.Resources.mapBlank
+            Case 27 To 29
+                If locationCode = 29 Then
+                    pbxMap.Image = My.Resources.mapMKEntrance2
+                Else
+                    pbxMap.Image = My.Resources.mapMKEntrance
+                End If
+                readExits(0) = &H384650     ' HF from MK Entrance Day
+                lPoints.Add(New Point(487, 120))
+                aAlign(0) = 1
+                readExits(1) = &H384652     ' MK from MK Entrance Day
+                lPoints.Add(New Point(200, 320))
+                aAlign(1) = 1
+                ' For night, adjust by -0x48
+                If locationCode = 28 Then
+                    readExits(0) = readExits(0) - &H48
+                    readExits(1) = readExits(1) - &H48
+                End If
+                locationArray = 0
+            Case 30, 31
+                pbxMap.Image = My.Resources.mapMKBackAlley
+                readExits(0) = &H383824     ' MK from Back Alley Left Day
+                lPoints.Add(New Point(266, 307))
+                readExits(1) = &H383826     ' MK from Back Alley Right Day
+                lPoints.Add(New Point(266, 70))
+                ' For night, adjust by -0x98
+                If locationCode = 31 Then
+                    readExits(0) = readExits(0) - &H98
+                    readExits(1) = readExits(1) - &H98
+                End If
+                locationArray = 1
+            Case 32, 33
+                pbxMap.Image = My.Resources.mapMK
+                readExits(0) = &H3824A8     ' HC from MK Day
+                lPoints.Add(New Point(278, 3))
+                aAlign(0) = 1
+                readExits(1) = &H3824AA     ' MK Entrance from MK Day
+                lPoints.Add(New Point(278, 390))
+                aAlign(1) = 1
+                readExits(2) = &H3824AE     ' Outside ToT from MK Day
+                lPoints.Add(New Point(456, 81))
+                readExits(3) = &H3824AC     ' Back Alley Right from MK Day
+                lPoints.Add(New Point(98, 56))
+                aAlign(3) = 2
+                readExits(4) = &H3824B2     ' Back Alley Left from MK Day
+                lPoints.Add(New Point(98, 330))
+                aAlign(4) = 2
+                ' For night, adjust by +0x40
+                If locationCode = 33 Then
+                    readExits(0) = readExits(0) + &H40
+                    readExits(1) = readExits(1) + &H40
+                    readExits(2) = readExits(2) + &H40
+                    readExits(3) = readExits(3) + &H40
+                    readExits(4) = readExits(4) + &H40
+                End If
+                locationArray = 2
+            Case 34
+                pbxMap.Image = My.Resources.mapMK2
+                readExits(0) = &H383478     ' OGC from MK Day
+                lPoints.Add(New Point(278, 3))
+                aAlign(0) = 1
+                readExits(1) = &H38347A     ' MK Entrance from MK
+                lPoints.Add(New Point(278, 390))
+                aAlign(1) = 1
+                readExits(2) = &H38347E     ' Outside ToT from MK
+                lPoints.Add(New Point(456, 70))
+                locationArray = 3
+            Case 35, 36
+                pbxMap.Image = My.Resources.mapToTOutside
+                readExits(0) = &H383524     ' ToT from Outside ToT Day
+                lPoints.Add(New Point(215, 119))
+                aAlign(0) = 1
+                readExits(1) = &H383526     ' MK from Outside ToT Day
+                lPoints.Add(New Point(363, 375))
+                aAlign(1) = 1
+                ' For night, adjust by -0x18
+                If locationCode = 36 Then
+                    readExits(0) = readExits(0) - &H18
+                    readExits(1) = readExits(1) - &H18
+                End If
+                locationArray = 4
+            Case 37
+                pbxMap.Image = My.Resources.mapToTOutside2
+                readExits(0) = &H383574     ' ToT from Outside ToT
+                lPoints.Add(New Point(215, 119))
+                aAlign(0) = 1
+                readExits(1) = &H383576     ' MK from Outside ToT 
+                lPoints.Add(New Point(363, 375))
+                aAlign(1) = 1
+                locationArray = 4
+            Case 67
+                pbxMap.Image = My.Resources.mapToT
+                readExits(0) = &H372332     ' Outside ToT from ToT
+                lPoints.Add(New Point(278, 385))
+                aAlign(0) = 1
+                locationArray = 5
+            Case 81
+                pbxMap.Image = My.Resources.mapHF
+                readExits(0) = &H36BF9C     ' KV from HF
+                lPoints.Add(New Point(419, 63))
+                readExits(1) = &H36BFA0     ' LW Bridge from HF
+                lPoints.Add(New Point(429, 215))
+                readExits(2) = &H36BFA2     ' ZR from HF
+                lPoints.Add(New Point(439, 124))
+                readExits(3) = &H36BFA4     ' GV from HF
+                lPoints.Add(New Point(112, 186))
+                aAlign(3) = 2
+                readExits(4) = &H36BFA8     ' MK from HF
+                lPoints.Add(New Point(313, 23))
+                aAlign(4) = 1
+                readExits(5) = &H36BFAA     ' LLR from HF
+                lPoints.Add(New Point(279, 159))
+                aAlign(5) = 1
+                readExits(6) = &H36BFAE     ' LH from HF
+                lPoints.Add(New Point(200, 375))
+                aAlign(6) = 1
+                locationArray = 6
+            Case 82
+                pbxMap.Image = My.Resources.mapKV
+                If isDungeon Then
+                    readExits(0) = &H368A82     ' BotW from KV
+                    lPoints.Add(New Point(369, 223))
+                    aAlign(0) = 1
+                    ent = 1
+                End If
+                If isOverworld Then
+                    readExits(ent) = &H368A78     ' DMT from KV
+                    lPoints.Add(New Point(298, 11))
+                    aAlign(ent) = 1
+                    incB(ent)
+                    readExits(ent) = &H368A7A     ' HF from KV
+                    lPoints.Add(New Point(57, 294))
+                    aAlign(ent) = 2
+                    incB(ent)
+                    readExits(ent) = &H368A7E     ' GY from KV
+                    lPoints.Add(New Point(493, 312))
+                End If
+                locationArray = 7
+            Case 83
+                pbxMap.Image = My.Resources.mapGY
+                If isDungeon Then
+                    readExits(0) = &H378E44     ' Shadow Temple from GY
+                    lPoints.Add(New Point(492, 202))
+                    ent = 1
+                End If
+                If isOverworld Then
+                    readExits(ent) = &H378E46     ' KV from GY
+                    lPoints.Add(New Point(57, 225))
+                    aAlign(ent) = 2
+                End If
+                locationArray = 8
+            Case 84
+                pbxMap.Image = My.Resources.mapZR
+                readExits(0) = &H37951C     ' HF from ZR
+                lPoints.Add(New Point(46, 319))
+                aAlign(0) = 2
+                readExits(1) = &H37951E     ' ZD from ZR
+                lPoints.Add(New Point(509, 92))
+                readExits(2) = &H379522     ' LW from ZR
+                lPoints.Add(New Point(483, 157))
+                aAlign(2) = 1
+                locationArray = 9
+            Case 85
+                pbxMap.Image = My.Resources.mapKF
+                If isDungeon Then
+                    readExits(0) = &H3738F4     ' Deku Tree from KF
+                    lPoints.Add(New Point(440, 234))
+                    aAlign(0) = 1
+                    ent = 1
+                End If
+                If isOverworld Then
+                    readExits(ent) = &H3738FA     ' LW Bridge from KF
+                    lPoints.Add(New Point(79, 187))
+                    aAlign(ent) = 2
+                    incB(ent)
+                    readExits(ent) = &H373902     ' LW from KF
+                    lPoints.Add(New Point(172, 84))
+                    aAlign(ent) = 1
+                End If
+                locationArray = 10
+            Case 86
+                pbxMap.Image = My.Resources.mapSFM
+                If isDungeon Then
+                    readExits(0) = &H36FCD4     ' Forest Temple from SFM
+                    lPoints.Add(New Point(278, 3))
+                    aAlign(0) = 1
+                    ent = 1
+                End If
+                If isOverworld Then
+                    readExits(ent) = &H36FCD6     ' LW from SFM
+                    lPoints.Add(New Point(278, 389))
+                    aAlign(ent) = 1
+                End If
+                locationArray = 11
+            Case 87
+                pbxMap.Image = My.Resources.mapLH
+                If isDungeon Then
+                    readExits(0) = &H3696A6     ' Water Temple from LH
+                    lPoints.Add(New Point(311, 270))
+                    aAlign(0) = 1
+                    ent = 1
+                End If
+                If isOverworld Then
+                    readExits(ent) = &H3696A2     ' HF from LH
+                    lPoints.Add(New Point(276, 5))
+                    aAlign(ent) = 1
+                    incB(ent)
+                    readExits(ent) = &H3696AE     ' ZD from LH
+                    lPoints.Add(New Point(313, 146))
+                    aAlign(ent) = 1
+                End If
+                locationArray = 12
+            Case 88
+                pbxMap.Image = My.Resources.mapZD
+                readExits(0) = &H37B26C     ' ZF from ZD
+                lPoints.Add(New Point(291, 24))
+                aAlign(0) = 1
+                readExits(1) = &H37B26E     ' ZR from ZD
+                lPoints.Add(New Point(182, 291))
+                aAlign(1) = 1
+                readExits(2) = &H37B270     ' LH from ZD
+                lPoints.Add(New Point(352, 387))
+                aAlign(2) = 2
+                locationArray = 13
+            Case 89
+                pbxMap.Image = My.Resources.mapZF
+                If isDungeon Then
+                    readExits(0) = &H3733CC     ' Jabu-Jabu's Belly from ZF
+                    lPoints.Add(New Point(262, 168))
+                    readExits(1) = &H3733D0     ' Ice Cavern from ZF
+                    lPoints.Add(New Point(346, 8))
+                    aAlign(1) = 1
+                    ent = 2
+                End If
+                If isOverworld Then
+                    readExits(ent) = &H3733D2     ' ZD from ZF
+                    lPoints.Add(New Point(189, 268))
+                    aAlign(ent) = 2
+                End If
+                locationArray = 14
+            Case 90
+                pbxMap.Image = My.Resources.mapGV
+                readExits(0) = &H373904     ' LH from GV
+                lPoints.Add(New Point(328, 387))
+                aAlign(0) = 1
+                readExits(1) = &H373906     ' HF from GV
+                lPoints.Add(New Point(464, 218))
+                readExits(2) = &H373908     ' GF from GV
+                lPoints.Add(New Point(84, 117))
+                aAlign(2) = 2
+                locationArray = 15
+            Case 91
+                pbxMap.Image = My.Resources.mapBlank
+                readExits(0) = &H37475C     ' SFM from LW
+                lPoints.Add(New Point(328, 20))
+                aAlign(0) = 1
+                readExits(1) = &H37475E     ' KF from LW
+                lPoints.Add(New Point(278, 280))
+                aAlign(1) = 1
+                readExits(2) = &H374768     ' ZR from LW
+                lPoints.Add(New Point(548, 199))
+                aAlign(2) = 2
+                readExits(3) = &H37476A     ' GC from LW
+                lPoints.Add(New Point(328, 175))
+                aAlign(3) = 1
+                readExits(4) = &H37476C     ' KF from LW Bridge
+                lPoints.Add(New Point(53, 375))
+                readExits(5) = &H37476E     ' HF from LW Bridge
+                lPoints.Add(New Point(0, 350))
+                locationArray = 16
+            Case 92
+                pbxMap.Image = My.Resources.mapDC
+                If isDungeon Then
+                    readExits(0) = &H36B5AC     ' Spirit Temple from DC
+                    lPoints.Add(New Point(85, 186))
+                    aAlign(0) = 1
+                    ent = 1
+                    'readExits(2) = &H36B5B0     ' Spirit Temple from Statue Hand Left
+                    'lPoints.Add(New Point(84, 257))
+                    'aAlign(2) = 1
+                    'readExits(3) = &H36B5B2     ' Spirit Temple from Statue Hand Right
+                    'lPoints.Add(New Point(84, 118))
+                    'aAlign(3) = 1
+                End If
+                If isOverworld Then
+                    readExits(ent) = &H36B5AE     ' HW from DC
+                    lPoints.Add(New Point(476, 174))
+                End If
+                locationArray = 17
+            Case 93
+                pbxMap.Image = My.Resources.mapGF
+                If isDungeon Then
+                    readExits(0) = &H374D02     ' GTG from GF
+                    lPoints.Add(New Point(306, 243))
+                    aAlign(0) = 1
+                    ent = 1
+                End If
+                If isOverworld Then
+                    readExits(ent) = &H374CE6     ' GV from GF
+                    lPoints.Add(New Point(311, 363))
+                    incB(ent)
+                    readExits(ent) = &H374D00     ' HW from GF
+                    lPoints.Add(New Point(124, 53))
+                    aAlign(ent) = 2
+                End If
+                locationArray = 18
+            Case 94
+                pbxMap.Image = My.Resources.mapBlank
+                readExits(0) = &H37EBFC     ' DC from HW
+                lPoints.Add(New Point(0, 188))
+                readExits(1) = &H37EBFE     ' GF from HW
+                lPoints.Add(New Point(550, 213))
+                aAlign(1) = 2
+                locationArray = 19
+            Case 95
+                pbxMap.Image = My.Resources.mapHC
+                readExits(0) = &H36C55E     ' MK from HC
+                lPoints.Add(New Point(162, 365))
+                aAlign(0) = 1
+                'readExits(1) = &H36C562     ' GFF from HC
+                'lPoints.Add(New Point(346, 243))
+                'readExits(2) = &H36C55C     ' Castle Courtyard from HC
+                'lPoints.Add(New Point(89, 32))
+                locationArray = 20
+            Case 96
+                pbxMap.Image = My.Resources.mapDMT
+                If isDungeon Then
+                    readExits(0) = &H365FF0     ' Dodongo's Cavern from DMT
+                    lPoints.Add(New Point(260, 174))
+                    aAlign(0) = 2
+                    ent = 1
+                End If
+                If isOverworld Then
+                    readExits(ent) = &H365FEC     ' GC from DMT
+                    lPoints.Add(New Point(320, 149))
+                    incB(ent)
+                    readExits(ent) = &H365FEE     ' KV from DMT
+                    lPoints.Add(New Point(259, 384))
+                    aAlign(ent) = 1
+                    incB(ent)
+                    readExits(ent) = &H365FF2     ' DMC from DMT
+                    lPoints.Add(New Point(315, 3))
+                    aAlign(ent) = 1
+                End If
+                locationArray = 21
+            Case 97
+                pbxMap.Image = My.Resources.mapDMC
+                If isDungeon Then
+                    readExits(0) = &H374B9E     ' Fire Temple from DMC
+                    lPoints.Add(New Point(308, 3))
+                    aAlign(0) = 1
+                    ent = 1
+                End If
+                If isOverworld Then
+                    readExits(ent) = &H374B98     ' GC from DMC
+                    lPoints.Add(New Point(129, 192))
+                    aAlign(ent) = 2
+                    incB(ent)
+                    readExits(ent) = &H374B9A     ' DMT from DMC
+                    lPoints.Add(New Point(199, 387))
+                    aAlign(ent) = 1
+                End If
+                locationArray = 22
+            Case 98
+                pbxMap.Image = My.Resources.mapGC
+                readExits(0) = &H37A64C     ' DMC from GC
+                lPoints.Add(New Point(281, 3))
+                aAlign(0) = 1
+                readExits(1) = &H37A64E     ' DMT from GC
+                lPoints.Add(New Point(278, 390))
+                aAlign(1) = 1
+                readExits(2) = &H37A650     ' LW from GC
+                lPoints.Add(New Point(351, 361))
+                locationArray = 23
+            Case 99
+                pbxMap.Image = My.Resources.mapLLR
+                readExits(0) = &H377C12     ' HF from LLR
+                lPoints.Add(New Point(337, 39))
+                aAlign(0) = 1
+                locationArray = 24
+            Case 100
+                pbxMap.Image = My.Resources.mapOGC
+                readExits(0) = &H37FEC2     ' MK from OGC
+                lPoints.Add(New Point(278, 390))
+                aAlign(0) = 1
+                'readExits(1) = &H37FEC0     ' Ganon's Castle from OGC
+                'lPoints.Add(New Point(278, 3))
+                'aAlign(1) = 1
+                locationArray = 25
+            Case Else
+                Exit Sub
+        End Select
+
+        If iER = 0 Then Exit Sub
+        ' Sets that you have been to the current
+        aVisited(locationArray) = True
+
+        Dim exitCode As String = String.Empty
+        Dim fontGS = New Font("Lucida Console", 24, FontStyle.Bold, GraphicsUnit.Pixel)
+        Dim ptX As Integer = 0
+        Dim ptY As Integer = 0
+        Dim iNewReach As Byte = 0
+        Dim iVisited As Byte = 0
+        Dim doDisplay As Boolean = False
+        For i = 0 To readExits.Length - 1
+            If readExits(i) = 0 Then Exit For
+            iNewReach = 255
+            exitCode = Hex(goRead(readExits(i), 15))
+            fixHex(exitCode, 3)
+            exitCode = exit2label(exitCode, iNewReach)
+            ' If aReachExit is not 255, set exit to the new iNewReach
+            If Not iNewReach = 255 Then
+                aExitMap(locationArray)(i) = iNewReach
+            End If
+
+            ' Only run the display part if the panel is actually visable
+            If pnlER.Visible Then
+                ' Convert the iNewReach into the location for aVisited
+                iVisited = zone2map(iNewReach)
+                doDisplay = False
+                If iVisited = 255 Then
+                    doDisplay = True
+                Else
+                    If aVisited(iVisited) Then doDisplay = True
+                End If
+                If doDisplay Then
+                    ptX = lPoints(i).X
+                    ptY = lPoints(i).Y
+
+                    ' Make sure the text will not run off the display area
+                    Select Case aAlign(i)
+                        Case 0
+                            If ptX + ((exitCode.Length) * 15) + 4 > 548 Then
+                                ptX = 548
+                                aAlign(i) = 2
+                            End If
+                        Case 1
+                            Dim limitSize As Double = 0
+                            If ptX > (pbxMap.Width / 2) Then
+                                limitSize = ptX + (((exitCode.Length) * 15) / 2) + 4
+                                If limitSize > 548 Then
+                                    ptX = 548
+                                    aAlign(i) = 2
+                                End If
+                            Else
+                                limitSize = ptX - (((exitCode.Length) * 15) / 2) + 4
+                                If limitSize < 0 Then
+                                    ptX = 0
+                                    aAlign(i) = 0
+                                End If
+                            End If
+                        Case 2
+                            If ptX - ((exitCode.Length) * 15) - 4 < 0 Then
+                                ptX = 0
+                                aAlign(i) = 0
+                            End If
+                    End Select
+
+                    ' Adjust the starting position for the exit's alignment
+                    Select Case aAlign(i)
+                        Case 1
+                            ptX = CInt(ptX - ((exitCode.Length * 15) / 2) - 4)
+                        Case 2
+                            ptX = ptX - (exitCode.Length * 15) - 4
+                    End Select
+
+                    Graphics.FromImage(pbxMap.Image).DrawString(exitCode, fontGS, New SolidBrush(Color.Black), ptX + 1, ptY + 1)
+                    Graphics.FromImage(pbxMap.Image).DrawString(exitCode, fontGS, New SolidBrush(Color.White), ptX, ptY)
+                End If
+            End If
+        Next
+
+    End Sub
+    Private Function exit2label(ByVal exitCode As String, ByRef reachMap As Byte) As String
+        exit2label = String.Empty
+        Select Case exitCode
+            Case "09C", "0BB", "0C1", "0C9", "209", "211", "266", "26A", "272", "286", "33C", "433", "437", "443", "447"
+                ' KF Main
+                exit2label = "KF"
+                reachMap = 0
+            Case "20D"
+                ' KF Trapped
+                exit2label = "KF"
+                reachMap = 0
+            Case "11E", "4D6", "4DA"
+                ' LW Front
+                exit2label = "LW Front"
+                reachMap = 2
+            Case "1A9"
+                ' LW Behind Mido
+                exit2label = "LW Back"
+                reachMap = 3
+            Case "4DE", "5E0"
+                ' LW Bridge
+                exit2label = "LW Bridge"
+                reachMap = 4
+            Case "0FC", "215", "600"
+                ' SFM Main
+                exit2label = "SFM"
+                reachMap = 5
+            Case "17D", "181", "185", "189", "18D", "1F9", "1FD", "27E", "311"
+                ' HF
+                exit2label = "HF"
+                reachMap = 7
+            Case "04F", "157", "2F9", "378", "42F", "5D0", "5D4"
+                ' LLR
+                exit2label = "LLR"
+                reachMap = 9
+            Case "033", "034", "035", "036", "26E", "26F", "270", "271", "276", "277", "278", "279"
+                ' MK Entrance
+                exit2label = "Market Entrance"
+                reachMap = 197
+            Case "063", "067", "07E", "0B1", "16D", "1CD", "1D1", "1D5", "25A", "25E", "262", "263", "29E", "29F", "2A2", "388", _
+                    "3B8", "3BC", "3C0", "43B", "507", "528", "52C", "530"
+                ' MK
+                exit2label = "Market"
+                reachMap = 10
+            Case "29A", "29B", "29C", "29D"
+                ' MK Alley Back (left)
+                exit2label = "MK Back Alley"
+                reachMap = 198
+            Case "0AD", "0AE", "0AF", "0B0"
+                ' MK Alley Back (right)
+                exit2label = "MK Back Alley"
+                reachMap = 199
+            Case "171", "172", "472"
+                ' ToT Front
+                exit2label = "Outside ToT"
+                reachMap = 1
+            Case "053", "054", "5F4"
+                ' ToT
+                exit2label = "ToT"
+                reachMap = 200
+            Case "138", "23D", "340"
+                ' HC & OGC
+                If isAdult Then
+                    exit2label = "OGC"
+                    reachMap = 51
+                Else
+                    exit2label = "HC"
+                    reachMap = 13
+                End If
+            Case "07A", "296"
+                ' HC Castle Courtyard
+                exit2label = "Castle Courtyard"
+                reachMap = 13
+            Case "400", "5F0"
+                ' HC Zelda's Courtyard
+                exit2label = "Zelda's Courtyard"
+                reachMap = 13
+            Case "03B", "072", "0B7", "0DB", "195", "201", "2FD", "2A6", "345", "349", "34D", "351", "384", "39C", "3EC", "44B", _
+                    "453", "463", "4EE", "4FF", "550", "5C8", "5DC"
+                ' KV Main
+                exit2label = "KV"
+                reachMap = 15
+            Case "554"
+                ' KV Rooftops
+                exit2label = "KV Roofs"
+                reachMap = 16
+            Case "191"
+                ' KV Behind Gate
+                exit2label = "KV"
+                reachMap = 17
+            Case "0E4", "30D", "355"
+                ' GY Main
+                exit2label = "GY"
+                reachMap = 18
+            Case "205", "568"
+                ' GY Upper
+                exit2label = "GY near Temple"
+                reachMap = 19
+            Case "13D", "1B9", "242"
+                ' DMT Lower
+                exit2label = "DMT Lower"
+                reachMap = 20
+            Case "1BD", "315", "45B"
+                ' DMT Upper 
+                exit2label = "DMT Upper"
+                reachMap = 21
+            Case "147"
+                ' DMC Upper Local
+                exit2label = "DMC Upper"
+                reachMap = 22
+            Case "246", "482", "4BE"
+                ' DMC Lower Nearby
+                exit2label = "DMC near GC"
+                reachMap = 24
+            Case "4F6"
+                ' DMC Central Local
+                exit2label = "DMC Warp"
+                reachMap = 27
+            Case "24A"
+                ' DMC near Temple
+                exit2label = "DMC near Temple"
+                reachMap = 28
+            Case "14D", "3FC"
+                ' GC Main
+                exit2label = "GC"
+                reachMap = 29
+            Case "4E2"
+                ' GC Shortcut
+                exit2label = "GC"
+                reachMap = 30
+            Case "1C1"
+                ' GC Darunia
+                exit2label = "GC Darunia"
+                reachMap = 31
+            Case "37C"
+                ' GC Shoppe
+                exit2label = "GC Shop"
+                reachMap = 32
+            Case "0EA"
+                ' ZR Front
+                exit2label = "ZR Front"
+                reachMap = 34
+            Case "199", "1DD"
+                ' ZR Main
+                exit2label = "ZR"
+                reachMap = 35
+            Case "19D"
+                ' ZR Behind Waterfall
+                exit2label = "ZR"
+                reachMap = 36
+            Case "108", "153", "328", "3C4"
+                ' ZD Main
+                exit2label = "ZD"
+                reachMap = 37
+            Case "1A1"
+                ' ZD Behind King
+                exit2label = "ZD Behind King"
+                reachMap = 38
+            Case "221", "225", "371", "394"
+                ' ZF Main
+                exit2label = "ZF"
+                reachMap = 40
+            Case "3D4"
+                ' ZF Ledge
+                exit2label = "ZF Ledge"
+                reachMap = 41
+            Case "043", "102", "219", "21D", "3CC", "560", "604"
+                ' LH Main
+                exit2label = "LH"
+                reachMap = 42
+            Case "309", "45F"
+                ' LH Fishing Ledge
+                exit2label = "LH"
+                reachMap = 43
+            Case "117"
+                ' GV Hyrule Side
+                exit2label = "GV Hyrule Side"
+                reachMap = 44
+            Case "22D", "3A0", "3D0"
+                ' GV Gerudo Side
+                exit2label = "GV Gerudo Side"
+                reachMap = 45
+            Case "129", "3A8"
+                ' GF Main
+                exit2label = "GF"
+                reachMap = 46
+            Case "3AC"
+                ' GF Behind Gate
+                exit2label = "GF Behind Gate"
+                reachMap = 47
+            Case "130"
+                ' HW Gerudo Side
+                exit2label = "HW Gerudo Side"
+                reachMap = 48
+            Case "365"
+                ' HW Colossus Side
+                exit2label = "HW Colossus Side"
+                reachMap = 49
+            Case "123", "1F1", "1E1", "57C", "588"
+                ' DC Main
+                exit2label = "DC"
+                reachMap = 50
+            Case "1E5"
+                ' DC Statue Hand Right
+                exit2label = "DC Statue Hand Right"
+                reachMap = 50
+            Case "1E9"
+                ' DC Statue Hand Left
+                exit2label = "DC Statue Hand left"
+                reachMap = 50
+            Case "4C2"
+                ' Schrodinger's Fairy Adult
+                exit2label = "OGC Fairy"
+                reachMap = 51
+            Case "578"
+                ' Schrodinger's Fairy Young
+                exit2label = "HC Fairy"
+                reachMap = 13
+            Case "000"
+                ' Deku Tree
+                exit2label = "Deku Tree"
+                reachMap = 60
+            Case "40F"
+                ' Queen Gohma
+                exit2label = "Queen Gohma"
+            Case "004"
+                ' Dodongo's Cavern
+                exit2label = "Dodongo's Cavern"
+                reachMap = 69
+            Case "40B"
+                ' King Dodongo
+                exit2label = "King Dodongo"
+            Case "028"
+                ' Jabu-Jabu's Belly
+                exit2label = "Jabu-Jabu's Belly"
+                reachMap = 79
+            Case "301"
+                ' Barinade
+                exit2label = "Barinade"
+            Case "169"
+                ' Forest Temple
+                exit2label = "Forest Temple"
+                reachMap = 88
+            Case "00C"
+                ' Phantom Ganon
+                exit2label = "Phantom Ganon"
+            Case "165"
+                ' Fire Temple
+                exit2label = "Fire Temple"
+                reachMap = 108
+            Case "305"
+                ' Volvagia
+                exit2label = "Volvagia"
+            Case "010"
+                ' Water Temple
+                exit2label = "Water Temple"
+                reachMap = 119
+            Case "417"
+                ' Morpha
+                exit2label = "Morpha"
+            Case "082", "3F0", "3F4"
+                ' Spirit Temple
+                exit2label = "Spirit Temple"
+                reachMap = 132
+            Case "08D"
+                ' Twinrova
+                exit2label = "Twinrova"
+            Case "037"
+                ' Shadow Temple
+                exit2label = "Shadow Temple"
+                reachMap = 150
+            Case "413"
+                ' Bongo Bongo
+                exit2label = "Bongo Bongo"
+            Case "098"
+                ' Bottom of the Well
+                exit2label = "BotW"
+                reachMap = 174
+            Case "088"
+                ' Ice Cavern
+                exit2label = "Ice Cavern"
+                reachMap = 178
+            Case "008"
+                ' Gerudo Training Ground
+                exit2label = "GTG"
+                reachMap = 179
+            Case "467", "534"
+                ' Ganon's Castle
+                exit2label = "Ganon's Castle"
+            Case "41B"
+                ' Ganon's Tower
+                exit2label = "Ganon's Tower"
+            Case "41F"
+                ' Ganondorf
+                exit2label = "Ganondorf"
+            Case Else
+                ' Unknown entry
+                exit2label = exitCode & "?"
+        End Select
+    End Function
+    Private Function zone2map(ByVal zone As Byte) As Byte
+        ' Converts zone into map array for ER usage. Default 255 as null
+        zone2map = 255
+        Select Case zone
+            Case 0, 1
+                zone2map = 10   ' KF
+            Case 2 To 4, 8
+                zone2map = 16   ' LW
+            Case 5, 6
+                zone2map = 11   ' SFM
+            Case 7
+                zone2map = 6    ' HF
+            Case 9
+                zone2map = 24   ' LLR
+            Case 197
+                zone2map = 0    ' MK Entrance
+            Case 10
+                If isAdult Then
+                    zone2map = 3    ' MK Adult
+                Else
+                    zone2map = 2    ' MK Young
+                End If
+            Case 198, 199
+                zone2map = 1    ' MK Back Alley
+            Case 11
+                zone2map = 4    ' Outside ToT
+            Case 12, 200
+                zone2map = 5    ' ToT
+            Case 13
+                zone2map = 20   ' HC
+            Case 15 To 17
+                zone2map = 7    ' KV
+            Case 18, 19
+                zone2map = 8    ' GY
+            Case 20, 21
+                zone2map = 21   ' DMT
+            Case 22 To 28
+                zone2map = 22   ' DMC
+            Case 29 To 33
+                zone2map = 23   ' GC
+            Case 34 To 36
+                zone2map = 9    ' ZR
+            Case 37 To 39
+                zone2map = 13   ' ZD
+            Case 40, 41
+                zone2map = 14   ' ZF
+            Case 42, 43
+                zone2map = 12   ' LH
+            Case 44, 45, 56, 57
+                zone2map = 15   ' GV
+            Case 46, 47
+                zone2map = 18   ' GF
+            Case 48, 49, 55
+                zone2map = 19   ' HW
+            Case 50
+                zone2map = 17   ' DC
+            Case 51
+                zone2map = 25   ' OGC
+            Case 60
+                zone2map = 26   ' Deku Tree
+            Case 69
+                zone2map = 27   ' Dodongo's Cavern
+            Case 79
+                zone2map = 28   ' Jabu-Jabu's Belly
+            Case 88
+                zone2map = 29   ' Forest Temple
+            Case 108
+                zone2map = 30   ' Fire Temple
+            Case 119
+                zone2map = 31   ' Water Temple
+            Case 132
+                zone2map = 32   ' Spirit Temple
+            Case 150
+                zone2map = 33   ' Shadow Temple
+            Case 174
+                zone2map = 34   ' Bottom of the Well
+            Case 178
+                zone2map = 35   ' Ice Cavern
+            Case 179
+                zone2map = 36   ' Gerudo Training Ground
+        End Select
+    End Function
     ' Scan each of the chests data
     Private Sub readChestData()
         If emulator = String.Empty Then
@@ -986,11 +2305,12 @@ Public Class frmTrackerOfTime
                 If emulator = String.Empty Then attachToRMG()
                 If emulator = String.Empty Then attachToM64P()
                 If emulator = String.Empty Then attachToRetroArch()
+                If emulator = String.Empty Then attachToModLoader64()
             End If
             If Not emulator = String.Empty Then
                 Me.Text = "Tracker of Time v" & VER & " (" & emulator & ")"
                 Select Case LCase(emulator)
-                    Case "emuhawk", "rmg", "mupen64plus-gui", "retroarch - mupen64plus", "retroarch - parallel"
+                    Case "emuhawk", "rmg", "mupen64plus-gui", "retroarch - mupen64plus", "retroarch - parallel", "modloader64-gui"
                         emulator = "variousX64"
                 End Select
             End If
@@ -1688,7 +3008,7 @@ Public Class frmTrackerOfTime
                         End If
                     Else
                         workLabel.BackColor = Color.Red
-                End If
+                    End If
                 End If
             Next
         Else
@@ -2043,32 +3363,38 @@ Public Class frmTrackerOfTime
             getAge()
             If My.Settings.setNavi Then shutupNavi()
             checkMQs()
-            'getWarps()
+            ' Do not bother scanning the all the checks if we are focused on the ER panel
+            If pnlMain.Visible Then
+                readChestData()
+                If Not keepRunning Then
+                    stopScanning()
+                    Exit Sub
+                End If
+                updateEverything()
+            End If
+            'If pnlER.Visible Then scanER()
+        End If
+    End Sub
+    Private Sub goScan(ByVal auto As Boolean)
+        zeldazFails = 0
+        keepRunning = True
+        If pnlMain.Visible Then
+            readChestData()
+            If Not keepRunning Then
+                stopScanning()
+                Exit Sub
+            End If
+            getAge()
+            checkMQs()
             readChestData()
             If Not keepRunning Then
                 stopScanning()
                 Exit Sub
             End If
             updateEverything()
+        Else
+            scanER()
         End If
-    End Sub
-    Private Sub goScan(ByVal auto As Boolean)
-        zeldazFails = 0
-        keepRunning = True
-        readChestData()
-        If Not keepRunning Then
-            stopScanning()
-            Exit Sub
-        End If
-        getAge()
-        checkMQs()
-        'getWarps()
-        readChestData()
-        If Not keepRunning Then
-            stopScanning()
-            Exit Sub
-        End If
-        updateEverything()
         If Not auto Then Exit Sub
         If tmrAutoScan.Enabled = False Then
             tmrAutoScan.Enabled = True
@@ -2091,22 +3417,10 @@ Public Class frmTrackerOfTime
         End If
 
         ' Check both and if they are proper, 2 for full-true
-        If zeldaz1 = 1514490948 Then
-            If zeldaz2 = 16730 Then checkZeldaz = 2
-            '        ElseIf emulator = "project64" And False Then
-            '            Select Case romAddrStart
-            '                Case &HDFE40000 ' Rupees at DFF5A606
-            '                    romAddrStart = &HDFFB0000
-            '                Case &HDFFB0000 ' Rupees at E00CA606
-            '                    romAddrStart = &HDFE40000
-            '            End Select
-        End If
+        If zeldaz1 = 1514490948 And zeldaz2 = 16730 Then checkZeldaz = 2
 
         ' Check for the rando version only if a full-true
-        If checkZeldaz = 2 Then
-            getRandoVer()
-            getRainbowBridge()
-        End If
+        If checkZeldaz = 2 Then getRandoVer()
     End Function
     Private Function isLoadedGame() As Boolean
         ' Checks the game state (2=game menu, 1=title screen, 0=gameplay), if 0 and a successful ZELDAZ check, then true
@@ -2123,11 +3437,12 @@ Public Class frmTrackerOfTime
             If emulator = String.Empty Then attachToRMG()
             If emulator = String.Empty Then attachToM64P()
             If emulator = String.Empty Then attachToRetroArch()
+            If emulator = String.Empty Then attachToModLoader64()
         End If
         If Not emulator = String.Empty Then
             Me.Text = "Tracker of Time v" & VER & " (" & emulator & ")"
             Select Case LCase(emulator)
-                Case "emuhawk", "rmg", "mupen64plus-gui", "retroarch - mupen64plus", "retroarch - parallel"
+                Case "emuhawk", "rmg", "mupen64plus-gui", "retroarch - mupen64plus", "retroarch - parallel", "modloader64-gui"
                     emulator = "variousX64"
             End Select
         End If
@@ -2164,7 +3479,7 @@ Public Class frmTrackerOfTime
         Next
         rtbOutputLeft.AppendText(vbCrLf)
     End Sub
-   Private Sub checkMQs()
+    Private Sub checkMQs()
         If Not isLoadedGame() Then Exit Sub
 
         For i = 0 To aMQ.Length - 1
@@ -2208,9 +3523,12 @@ Public Class frmTrackerOfTime
             updateQuestItems()
             updateDungeonItems()
             getWarps()
-            'updateDACs()
-            updateLabels()
-            updateLabelsDungeons()
+            getRainbowBridge()
+            getER()
+            If Not pnlER.Visible Then
+                updateLabels()
+                updateLabelsDungeons()
+            End If
         End If
     End Sub
 
@@ -2259,14 +3577,17 @@ Public Class frmTrackerOfTime
     End Sub
 
     Private Sub btnTest_Click(sender As Object, e As EventArgs) Handles btnTest.Click
+        scanEmulator("modloader64-gui")
+        'pnlER.Visible = Not pnlER.Visible
+        'goScan(False)
         'rtbOutputLeft.Clear()
-        MsgBox(Hex(goRead(&H400CEE, 1)))
+        'MsgBox(Hex(goRead(&H400CEE, 1)))
         'MsgBox(Hex(goRead(&H400CEB, 1)))
         'MsgBox(My.Settings.setSmallKeys.ToString)
         'For Each i As Integer In aAddresses
         'rtbAddLine(Hex(i))
         'Next
-        'debugInfo()goRead(&H40BF80 + 2, 15)
+        debugInfo()
         'Dim test As Integer = goRead(&H40BF80 + 1, 1)
         'MsgBox(test.ToString)
         If False Then
@@ -2281,7 +3602,6 @@ Public Class frmTrackerOfTime
             Next
             Clipboard.SetText(outputXX)
         End If
-
     End Sub
     Private Sub changeTheme(Optional theme As Byte = 0)
         Dim cBack As Color = Control.DefaultBackColor
@@ -2362,11 +3682,15 @@ Public Class frmTrackerOfTime
             rtbLines = 14
             rtbOutputLeft.Height = 196
             rtbOutputRight.Height = 196
+            pnlER.Height = 516
+            pbxMap.Top = 49
         Else
             rtbLines = 11
             pnlWorldMap.Height = 300
             rtbOutputLeft.Height = 157
             rtbOutputRight.Height = 157
+            pnlER.Height = 492
+            pbxMap.Top = 37
         End If
         pnlMain.Height = setHeight
         pnlSettings.VerticalScroll.Visible = pnlMain.VerticalScroll.Visible
@@ -2386,7 +3710,7 @@ Public Class frmTrackerOfTime
         Else
             Me.Width = pnlMain.Width + 26
         End If
-            Me.Height = pnlMain.Height + 52 '+ CByte(IIf(My.Settings.setMap, 0, 1))
+        Me.Height = pnlMain.Height + 52 '+ CByte(IIf(My.Settings.setMap, 0, 1))
         redrawOutputBoarder()
         If My.Settings.setShortForm Then ' pnlMain.VerticalScroll.Value >= pnlMain.VerticalScroll.Maximum - pnlMain.Height Then
             Me.CreateGraphics.DrawLine(New Pen(Me.ForeColor, 1), 6, Me.Height - 45, rtbOutputLeft.Width + 7, Me.Height - 45)
@@ -2884,7 +4208,8 @@ Public Class frmTrackerOfTime
     End Sub
 
     Private Sub reachAreas(ByVal area As Byte, ByVal asAdult As Boolean)
-        ' Make sure the area is set
+
+        ' Make sure the area is set to prevent branching from unreachable areas
         If asAdult Then
             If Not aReachA(area) Then Return
         Else
@@ -2898,40 +4223,40 @@ Public Class frmTrackerOfTime
         Select Case area
             Case 0
                 ' KF Main to LW Front, KF Deku Tree, KF Between Bridge
-                addArea(2, asAdult)
+                addAreaExit(10, 2, asAdult) 'addArea(2, asAdult)
                 If asAdult Then
                     addArea(1, asAdult)
-                    addArea(8, asAdult)
+                    addAreaExit(10, 1, asAdult) 'addArea(8, asAdult)
                 Else
                     If checkLoc("6220") Or (item("kokiri sword") And item("deku shield")) Then addArea(1, asAdult)
-                    If My.Settings.setOpenKF Or bSongWarps Or bSpawnWarps Or checkLoc("6223") Then addArea(8, asAdult)
+                    If My.Settings.setOpenKF Or bSongWarps Or bSpawnWarps Or checkLoc("6223") Or iER Mod 2 = 1 Then addAreaExit(10, 1, asAdult) 'addArea(8, asAdult)
                 End If
             Case 1
                 ' KF Deku Tree to Deku Tree Lobby
-                If Not asAdult Then addArea(60, asAdult)
+                If Not asAdult Or iER > 1 Then addAreaExit(10, 0, asAdult) 'addArea(60, asAdult)
             Case 2
                 ' LW Front to KF Main, GC Shortcut, LW Behind Mido, ZR Main
-                addArea(0, asAdult)
-                addArea(30, asAdult)
+                addAreaExit(16, 1, asAdult) 'addArea(0, asAdult)
+                addAreaExit(16, 3, asAdult) 'addArea(30, asAdult)
                 If asAdult Then
-                    If item("minuet of forest") Or item("saria's song") Or checkLoc("6226") Then addArea(3, asAdult)
-                    If item("dive") Or item("iron boots") Then addArea(35, asAdult)
+                    If item("saria's song") Or checkLoc("6226") Then addArea(3, asAdult)
+                    If item("dive") Or item("iron boots") Then addAreaExit(16, 2, asAdult) 'addArea(35, asAdult)
                 Else
                     addArea(3, asAdult)
-                    If item("dive") Then addArea(35, asAdult)
+                    If item("dive") Then addAreaExit(16, 2, asAdult) 'addArea(35, asAdult)
                 End If
             Case 3
                 ' LW Behind Mido to KF Main, SFM Main, LW Front
-                addArea(0, asAdult)
-                addArea(5, asAdult)
+                addAreaExit(16, 1, asAdult) 'addArea(0, asAdult)
+                addAreaExit(16, 0, asAdult) 'addArea(5, asAdult)
                 If asAdult Then
-                    If item("minuet of forest") Or item("saria's song") Or checkLoc("6226") Then addArea(2, asAdult)
+                    If item("saria's song") Or checkLoc("6226") Then addArea(2, asAdult)
                 Else
                     addArea(2, asAdult)
                 End If
             Case 4
                 ' LW Bridge to HF, KF Between Bridge
-                addArea(7, asAdult)
+                addAreaExit(16, 5, asAdult) 'addArea(7, asAdult)
                 If asAdult Then
                     addArea(8, asAdult)
                 Else
@@ -2939,68 +4264,74 @@ Public Class frmTrackerOfTime
                 End If
             Case 5
                 ' SFM Main to LW Behind Mido, SFM Temple Ledge
-                addArea(3, asAdult)
+                addAreaExit(11, 1, asAdult) 'addArea(3, asAdult)
                 If asAdult And item("hookshot") Then addArea(6, asAdult)
             Case 6
                 ' SFM Temple Ledge to Forest Temple
-                addArea(88, asAdult)
+                addAreaExit(11, 0, asAdult) 'addArea(88, asAdult)
             Case 7
-                ' HF to LW Bridge, ZR Front, KV Main, MK, LLR, GV Hyrule Side, Big Poe Hunt
-                addArea(4, asAdult)
-                addArea(34, asAdult)
-                addArea(15, asAdult)
-                addArea(10, asAdult)
-                addArea(9, asAdult)
-                addArea(44, asAdult)
+                ' HF to LW Bridge, ZR Front, KV Main, MK Entrance, LLR, LH Main, GV Hyrule Side, Big Poe Hunt
+                addAreaExit(6, 1, asAdult) 'addArea(4, asAdult)
+                addAreaExit(6, 2, asAdult) 'addArea(34, asAdult)
+                addAreaExit(6, 0, asAdult) 'addArea(15, asAdult)
+                addAreaExit(6, 4, asAdult) 'addArea(197, asAdult)
+                addAreaExit(6, 5, asAdult) 'addArea(9, asAdult)
+                addAreaExit(6, 6, asAdult) 'addArea(42, asAdult)
+                addAreaExit(6, 3, asAdult) 'addArea(44, asAdult)
                 If asAdult And item("epona") And item("bow") And item("bottle") Then addArea(59, asAdult)
             Case 8
                 ' KF Between Bridge
                 If asAdult Then
-                    addArea(0, asAdult)
+                    addAreaExit(16, 4, asAdult) 'addArea(0, asAdult)
                     addArea(4, asAdult)
                 Else
                     If My.Settings.setOpenKF Or bSongWarps Or bSpawnWarps Or checkLoc("6223") Then
-                        addArea(0, asAdult)
+                        addAreaExit(16, 4, asAdult) 'addArea(0, asAdult)
                         addArea(4, asAdult)
                     End If
                 End If
             Case 9
                 'LLR to HF
-                addArea(7, asAdult)
+                addAreaExit(24, 0, asAdult) 'addArea(7, asAdult)
             Case 10
-                ' MK to HF, ToT Front, OGC, HC
-                addArea(7, asAdult)
-                addArea(11, asAdult)
+                ' MK to MK Entrance, ToT Front, OGC, HC, MK Back Alley (left) and (right)
                 If asAdult Then
-                    addArea(51, asAdult)
+                    addAreaExit(3, 1, asAdult) 'addArea(197, asAdult)
+                    addAreaExit(3, 2, asAdult) 'addArea(11, asAdult)
+                    addAreaExit(3, 0, asAdult) 'addArea(51, asAdult)
                 Else
-                    addArea(13, asAdult)
+                    addAreaExit(2, 1, asAdult) 'addArea(197, asAdult)
+                    addAreaExit(2, 2, asAdult) 'addArea(11, asAdult)
+                    addAreaExit(2, 0, asAdult) 'addArea(13, asAdult)
+                    addAreaExit(2, 4, asAdult) 'addArea(198, asAdult)
+                    addAreaExit(2, 3, asAdult) 'addArea(199, asAdult)
                 End If
             Case 11
-                ' ToT Front to MK, ToT Behind Door
-                addArea(10, asAdult)
-                If item("song of time") Or checkLoc("6427") Then addArea(12, asAdult)
+                ' Outside ToT to MK, ToT Front
+                addAreaExit(4, 1, asAdult) 'addArea(10, asAdult)
+                addAreaExit(4, 0, asAdult) 'addArea(200, asAdult)
             Case 12
                 ' ToT Behind Door to ToT Front, ToT Behind Door Both Ages
-                If checkLoc("6427") Then addArea(11, asAdult)
+                If checkLoc("6427") Then addArea(200, asAdult)
                 addArea(12, Not asAdult)
             Case 13
                 ' HC to MK, GFF
-                addArea(10, asAdult)
+                addAreaExit(20, 0, asAdult) 'addArea(10, asAdult)
                 If Not asAdult And canExplode() Then addArea(54, asAdult)
             Case 14
                 ' KV Windmill to KV Main
                 addArea(15, asAdult)
             Case 15
                 ' KV Main to HF, GY, KF Behind Gate, KV Rooftops, Bottom of the Well
-                addArea(7, asAdult)
-                addArea(18, asAdult)
+                addAreaExit(7, 1, asAdult) 'addArea(7, asAdult)
+                addAreaExit(7, 2, asAdult) 'addArea(18, asAdult)
                 If asAdult Then
-                    If item("hookshot") Or My.Settings.setHoverTricks Then addArea(16, asAdult)
                     addArea(17, asAdult)
+                    If item("hookshot") Or My.Settings.setHoverTricks Then addArea(16, asAdult)
+                    If iER > 1 And (checkLoc("C02") Or item("song of storms")) Then addAreaExit(7, 3, asAdult)
                 Else
                     If allItems.Contains("y3") Or checkLoc("C05") Then addArea(17, asAdult)
-                    If aReachY(15) And (checkLoc("C02") Or item("song of storms")) Then addArea(174, asAdult)
+                    If aReachY(15) And (checkLoc("C02") Or item("song of storms")) Then addAreaExit(7, 3, asAdult) 'addArea(174, asAdult)
                 End If
             Case 16
                 ' KV Rooftops to KV Main
@@ -3008,46 +4339,46 @@ Public Class frmTrackerOfTime
             Case 17
                 ' KV Behind Gate to KV Main, DMT Lower
                 addArea(15, asAdult)
-                addArea(20, asAdult)
+                addAreaExit(7, 0, asAdult) 'addArea(20, asAdult)
             Case 18
                 ' GY Main to KV Main, KV Windmill
-                addArea(15, asAdult)
+                addAreaExit(8, 1, asAdult) 'addArea(15, asAdult)
                 If asAdult And item("song of time") Then addArea(14, asAdult)
             Case 19
-                ' GY Upper to GY Main
+                ' GY Upper to GY Main, Shadow Temple
                 addArea(18, asAdult)
-                If item("din's fire") Then addArea(150, asAdult)
+                If item("din's fire") Then addAreaExit(8, 0, asAdult) 'addArea(150, asAdult)
             Case 20
                 ' DMT Lower to KV Behind Gate, GC Main, Dodongo's Cavern Lobby, DMT Upper
-                addArea(17, asAdult)
-                addArea(29, asAdult)
+                addAreaExit(21, 1, asAdult) 'addArea(17, asAdult)
+                addAreaExit(21, 0, asAdult) 'addArea(29, asAdult)
                 If asAdult Then
-                    If canBreakRocks() Or item("lift") Then addArea(69, asAdult)
+                    If canBreakRocks() Or item("lift") Then addAreaExit(21, 2, asAdult) 'addArea(69, asAdult)
                     If canBreakRocks() Or (canMagicBean("B2") Or canHoverTricks()) Then addArea(21, asAdult)
                 Else
-                    If canExplode() Or item("lift") Then addArea(69, asAdult)
+                    If canExplode() Or item("lift") Then addAreaExit(21, 2, asAdult) 'addArea(69, asAdult)
                     If canExplode() Then addArea(21, asAdult)
                 End If
             Case 21
                 ' DMT Upper to DMT Lower, DMC Upper Local, KV Rooftops
                 addArea(20, asAdult)
-                addArea(22, asAdult)
+                addAreaExit(21, 3, asAdult) 'addArea(22, asAdult)
                 If Not asAdult Then addArea(16, asAdult) ' Hoot hoot
             Case 22
                 ' DMC Upper to DMT Upper, DMC Ladder, DMC Central Nearby
-                addArea(21, asAdult)
+                addAreaExit(22, 1, asAdult) 'addArea(21, asAdult)
                 addArea(23, asAdult)
                 If asAdult And item("goron tunic") And item("longshot") Then addArea(26, asAdult)
             Case 23
                 ' DMC Ladder to DMT Upper, DMC Upper, DMC Lower Nearby
                 If asAdult Then
-                    addArea(21, asAdult)
+                    addAreaExit(22, 1, asAdult) 'addArea(21, asAdult)
                     If item("goron tunic") Then addArea(22, asAdult)
                     If item("hover boots") Then addArea(24, asAdult)
                 End If
             Case 24
                 ' DMC Lower Nearby to GC Darunias, DMC Lower Local
-                addArea(31, asAdult)
+                addAreaExit(22, 0, asAdult) 'addArea(31, asAdult)
                 If asAdult And item("goron tunic") Then addArea(25, asAdult)
             Case 25
                 ' DMC Lower Local to DMC Ladder, DMC Lower Nearby, DMC Central Nearby, DMC Fire Temple Entrance
@@ -3067,17 +4398,19 @@ Public Class frmTrackerOfTime
                     If item("hover boots") Or item("hookshot") Then addArea(24, asAdult)
                     If canMagicBean("B3") Then
                         addArea(24, asAdult)
-                        addArea(21, asAdult)
+                        addAreaExit(22, 1, asAdult)
                         If item("goron tunic") Then addArea(22, asAdult)
-                        If canFewerGoron() Then addArea(28, asAdult)
                     End If
+                    If canFewerGoron() Then addArea(28, asAdult)
+                Else
+                    If iER > 1 Then addArea(28, asAdult)
                 End If
             Case 28
                 ' DMC Fire Temple Entrance to DMC Fire Temple
-                addArea(108, asAdult)
+                addAreaExit(22, 2, asAdult) 'addArea(108, asAdult)
             Case 29
                 ' GC Main to DMT Lower, GC Shortcut, GC Darunia, GC Shoppe, GC Grotto Platform
-                addArea(20, asAdult)
+                addAreaExit(23, 1, asAdult) 'addArea(20, asAdult)
                 If asAdult Then
                     If canBreakRocks() Or canBurnAdult() Or item("lift") Or checkLoc("11508") Or checkLoc("11511") Or checkLoc("11512") Then addArea(30, asAdult)
                     If checkLoc("7025") Then
@@ -3092,7 +4425,7 @@ Public Class frmTrackerOfTime
                 End If
             Case 30
                 ' GC Shortcut to LW Front, GC Main
-                addArea(2, asAdult)
+                addAreaExit(23, 2, asAdult) 'addArea(2, asAdult)
                 If asAdult Then
                     If canBreakRocks() Or item("din's fire") Or checkLoc("11508") Or checkLoc("11511") Or checkLoc("11512") Then addArea(29, asAdult)
                 Else
@@ -3101,7 +4434,7 @@ Public Class frmTrackerOfTime
             Case 31
                 ' GC Darunia to GC Main, DMC Lower Local
                 addArea(29, asAdult)
-                If asAdult Then addArea(25, asAdult)
+                If asAdult Then addAreaExit(23, 0, asAdult) 'addArea(25, asAdult)
             Case 32
                 ' GC Shoppe to GC Main
                 addArea(29, asAdult)
@@ -3110,7 +4443,7 @@ Public Class frmTrackerOfTime
                 addArea(29, asAdult)
             Case 34
                 ' ZR Front to HF, ZR Main
-                addArea(7, asAdult)
+                addAreaExit(9, 0, asAdult) 'addArea(7, asAdult)
                 If asAdult Then
                     addArea(35, asAdult)
                 Else
@@ -3121,30 +4454,30 @@ Public Class frmTrackerOfTime
                 addArea(34, asAdult)
                 If asAdult Then
                     If item("zelda's lullaby") Or canHoverTricks() Then addArea(36, asAdult)
-                    If item("dive") Or item("iron boots") Then addArea(2, asAdult)
+                    If item("dive") Or item("iron boots") Then addAreaExit(9, 2, asAdult) 'addArea(2, asAdult)
                 Else
                     If item("zelda's lullaby") Or My.Settings.setCucco Then addArea(36, asAdult)
-                    If item("dive") Then addArea(2, asAdult)
+                    If item("dive") Then addAreaExit(9, 2, asAdult) 'addArea(2, asAdult)
                     If item("ocarina") Then addArea(58, asAdult)
                 End If
             Case 36
                 'ZR Behind Waterfall to ZR Main and ZD Main
                 addArea(35, asAdult)
-                addArea(37, asAdult)
+                addAreaExit(9, 1, asAdult) 'addArea(37, asAdult)
             Case 37
                 ' ZD Main to ZR Behind Waterfall, ZR Shoppe, ZR Behind King, LH
-                addArea(36, asAdult)
+                addAreaExit(13, 1, asAdult) 'addArea(36, asAdult)
                 If asAdult Then
                     If item("blue fire") Then addArea(39, asAdult)
                     If checkLoc("6303") Or My.Settings.setOpenZF Then addArea(38, asAdult)
                 Else
                     addArea(39, asAdult)
                     If checkLoc("6303") Or allItems.Contains("v") Then addArea(38, asAdult)
-                    If item("dive") Then addArea(42, asAdult)
+                    If item("dive") Then addAreaExit(13, 2, asAdult) 'addArea(42, asAdult)
                 End If
             Case 38
                 ' ZD Behind King to ZF Main, ZD Main
-                addArea(40, asAdult)
+                addAreaExit(13, 0, asAdult) 'addArea(40, asAdult)
                 If asAdult Then
                     If checkLoc("6303") Or My.Settings.setOpenZF Then addArea(37, asAdult)
                 Else
@@ -3154,35 +4487,35 @@ Public Class frmTrackerOfTime
                 ' ZD Shoppe to ZD Main
                 addArea(37, asAdult)
             Case 40
-                ' ZF Main to ZD Behind King, ZF Ice Cavern Ledge
-                addArea(38, asAdult)
+                ' ZF Main to ZD Behind King, ZF Ice Cavern Ledge, Jabu-Jabu's Belly
+                addAreaExit(14, 2, asAdult) 'addArea(38, asAdult)
                 If asAdult Then
                     addArea(41, asAdult)
                 Else
-                    If item("bottle") Then addArea(79, asAdult)
+                    If item("bottle") Then addAreaExit(14, 0, asAdult) 'addArea(79, asAdult)
                 End If
             Case 41
                 ' ZF Ice Cavern Ledge to ZF Main, Ice Cavern
                 addArea(40, asAdult)
-                If asAdult Then addArea(178, asAdult)
+                If asAdult Then addAreaExit(14, 1, asAdult) 'addArea(178, asAdult)
             Case 42
                 ' LH Main to HF, LH Fishing Ledge, ZD Main, Water Temple
-                addArea(7, asAdult)
+                addAreaExit(12, 0, asAdult) 'addArea(7, asAdult)
                 If asAdult Then
                     If item("scarecrow") Or canMagicBean("202") Or canChangeLake() Then addArea(43, asAdult)
-                    If item("iron boots") And (checkLoc("231") Or allItems.Contains("k")) Then addArea(119, asAdult)
-                    If item("dive", 2) And (checkLoc("231") Or allItems.Contains("l")) Then addArea(119, asAdult)
+                    If item("iron boots") And (checkLoc("231") Or allItems.Contains("k")) Then addAreaExit(12, 1, asAdult) 'addArea(119, asAdult)
+                    If item("dive", 2) And (checkLoc("231") Or allItems.Contains("l")) Then addAreaExit(12, 1, asAdult) 'addArea(119, asAdult)
                 Else
                     'addArea(7, asAdult)   ' Hoot hoot!
                     addArea(43, asAdult)
-                    If item("dive") Then addArea(37, asAdult)
+                    If item("dive") Then addAreaExit(12, 2, asAdult) 'addArea(37, asAdult)
                 End If
             Case 43
                 ' LH Fishing Ledge to LH Main
                 addArea(42, asAdult)
             Case 44
                 ' GV Hyrule Side to HF, GV Upper Stream, GV Gerudo Side, GV Crate Ledge
-                addArea(7, asAdult)
+                addAreaExit(15, 1, asAdult) 'addArea(7, asAdult)
                 addArea(56, asAdult)
                 If asAdult Then
                     If item("epona") Or item("longshot") Or checkLoc("CARD") Then addArea(45, asAdult)
@@ -3192,7 +4525,7 @@ Public Class frmTrackerOfTime
                 End If
             Case 45
                 ' GV Gerudo Side to GF Main, GV Upper Stream, GV Hyrule Side, GV Crate Ledge
-                addArea(46, asAdult)
+                addAreaExit(15, 2, asAdult) 'addArea(46, asAdult)
                 addArea(56, asAdult)
                 If asAdult Then
                     If item("epona") Or item("longshot") Or checkLoc("CARD") Then addArea(44, asAdult)
@@ -3202,26 +4535,26 @@ Public Class frmTrackerOfTime
                 End If
             Case 46
                 ' GF Main to GV Gerudo Side, GF Behind Gate, Gerudo Training Ground
-                addArea(45, asAdult)
+                addAreaExit(18, 0, asAdult) 'addArea(45, asAdult)
                 If asAdult Then
                     If item("membership card") Then
                         addArea(47, asAdult)
-                        addArea(179, asAdult)
+                        addAreaExit(18, 2, asAdult) 'addArea(179, asAdult)
                     End If
                 Else
                     If checkLoc("C00") Then addArea(47, asAdult)
                 End If
             Case 47
                 ' GF Behind Gate to HW Gerudo Side, GF Main
-                addArea(48, asAdult)
+                addAreaExit(18, 1, asAdult) 'addArea(48, asAdult)
                 If asAdult Then
                     addArea(46, asAdult)
                 Else
-                    If checkLoc("C00") Then addArea(46, asAdult)
+                    If iER Mod 2 = 1 And checkLoc("C00") Then addArea(46, asAdult)
                 End If
             Case 48
                 ' HW Gerudo Side to GF Behind Gate, HW Main
-                addArea(47, asAdult)
+                addAreaExit(19, 1, asAdult) 'addArea(47, asAdult)
                 If asAdult Then
                     If My.Settings.setWastelandBackstep Or item("hover boots") Or item("longshot") Then addArea(55, asAdult)
                 Else
@@ -3229,15 +4562,15 @@ Public Class frmTrackerOfTime
                 End If
             Case 49
                 ' HW Colossus Side to DC, HW Main
-                addArea(50, asAdult)
+                addAreaExit(19, 0, asAdult) 'addArea(50, asAdult)
                 If My.Settings.setWastelandReverse Then addArea(55, asAdult)
             Case 50
                 ' DC to HW Colossus Side, Spirit Temple
-                addArea(49, asAdult)
-                addArea(132, asAdult)
+                addAreaExit(17, 1, asAdult) 'addArea(49, asAdult)
+                addAreaExit(17, 0, asAdult) 'addArea(132, asAdult)
             Case 51
                 ' OGC to MK, GFF, Ganon's Castle
-                addArea(10, asAdult)
+                addAreaExit(25, 0, asAdult) 'addArea(10, asAdult)
                 If asAdult And item("lift", 3) Then addArea(53, asAdult)
                 If canEnterGanonsCastle() Then addArea(193, asAdult)
             Case 52
@@ -3260,12 +4593,12 @@ Public Class frmTrackerOfTime
                 End If
             Case 56
                 ' GV Upper Stream to LH
-                addArea(42, asAdult)
+                addAreaExit(15, 0, asAdult) 'addArea(42, asAdult)
             Case 57
                 ' GV Crate Ledge to LH
-                addArea(42, asAdult)
+                addAreaExit(15, 0, asAdult) 'addArea(42, asAdult)
             Case 60
-                addArea(1, asAdult)
+                'addAreaExit(26, 0, asAdult)
                 If Not aMQ(0) Then
                     ' 60	DT Lobby
                     ' 61	DT Slinghsot Room
@@ -3273,12 +4606,24 @@ Public Class frmTrackerOfTime
                     ' 63	DT Boss Room
 
                     ' DT: Lobby to Slingshot Room, Basement Backroom, Boss Room
-                    If Not asAdult Then
-                        If item("deku shield") Then addArea(61, asAdult)
-                        If (item("slingshot") And canBurnYoung()) Or My.Settings.setDekuB1Skip Or checkLoc("10316") Then
-                            addArea(62, asAdult)
-                            addArea(63, asAdult)
+
+                    If iER < 2 Then
+                        If Not asAdult Then
+                            If item("deku shield") Then addArea(61, asAdult)
+                            If (item("slingshot") And canBurnYoung()) Or My.Settings.setDekuB1Skip Or checkLoc("10316") Then
+                                addArea(62, asAdult)
+                                addArea(63, asAdult)
+                            End If
                         End If
+                    Else
+                        If (aReachY(60) And item("deku shield")) Or (aReachA(60) And item("hylian shield")) Then addArea(61, asAdult)
+                        If (((aReachY(60) And canBurnYoung()) Or (aReachA(60) And (canBurnAdult() Or item("bow")))) And _
+                                ((aReachY(60) And item("slingshot")) Or (aReachA(60) And item("bow")))) Or _
+                            (Not asAdult And (My.Settings.setDekuB1Skip Or aReachA(60) Or checkLoc("10316"))) Then addArea(62, asAdult)
+                        ' TODO: False is placeholder for "(logic_deku_b1_webs_with_bow and can_use(Bow)))"
+                        If (((aReachY(60) And canBurnYoung()) Or (aReachA(60) And canBurnAdult())) Or _
+                                False) And _
+                            (Not asAdult And (My.Settings.setDekuB1Skip Or aReachA(60) Or checkLoc("10316"))) Then addArea(63, asAdult)
                     End If
                 Else
                     ' 60	DT MQ Lobby
@@ -3289,12 +4634,19 @@ Public Class frmTrackerOfTime
                     ' 68	DT MQ Basement Ledge
 
                     ' DT MQ: Lobby to Compass Room, Basement Water Room Front, Basement Ledge
-                    If Not asAdult Then
-                        If item("slingshot") And canBurnYoung() Then
-                            addArea(64, asAdult)
-                            addArea(65, asAdult)
+                    If iER < 2 Then
+                        If Not asAdult Then
+                            If item("slingshot") And canBurnYoung() Then
+                                addArea(64, asAdult)
+                                addArea(65, asAdult)
+                            End If
+                            If My.Settings.setDekuB1Skip Or checkLoc("10316") Then addArea(68, asAdult)
                         End If
-                        If My.Settings.setDekuB1Skip Or checkLoc("10316") Then addArea(68, asAdult)
+                    Else
+                        If ((aReachY(60) And item("slingshot")) Or (aReachA(60) And item("bow"))) And _
+                            ((aReachY(60) And canBurnYoung()) Or (aReachA(60) And (canBurnAdult() Or item("bow")))) Then addArea(64, asAdult)
+                        If ((aReachY(60) And item("slingshot")) Or (aReachA(60) And item("bow"))) And ((aReachY(60) And canBurnYoung()) Or (aReachA(60) And canBurnAdult())) Then addArea(65, asAdult)
+                        If My.Settings.setDekuB1Skip Or aReachA(60) Or checkLoc("10316") Then addArea(68, asAdult)
                     End If
                 End If
             Case 61 To 63
@@ -3306,23 +4658,40 @@ Public Class frmTrackerOfTime
             Case 65
                 ' DT MQ: Basement Water Rooom Front to Lobby, Basement Water Rooom Front
                 addArea(60, asAdult)
-                If Not asAdult And item("deku shield") Or item("hylian shield") Then addArea(66, asAdult)
+                If iER > 2 Then
+                    If Not asAdult And item("deku shield") Or item("hylian shield") Then addArea(66, asAdult)
+                Else
+                    ' TODO: False is placeholder for "logic_deku_mq_log"
+                    If False Or (Not asAdult And (item("deku shield") Or item("hylian shield"))) Or _
+                        (asAdult And (item("longshot") Or (item("hookshot") And item("iron boots")))) Then addArea(66, asAdult)
+                End If
             Case 66
                 ' DT MQ: Basement Water Rooom Back to Basement Water Rooom Front, Basement Back Room
                 addArea(65, asAdult)
-                If Not asAdult And (item("deku stick") Or item("din's fire")) And (item("kokiri sword") Or canProjectile(0) Or (item("deku nuts") And item("deku stick"))) Then addArea(67, asAdult)
+                If iER < 2 Then
+                    If Not asAdult And (item("deku stick") Or item("din's fire")) And (item("kokiri sword") Or canProjectile(0) Or (item("deku nuts") And item("deku stick"))) Then addArea(67, asAdult)
+                Else
+                    If ((aReachY(66) And item("deku stick")) Or item("din's fire") Or _
+                        (aReachA(65) And item("fire arrows"))) And _
+                    (aReachA(66) Or item("kokiri sword") Or (aReachY(67) And canProjectile(0)) Or (item("deku nuts") And item("deku stick"))) Then addArea(67, asAdult)
+                End If
             Case 67
                 ' DT MQ: Basement Back Room to Basement Ledge, Basement Water Room Back
-                If Not asAdult Then
-                    addArea(68, asAdult)
-                    If item("kokiri sword") Or canProjectile(0) Or (item("deku nuts") And item("deku stick")) Then addArea(66, asAdult)
+                If iER < 2 Then
+                    If Not asAdult Then
+                        addArea(68, asAdult)
+                        If item("kokiri sword") Or canProjectile(0) Or (item("deku nuts") And item("deku stick")) Then addArea(66, asAdult)
+                    End If
+                Else
+                    If Not asAdult Then addArea(68, asAdult)
+                    If item("kokiri sword") Or ((aReachY(67) And canProjectile(0)) Or (aReachA(67) And canProjectile(2))) Or (item("deku nuts") And item("deku stick")) Then addArea(66, asAdult)
                 End If
             Case 68
                 ' DT MQ: Basement Ledge to Lobby, Basement Back Room
                 addArea(60, asAdult)
                 If Not asAdult Then addArea(67, asAdult)
             Case 69
-                addArea(20, asAdult)
+                'addAreaExit(27, 0, asAdult)
                 If Not aMQ(1) Then
                     ' 69	DC Lobby
                     ' 70	DC Staircase
@@ -3383,7 +4752,7 @@ Public Class frmTrackerOfTime
                 ' DC MQ: Elevator to Lower Right Side, Boss Area
                 If asAdult Then
                     If item("din's fire") And item("lift") Then addArea(75, asAdult)
-                    If canExplode() Or (item("lift") And My.Settings.setDCLightEyes And (item("din's fire") Or My.Settings.setDCSpikeJump Or item("hammer") Or item("hover boots") Or item("hookshot"))) Then addArea(78, asAdult)
+                    If canExplode() Or (item("lift") And My.Settings.setDCLightEyes And (item("din's fire") Or My.Settings.setDCSpikeJump Or item("hammer") Or item("hover boots") Or item("hookshot"))) Then addArea(77, asAdult)
                 Else
                     If (item("deku stick") Or item("din's fire")) And item("lift") Then addArea(75, asAdult)
                     If canExplode() Or (item("lift") And My.Settings.setDCLightEyes And (item("deku stick") Or item("din's fire"))) Then addArea(77, asAdult)
@@ -3402,13 +4771,23 @@ Public Class frmTrackerOfTime
                     If canExplode() Or item("din's fire") Or (item("deku stick") Or ((item("deku nuts") Or item("boomerang")) And (item("kokiri sword") Or item("slingshot")))) Then addArea(78, asAdult)
                 End If
             Case 79
+                'addAreaExit(28, 0, asAdult)
                 If Not aMQ(2) Then
                     ' 79	JB Beginning
                     ' 80	JB Main
                     ' 81	JB Depths
                     ' 82	JB Boss Area
+
                     ' JB: Beginning to Main
-                    If Not asAdult And canProjectile(0) Then addArea(80, asAdult)
+                    If iER < 2 Then
+                        If Not asAdult And canProjectile(0) Then addArea(80, asAdult)
+                    Else
+                        If asAdult Then
+                            If canProjectile(2) Then addArea(80, asAdult)
+                        Else
+                            If canProjectile(0) Then addArea(80, asAdult)
+                        End If
+                    End If
                 Else
                     ' 79	JB MQ Beginning
                     ' 83	JB MQ Elevator Room
@@ -3424,7 +4803,12 @@ Public Class frmTrackerOfTime
                 ' JB: Main to Beginning, Boss Area, Depths
                 addArea(79, asAdult)
                 If checkLoc("10529") Then addArea(82, asAdult)
-                If Not asAdult And item("boomerang") Then addArea(81, asAdult)
+                If asAdult Then
+                    ' TODO: False is placeholder for "logic_jabu_boss_gs_adult"
+                    If False And item("hover boots") Then addArea(82, asAdult)
+                Else
+                    If item("boomerang") Then addArea(81, asAdult)
+                End If
             Case 81
                 ' JB: Depths to Main, Boss Area
                 addArea(80, asAdult)
@@ -3453,6 +4837,7 @@ Public Class frmTrackerOfTime
                 ' JB MQ: Boss Area to Main
                 addArea(84, asAdult)
             Case 88
+                'addAreaExit(29, 0, asAdult)
                 If Not aMQ(3) Then
                     ' 88	FoT Lobby
                     ' 89	FoT NW Outdoors
@@ -3516,37 +4901,37 @@ Public Class frmTrackerOfTime
                     End If
                 End If
             Case 89
-                    ' FoT: NW Outdoors to NE Outdoors, Outdoors High Balconies
-                    If item("dive", 2) Then addArea(90, asAdult)
-                    If asAdult Then
-                        addArea(91, asAdult)
-                    Else
-                        If canExplode() Or ((item("boomerang") Or item("deku nuts") Or item("deku shield")) And (item("deku stick") Or item("kokiri sword") Or item("slingshot"))) Then addArea(91, asAdult)
-                    End If
+                ' FoT: NW Outdoors to NE Outdoors, Outdoors High Balconies
+                If item("dive", 2) Then addArea(90, asAdult)
+                If asAdult Then
+                    addArea(91, asAdult)
+                Else
+                    If canExplode() Or ((item("boomerang") Or item("deku nuts") Or item("deku shield")) And (item("deku stick") Or item("kokiri sword") Or item("slingshot"))) Then addArea(91, asAdult)
+                End If
             Case 90
-                    ' FoT: NE Outdoors to Lobby, Outdoors High Balconies, NW Outdoors
-                    addArea(88, asAdult)
-                    If asAdult Then
-                        If item("longshot") Or (My.Settings.setFoTVines And item("hookshot")) Then addArea(91, asAdult)
-                        If item("iron boots") Or item("dive", 2) Then addArea(89, asAdult)
-                    Else
-                        If item("dive", 2) Then addArea(89, asAdult)
-                    End If
+                ' FoT: NE Outdoors to Lobby, Outdoors High Balconies, NW Outdoors
+                addArea(88, asAdult)
+                If asAdult Then
+                    If item("longshot") Or (My.Settings.setFoTVines And item("hookshot")) Then addArea(91, asAdult)
+                    If item("iron boots") Or item("dive", 2) Then addArea(89, asAdult)
+                Else
+                    If item("dive", 2) Then addArea(89, asAdult)
+                End If
             Case 91
-                    ' FoT: Outdoors High Balconies to NW Outdoors, NE Outdoors, Falling Room
-                    addArea(89, asAdult)
-                    addArea(90, asAdult)
-                    If asAdult And My.Settings.setFoTLedge And item("hover boots") And item("scarecrow") Then addArea(92, asAdult)
+                ' FoT: Outdoors High Balconies to NW Outdoors, NE Outdoors, Falling Room
+                addArea(89, asAdult)
+                addArea(90, asAdult)
+                If asAdult And My.Settings.setFoTLedge And item("hover boots") And item("scarecrow") Then addArea(92, asAdult)
             Case 92
-                    ' FoT: Falling room to NE Outdoors
-                    addArea(90, asAdult)
+                ' FoT: Falling room to NE Outdoors
+                addArea(90, asAdult)
             Case 93
-                    ' FoT: Block Push Room to Outside Upper Ledge, Bow Region, Straightened Hall
-                    If asAdult Then
-                        If item("hover boots") Or (My.Settings.setFoTBackdoor And item("lift")) Then addArea(95, asAdult)
-                        If item("lift") And dungeonKeyCounter(3, "010203") Then addArea(96, asAdult)
-                        If item("lift") And dungeonKeyCounter(3, "0102") And item("bow") Then addArea(94, asAdult)
-                    End If
+                ' FoT: Block Push Room to Outside Upper Ledge, Bow Region, Straightened Hall
+                If asAdult Then
+                    If item("hover boots") Or (My.Settings.setFoTBackdoor And item("lift")) Then addArea(95, asAdult)
+                    If item("lift") And dungeonKeyCounter(3, "010203") Then addArea(96, asAdult)
+                    If item("lift") And dungeonKeyCounter(3, "0102") And item("bow") Then addArea(94, asAdult)
+                End If
             Case 94
                 ' FoT: Straightened Hallway to Outside Upper Ledge
                 addArea(95, asAdult)
@@ -3612,6 +4997,7 @@ Public Class frmTrackerOfTime
                 ' FoT MQ: Falling Room to NE Outdoors Ledge
                 addArea(104, asAdult)
             Case 108
+                'addAreaExit(30, 0, asAdult)
                 If Not aMQ(4) Then
                     ' 108	FiT Lower
                     ' 109	FiT Big Lava Room
@@ -3682,6 +5068,7 @@ Public Class frmTrackerOfTime
                 ' This is not normally there, but this will prevent failed checks
                 If asAdult And item("goron tunic") And item("hammer") Then addArea(118, asAdult)
             Case 119
+                'addAreaExit(31, 0, asAdult)
                 If Not aMQ(5) Then
                     ' 119	WaT Lobby
                     ' 120	WaT Highest Water Level
@@ -3737,6 +5124,10 @@ Public Class frmTrackerOfTime
                 If dungeonKeyCounter(5, "05") Then addArea(126, asAdult)
             Case 121
                 ' WaT: Dive to Middle Water Level, Cracked Wall, North Basement, Dragon Statue
+
+                ' If adult Link can make it here, and young Link can make it into the Water Temple, then adult Link can lower the water to let young Link down here.
+                If aReachY(119) Then addArea(121, False)
+
                 If asAdult Then
                     If (item("bow") Or item("din's fire") Or (dungeonKeyCounter(5, "06") And item("hookshot"))) And item("zelda's lullaby") Then addArea(125, asAdult)
                     If item("zelda's lullaby") And (item("hookshot") Or item("hover boots")) And _
@@ -3764,6 +5155,7 @@ Public Class frmTrackerOfTime
                 ' WaT MQ: Dark Link Region to Basement Grated Areas
                 If asAdult And canFewerZora() And item("din's fire") And item("iron boots") Then addArea(131, asAdult)
             Case 132
+                'addAreaExit(32, 0, asAdult)
                 If Not aMQ(6) Then
                     ' 132	SpT Lobby
                     ' 133	SpT Child
@@ -3882,6 +5274,7 @@ Public Class frmTrackerOfTime
                 ' SpT MQ: Silver Gauntlets Hand to DC
                 addArea(50, asAdult)
             Case 150
+                'addAreaExit(33, 0, asAdult)
                 If Not aMQ(7) Then
                     ' 150	ShT Entryway
                     ' 151	ShT Beginning
@@ -4011,6 +5404,7 @@ Public Class frmTrackerOfTime
                     If (item("bow") Or (My.Settings.setShTStatue And item("bombchu")) Or checkLoc("11016")) And item("hover boots") Then addArea(173, asAdult)
                 End If
             Case 174
+                'addAreaExit(34, 0, asAdult)
                 If Not aMQ(8) Then
                     ' 174	BotW Entrance
                     ' 175	BotW Main Area
@@ -4048,7 +5442,35 @@ Public Class frmTrackerOfTime
             Case 175
                 ' BotW: Main Area Main Area with Lens of Truth Check
                 If My.Settings.setBotWLensless Or item("lens of truth") Then addArea(176, asAdult)
+            Case 178
+                'addAreaExit(35, 0, asAdult)
+
+                If Not aMQ(9) Then
+                    ' 178   IC Beginning
+                    ' 201   IC Main
+
+                    ' IC: Beginning to Main
+                    If asAdult Then
+                        addArea(201, asAdult)
+                    Else
+                        If canExplode() Or item("din's fire") Or item("deku stick") Then addArea(201, asAdult)
+                    End If
+                Else
+                    ' 178   IC Beginning
+                    ' 202   IC Map Room
+                    ' 203   IC Compass Room
+                    ' 204   IC Iron Boots Region
+
+                    If item("blue fire") Then addArea(204, asAdult)
+                    If asAdult Then
+                        addArea(202, asAdult)
+                        If item("blue fire") Then addArea(203, asAdult)
+                    Else
+                        If item("din's fire") Or (canExplode() And (item("deku stick") Or item("slingshot") Or item("kokiri sword"))) Then addArea(202, asAdult)
+                    End If
+                End If
             Case 179
+                'addAreaExit(36, 0, asAdult)
                 If Not aMQ(10) Then
                     ' 179	GTG Lobby and Central Maze
                     ' 180	GTG Central Maze Right
@@ -4165,6 +5587,22 @@ Public Class frmTrackerOfTime
                 If canLens() Then addArea(194, asAdult)
                 If asAdult And item("lift", 3) Then addArea(195, asAdult)
                 If (checkLoc("6611") And checkLoc("6612") And checkLoc("6613") And checkLoc("6614") And checkLoc("6615") And checkLoc("6629")) Or checkLoc("6719") Then addArea(196, asAdult)
+            Case 197
+                ' MK Entrance to MK and HF
+                addAreaExit(0, 1, asAdult) 'addArea(10, asAdult)
+                addAreaExit(0, 0, asAdult) 'addArea(7, asAdult)
+            Case 198
+                ' MK Back Alley (left) to MK, MK Back Alley (right)
+                addAreaExit(1, 0, asAdult) 'addArea(10, asAdult)
+                addArea(199, asAdult)
+            Case 199
+                ' MK Back Alley (right) to MK, MK Back Alley (left)
+                addAreaExit(1, 1, asAdult) 'addArea(10, asAdult)
+                addArea(198, asAdult)
+            Case 200
+                ' ToT Front to Outside ToT, ToT Behind Door
+                addAreaExit(5, 0, asAdult) 'addArea(11, asAdult)
+                If item("song of time") Or checkLoc("6427") Then addArea(12, asAdult)
         End Select
     End Sub
     Private Sub addArea(ByVal area As Byte, ByVal asAdult As Boolean)
@@ -4181,6 +5619,13 @@ Public Class frmTrackerOfTime
         addArray(area) = True
         reachAreas(area, asAdult)
     End Sub
+    Private Sub addAreaExit(ByVal area As Byte, ByVal ext As Byte, ByVal asAdult As Boolean)
+        ' Depending on if as an adult or not, focus on the correct array
+        Dim realArea As Byte = aExitMap(area)(ext)
+        addArea(realArea, asAdult)
+
+    End Sub
+
     Private Function dungeonKeyCounter(ByVal dungeon As Byte, ByVal theseDoors As String) As Boolean        ', Optional safeDoors As String = "x") As Boolean
         ' Works to count dungeon keys and unlocked doors
         dungeonKeyCounter = False
@@ -4267,7 +5712,7 @@ Public Class frmTrackerOfTime
             Case "hover boots"
                 If canAdult And checkLoc("7430") Then Return True
             Case "blue fire"
-                If allItems.Contains("u") And (allItems.Contains("w") Or aReachA(41) Or aReachA(190) Or aReachA(193)) Then Return True
+                If allItems.Contains("u") And (allItems.Contains("w") Or aReachA(190) Or aReachA(193) Or aReachA(201) Or aReachY(202) Or aReachA(202)) Then Return True
             Case "bomb", "bombs"
                 If allItems.Contains("c") Then Return True
             Case "bombchu", "bombchus"
@@ -4327,7 +5772,7 @@ Public Class frmTrackerOfTime
             Case "prelude of light"
                 If allItems.Contains("h") And aQIChecks(11) And Not bSongWarps Then Return True
             Case "scarecrow"
-                If canAdult And checkLoc("6512") Then
+                If canAdult And allItems.Contains("h") And checkLoc("6512") Then
                     If rank = 1 And allItems.Contains("k") Then
                         Return True
                     ElseIf rank = 2 And allItems.Contains("l") Then
@@ -4533,11 +5978,11 @@ Public Class frmTrackerOfTime
     End Function
     Private Function canFewerGoron() As Boolean
         canFewerGoron = False
-        If My.Settings.setFewerTunics Or checkLoc("7425") Then Return canAdult
+        If My.Settings.setFewerTunics Or (canAdult And checkLoc("7425")) Then Return True
     End Function
     Private Function canFewerZora() As Boolean
         canFewerZora = False
-        If My.Settings.setFewerTunics Or checkLoc("7426") Then Return canAdult
+        If My.Settings.setFewerTunics Or (canAdult And checkLoc("7426")) Then Return True
     End Function
     Private Function canGetBugs() As Boolean
         ' Checks if you can reach bugs
@@ -4649,6 +6094,16 @@ Public Class frmTrackerOfTime
 
         ' Check we can reach the overworld zone, or dungeon area
         If aReachA(zone) Or aReachY(zone) Then canDoThis = True
+        ' If ER, then check the visited array
+        If Not iER = 0 Then
+            Dim iVisited As Byte = zone2map(zone)
+            If iVisited = 255 Then
+                canDoThis = False
+            Else
+                If aVisited(iVisited) = False Then canDoThis = False
+            End If
+        End If
+
         ' Do not convert dungeons or quests
         convertLogic(logicKey)
 
@@ -4727,7 +6182,7 @@ Public Class frmTrackerOfTime
         For i = 1 To logicKey.Length
             Select Case Mid(logicKey, i, 1)
                 Case "G"
-                    ' G# = Test Types:  00 = Break Rock         01 = Break Rock with SoA    02 = Storms Grotto      03 = SoA Check          0A = Fewer Zora Tunic       0D = Can Get Bugs
+                    ' G# = Test Types:  00 = Break Rock         01 = Break Rock with SoA    02 = Storms Grotto      03 = SoA Check          09 = Fewer Goron Tunic      0A = Fewer Zora Tunic       0D = Can Get Bugs
                     '                   14 = SpT Shortcut       15 = SpT Lensless           16 = Can Change Lake    17 = Blue Fire Access 
                     '
                     '                   20 = Can Projectile Y   21 = Can Projectile A       22 = Can LACS           23 = Burn Young         24 = Burn Adult
@@ -4747,7 +6202,7 @@ Public Class frmTrackerOfTime
                     '                   D8 = GTG Final Chest            D9 = GTG MQ First Door      DA = GTG MQ All Doors       DB = GC Light Trail First Door  DC = Forest Temple MQ Keys: 2   DD = Fire Temple Keys: 6
                     '
                     '                   Removed
-                    '                   03 = Ascending Death Mountain   04 = Crater Entrance Check      05 = Half Crater Climb  06 = Full Crater Climb  07 = LW to ZR           08 = Can Buy Beans      09 = Fewer Goron Tunic (unused)
+                    '                   03 = Ascending Death Mountain   04 = Crater Entrance Check      05 = Half Crater Climb  06 = Full Crater Climb  07 = LW to ZR           08 = Can Buy Beans      
                     '                   0B = Entrance Check GV          0C = Reach Structure
                     '                   0E = Young ZD   0F = Adult ZD   10 = Young DC                   11 = Adult DC           12 = Young SpT Centre   13 = Adult SpT Centre
                     '                   15 = Young ZF   16 = Adult ZF   18 = Can Reach Bean Salesman    19 = KV Entrance        20 = Adult SFM (Never actually put it in...)
@@ -4767,6 +6222,8 @@ Public Class frmTrackerOfTime
                             canDoThis = canStormsGrotto()
                         Case "03"
                             If Not My.Settings.setStoneOfAgony Or checkLoc("7721") Then canDoThis = True
+                        Case "09"
+                            canDoThis = canFewerGoron()
                         Case "0A"
                             canDoThis = canFewerZora()
                         Case "0D"
@@ -5248,9 +6705,8 @@ Public Class frmTrackerOfTime
         inc(tK)
         With aKeys(tK)
             .loc = "6717"
-            ' It is attached to leaving KF technically
             .area = "LW"
-            .zone = 0
+            .zone = 4
             .name = "Gift from Saria"
             .logic = "YU.Z"
         End With
@@ -5582,7 +7038,7 @@ Public Class frmTrackerOfTime
             .loc = "8025"
             .area = "LLR"
             .zone = 9
-            .name = "Behind Coral (N)"
+            .name = "Behind Corral (N)"
             .gs = True
             .logic = "YN"
         End With
@@ -7832,14 +9288,16 @@ Public Class frmTrackerOfTime
                 .area = "DT0"
                 .zone = 60
                 .name = "Basement Chest"
-                .logic = "YJ.b"
+                .logic = "YJ.Yb.Z"
+                '.logic = "YJ.b"
             End With
             With aKeysDungeons(0)(6)
                 .loc = "1031"
                 .area = "DT3"
                 .zone = 63
                 .name = "Queen Gohma"
-                .logic = "YLL7420LL7416.YLL7420a"
+                .logic = "YLL7420LL7416.YLL7420a.ZLL7421"
+                '.logic = "YLL7420LL7416.YLL7420a"
             End With
             With aKeysDungeons(0)(7)
                 .loc = "7803"
@@ -7847,7 +9305,8 @@ Public Class frmTrackerOfTime
                 .zone = 60
                 .name = "Compass Room"
                 .gs = True
-                .logic = "YJ"
+                .logic = "YJ.Z"
+                '.logic = "YJ"
             End With
             With aKeysDungeons(0)(8)
                 .loc = "7802"
@@ -7855,7 +9314,8 @@ Public Class frmTrackerOfTime
                 .zone = 60
                 .name = "Basement Vines"
                 .gs = True
-                .logic = "f.x.Yg.Yo"
+                .logic = "YG20.Yf.ZG21.Zf"
+                '.logic = "f.x.Yg.Yo"
             End With
             With aKeysDungeons(0)(9)
                 .loc = "7801"
@@ -7863,7 +9323,8 @@ Public Class frmTrackerOfTime
                 .zone = 60
                 .name = "Basement Gate"
                 .gs = True
-                .logic = "YJ"
+                .logic = "YJ.Z"
+                '.logic = "YJ"
             End With
             With aKeysDungeons(0)(10)
                 .loc = "7800"
@@ -7871,7 +9332,8 @@ Public Class frmTrackerOfTime
                 .zone = 62
                 .name = "Basement Back Room"
                 .gs = True
-                .logic = "YG23ox"
+                .logic = "YG23xo.ZG24xk.Zdxk.ZG24rk.Zdrk"
+                '.logic = "YG23ox"
             End With
             tK = 11
         Else
@@ -8191,7 +9653,7 @@ Public Class frmTrackerOfTime
                 .logic = "Zrc.ZrV01.Yca.YxV01a.YcLL7416.YxV01LL7416"
             End With
             With aKeysDungeons(1)(8)
-                .loc = "7810"
+                .loc = "7809"
                 .area = "DDC4"
                 .zone = 76
                 .name = "Scrub Room"
@@ -8207,7 +9669,7 @@ Public Class frmTrackerOfTime
                 .logic = "Ya.f.ZG24"
             End With
             With aKeysDungeons(1)(10)
-                .loc = "7809"
+                .loc = "7810"
                 .area = "DDC2"
                 .zone = 74
                 .name = "Lizalfos Room"
@@ -8338,7 +9800,7 @@ Public Class frmTrackerOfTime
                 .zone = 80
                 .name = "Lobby Basement Upper"
                 .gs = True
-                .logic = "Yo"
+                .logic = "Yo.Zk"
             End With
             With aKeysDungeons(2)(6)
                 .loc = "7816"
@@ -8346,7 +9808,7 @@ Public Class frmTrackerOfTime
                 .zone = 80
                 .name = "Lobby Basement Lower"
                 .gs = True
-                .logic = "Yo"
+                .logic = "Yo.Zk"
             End With
             With aKeysDungeons(2)(7)
                 .loc = "7818"
@@ -8361,6 +9823,7 @@ Public Class frmTrackerOfTime
                 .zone = 80
                 .name = "Through Water Passage"
                 .scrub = True
+                .logic = "Y.ZV11.ZLL4729"
             End With
             tK = 9
         Else
@@ -8377,7 +9840,7 @@ Public Class frmTrackerOfTime
                 .area = "JB0"
                 .zone = 79
                 .name = "Map Chest"
-                .logic = "G00"
+                .logic = "Yx.Zx.Zr"
             End With
             With aKeysDungeons(2)(1)
                 .loc = "3305"
@@ -8542,13 +10005,14 @@ Public Class frmTrackerOfTime
                 .area = "FOT0"
                 .zone = 88
                 .name = "First Stalfos Chest"
+                .logic = "YLL7416.Z"
             End With
             With aKeysDungeons(3)(2)
                 .loc = "3405"
                 .area = "FOT2"
                 .zone = 90
                 .name = "Raised Island Courtyard Chest"
-                .logic = "Zk.ZQ1092.ZGA1LL7430Q1091"
+                .logic = "Zk.Q1092.ZGA1LL7430Q1091"
             End With
             With aKeysDungeons(3)(3)
                 .loc = "3401"
@@ -8567,7 +10031,7 @@ Public Class frmTrackerOfTime
                 .area = "FOT5"
                 .zone = 93
                 .name = "Eye Switch Chest"
-                .logic = "ZV01d"
+                .logic = "YV01g.ZV01d"
             End With
             With aKeysDungeons(3)(6)
                 .loc = "3414"
@@ -8612,13 +10076,14 @@ Public Class frmTrackerOfTime
                 .area = "FOT9"
                 .zone = 97
                 .name = "Basement Chest"
+                .logic = "YJ.Z.b"
             End With
             With aKeysDungeons(3)(13)
                 .loc = "1331"
                 .area = "FOT9"
                 .zone = 97
                 .name = "Phantom Ganon"
-                .logic = "ZGB0d.ZGB0k"
+                .logic = "YLL7416.Yg.ZGB0d.ZGB0k"
             End With
             With aKeysDungeons(3)(14)
                 .loc = "7825"
@@ -8626,7 +10091,8 @@ Public Class frmTrackerOfTime
                 .zone = 88
                 .name = "First Room"
                 .gs = True
-                .logic = "c.Zd.f.j.Zk"
+                .logic = "Yg.Yo.Zc.Zd.Zk.f.j"
+                '.logic = "Zc.Zd.f.j.Zk"
             End With
             With aKeysDungeons(3)(15)
                 .loc = "7827"
@@ -8634,7 +10100,7 @@ Public Class frmTrackerOfTime
                 .zone = 88
                 .name = "Lobby"
                 .gs = True
-                .logic = "Zk"
+                .logic = "Yo.Zk"
             End With
             With aKeysDungeons(3)(16)
                 .loc = "7826"
@@ -8650,7 +10116,7 @@ Public Class frmTrackerOfTime
                 .zone = 90
                 .name = "Raised Island Courtyard"
                 .gs = True
-                .logic = "Zk.ZQ1092d.ZQ1092f.ZQ1092x"
+                .logic = "Zk.ZQ1092d.Q1092f.Q1092x"
             End With
             With aKeysDungeons(3)(18)
                 .loc = "7828"
@@ -8658,7 +10124,7 @@ Public Class frmTrackerOfTime
                 .zone = 97
                 .name = "Basement"
                 .gs = True
-                .logic = "Zk"
+                .logic = "Yo.Zk"
             End With
             With aKeysDungeons(3)(19)
                 .loc = "10600"
@@ -8705,20 +10171,21 @@ Public Class frmTrackerOfTime
                 .area = "FOT0"
                 .zone = 88
                 .name = "First Room Chest"
+                .logic = "YLL7416.Ya.Yb.Yc.Yf.Yg.Yo.Z"
             End With
             With aKeysDungeons(3)(1)
                 .loc = "3400"
                 .area = "FOT1"
                 .zone = 98
                 .name = "Wolfos Chest"
-                .logic = "hLL7716"
+                .logic = "YLL7416.Ya.Yf.Yg.ZhLL7716"
             End With
             With aKeysDungeons(3)(2)
                 .loc = "3409"
                 .area = "FOT5"
                 .zone = 102
                 .name = "Well Chest"
-                .logic = "Zd"
+                .logic = "Yg.Zd"
             End With
             With aKeysDungeons(3)(3)
                 .loc = "3401"
@@ -8782,7 +10249,7 @@ Public Class frmTrackerOfTime
                 .area = "FOTA"
                 .zone = 107
                 .name = "Phantom Ganon"
-                .logic = "ZGB0d.ZGB0k"
+                .logic = "YLL7416.Yg.ZGB0d.ZGB0k"
             End With
             With aKeysDungeons(3)(13)
                 .loc = "7825"
@@ -8790,7 +10257,7 @@ Public Class frmTrackerOfTime
                 .zone = 88
                 .name = "First Hallway"
                 .gs = True
-                .logic = "Zk"
+                .logic = "Yo.Zk"
             End With
             With aKeysDungeons(3)(14)
                 .loc = "7824"
@@ -8798,7 +10265,8 @@ Public Class frmTrackerOfTime
                 .zone = 102
                 .name = "Raised Island Courtyard"
                 .gs = True
-                .logic = "Zk.ZdeLL7716.ZdeLL7430GA2"
+                .logic = "Yo.Zk.ZdeLL7716.ZdeLL7430GA2"
+                '.logic = "Zk.ZdeLL7716.ZdeLL7430GA2"
             End With
             With aKeysDungeons(3)(15)
                 .loc = "7826"
@@ -8813,7 +10281,7 @@ Public Class frmTrackerOfTime
                 .zone = 102
                 .name = "Well"
                 .gs = True
-                .logic = "ZLL7729k.Zd"
+                .logic = "Yg.ZLL7429k.Zd"
             End With
             With aKeysDungeons(3)(17)
                 .loc = "7828"
@@ -8821,6 +10289,7 @@ Public Class frmTrackerOfTime
                 .zone = 98
                 .name = "Block Push Room"
                 .gs = True
+                .logic = "YLL7416.Z"
             End With
             With aKeysDungeons(3)(18)
                 .loc = "10600"
@@ -8914,6 +10383,7 @@ Public Class frmTrackerOfTime
                 .area = "FIT0"
                 .zone = 108
                 .name = "Near Boss Chest"
+                .logic = "G09"
             End With
             With aKeysDungeons(4)(1)
                 .loc = "3500"
@@ -8938,7 +10408,7 @@ Public Class frmTrackerOfTime
                 .area = "FIT1"
                 .zone = 109
                 .name = "Big Lava Room Blocked Door Chest"
-                .logic = "x"
+                .logic = "Yx.Z"
             End With
             With aKeysDungeons(4)(5)
                 .loc = "3503"
@@ -9021,7 +10491,7 @@ Public Class frmTrackerOfTime
                 .zone = 109
                 .name = "Song of Time Room"
                 .gs = True
-                .logic = "hLL7716"
+                .logic = "ZhLL7716"
             End With
             With aKeysDungeons(4)(17)
                 .loc = "7902"
@@ -9108,20 +10578,21 @@ Public Class frmTrackerOfTime
                 .area = "FIT0"
                 .zone = 108
                 .name = "Near Boss Chest"
-                .logic = "ZLL7430G24.ZkG24"
+                .logic = "Yf.Zf.ZLL7430G24.Zkde"
             End With
             With aKeysDungeons(4)(1)
                 .loc = "3502"
                 .area = "FIT0"
                 .zone = 108
                 .name = "Map Room Side Chest"
+                .logic = "YLL7416.Ya.Yc.Yf.Yg.Z"
             End With
             With aKeysDungeons(4)(2)
                 .loc = "3500"
                 .area = "FIT1"
                 .zone = 108
                 .name = "Megaton Hammer Chest"
-                .logic = "Zk.Zr.x"
+                .logic = "Zk.Zr.Zx"
             End With
             With aKeysDungeons(4)(3)
                 .loc = "3512"
@@ -9316,7 +10787,8 @@ Public Class frmTrackerOfTime
                 .area = "WAT2"
                 .zone = 121
                 .name = "Torches Chest"
-                .logic = "ZdehLL7712.fhLL7712"
+                .logic = "YLL7416MahLL7712.YfhLL7712.ZdhLL7712.ZfhLL7712"
+                ' .logic = "ZdehLL7712.fhLL7712"
             End With
             With aKeysDungeons(5)(3)
                 .loc = "3609"
@@ -9884,10 +11356,10 @@ Public Class frmTrackerOfTime
             End With
             With aKeysDungeons(6)(11)
                 .loc = "3712"
-                .area = "SPT1"
-                .zone = 142
+                .area = "SPT2"
+                .zone = 143
                 .name = "Child Climb South Chest"
-                .logic = "x"
+                .logic = "Zx"
             End With
             With aKeysDungeons(6)(12)
                 .loc = "3715"
@@ -10773,122 +12245,126 @@ Public Class frmTrackerOfTime
             With aKeysDungeons(9)(0)
                 .loc = "4000"
                 .area = "IC"
-                .zone = 178
+                .zone = 201
                 .name = "Map Chest"
                 .logic = "Zu"
             End With
             With aKeysDungeons(9)(1)
                 .loc = "4001"
                 .area = "IC"
-                .zone = 178
+                .zone = 201
                 .name = "Compass Chest"
-                .logic = "Zu"
+                .logic = "G17"
             End With
             With aKeysDungeons(9)(2)
                 .loc = "701"
                 .area = "IC"
-                .zone = 178
+                .zone = 201
                 .name = "Piece of Heart"
-                .logic = "Zu"
+                .logic = "G17"
             End With
             With aKeysDungeons(9)(3)
                 .loc = "4002"
                 .area = "IC"
-                .zone = 178
+                .zone = 201
                 .name = "Iron Boots Chest"
-                .logic = "Zu"
+                .logic = "YLL7416G17.YaG17.YfG17.YgG17.Zu"
             End With
             With aKeysDungeons(9)(4)
                 .loc = "6402"
                 .area = "IC"
-                .zone = 178
+                .zone = 201
                 .name = "Song from Sheik"
-                .logic = "Zu"
+                .logic = "YLL7416G17.YaG17.YfG17.YgG17.Zu"
             End With
             With aKeysDungeons(9)(5)
                 .loc = "8009"
                 .area = "IC"
-                .zone = 178
+                .zone = 201
                 .name = "Spinning Scythe Room"
                 .gs = True
-                .logic = "Zk"
+                .logic = "Yo.Zk"
             End With
             With aKeysDungeons(9)(6)
                 .loc = "8010"
                 .area = "IC"
-                .zone = 178
+                .zone = 201
                 .name = "Heart Piece Room"
                 .gs = True
-                .logic = "Zuk"
+                .logic = "YoG17.ZG17k"
             End With
             With aKeysDungeons(9)(7)
                 .loc = "8008"
                 .area = "IC"
-                .zone = 178
+                .zone = 201
                 .name = "Push Block Room"
                 .gs = True
-                .logic = "Zuk"
+                .logic = "YoG17.ZG17k"
             End With
         Else
+            ' 178   IC Beginning
+            ' 202   IC Map Room
+            ' 203   IC Compass Room
+            ' 204   IC Iron Boots Region
+
             ' The Master Quest keys for the Ice Carvern
             With aKeysDungeons(9)(0)
                 .loc = "4001"
                 .area = "IC"
-                .zone = 178
+                .zone = 202
                 .name = "Map Chest"
-                .logic = "Zu"
+                .logic = "YLL7416u.Yau.YG20u.Zu"
             End With
             With aKeysDungeons(9)(1)
                 .loc = "4000"
                 .area = "IC"
-                .zone = 178
+                .zone = 203
                 .name = "Compass Chest"
-                .logic = "Zu"
             End With
             With aKeysDungeons(9)(2)
                 .loc = "701"
                 .area = "IC"
-                .zone = 178
+                .zone = 203
                 .name = "Piece of Heart"
-                .logic = "Zux"
+                .logic = "x"
             End With
             With aKeysDungeons(9)(3)
                 .loc = "4002"
                 .area = "IC"
-                .zone = 178
+                .zone = 204
                 .name = "Iron Boots Chest"
-                .logic = "Zu"
+                .logic = "Z"
             End With
             With aKeysDungeons(9)(4)
                 .loc = "6402"
                 .area = "IC"
-                .zone = 178
+                .zone = 204
                 .name = "Song from Sheik"
-                .logic = "Zu"
+                .logic = "Z"
             End With
             With aKeysDungeons(9)(5)
                 .loc = "8009"
                 .area = "IC"
-                .zone = 178
+                .zone = 203
                 .name = "Red Ice"
                 .gs = True
-                .logic = "ZuhLL7716"
+                .logic = "hLL7716"
             End With
             With aKeysDungeons(9)(6)
                 .loc = "8010"
                 .area = "IC"
-                .zone = 178
+                .zone = 204
                 .name = "Ice Block"
                 .gs = True
-                .logic = "Zu"
+                .logic = "YJ.Z"
             End With
             With aKeysDungeons(9)(7)
                 .loc = "8008"
                 .area = "IC"
-                .zone = 178
+                .zone = 204
                 .name = "Scarecrow"
                 .gs = True
-                .logic = "ZuhLL6512k.ZuLL7730l"
+                .logic = "ZhLL6512k.ZLL7730l"
             End With
         End If
     End Sub
@@ -10921,27 +12397,28 @@ Public Class frmTrackerOfTime
                 .area = "GTG0"
                 .zone = 179
                 .name = "Lobby Left Chest"
-                .logic = "Zd"
+                .logic = "Yg.Zd"
             End With
             With aKeysDungeons(10)(1)
                 .loc = "4207"
                 .area = "GTG0"
                 .zone = 179
                 .name = "Lobby Right Chest"
-                .logic = "Zd"
+                .logic = "Yg.Zd"
             End With
             With aKeysDungeons(10)(2)
                 .loc = "4200"
                 .area = "GTG0"
                 .zone = 179
                 .name = "Stalfos Chest"
+                .logic = "YLL7416.Z"
             End With
             With aKeysDungeons(10)(3)
                 .loc = "4201"
                 .area = "GTG0"
                 .zone = 179
                 .name = "Beamos Chest"
-                .logic = "x"
+                .logic = "YLL7416x.Zx"
             End With
             With aKeysDungeons(10)(4)
                 .loc = "4217"
@@ -11158,6 +12635,7 @@ Public Class frmTrackerOfTime
                 .area = "GTG1"
                 .zone = 187
                 .name = "Dinolfos Chest"
+                .logic = "Z"
             End With
             With aKeysDungeons(10)(7)
                 .loc = "4213"
@@ -11171,14 +12649,13 @@ Public Class frmTrackerOfTime
                 .area = "GTG3"
                 .zone = 189
                 .name = "First Iron Knuckle Chest"
-                .logic = "Z"
+                .logic = "YLL7416.Yx.Z"
             End With
             With aKeysDungeons(10)(9)
                 .loc = "4217"
                 .area = "GTG4"
                 .zone = 190
                 .name = "Before Heavy Block Chest"
-                .logic = "Z"
             End With
             With aKeysDungeons(10)(10)
                 .loc = "4202"
@@ -12163,6 +13640,13 @@ Public Class frmTrackerOfTime
         Dim attemptOffset As Int64 = 0
         Dim attemptAdded As Int64 = 0
 
+        ' Step through all modules to find mupen64plus.dll's base address
+        For Each mo As ProcessModule In target.Modules
+            If LCase(mo.ModuleName) = "mupen64plus.dll" Then
+                addressDLL = mo.BaseAddress.ToInt64
+                Exit For
+            End If
+        Next
 
         Select Case attempt
             Case 0
@@ -12172,17 +13656,28 @@ Public Class frmTrackerOfTime
             Case 1
                 ' Builds July 13, 2021 to October 11, 2021
                 attemptOffset = &HCA6B8
+            Case 2
+                ' Builds October 27, 2021 to June, 2, 2022
+
+                ' I hate this sooo much. Rather than the confusing "find the address that has the address", it is:
+                ' "Find the address that, that has an address (with an increase of 0x140), that has the address we need"
+                attemptOffset = &H1177888
+                attemptAdded = 0
+                'attemptOffset = attemptOffset + &H140
+                Dim readRCX As Integer = ReadMemory(Of Integer)(addressDLL + attemptOffset)
+
+                If Not readRCX = 0 Then
+                    inc(readRCX, &H140)
+                    Dim hexRCX As String = Hex(readRCX)
+                    fixHex(hexRCX)
+                    readRCX = ReadMemory(Of Integer)(addressDLL + attemptOffset + 4)
+                    hexRCX = Hex(readRCX) & hexRCX
+                    attemptOffset = CLng("&H" & hexRCX) - addressDLL
+                End If
             Case Else
                 Return
         End Select
 
-        ' Step through all modules to find mupen64plus.dll's base address
-        For Each mo As ProcessModule In target.Modules
-            If LCase(mo.ModuleName) = "mupen64plus.dll" Then
-                addressDLL = mo.BaseAddress.ToInt64
-                Exit For
-            End If
-        Next
         ' Check if mupen64plus.dll was found
         Dim nextAttempt As Boolean = True
         If Not addressDLL = 0 Then
@@ -12209,6 +13704,252 @@ Public Class frmTrackerOfTime
         End If
         If nextAttempt Then attachToM64P(CByte(attempt + 1))
     End Sub
+    Private Sub attachToModLoader64()
+        ' This sub, and thus support for ML64, is credited to subenji, who also added the memory function to attach by process ID -- 2022.06.17
+
+        ' This should already be empty in order to reach this point, but never hurts to make sure
+        emulator = String.Empty
+        ' If not 64bit, do not even bother
+        If IS_64BIT = False Then Exit Sub
+        ' Prepare new target process
+        Dim target As Process = Nothing
+
+        Try
+            ' Try to attach to application
+            ' target = Process.GetProcessesByName("modloader64-gui")(0)
+            ''
+            ' ModLoader64 runs 5 or 6 processes with only one of them actually being the emulator window, so we need to check the emulation is running
+            ''
+            Dim processes As Process() = Process.GetProcessesByName("modloader64-gui")
+            If processes.Length = 0 Then
+                ' If process was not found, just return
+                Return
+            End If
+            For Each p As Process In processes
+                For Each pModule As ProcessModule In p.Modules
+                    If LCase(pModule.ModuleName) = "mupen64plus.dll" Then
+                        ''
+                        ' As the process is run several times and I need to specify by PID rather than name, I need to attach this once by hand
+                        ''
+                        If Not OpenProcessHandleById(p.Id) Then
+                            rtbOutputLeft.Text = "Attachment Problem: Could not open process handle: " & p.Id & vbCrLf
+                            Return
+                        End If
+
+                        target = p
+                        ' Prepare new address variable
+                        Dim addressDLL As Int64 = 0
+                        Dim attemptOffset As Int64 = 0
+                        Dim attemptAdded As Int64 = 0
+                        Dim positiveHit As Boolean = False
+                        ''
+                        ' These pointers to the Base ROM location were all listed as static, I felt it best just to add them all. The first one worked every time in testing.
+                        ' I found adding 0x80000000 was never necessary.
+                        ''
+                        For attempt = 0 To 5
+                            Select Case attempt
+                                Case 0
+                                    attemptOffset = &H116ECF8
+                                Case 1
+                                    attemptOffset = &H12EED10
+                                Case 2
+                                    attemptOffset = &H6A6F0
+                                Case 3
+                                    attemptOffset = &H6C400
+                                Case 4
+                                    attemptOffset = &H6C460
+                                Case 5
+                                    attemptOffset = &H6C538
+                                Case Else
+                                    Return
+                            End Select
+
+                            ''
+                            ' As the emulator is the same mupen64plus module, the rest of the code is the same as the existing attachToM64P function.
+                            ''
+                            ' Step through all modules to find mupen64plus.dll's base address
+                            For Each mo As ProcessModule In target.Modules
+                                If LCase(mo.ModuleName) = "mupen64plus.dll" Then
+                                    addressDLL = mo.BaseAddress.ToInt64
+                                    Exit For
+                                End If
+                            Next
+                            ' Check if mupen64plus.dll was found
+                            If Not addressDLL = 0 Then
+                                ' Add location of variable to base address
+                                addressDLL = addressDLL + attemptOffset
+                                ' Set it as the current emulator
+                                emulator = "modloader64-gui"
+                                ' Read the first half of the address
+                                Dim readR15 As Integer = ReadMemory(Of Integer)(addressDLL)
+                                ' Convert to hex
+                                Dim hexR15 As String = Hex(readR15)
+                                If Not hexR15 = "0" Then
+                                    ' Make sure length is 8 digit for any dropped 0's
+                                    fixHex(hexR15)
+                                    ' Read the second half of the address
+                                    readR15 = ReadMemory(Of Integer)(addressDLL + 4)
+                                    ' Convert to hex and attach to first half
+                                    hexR15 = Hex(readR15) & hexR15
+                                    romAddrStart64 = CLng("&H" & hexR15) + attemptAdded
+                                    If ReadMemory(Of Integer)(romAddrStart64 + &H11A5EC) = 1514490948 Then
+                                        ' Note as a positive hit and exit the loop
+                                        positiveHit = True
+                                        Exit For
+                                    End If
+
+                                End If
+                            End If
+                        Next
+                        ' If a positive hit, finish up. If not, reset the target to advance to the next process
+                        If positiveHit Then
+                            Exit For
+                        Else
+                            target = Nothing
+                        End If
+                    End If
+                Next
+                If target IsNot Nothing Then
+                    Exit For
+                End If
+            Next
+            ''
+            ' I added a line to handle the case that the launcher had started but emulation hadn't yet. Printing here isn't really necessary.
+            ''
+            If target Is Nothing Then
+                rtbOutputLeft.Text = "Found modloader64 but couldn't find a running emulator." & vbCrLf
+                Return
+            End If
+        Catch ex As Exception
+            If ex.Message = "Index was outside the bounds of the array." Then
+                ' This is the expected error if process was not found, just return
+                Return
+            Else
+                ' Any other error, output error message to textbox
+                rtbOutputLeft.Text = "Attachment Problem: " & ex.Message & vbCrLf
+                Return
+            End If
+        End Try
+    End Sub
+
+    Private Sub attachToModLoader642()
+        ' This sub, and thus support for ML64, is credited to subenji, who also added the memory function to attach by process ID -- 2022.06.17
+
+        ' This should already be empty in order to reach this point, but never hurts to make sure
+        emulator = String.Empty
+        ' If not 64bit, do not even bother
+        If IS_64BIT = False Then Exit Sub
+        ' Prepare new target process
+        Dim target As Process = Nothing
+
+        Try
+            ' Try to attach to application
+            ' target = Process.GetProcessesByName("modloader64-gui")(0)
+            ''
+            ' ModLoader64 runs 5 or 6 processes with only one of them actually being the emulator window, so we need to check the emulation is running
+            ''
+            Dim processes As Process() = Process.GetProcessesByName("modloader64-gui")
+            If processes.Length = 0 Then
+                ' If process was not found, just return
+                Return
+            End If
+            For Each p As Process In processes
+                For Each pModule As ProcessModule In p.Modules
+                    If LCase(pModule.ModuleName) = "mupen64plus.dll" Then
+                        ''
+                        ' As the process is run several times and I need to specify by PID rather than name, I need to attach this once by hand
+                        ''
+                        If Not OpenProcessHandleById(p.Id) Then
+                            rtbOutputLeft.Text = "Attachment Problem: Could not open process handle: " & p.Id & vbCrLf
+                            Return
+                        End If
+                        target = p
+                        Exit For
+                    End If
+                Next
+                If target IsNot Nothing Then
+                    Exit For
+                End If
+            Next
+            ''
+            ' I added a line to handle the case that the launcher had started but emulation hadn't yet. Printing here isn't really necessary.
+            ''
+            If target Is Nothing Then
+                rtbOutputLeft.Text = "Found modloader64 but couldn't find a running emulator." & vbCrLf
+                Return
+            End If
+        Catch ex As Exception
+            If ex.Message = "Index was outside the bounds of the array." Then
+                ' This is the expected error if process was not found, just return
+                Return
+            Else
+                ' Any other error, output error message to textbox
+                rtbOutputLeft.Text = "Attachment Problem: " & ex.Message & vbCrLf
+                Return
+            End If
+        End Try
+
+        ' Prepare new address variable
+        Dim addressDLL As Int64 = 0
+        Dim attemptOffset As Int64 = 0
+        Dim attemptAdded As Int64 = 0
+
+        ''
+        ' These pointers to the Base ROM location were all listed as static, I felt it best just to add them all. The first one worked every time in testing.
+        ' I found adding 0x80000000 was never necessary.
+        ''
+        For attempt = 0 To 5
+            Select Case attempt
+                Case 0
+                    attemptOffset = &H116ECF8
+                Case 1
+                    attemptOffset = &H12EED10
+                Case 2
+                    attemptOffset = &H6A6F0
+                Case 3
+                    attemptOffset = &H6C400
+                Case 4
+                    attemptOffset = &H6C460
+                Case 5
+                    attemptOffset = &H6C538
+                Case Else
+                    Return
+            End Select
+
+            ''
+            ' As the emulator is the same mupen64plus module, the rest of the code is the same as the existing attachToM64P function.
+            ''
+            ' Step through all modules to find mupen64plus.dll's base address
+            For Each mo As ProcessModule In target.Modules
+                If LCase(mo.ModuleName) = "mupen64plus.dll" Then
+                    addressDLL = mo.BaseAddress.ToInt64
+                    Exit For
+                End If
+            Next
+            ' Check if mupen64plus.dll was found
+            If Not addressDLL = 0 Then
+                ' Add location of variable to base address
+                addressDLL = addressDLL + attemptOffset
+                ' Set it as the current emulator
+                emulator = "modloader64-gui"
+                ' Read the first half of the address
+                Dim readR15 As Integer = ReadMemory(Of Integer)(addressDLL)
+                ' Convert to hex
+                Dim hexR15 As String = Hex(readR15)
+                If Not hexR15 = "0" Then
+                    ' Make sure length is 8 digit for any dropped 0's
+                    fixHex(hexR15)
+                    ' Read the second half of the address
+                    readR15 = ReadMemory(Of Integer)(addressDLL + 4)
+                    ' Convert to hex and attach to first half
+                    hexR15 = Hex(readR15) & hexR15
+                    romAddrStart64 = CLng("&H" & hexR15) + attemptAdded
+                    If ReadMemory(Of Integer)(romAddrStart64 + &H11A5EC) = 1514490948 Then Exit For
+                End If
+            End If
+        Next
+    End Sub
+
     Private Sub attachToRetroArch()
         ' This should already be empty in order to reach this point, but never hurts to make sure
         emulator = String.Empty
@@ -13718,7 +15459,9 @@ Public Class frmTrackerOfTime
     Private Sub ExitScanToolStripMenuItem_Click(sender As Object, e As EventArgs)
         Me.Close()
     End Sub
-
+    Private Sub MiniMapToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MiniMapToolStripMenuItem.Click
+        pnlER.Visible = Not pnlER.Visible
+    End Sub
     Private Sub ShowSettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ShowSettingsToolStripMenuItem.Click
         showSetting = Not showSetting
         updateShowSettings()
@@ -14294,6 +16037,8 @@ Public Class frmTrackerOfTime
                 aAddresses(14) = &H400CED   ' Big Poe Goal
                 aAddresses(15) = &H400CEF   ' KF | 0: Open | 1: Closed Deku | 2: Closed
                 aAddresses(16) = &H400CEE   ' ZF | 0: Open | 1: Adult | 2: Closed
+                aAddresses(18) = &H400CDD   ' Overworld ER
+                aAddresses(19) = &H400CDE   ' Dungeon ER
             Case "8040A474"
                 ' OOTR 6.2
                 aAddresses(0) = &H40B6E0    ' MQs Addr
@@ -14305,6 +16050,8 @@ Public Class frmTrackerOfTime
                 aAddresses(7) = &H400CAC    ' Bombchu's in Logic
                 aAddresses(8) = &H400CC4    ' Cow Shuffle
                 'aAddresses(9) = &H40A3B4    ' Dungeon Rewards
+                aAddresses(18) = &H400CCD   ' Overworld ER
+                aAddresses(19) = &H400CCE   ' Dungeon ER
             Case "8040AA7C"
                 ' OOTR 6.2.72
                 aAddresses(0) = &H400CF8    ' MQs Addr
@@ -14324,6 +16071,8 @@ Public Class frmTrackerOfTime
                 'aAddresses(15) = &H   ' KF | 0: Open | 1: Closed Deku | 2: Closed
                 'aAddresses(16) = &H   ' ZF | 0: Closed | 1: Adult | 2: Open
                 aAddresses(17) = &H400CE0   ' OOTR Info On/Off
+                aAddresses(18) = &H400CCD   ' Overworld ER
+                aAddresses(19) = &H400CCE   ' Dungeon ER
             Case "8040ACC4"
                 ' ROMAN 6.2.43
                 aAddresses(0) = &H400CF8    ' MQs Addr
@@ -14334,6 +16083,8 @@ Public Class frmTrackerOfTime
                 aAddresses(5) = &H400CC2    ' RB2 Addr
                 aAddresses(7) = &H400CAC    ' Bombchu's in Logic
                 aAddresses(8) = &H400CC4    ' Cow Shuffle
+                aAddresses(18) = &H400CCD   ' Overworld ER
+                aAddresses(19) = &H400CCE   ' Dungeon ER
             Case "8040B11C"
                 ' ROMAN 6.2.72-R2
                 aAddresses(0) = &H400CF8    ' MQs Addr
@@ -14344,6 +16095,8 @@ Public Class frmTrackerOfTime
                 aAddresses(5) = &H400CC2    ' RB2 Addr
                 aAddresses(7) = &H400CAC    ' Bombchu's in Logic
                 aAddresses(8) = &H400CC4    ' Cow Shuffle
+                aAddresses(18) = &H400CCD   ' Overworld ER
+                aAddresses(19) = &H400CCE   ' Dungeon ER
         End Select
     End Sub
     Private Sub getRainbowBridge()
@@ -14356,6 +16109,24 @@ Public Class frmTrackerOfTime
         rainbowBridge(0) = CByte(goRead(aAddresses(4), 1))
         ' Rainbow Bridge Condition Count
         rainbowBridge(1) = CByte(goRead(aAddresses(5), 1))
+    End Sub
+    Private Sub getER()
+        iER = 0
+        ' Overworld ER check
+        If Not aAddresses(18) = 0 Then
+            If goRead(aAddresses(18), 1) = 1 Then incB(iER)
+        End If
+        ' Dungeon ER check
+        If Not aAddresses(19) = 0 Then
+            If goRead(aAddresses(19), 1) = 1 Then incB(iER, 2)
+        End If
+        If Not iER = iOldER Then
+            ' If a change in ER is detected (basically first scan), clear the appropriate exits
+            If iER Mod 2 = 1 Then clearArrayExitsOverworld()
+            If iER > 1 Then clearArrayExitsDungeons()
+            iOldER = iER
+        End If
+        scanER()
     End Sub
     Private Sub pnlSettings_Paint(sender As Object, e As PaintEventArgs) Handles pnlSettings.Paint
         updateSettingsPanel()
@@ -14648,7 +16419,7 @@ Public Class custMenu
             Dim cBack As Color = CType(IIf(.Selected, highlight, backColour), Color)
             e.Graphics.FillRectangle(New SolidBrush(cBack), New Rectangle(Point.Empty, .Size))
             Select Case LCase(.Text)
-                Case "scan", "auto scan", "stop", "reset", "exit", "themes", "settings >", "settings <"
+                Case "scan", "auto scan", "stop", "reset", "exit", "themes", "settings >", "settings <", "mini-map"
                     e.Graphics.DrawRectangle(New Pen(foreColour, 1), New Rectangle(0, 0, .Width - 1, .Height - 1))
             End Select
             .ForeColor = foreColour

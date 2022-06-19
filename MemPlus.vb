@@ -26,6 +26,7 @@ Module MemPlus
     Private TargetProcess As String = "iw6mp64_ship"
     Private ProcessHandle As IntPtr = IntPtr.Zero
     Private LastKnownPID As Integer = -1
+    Private useID As Boolean = False
 
     Private Function ProcessIDExists(ByVal pID As Integer) As Boolean
         For Each p As Process In Process.GetProcessesByName(TargetProcess)
@@ -39,7 +40,18 @@ Module MemPlus
         If ProcessHandle <> IntPtr.Zero Then CloseHandle(ProcessHandle)
         LastKnownPID = -1
         ProcessHandle = IntPtr.Zero
+        useID = False
     End Sub
+
+    Public Function OpenProcessHandleById(id As Integer) As Boolean
+        If ProcessHandle <> IntPtr.Zero Then CloseHandle(ProcessHandle)
+        ProcessHandle = OpenProcess(PROCESS_VM_READ Or PROCESS_VM_WRITE Or PROCESS_VM_OPERATION, False, id)
+        If ProcessHandle = IntPtr.Zero Then Return False
+        LastKnownPID = id
+        TargetProcess = Process.GetProcessById(id).ProcessName
+        useID = True
+        Return True
+    End Function
 
     Public Function GetCurrentProcessName() As String
         Return TargetProcess
