@@ -9,8 +9,8 @@ Public Class frmTrackerOfTime
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 116
-    Private Const IS_64BIT As Boolean = False
-    Private Const VER As String = "4.0.0"
+    Private Const IS_64BIT As Boolean = True
+    Private Const VER As String = "4.0.2"
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private romAddrStart As Integer = &HDFE40000
@@ -72,8 +72,8 @@ Public Class frmTrackerOfTime
     Private aDungeonRewards(7) As Byte
     Private aReachA(255) As Boolean
     Private aReachY(255) As Boolean
-    Private aExitMap(36)() As Byte
-    Private aVisited(36) As Boolean
+    Private aExitMap(37)() As Byte
+    Private aVisited(37) As Boolean
     Private iER As Byte = 0
     ' Old ER is for detecting if there is an ER change, thus triggering the clearing of exits.
     ' It will not be reset when stopping the scan, as I do not want people's ER progress to reset randomly.
@@ -448,9 +448,9 @@ Public Class frmTrackerOfTime
         aExitMap(6)(5) = 9      ' LLR
         aExitMap(6)(6) = 42     ' LH Main
         ' KV (82)
-        aExitMap(7)(0) = 20     ' DMT Lower
-        aExitMap(7)(1) = 7      ' HF
-        aExitMap(7)(2) = 18     ' GY Lower
+        aExitMap(7)(1) = 20     ' DMT Lower
+        aExitMap(7)(2) = 7      ' HF
+        aExitMap(7)(3) = 18     ' GY Lower
         ' GY (83)
         aExitMap(8)(1) = 15     ' KV Main
         ' ZR (84)
@@ -485,20 +485,20 @@ Public Class frmTrackerOfTime
         ' DC (92)
         aExitMap(17)(1) = 49    ' HW Colossus Side
         ' GF (93)
-        aExitMap(18)(0) = 45    ' GV Gerudo Side
-        aExitMap(18)(1) = 47    ' HW Gerudo Side
+        aExitMap(18)(1) = 45    ' GV Gerudo Side
+        aExitMap(18)(2) = 47    ' HW Gerudo Side
         ' HW (94)
         aExitMap(19)(0) = 50    ' DC
         aExitMap(19)(1) = 47    ' GF Behind Gate
         ' HC (95)
         aExitMap(20)(0) = 10    ' MK
         ' DMT (96)
-        aExitMap(21)(0) = 29    ' GC Main
-        aExitMap(21)(1) = 17    ' KV Behind Gate
+        aExitMap(21)(1) = 29    ' GC Main
+        aExitMap(21)(2) = 17    ' KV Behind Gate
         aExitMap(21)(3) = 22    ' DMC Upper
         ' DMC (97)
-        aExitMap(22)(0) = 31    ' GC Darunia
-        aExitMap(22)(1) = 21    ' DMT Upper
+        aExitMap(22)(1) = 31    ' GC Darunia
+        aExitMap(22)(2) = 21    ' DMT Upper
         ' GC (98)
         aExitMap(23)(0) = 25    ' DMC Lower Local
         aExitMap(23)(1) = 20    ' DMT Lower
@@ -506,31 +506,34 @@ Public Class frmTrackerOfTime
         ' LLR (99)
         aExitMap(24)(0) = 7     ' HF
         ' OGC (100)
-        aExitMap(25)(0) = 10    ' MK
+        aExitMap(25)(1) = 10    ' MK
 
         ' Dungeon Exits
         aExitMap(10)(0) = 60    ' Deku Tree
         aExitMap(26)(0) = 1
-        aExitMap(21)(2) = 69    ' Dodongo's Cavern
+        aExitMap(21)(0) = 69    ' Dodongo's Cavern
         aExitMap(27)(0) = 20
         aExitMap(14)(0) = 79    ' Jabu-Jabu's Belly
         aExitMap(28)(0) = 40
         aExitMap(11)(0) = 88    ' Forest Temple
         aExitMap(29)(0) = 6
-        aExitMap(22)(2) = 108   ' Fire Temple
+        aExitMap(22)(0) = 108   ' Fire Temple
         aExitMap(30)(0) = 28
-        aExitMap(12)(1) = 119   ' Water Temple
+        aExitMap(12)(0) = 119   ' Water Temple
         aExitMap(31)(0) = 42
         aExitMap(17)(0) = 132   ' Spirit Temple
         aExitMap(32)(0) = 50
         aExitMap(8)(0) = 150    ' Shadow Temple
         aExitMap(33)(0) = 19
-        aExitMap(7)(3) = 174    ' BotW
+        aExitMap(7)(0) = 174    ' BotW
         aExitMap(34)(0) = 15
         aExitMap(14)(1) = 178   ' Ice Cavern
         aExitMap(35)(0) = 41
-        aExitMap(18)(2) = 179   ' Gerudo Training Ground
+        aExitMap(18)(0) = 179   ' Gerudo Training Ground
         aExitMap(36)(0) = 46
+        aExitMap(25)(0) = 193   ' Ganon's Castle
+        aExitMap(37)(0) = 51
+        aExitMap(37)(1) = 196
     End Sub
     Private Sub clearArrayExitsOverworld()
         ' Make sure Overworld ER is active
@@ -572,9 +575,9 @@ Public Class frmTrackerOfTime
         aExitMap(6)(5) = 255    ' LLR
         aExitMap(6)(6) = 255    ' LH Main
         ' KV (82)
-        aExitMap(7)(0) = 255    ' DMT Lower
-        aExitMap(7)(1) = 255    ' HF
-        aExitMap(7)(2) = 255    ' GY Lower
+        aExitMap(7)(1) = 255    ' DMT Lower
+        aExitMap(7)(2) = 255    ' HF
+        aExitMap(7)(3) = 255    ' GY Lower
         ' GY (83)
         aExitMap(8)(1) = 255    ' KV Main
         ' ZR (84)
@@ -587,7 +590,7 @@ Public Class frmTrackerOfTime
         ' SFM (86)
         aExitMap(11)(1) = 255    ' LW Behind Mido
         ' LH (87)
-        aExitMap(12)(0) = 255    ' HF
+        aExitMap(12)(1) = 255    ' HF
         aExitMap(12)(2) = 255    ' ZD Main
         ' ZD (88)
         aExitMap(13)(0) = 255    ' ZF Main
@@ -607,22 +610,22 @@ Public Class frmTrackerOfTime
         aExitMap(16)(4) = 255    ' KF Main
         aExitMap(16)(5) = 255    ' HF
         ' DC (92)
-        aExitMap(17)(1) = 255    ' HW Colossus Side
+        aExitMap(17)(1) = 255    ' HW C olossus Side
         ' GF (93)
-        aExitMap(18)(0) = 255    ' GV Gerudo Side
-        aExitMap(18)(1) = 255    ' HW Gerudo Side
+        aExitMap(18)(1) = 255    ' GV Gerudo Side
+        aExitMap(18)(2) = 255    ' HW Gerudo Side
         ' HW (94)
         aExitMap(19)(0) = 255    ' DC
         aExitMap(19)(1) = 255    ' GF Behind Gate
         ' HC (95)
         aExitMap(20)(0) = 255    ' MK
         ' DMT (96)
-        aExitMap(21)(0) = 255    ' GC Main
-        aExitMap(21)(1) = 255    ' KV Behind Gate
+        aExitMap(21)(1) = 255    ' GC Main
+        aExitMap(21)(2) = 255    ' KV Behind Gate
         aExitMap(21)(3) = 255    ' DMC Upper
         ' DMC (97)
-        aExitMap(22)(0) = 255    ' GC Darunia
-        aExitMap(22)(1) = 255    ' DMT Upper
+        aExitMap(22)(1) = 255    ' GC Darunia
+        aExitMap(22)(2) = 255    ' DMT Upper
         ' GC (98)
         aExitMap(23)(0) = 255    ' DMC Lower Local
         aExitMap(23)(1) = 255    ' DMT Lower
@@ -630,40 +633,44 @@ Public Class frmTrackerOfTime
         ' LLR (99)
         aExitMap(24)(0) = 255    ' HF
         ' OGC (100)
-        aExitMap(25)(0) = 255    ' MK
+        aExitMap(25)(1) = 255    ' MK
     End Sub
     Private Sub clearArrayExitsDungeons()
         ' Make sure Dungeon ER is active
-        If iER <= 2 Then Exit Sub
+        If iER < 2 Then Exit Sub
 
         ' Clear visits to overworld maps
-        For i = 27 To 36
+        For i = 27 To 37
             aVisited(i) = False
         Next
 
         ' Unlink all the dungeon related exits
         aExitMap(10)(0) = 255   ' Deku Tree
-        aExitMap(26)(1) = 255
-        aExitMap(21)(2) = 255   ' Dodongo's Cavern
-        aExitMap(27)(1) = 255
+        aExitMap(26)(0) = 255
+        aExitMap(21)(0) = 255   ' Dodongo's Cavern
+        aExitMap(27)(0) = 255
         aExitMap(14)(0) = 255   ' Jabu-Jabu's Belly
-        aExitMap(28)(1) = 255
+        aExitMap(28)(0) = 255
         aExitMap(11)(0) = 255   ' Forest Temple
-        aExitMap(29)(1) = 255
-        aExitMap(22)(2) = 255   ' Fire Temple
-        aExitMap(30)(1) = 255
-        aExitMap(12)(1) = 255   ' Water Temple
-        aExitMap(31)(1) = 255
+        aExitMap(29)(0) = 255
+        aExitMap(22)(0) = 255   ' Fire Temple
+        aExitMap(30)(0) = 255
+        aExitMap(12)(0) = 255   ' Water Temple
+        aExitMap(31)(0) = 255
         aExitMap(17)(0) = 255   ' Spirit Temple
-        aExitMap(32)(1) = 255
+        aExitMap(32)(0) = 255
         aExitMap(8)(0) = 255    ' Shadow Temple
-        aExitMap(33)(1) = 255
-        aExitMap(7)(3) = 255    ' BotW
-        aExitMap(34)(1) = 255
+        aExitMap(33)(0) = 255
+        aExitMap(7)(0) = 255    ' BotW
+        aExitMap(34)(0) = 255
         aExitMap(14)(1) = 255   ' Ice Cavern
-        aExitMap(35)(1) = 255
-        aExitMap(18)(2) = 255   ' Gerudo Training Ground
-        aExitMap(36)(1) = 255
+        aExitMap(35)(0) = 255
+        aExitMap(18)(0) = 255   ' Gerudo Training Ground
+        aExitMap(36)(0) = 255
+        aExitMap(25)(0) = 193   ' Ganon's Castle
+        aExitMap(37)(0) = 255
+        aExitMap(37)(1) = 196
+        aVisited(37) = True     ' Since GaC is not randomized yet, we will always enabled it
     End Sub
 
 
@@ -1274,11 +1281,103 @@ Public Class frmTrackerOfTime
             readExits(i) = 0
         Next
         getAge()
+
+        ' First load up the map, I keep this separated so that it does not matter for ER settings
+        Select Case locationCode
+            Case 0
+                pbxMap.Image = My.Resources.mapDT
+            Case 1
+                pbxMap.Image = My.Resources.mapDDC
+            Case 2
+                pbxMap.Image = My.Resources.mapJB
+            Case 3
+                pbxMap.Image = My.Resources.mapFoT
+            Case 4
+                pbxMap.Image = My.Resources.mapFoT
+            Case 5
+                pbxMap.Image = My.Resources.mapWaT
+            Case 6
+                pbxMap.Image = My.Resources.mapSpT
+            Case 7
+                pbxMap.Image = My.Resources.mapShT
+            Case 8
+                pbxMap.Image = My.Resources.mapBotW
+            Case 9
+                pbxMap.Image = My.Resources.mapIC
+            Case 10
+                pbxMap.Image = My.Resources.mapBlank
+            Case 11
+                pbxMap.Image = My.Resources.mapBlank
+            Case 13
+                pbxMap.Image = My.Resources.mapBlank
+            Case 27 To 29
+                If locationCode = 29 Then
+                    pbxMap.Image = My.Resources.mapMKEntrance2
+                Else
+                    pbxMap.Image = My.Resources.mapMKEntrance
+                End If
+            Case 30, 31
+                pbxMap.Image = My.Resources.mapMKBackAlley
+            Case 32, 33
+                pbxMap.Image = My.Resources.mapMK
+            Case 34
+                pbxMap.Image = My.Resources.mapMK2
+            Case 35, 36
+                pbxMap.Image = My.Resources.mapToTOutside
+            Case 37
+                pbxMap.Image = My.Resources.mapToTOutside2
+            Case 67
+                pbxMap.Image = My.Resources.mapToT
+            Case 81
+                pbxMap.Image = My.Resources.mapHF
+            Case 82
+                pbxMap.Image = My.Resources.mapKV
+            Case 83
+                pbxMap.Image = My.Resources.mapGY
+            Case 84
+                pbxMap.Image = My.Resources.mapZR
+            Case 85
+                pbxMap.Image = My.Resources.mapKF
+            Case 86
+                pbxMap.Image = My.Resources.mapSFM
+            Case 87
+                pbxMap.Image = My.Resources.mapLH
+            Case 88
+                pbxMap.Image = My.Resources.mapZD
+            Case 89
+                pbxMap.Image = My.Resources.mapZF
+            Case 90
+                pbxMap.Image = My.Resources.mapGV
+            Case 91
+                pbxMap.Image = My.Resources.mapBlank
+            Case 92
+                pbxMap.Image = My.Resources.mapDC
+            Case 93
+                pbxMap.Image = My.Resources.mapGF
+            Case 94
+                pbxMap.Image = My.Resources.mapBlank
+            Case 95
+                pbxMap.Image = My.Resources.mapHC
+            Case 96
+                pbxMap.Image = My.Resources.mapDMT
+            Case 97
+                pbxMap.Image = My.Resources.mapDMC
+            Case 98
+                pbxMap.Image = My.Resources.mapGC
+            Case 99
+                pbxMap.Image = My.Resources.mapLLR
+            Case 100
+                pbxMap.Image = My.Resources.mapOGC
+            Case Else
+                Exit Sub
+        End Select
+
+        If iER = 0 Then Exit Sub
+
         ' Dungeon only checks
         If isDungeon Then
             Select Case locationCode
                 Case 0
-                    pbxMap.Image = My.Resources.mapDT
                     readExits(0) = &H377116     ' KF from Deku Tree
                     If aMQ(0) Then readExits(0) = &H3770B6 ' MQ version
                     lPoints.Add(New Point(278, 390))
@@ -1288,7 +1387,6 @@ Public Class frmTrackerOfTime
                     'aAlign(1) = 1
                     locationArray = 26
                 Case 1
-                    pbxMap.Image = My.Resources.mapDDC
                     readExits(0) = &H36FABE     ' DMT from Dodongo's Cavern
                     If aMQ(1) Then readExits(0) = &H36FA8E ' MQ version
                     lPoints.Add(New Point(278, 390))
@@ -1298,7 +1396,6 @@ Public Class frmTrackerOfTime
                     'aAlign(1) = 1
                     locationArray = 27
                 Case 2
-                    pbxMap.Image = My.Resources.mapJB
                     readExits(0) = &H36F43E     ' ZD from Jabu-Jabu's Belly
                     If aMQ(2) Then readExits(0) = &H36F40E ' MQ version
                     lPoints.Add(New Point(278, 390))
@@ -1308,7 +1405,6 @@ Public Class frmTrackerOfTime
                     'aAlign(1) = 1
                     locationArray = 28
                 Case 3
-                    pbxMap.Image = My.Resources.mapFoT
                     readExits(0) = &H36ED12     ' SFM from Forest Temple
                     If aMQ(3) Then readExits(0) = &H36ED12 ' MQ version
                     lPoints.Add(New Point(278, 390))
@@ -1318,7 +1414,6 @@ Public Class frmTrackerOfTime
                     'aAlign(1) = 1
                     locationArray = 29
                 Case 4
-                    pbxMap.Image = My.Resources.mapFoT
                     readExits(0) = &H36A3C6     ' DMC from Fire Temple
                     If aMQ(4) Then readExits(0) = &H36A376 ' MQ version
                     lPoints.Add(New Point(278, 390))
@@ -1328,7 +1423,6 @@ Public Class frmTrackerOfTime
                     'aAlign(1) = 1
                     locationArray = 30
                 Case 5
-                    pbxMap.Image = My.Resources.mapWaT
                     readExits(0) = &H36EF76     ' LH from Water Temple
                     If aMQ(5) Then readExits(0) = &H36EF36 ' MQ version
                     lPoints.Add(New Point(278, 390))
@@ -1338,7 +1432,6 @@ Public Class frmTrackerOfTime
                     'aAlign(1) = 1
                     locationArray = 31
                 Case 6
-                    pbxMap.Image = My.Resources.mapSpT
                     readExits(0) = &H36B1EA     ' DC from Spirit Temple
                     If aMQ(6) Then readExits(0) = &H36B12A ' MQ version
                     lPoints.Add(New Point(278, 390))
@@ -1353,7 +1446,6 @@ Public Class frmTrackerOfTime
                     'lPoints.Add(New Point(482, 357))
                     locationArray = 32
                 Case 7
-                    pbxMap.Image = My.Resources.mapShT
                     readExits(0) = &H36C86E     ' GY from Shadow Temple
                     If aMQ(7) Then readExits(0) = &H36C86E ' MQ version
                     lPoints.Add(New Point(278, 390))
@@ -1363,21 +1455,18 @@ Public Class frmTrackerOfTime
                     'aAlign(1) = 1
                     locationArray = 33
                 Case 8
-                    pbxMap.Image = My.Resources.mapBotW
                     readExits(0) = &H3785C6     ' KV from BotW
                     If aMQ(8) Then readExits(0) = &H378566 ' MQ version
                     lPoints.Add(New Point(278, 390))
                     aAlign(0) = 1
                     locationArray = 34
                 Case 9
-                    pbxMap.Image = My.Resources.mapIC
                     readExits(0) = &H37352E     ' ZF from Ice Cavern
                     If aMQ(9) Then readExits(0) = &H37344E ' MQ version
                     lPoints.Add(New Point(278, 390))
                     aAlign(0) = 1
                     locationArray = 35
                 Case 10
-                    pbxMap.Image = My.Resources.mapBlank
                     readExits(0) = &H374348     ' Ganon's Castle from Ganon's Tower
                     lPoints.Add(New Point(278, 3))
                     aAlign(0) = 1
@@ -1385,455 +1474,377 @@ Public Class frmTrackerOfTime
                     'lPoints.Add(New Point(278, 390))
                     'aAlign(1) = 1
                 Case 11
-                    pbxMap.Image = My.Resources.mapBlank
                     readExits(0) = &H373686     ' GF from GTG
                     If aMQ(10) Then readExits(0) = &H373686 ' MQ version
                     lPoints.Add(New Point(278, 390))
                     aAlign(0) = 1
                     locationArray = 36
                 Case 13
-                    pbxMap.Image = My.Resources.mapBlank
                     readExits(0) = &H3634BC     ' Ganon's Tower from Ganon's Castle
                     lPoints.Add(New Point(278, 3))
                     aAlign(0) = 1
                     readExits(1) = &H3634BE     ' OGC from Ganon's Castle
                     lPoints.Add(New Point(278, 390))
                     aAlign(1) = 1
+                    locationArray = 37
             End Select
         End If
 
-        Select Case locationCode
-            Case 0
-                pbxMap.Image = My.Resources.mapDT
-                locationArray = 26
-            Case 1
-                pbxMap.Image = My.Resources.mapDDC
-                locationArray = 27
-            Case 2
-                pbxMap.Image = My.Resources.mapJB
-                locationArray = 28
-            Case 3
-                pbxMap.Image = My.Resources.mapFoT
-                locationArray = 29
-            Case 4
-                pbxMap.Image = My.Resources.mapFoT
-                locationArray = 30
-            Case 5
-                pbxMap.Image = My.Resources.mapWaT
-                locationArray = 31
-            Case 6
-                pbxMap.Image = My.Resources.mapSpT
-                locationArray = 32
-            Case 7
-                pbxMap.Image = My.Resources.mapShT
-                locationArray = 33
-            Case 8
-                pbxMap.Image = My.Resources.mapBotW
-                locationArray = 34
-            Case 9
-                pbxMap.Image = My.Resources.mapIC
-                locationArray = 35
-            Case 10
-                pbxMap.Image = My.Resources.mapBlank
-            Case 11
-                pbxMap.Image = My.Resources.mapBlank
-                locationArray = 36
-            Case 13
-                pbxMap.Image = My.Resources.mapBlank
-            Case 27 To 29
-                If locationCode = 29 Then
-                    pbxMap.Image = My.Resources.mapMKEntrance2
-                Else
-                    pbxMap.Image = My.Resources.mapMKEntrance
-                End If
-                readExits(0) = &H384650     ' HF from MK Entrance Day
-                lPoints.Add(New Point(487, 120))
-                aAlign(0) = 1
-                readExits(1) = &H384652     ' MK from MK Entrance Day
-                lPoints.Add(New Point(200, 320))
-                aAlign(1) = 1
-                ' For night, adjust by -0x48
-                If locationCode = 28 Then
-                    readExits(0) = readExits(0) - &H48
-                    readExits(1) = readExits(1) - &H48
-                End If
-                locationArray = 0
-            Case 30, 31
-                pbxMap.Image = My.Resources.mapMKBackAlley
-                readExits(0) = &H383824     ' MK from Back Alley Left Day
-                lPoints.Add(New Point(266, 307))
-                readExits(1) = &H383826     ' MK from Back Alley Right Day
-                lPoints.Add(New Point(266, 70))
-                ' For night, adjust by -0x98
-                If locationCode = 31 Then
-                    readExits(0) = readExits(0) - &H98
-                    readExits(1) = readExits(1) - &H98
-                End If
-                locationArray = 1
-            Case 32, 33
-                pbxMap.Image = My.Resources.mapMK
-                readExits(0) = &H3824A8     ' HC from MK Day
-                lPoints.Add(New Point(278, 3))
-                aAlign(0) = 1
-                readExits(1) = &H3824AA     ' MK Entrance from MK Day
-                lPoints.Add(New Point(278, 390))
-                aAlign(1) = 1
-                readExits(2) = &H3824AE     ' Outside ToT from MK Day
-                lPoints.Add(New Point(456, 81))
-                readExits(3) = &H3824AC     ' Back Alley Right from MK Day
-                lPoints.Add(New Point(98, 56))
-                aAlign(3) = 2
-                readExits(4) = &H3824B2     ' Back Alley Left from MK Day
-                lPoints.Add(New Point(98, 330))
-                aAlign(4) = 2
-                ' For night, adjust by +0x40
-                If locationCode = 33 Then
-                    readExits(0) = readExits(0) + &H40
-                    readExits(1) = readExits(1) + &H40
-                    readExits(2) = readExits(2) + &H40
-                    readExits(3) = readExits(3) + &H40
-                    readExits(4) = readExits(4) + &H40
-                End If
-                locationArray = 2
-            Case 34
-                pbxMap.Image = My.Resources.mapMK2
-                readExits(0) = &H383478     ' OGC from MK Day
-                lPoints.Add(New Point(278, 3))
-                aAlign(0) = 1
-                readExits(1) = &H38347A     ' MK Entrance from MK
-                lPoints.Add(New Point(278, 390))
-                aAlign(1) = 1
-                readExits(2) = &H38347E     ' Outside ToT from MK
-                lPoints.Add(New Point(456, 70))
-                locationArray = 3
-            Case 35, 36
-                pbxMap.Image = My.Resources.mapToTOutside
-                readExits(0) = &H383524     ' ToT from Outside ToT Day
-                lPoints.Add(New Point(215, 119))
-                aAlign(0) = 1
-                readExits(1) = &H383526     ' MK from Outside ToT Day
-                lPoints.Add(New Point(363, 375))
-                aAlign(1) = 1
-                ' For night, adjust by -0x18
-                If locationCode = 36 Then
-                    readExits(0) = readExits(0) - &H18
-                    readExits(1) = readExits(1) - &H18
-                End If
-                locationArray = 4
-            Case 37
-                pbxMap.Image = My.Resources.mapToTOutside2
-                readExits(0) = &H383574     ' ToT from Outside ToT
-                lPoints.Add(New Point(215, 119))
-                aAlign(0) = 1
-                readExits(1) = &H383576     ' MK from Outside ToT 
-                lPoints.Add(New Point(363, 375))
-                aAlign(1) = 1
-                locationArray = 4
-            Case 67
-                pbxMap.Image = My.Resources.mapToT
-                readExits(0) = &H372332     ' Outside ToT from ToT
-                lPoints.Add(New Point(278, 385))
-                aAlign(0) = 1
-                locationArray = 5
-            Case 81
-                pbxMap.Image = My.Resources.mapHF
-                readExits(0) = &H36BF9C     ' KV from HF
-                lPoints.Add(New Point(419, 63))
-                readExits(1) = &H36BFA0     ' LW Bridge from HF
-                lPoints.Add(New Point(429, 215))
-                readExits(2) = &H36BFA2     ' ZR from HF
-                lPoints.Add(New Point(439, 124))
-                readExits(3) = &H36BFA4     ' GV from HF
-                lPoints.Add(New Point(112, 186))
-                aAlign(3) = 2
-                readExits(4) = &H36BFA8     ' MK from HF
-                lPoints.Add(New Point(313, 23))
-                aAlign(4) = 1
-                readExits(5) = &H36BFAA     ' LLR from HF
-                lPoints.Add(New Point(279, 159))
-                aAlign(5) = 1
-                readExits(6) = &H36BFAE     ' LH from HF
-                lPoints.Add(New Point(200, 375))
-                aAlign(6) = 1
-                locationArray = 6
-            Case 82
-                pbxMap.Image = My.Resources.mapKV
-                If isDungeon Then
-                    readExits(0) = &H368A82     ' BotW from KV
+        If iER Mod 2 = 1 Then
+            Select Case locationCode
+                Case 27 To 29
+                    readExits(0) = &H384650     ' HF from MK Entrance Day
+                    lPoints.Add(New Point(487, 120))
+                    aAlign(0) = 1
+                    readExits(1) = &H384652     ' MK from MK Entrance Day
+                    lPoints.Add(New Point(200, 320))
+                    aAlign(1) = 1
+                    ' For night, adjust by -0x48
+                    If locationCode = 28 Then
+                        readExits(0) = readExits(0) - &H48
+                        readExits(1) = readExits(1) - &H48
+                    End If
+                    locationArray = 0
+                Case 30, 31
+                    readExits(0) = &H383824     ' MK from Back Alley Left Day
+                    lPoints.Add(New Point(266, 307))
+                    readExits(1) = &H383826     ' MK from Back Alley Right Day
+                    lPoints.Add(New Point(266, 70))
+                    ' For night, adjust by -0x98
+                    If locationCode = 31 Then
+                        readExits(0) = readExits(0) - &H98
+                        readExits(1) = readExits(1) - &H98
+                    End If
+                    locationArray = 1
+                Case 32, 33
+                    readExits(0) = &H3824A8     ' HC from MK Day
+                    lPoints.Add(New Point(278, 3))
+                    aAlign(0) = 1
+                    readExits(1) = &H3824AA     ' MK Entrance from MK Day
+                    lPoints.Add(New Point(278, 390))
+                    aAlign(1) = 1
+                    readExits(2) = &H3824AE     ' Outside ToT from MK Day
+                    lPoints.Add(New Point(456, 81))
+                    readExits(3) = &H3824AC     ' Back Alley Right from MK Day
+                    lPoints.Add(New Point(98, 56))
+                    aAlign(3) = 2
+                    readExits(4) = &H3824B2     ' Back Alley Left from MK Day
+                    lPoints.Add(New Point(98, 330))
+                    aAlign(4) = 2
+                    ' For night, adjust by +0x40
+                    If locationCode = 33 Then
+                        readExits(0) = readExits(0) + &H40
+                        readExits(1) = readExits(1) + &H40
+                        readExits(2) = readExits(2) + &H40
+                        readExits(3) = readExits(3) + &H40
+                        readExits(4) = readExits(4) + &H40
+                    End If
+                    locationArray = 2
+                Case 34
+                    readExits(0) = &H383478     ' OGC from MK Day
+                    lPoints.Add(New Point(278, 3))
+                    aAlign(0) = 1
+                    readExits(1) = &H38347A     ' MK Entrance from MK
+                    lPoints.Add(New Point(278, 390))
+                    aAlign(1) = 1
+                    readExits(2) = &H38347E     ' Outside ToT from MK
+                    lPoints.Add(New Point(456, 70))
+                    locationArray = 3
+                Case 35, 36
+                    readExits(0) = &H383524     ' ToT from Outside ToT Day
+                    lPoints.Add(New Point(215, 119))
+                    aAlign(0) = 1
+                    readExits(1) = &H383526     ' MK from Outside ToT Day
+                    lPoints.Add(New Point(363, 375))
+                    aAlign(1) = 1
+                    ' For night, adjust by -0x18
+                    If locationCode = 36 Then
+                        readExits(0) = readExits(0) - &H18
+                        readExits(1) = readExits(1) - &H18
+                    End If
+                    locationArray = 4
+                Case 37
+                    readExits(0) = &H383574     ' ToT from Outside ToT
+                    lPoints.Add(New Point(215, 119))
+                    aAlign(0) = 1
+                    readExits(1) = &H383576     ' MK from Outside ToT 
+                    lPoints.Add(New Point(363, 375))
+                    aAlign(1) = 1
+                    locationArray = 4
+                Case 67
+                    readExits(0) = &H372332     ' Outside ToT from ToT
+                    lPoints.Add(New Point(278, 385))
+                    aAlign(0) = 1
+                    locationArray = 5
+                Case 81
+                    readExits(0) = &H36BF9C     ' KV from HF
+                    lPoints.Add(New Point(419, 63))
+                    readExits(1) = &H36BFA0     ' LW Bridge from HF
+                    lPoints.Add(New Point(429, 215))
+                    readExits(2) = &H36BFA2     ' ZR from HF
+                    lPoints.Add(New Point(439, 124))
+                    readExits(3) = &H36BFA4     ' GV from HF
+                    lPoints.Add(New Point(112, 186))
+                    aAlign(3) = 2
+                    readExits(4) = &H36BFA8     ' MK from HF
+                    lPoints.Add(New Point(313, 23))
+                    aAlign(4) = 1
+                    readExits(5) = &H36BFAA     ' LLR from HF
+                    lPoints.Add(New Point(279, 159))
+                    aAlign(5) = 1
+                    readExits(6) = &H36BFAE     ' LH from HF
+                    lPoints.Add(New Point(200, 375))
+                    aAlign(6) = 1
+                    locationArray = 6
+                Case 82
                     lPoints.Add(New Point(369, 223))
                     aAlign(0) = 1
                     ent = 1
-                End If
-                If isOverworld Then
-                    readExits(ent) = &H368A78     ' DMT from KV
-                    lPoints.Add(New Point(298, 11))
-                    aAlign(ent) = 1
-                    incB(ent)
-                    readExits(ent) = &H368A7A     ' HF from KV
-                    lPoints.Add(New Point(57, 294))
-                    aAlign(ent) = 2
-                    incB(ent)
-                    readExits(ent) = &H368A7E     ' GY from KV
-                    lPoints.Add(New Point(493, 312))
-                End If
-                locationArray = 7
-            Case 83
-                pbxMap.Image = My.Resources.mapGY
-                If isDungeon Then
-                    readExits(0) = &H378E44     ' Shadow Temple from GY
+                    If isDungeon Then readExits(0) = &H368A82 ' BotW from KV
+
+                    If isOverworld Then
+                        readExits(ent) = &H368A78     ' DMT from KV
+                        lPoints.Add(New Point(298, 11))
+                        aAlign(ent) = 1
+                        incB(ent)
+                        readExits(ent) = &H368A7A     ' HF from KV
+                        lPoints.Add(New Point(57, 294))
+                        aAlign(ent) = 2
+                        incB(ent)
+                        readExits(ent) = &H368A7E     ' GY from KV
+                        lPoints.Add(New Point(493, 312))
+                    End If
+                    locationArray = 7
+                Case 83
                     lPoints.Add(New Point(492, 202))
                     ent = 1
-                End If
-                If isOverworld Then
-                    readExits(ent) = &H378E46     ' KV from GY
-                    lPoints.Add(New Point(57, 225))
-                    aAlign(ent) = 2
-                End If
-                locationArray = 8
-            Case 84
-                pbxMap.Image = My.Resources.mapZR
-                readExits(0) = &H37951C     ' HF from ZR
-                lPoints.Add(New Point(46, 319))
-                aAlign(0) = 2
-                readExits(1) = &H37951E     ' ZD from ZR
-                lPoints.Add(New Point(509, 92))
-                readExits(2) = &H379522     ' LW from ZR
-                lPoints.Add(New Point(483, 157))
-                aAlign(2) = 1
-                locationArray = 9
-            Case 85
-                pbxMap.Image = My.Resources.mapKF
-                If isDungeon Then
-                    readExits(0) = &H3738F4     ' Deku Tree from KF
+                    If isDungeon Then readExits(0) = &H378E44 ' Shadow Temple from GY
+
+                    If isOverworld Then
+                        readExits(ent) = &H378E46     ' KV from GY
+                        lPoints.Add(New Point(57, 225))
+                        aAlign(ent) = 2
+                    End If
+                    locationArray = 8
+                Case 84
+                    readExits(0) = &H37951C     ' HF from ZR
+                    lPoints.Add(New Point(46, 319))
+                    aAlign(0) = 2
+                    readExits(1) = &H37951E     ' ZD from ZR
+                    lPoints.Add(New Point(509, 92))
+                    readExits(2) = &H379522     ' LW from ZR
+                    lPoints.Add(New Point(483, 157))
+                    aAlign(2) = 1
+                    locationArray = 9
+                Case 85
                     lPoints.Add(New Point(440, 234))
                     aAlign(0) = 1
                     ent = 1
-                End If
-                If isOverworld Then
-                    readExits(ent) = &H3738FA     ' LW Bridge from KF
-                    lPoints.Add(New Point(79, 187))
-                    aAlign(ent) = 2
-                    incB(ent)
-                    readExits(ent) = &H373902     ' LW from KF
-                    lPoints.Add(New Point(172, 84))
-                    aAlign(ent) = 1
-                End If
-                locationArray = 10
-            Case 86
-                pbxMap.Image = My.Resources.mapSFM
-                If isDungeon Then
-                    readExits(0) = &H36FCD4     ' Forest Temple from SFM
+                    If isDungeon Then readExits(0) = &H3738F4 ' Deku Tree from KF
+
+                    If isOverworld Then
+                        readExits(ent) = &H3738FA     ' LW Bridge from KF
+                        lPoints.Add(New Point(79, 187))
+                        aAlign(ent) = 2
+                        incB(ent)
+                        readExits(ent) = &H373902     ' LW from KF
+                        lPoints.Add(New Point(172, 84))
+                        aAlign(ent) = 1
+                    End If
+                    locationArray = 10
+                Case 86
                     lPoints.Add(New Point(278, 3))
                     aAlign(0) = 1
                     ent = 1
-                End If
-                If isOverworld Then
-                    readExits(ent) = &H36FCD6     ' LW from SFM
-                    lPoints.Add(New Point(278, 389))
-                    aAlign(ent) = 1
-                End If
-                locationArray = 11
-            Case 87
-                pbxMap.Image = My.Resources.mapLH
-                If isDungeon Then
-                    readExits(0) = &H3696A6     ' Water Temple from LH
+                    If isDungeon Then readExits(0) = &H36FCD4 ' Forest Temple from SFM
+                    If isOverworld Then
+                        readExits(ent) = &H36FCD6     ' LW from SFM
+                        lPoints.Add(New Point(278, 389))
+                        aAlign(ent) = 1
+                    End If
+                    locationArray = 11
+                Case 87
                     lPoints.Add(New Point(311, 270))
                     aAlign(0) = 1
                     ent = 1
-                End If
-                If isOverworld Then
-                    readExits(ent) = &H3696A2     ' HF from LH
-                    lPoints.Add(New Point(276, 5))
-                    aAlign(ent) = 1
-                    incB(ent)
-                    readExits(ent) = &H3696AE     ' ZD from LH
-                    lPoints.Add(New Point(313, 146))
-                    aAlign(ent) = 1
-                End If
-                locationArray = 12
-            Case 88
-                pbxMap.Image = My.Resources.mapZD
-                readExits(0) = &H37B26C     ' ZF from ZD
-                lPoints.Add(New Point(291, 24))
-                aAlign(0) = 1
-                readExits(1) = &H37B26E     ' ZR from ZD
-                lPoints.Add(New Point(182, 291))
-                aAlign(1) = 1
-                readExits(2) = &H37B270     ' LH from ZD
-                lPoints.Add(New Point(352, 387))
-                aAlign(2) = 2
-                locationArray = 13
-            Case 89
-                pbxMap.Image = My.Resources.mapZF
-                If isDungeon Then
-                    readExits(0) = &H3733CC     ' Jabu-Jabu's Belly from ZF
+                    If isDungeon Then readExits(0) = &H3696A6 ' Water Temple from LH
+
+                    If isOverworld Then
+                        readExits(ent) = &H3696A2     ' HF from LH
+                        lPoints.Add(New Point(276, 5))
+                        aAlign(ent) = 1
+                        incB(ent)
+                        readExits(ent) = &H3696AE     ' ZD from LH
+                        lPoints.Add(New Point(313, 146))
+                        aAlign(ent) = 1
+                    End If
+                    locationArray = 12
+                Case 88
+                    readExits(0) = &H37B26C     ' ZF from ZD
+                    lPoints.Add(New Point(291, 24))
+                    aAlign(0) = 1
+                    readExits(1) = &H37B26E     ' ZR from ZD
+                    lPoints.Add(New Point(182, 291))
+                    aAlign(1) = 1
+                    readExits(2) = &H37B270     ' LH from ZD
+                    lPoints.Add(New Point(352, 387))
+                    aAlign(2) = 2
+                    locationArray = 13
+                Case 89
                     lPoints.Add(New Point(262, 168))
-                    readExits(1) = &H3733D0     ' Ice Cavern from ZF
                     lPoints.Add(New Point(346, 8))
                     aAlign(1) = 1
                     ent = 2
-                End If
-                If isOverworld Then
-                    readExits(ent) = &H3733D2     ' ZD from ZF
-                    lPoints.Add(New Point(189, 268))
-                    aAlign(ent) = 2
-                End If
-                locationArray = 14
-            Case 90
-                pbxMap.Image = My.Resources.mapGV
-                readExits(0) = &H373904     ' LH from GV
-                lPoints.Add(New Point(328, 387))
-                aAlign(0) = 1
-                readExits(1) = &H373906     ' HF from GV
-                lPoints.Add(New Point(464, 218))
-                readExits(2) = &H373908     ' GF from GV
-                lPoints.Add(New Point(84, 117))
-                aAlign(2) = 2
-                locationArray = 15
-            Case 91
-                pbxMap.Image = My.Resources.mapBlank
-                readExits(0) = &H37475C     ' SFM from LW
-                lPoints.Add(New Point(328, 20))
-                aAlign(0) = 1
-                readExits(1) = &H37475E     ' KF from LW
-                lPoints.Add(New Point(278, 280))
-                aAlign(1) = 1
-                readExits(2) = &H374768     ' ZR from LW
-                lPoints.Add(New Point(548, 199))
-                aAlign(2) = 2
-                readExits(3) = &H37476A     ' GC from LW
-                lPoints.Add(New Point(328, 175))
-                aAlign(3) = 1
-                readExits(4) = &H37476C     ' KF from LW Bridge
-                lPoints.Add(New Point(53, 375))
-                readExits(5) = &H37476E     ' HF from LW Bridge
-                lPoints.Add(New Point(0, 350))
-                locationArray = 16
-            Case 92
-                pbxMap.Image = My.Resources.mapDC
-                If isDungeon Then
-                    readExits(0) = &H36B5AC     ' Spirit Temple from DC
+                    If isDungeon Then
+                        readExits(0) = &H3733CC     ' Jabu-Jabu's Belly from ZF
+                        readExits(1) = &H3733D0     ' Ice Cavern from ZF
+                    End If
+                    If isOverworld Then
+                        readExits(ent) = &H3733D2     ' ZD from ZF
+                        lPoints.Add(New Point(189, 268))
+                        aAlign(ent) = 2
+                    End If
+                    locationArray = 14
+                Case 90
+                    readExits(0) = &H373904     ' LH from GV
+                    lPoints.Add(New Point(328, 387))
+                    aAlign(0) = 1
+                    readExits(1) = &H373906     ' HF from GV
+                    lPoints.Add(New Point(464, 218))
+                    readExits(2) = &H373908     ' GF from GV
+                    lPoints.Add(New Point(84, 117))
+                    aAlign(2) = 2
+                    locationArray = 15
+                Case 91
+                    readExits(0) = &H37475C     ' SFM from LW
+                    lPoints.Add(New Point(328, 20))
+                    aAlign(0) = 1
+                    readExits(1) = &H37475E     ' KF from LW
+                    lPoints.Add(New Point(278, 280))
+                    aAlign(1) = 1
+                    readExits(2) = &H374768     ' ZR from LW
+                    lPoints.Add(New Point(548, 199))
+                    aAlign(2) = 2
+                    readExits(3) = &H37476A     ' GC from LW
+                    lPoints.Add(New Point(328, 175))
+                    aAlign(3) = 1
+                    readExits(4) = &H37476C     ' KF from LW Bridge
+                    lPoints.Add(New Point(53, 375))
+                    readExits(5) = &H37476E     ' HF from LW Bridge
+                    lPoints.Add(New Point(0, 350))
+                    locationArray = 16
+                Case 92
                     lPoints.Add(New Point(85, 186))
                     aAlign(0) = 1
                     ent = 1
-                    'readExits(2) = &H36B5B0     ' Spirit Temple from Statue Hand Left
-                    'lPoints.Add(New Point(84, 257))
-                    'aAlign(2) = 1
-                    'readExits(3) = &H36B5B2     ' Spirit Temple from Statue Hand Right
-                    'lPoints.Add(New Point(84, 118))
-                    'aAlign(3) = 1
-                End If
-                If isOverworld Then
-                    readExits(ent) = &H36B5AE     ' HW from DC
-                    lPoints.Add(New Point(476, 174))
-                End If
-                locationArray = 17
-            Case 93
-                pbxMap.Image = My.Resources.mapGF
-                If isDungeon Then
-                    readExits(0) = &H374D02     ' GTG from GF
+                    If isDungeon Then
+                        readExits(0) = &H36B5AC     ' Spirit Temple from DC
+                        'readExits(2) = &H36B5B0     ' Spirit Temple from Statue Hand Left
+                        'lPoints.Add(New Point(84, 257))
+                        'aAlign(2) = 1
+                        'readExits(3) = &H36B5B2     ' Spirit Temple from Statue Hand Right
+                        'lPoints.Add(New Point(84, 118))
+                        'aAlign(3) = 1
+                    End If
+                    If isOverworld Then
+                        readExits(ent) = &H36B5AE     ' HW from DC
+                        lPoints.Add(New Point(476, 174))
+                    End If
+                    locationArray = 17
+                Case 93
                     lPoints.Add(New Point(306, 243))
                     aAlign(0) = 1
                     ent = 1
-                End If
-                If isOverworld Then
-                    readExits(ent) = &H374CE6     ' GV from GF
-                    lPoints.Add(New Point(311, 363))
-                    incB(ent)
-                    readExits(ent) = &H374D00     ' HW from GF
-                    lPoints.Add(New Point(124, 53))
-                    aAlign(ent) = 2
-                End If
-                locationArray = 18
-            Case 94
-                pbxMap.Image = My.Resources.mapBlank
-                readExits(0) = &H37EBFC     ' DC from HW
-                lPoints.Add(New Point(0, 188))
-                readExits(1) = &H37EBFE     ' GF from HW
-                lPoints.Add(New Point(550, 213))
-                aAlign(1) = 2
-                locationArray = 19
-            Case 95
-                pbxMap.Image = My.Resources.mapHC
-                readExits(0) = &H36C55E     ' MK from HC
-                lPoints.Add(New Point(162, 365))
-                aAlign(0) = 1
-                'readExits(1) = &H36C562     ' GFF from HC
-                'lPoints.Add(New Point(346, 243))
-                'readExits(2) = &H36C55C     ' Castle Courtyard from HC
-                'lPoints.Add(New Point(89, 32))
-                locationArray = 20
-            Case 96
-                pbxMap.Image = My.Resources.mapDMT
-                If isDungeon Then
-                    readExits(0) = &H365FF0     ' Dodongo's Cavern from DMT
+                    If isDungeon Then readExits(0) = &H374D02 ' GTG from GF
+                    If isOverworld Then
+                        readExits(ent) = &H374CE6     ' GV from GF
+                        lPoints.Add(New Point(311, 363))
+                        incB(ent)
+                        readExits(ent) = &H374D00     ' HW from GF
+                        lPoints.Add(New Point(124, 53))
+                        aAlign(ent) = 2
+                    End If
+                    locationArray = 18
+                Case 94
+                    readExits(0) = &H37EBFC     ' DC from HW
+                    lPoints.Add(New Point(0, 188))
+                    readExits(1) = &H37EBFE     ' GF from HW
+                    lPoints.Add(New Point(550, 213))
+                    aAlign(1) = 2
+                    locationArray = 19
+                Case 95
+                    readExits(0) = &H36C55E     ' MK from HC
+                    lPoints.Add(New Point(162, 365))
+                    aAlign(0) = 1
+                    'readExits(1) = &H36C562     ' GFF from HC
+                    'lPoints.Add(New Point(346, 243))
+                    'readExits(2) = &H36C55C     ' Castle Courtyard from HC
+                    'lPoints.Add(New Point(89, 32))
+                    locationArray = 20
+                Case 96
                     lPoints.Add(New Point(260, 174))
                     aAlign(0) = 2
                     ent = 1
-                End If
-                If isOverworld Then
-                    readExits(ent) = &H365FEC     ' GC from DMT
-                    lPoints.Add(New Point(320, 149))
-                    incB(ent)
-                    readExits(ent) = &H365FEE     ' KV from DMT
-                    lPoints.Add(New Point(259, 384))
-                    aAlign(ent) = 1
-                    incB(ent)
-                    readExits(ent) = &H365FF2     ' DMC from DMT
-                    lPoints.Add(New Point(315, 3))
-                    aAlign(ent) = 1
-                End If
-                locationArray = 21
-            Case 97
-                pbxMap.Image = My.Resources.mapDMC
-                If isDungeon Then
-                    readExits(0) = &H374B9E     ' Fire Temple from DMC
+                    If isDungeon Then readExits(0) = &H365FF0 ' Dodongo's Cavern from DMT
+                    If isOverworld Then
+                        readExits(ent) = &H365FEC     ' GC from DMT
+                        lPoints.Add(New Point(320, 149))
+                        incB(ent)
+                        readExits(ent) = &H365FEE     ' KV from DMT
+                        lPoints.Add(New Point(259, 384))
+                        aAlign(ent) = 1
+                        incB(ent)
+                        readExits(ent) = &H365FF2     ' DMC from DMT
+                        lPoints.Add(New Point(315, 3))
+                        aAlign(ent) = 1
+                    End If
+                    locationArray = 21
+                Case 97
                     lPoints.Add(New Point(308, 3))
                     aAlign(0) = 1
                     ent = 1
-                End If
-                If isOverworld Then
-                    readExits(ent) = &H374B98     ' GC from DMC
-                    lPoints.Add(New Point(129, 192))
-                    aAlign(ent) = 2
-                    incB(ent)
-                    readExits(ent) = &H374B9A     ' DMT from DMC
-                    lPoints.Add(New Point(199, 387))
-                    aAlign(ent) = 1
-                End If
-                locationArray = 22
-            Case 98
-                pbxMap.Image = My.Resources.mapGC
-                readExits(0) = &H37A64C     ' DMC from GC
-                lPoints.Add(New Point(281, 3))
-                aAlign(0) = 1
-                readExits(1) = &H37A64E     ' DMT from GC
-                lPoints.Add(New Point(278, 390))
-                aAlign(1) = 1
-                readExits(2) = &H37A650     ' LW from GC
-                lPoints.Add(New Point(351, 361))
-                locationArray = 23
-            Case 99
-                pbxMap.Image = My.Resources.mapLLR
-                readExits(0) = &H377C12     ' HF from LLR
-                lPoints.Add(New Point(337, 39))
-                aAlign(0) = 1
-                locationArray = 24
-            Case 100
-                pbxMap.Image = My.Resources.mapOGC
-                readExits(0) = &H37FEC2     ' MK from OGC
-                lPoints.Add(New Point(278, 390))
-                aAlign(0) = 1
-                'readExits(1) = &H37FEC0     ' Ganon's Castle from OGC
-                'lPoints.Add(New Point(278, 3))
-                'aAlign(1) = 1
-                locationArray = 25
-            Case Else
-                Exit Sub
-        End Select
+                    If isDungeon Then readExits(0) = &H374B9E ' Fire Temple from DMC
+                    If isOverworld Then
+                        readExits(ent) = &H374B98     ' GC from DMC
+                        lPoints.Add(New Point(129, 192))
+                        aAlign(ent) = 2
+                        incB(ent)
+                        readExits(ent) = &H374B9A     ' DMT from DMC
+                        lPoints.Add(New Point(199, 387))
+                        aAlign(ent) = 1
+                    End If
+                    locationArray = 22
+                Case 98
+                    readExits(0) = &H37A64C     ' DMC from GC
+                    lPoints.Add(New Point(281, 3))
+                    aAlign(0) = 1
+                    readExits(1) = &H37A64E     ' DMT from GC
+                    lPoints.Add(New Point(278, 390))
+                    aAlign(1) = 1
+                    readExits(2) = &H37A650     ' LW from GC
+                    lPoints.Add(New Point(351, 361))
+                    locationArray = 23
+                Case 99
+                    readExits(0) = &H377C12     ' HF from LLR
+                    lPoints.Add(New Point(337, 39))
+                    aAlign(0) = 1
+                    locationArray = 24
+                Case 100
+                    lPoints.Add(New Point(278, 3))
+                    aAlign(1) = 1
+                    ent = 1
+                    If isDungeon Then readExits(1) = &H37FEC0 ' Ganon's Castle from OGC
+                    If isOverworld Then
+                        readExits(ent) = &H37FEC2     ' MK from OGC
+                        lPoints.Add(New Point(278, 390))
+                        aAlign(ent) = 1
+                        locationArray = 25
+                    End If
+            End Select
+        End If
 
-        If iER = 0 Then Exit Sub
         ' Sets that you have been to the current
+        If locationArray = 255 Then Exit Sub
         aVisited(locationArray) = True
 
         Dim exitCode As String = String.Empty
@@ -1844,71 +1855,74 @@ Public Class frmTrackerOfTime
         Dim iVisited As Byte = 0
         Dim doDisplay As Boolean = False
         For i = 0 To readExits.Length - 1
-            If readExits(i) = 0 Then Exit For
-            iNewReach = 255
-            exitCode = Hex(goRead(readExits(i), 15))
-            fixHex(exitCode, 3)
-            exitCode = exit2label(exitCode, iNewReach)
-            ' If aReachExit is not 255, set exit to the new iNewReach
-            If Not iNewReach = 255 Then
-                aExitMap(locationArray)(i) = iNewReach
-            End If
+            If Not readExits(i) = 0 Then
 
-            ' Only run the display part if the panel is actually visable
-            If pnlER.Visible Then
-                ' Convert the iNewReach into the location for aVisited
-                iVisited = zone2map(iNewReach)
-                doDisplay = False
-                If iVisited = 255 Then
-                    doDisplay = True
-                Else
-                    If aVisited(iVisited) Then doDisplay = True
+                iNewReach = 255
+                exitCode = Hex(goRead(readExits(i), 15))
+                fixHex(exitCode, 3)
+                exitCode = exit2label(exitCode, iNewReach)
+                ' If aReachExit is not 255, set exit to the new iNewReach
+                If Not iNewReach = 255 Then
+                    aExitMap(locationArray)(i) = iNewReach
                 End If
-                If doDisplay Then
-                    ptX = lPoints(i).X
-                    ptY = lPoints(i).Y
 
-                    ' Make sure the text will not run off the display area
-                    Select Case aAlign(i)
-                        Case 0
-                            If ptX + ((exitCode.Length) * 15) + 4 > 548 Then
-                                ptX = 548
-                                aAlign(i) = 2
-                            End If
-                        Case 1
-                            Dim limitSize As Double = 0
-                            If ptX > (pbxMap.Width / 2) Then
-                                limitSize = ptX + (((exitCode.Length) * 15) / 2) + 4
-                                If limitSize > 548 Then
+                ' Only run the display part if the panel is actually visable
+                If pnlER.Visible Then
+                    ' Convert the iNewReach into the location for aVisited
+                    iVisited = zone2map(iNewReach)
+                    doDisplay = False
+                    If iVisited = 255 Then
+                        doDisplay = True
+                    Else
+                        If aVisited(iVisited) Then doDisplay = True
+                    End If
+                    If doDisplay Then
+                        ptX = lPoints(i).X
+                        ptY = lPoints(i).Y
+
+                        ' Make sure the text will not run off the display area
+                        Select Case aAlign(i)
+                            Case 0
+                                If ptX + ((exitCode.Length) * 15) + 4 > 548 Then
                                     ptX = 548
                                     aAlign(i) = 2
                                 End If
-                            Else
-                                limitSize = ptX - (((exitCode.Length) * 15) / 2) + 4
-                                If limitSize < 0 Then
+                            Case 1
+                                Dim limitSize As Double = 0
+                                If ptX > (pbxMap.Width / 2) Then
+                                    limitSize = ptX + (((exitCode.Length) * 15) / 2) + 4
+                                    If limitSize > 548 Then
+                                        ptX = 548
+                                        aAlign(i) = 2
+                                    End If
+                                Else
+                                    limitSize = ptX - (((exitCode.Length) * 15) / 2) + 4
+                                    If limitSize < 0 Then
+                                        ptX = 0
+                                        aAlign(i) = 0
+                                    End If
+                                End If
+                            Case 2
+                                If ptX - ((exitCode.Length) * 15) - 4 < 0 Then
                                     ptX = 0
                                     aAlign(i) = 0
                                 End If
-                            End If
-                        Case 2
-                            If ptX - ((exitCode.Length) * 15) - 4 < 0 Then
-                                ptX = 0
-                                aAlign(i) = 0
-                            End If
-                    End Select
+                        End Select
 
-                    ' Adjust the starting position for the exit's alignment
-                    Select Case aAlign(i)
-                        Case 1
-                            ptX = CInt(ptX - ((exitCode.Length * 15) / 2) - 4)
-                        Case 2
-                            ptX = ptX - (exitCode.Length * 15) - 4
-                    End Select
+                        ' Adjust the starting position for the exit's alignment
+                        Select Case aAlign(i)
+                            Case 1
+                                ptX = CInt(ptX - ((exitCode.Length * 15) / 2) - 4)
+                            Case 2
+                                ptX = ptX - (exitCode.Length * 15) - 4
+                        End Select
 
-                    Graphics.FromImage(pbxMap.Image).DrawString(exitCode, fontGS, New SolidBrush(Color.Black), ptX + 1, ptY + 1)
-                    Graphics.FromImage(pbxMap.Image).DrawString(exitCode, fontGS, New SolidBrush(Color.White), ptX, ptY)
+                        Graphics.FromImage(pbxMap.Image).DrawString(exitCode, fontGS, New SolidBrush(Color.Black), ptX + 1, ptY + 1)
+                        Graphics.FromImage(pbxMap.Image).DrawString(exitCode, fontGS, New SolidBrush(Color.White), ptX, ptY)
+                    End If
                 End If
             End If
+
         Next
 
     End Sub
@@ -2215,6 +2229,7 @@ Public Class frmTrackerOfTime
     Private Function zone2map(ByVal zone As Byte) As Byte
         ' Converts zone into map array for ER usage. Default 255 as null
         zone2map = 255
+
         Select Case zone
             Case 0, 1
                 zone2map = 10   ' KF
@@ -2266,32 +2281,34 @@ Public Class frmTrackerOfTime
                 zone2map = 18   ' GF
             Case 48, 49, 55
                 zone2map = 19   ' HW
-            Case 50
+            Case 50, 54
                 zone2map = 17   ' DC
-            Case 51
+            Case 51, 53
                 zone2map = 25   ' OGC
-            Case 60
+            Case 60 To 68
                 zone2map = 26   ' Deku Tree
-            Case 69
+            Case 69 To 78
                 zone2map = 27   ' Dodongo's Cavern
-            Case 79
+            Case 79 To 87
                 zone2map = 28   ' Jabu-Jabu's Belly
-            Case 88
+            Case 88 To 107
                 zone2map = 29   ' Forest Temple
-            Case 108
+            Case 108 To 118
                 zone2map = 30   ' Fire Temple
-            Case 119
+            Case 119 To 131
                 zone2map = 31   ' Water Temple
-            Case 132
+            Case 132 To 149
                 zone2map = 32   ' Spirit Temple
-            Case 150
+            Case 150 To 173
                 zone2map = 33   ' Shadow Temple
-            Case 174
+            Case 174 To 177
                 zone2map = 34   ' Bottom of the Well
-            Case 178
+            Case 178, 201 To 204
                 zone2map = 35   ' Ice Cavern
-            Case 179
+            Case 179 To 192
                 zone2map = 36   ' Gerudo Training Ground
+            Case 193 To 196
+                zone2map = 37   ' Ganon's Castle and Tower
         End Select
     End Function
     ' Scan each of the chests data
@@ -3577,7 +3594,7 @@ Public Class frmTrackerOfTime
     End Sub
 
     Private Sub btnTest_Click(sender As Object, e As EventArgs) Handles btnTest.Click
-        scanEmulator("modloader64-gui")
+        'scanEmulator("modloader64-gui")
         'pnlER.Visible = Not pnlER.Visible
         'goScan(False)
         'rtbOutputLeft.Clear()
@@ -3587,10 +3604,25 @@ Public Class frmTrackerOfTime
         'For Each i As Integer In aAddresses
         'rtbAddLine(Hex(i))
         'Next
-        debugInfo()
+        'debugInfo()
         'Dim test As Integer = goRead(&H40BF80 + 1, 1)
         'MsgBox(test.ToString)
         If False Then
+            Dim outputXX As String = "Visited:"
+            For i = 0 To aVisited.Length - 1
+                outputXX = outputXX & vbCrLf & aVisited(i).ToString
+            Next
+            outputXX = outputXX & vbCrLf & vbCrLf
+            For i = 0 To aExitMap.Length - 1
+                For ii = 0 To aExitMap(i).Length - 1
+                    outputXX = outputXX & vbCrLf & "aExitMap(" & i.ToString & ")(" & ii.ToString & "): " & aExitMap(i)(ii).ToString
+                Next
+            Next
+            Clipboard.SetText(outputXX)
+        End If
+
+
+        If True Then
             Dim outputXX As String = String.Empty
             outputXX = "Adult:"
             For i = 0 To aReachA.Length - 1
@@ -3735,7 +3767,7 @@ Public Class frmTrackerOfTime
         Dim sOut As String = String.Empty
 
         ' Counter set to delay refreshing the output
-        If setCounter Then rtbRefresh = 3
+        If setCounter Then rtbRefresh = 2
 
         Select Case area
             Case "KF"
@@ -4000,7 +4032,7 @@ Public Class frmTrackerOfTime
         Dim sOut As String = String.Empty
 
         ' Counter set to delay refreshing the output
-        If setCounter Then rtbRefresh = 3
+        If setCounter Then rtbRefresh = 2
 
         displayName = dungeonNumber2name(dungeon)
 
@@ -6090,7 +6122,7 @@ Public Class frmTrackerOfTime
     Private Function checkLogic(ByVal logicKey As String, ByVal zone As Byte) As Byte ' Boolean
         ' Checks the logic key to see if it is available. Start with false
         checkLogic = 0 ' TESTLOGIC False
-        Dim canDoThis As Boolean = False
+        Dim canDoThis As Boolean = True
 
         ' Check we can reach the overworld zone, or dungeon area
         If aReachA(zone) Or aReachY(zone) Then canDoThis = True
@@ -6106,6 +6138,7 @@ Public Class frmTrackerOfTime
 
         ' Do not convert dungeons or quests
         convertLogic(logicKey)
+
 
         ' If either of those fail, return false
         If Not canDoThis Then Return 0 ' TESTLOGIC False
@@ -12831,7 +12864,7 @@ Public Class frmTrackerOfTime
                 .loc = "4317"
                 .area = "IGC2"
                 .zone = 195
-                .name = "Light Trail Lullaby Chest"
+                .name = "Light Trial Lullaby Chest"
                 .logic = "GDBhLL7712"
             End With
             With aKeysDungeons(11)(15)
