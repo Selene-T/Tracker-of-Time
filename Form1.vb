@@ -9,8 +9,8 @@ Public Class frmTrackerOfTime
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 116
-    Private Const IS_64BIT As Boolean = True
-    Private Const VER As String = "4.0.2"
+    Private Const IS_64BIT As Boolean = False
+    Private Const VER As String = "4.0.3"
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private romAddrStart As Integer = &HDFE40000
@@ -79,6 +79,7 @@ Public Class frmTrackerOfTime
     ' It will not be reset when stopping the scan, as I do not want people's ER progress to reset randomly.
     ' This may be used later for an 'Entrance Reset' option.
     Private iOldER As Byte = 255
+    Private iFloor As Byte = 128
     Private bSpawnWarps As Boolean = False
     Private bSongWarps As Boolean = False
     Private maxLife As Byte = 0
@@ -3541,6 +3542,7 @@ Public Class frmTrackerOfTime
             updateDungeonItems()
             getWarps()
             getRainbowBridge()
+            'getFloor()
             getER()
             If Not pnlER.Visible Then
                 updateLabels()
@@ -3549,18 +3551,19 @@ Public Class frmTrackerOfTime
         End If
     End Sub
 
-    Private Function checkLoc(ByVal loc As String) As Boolean
+    Private Function checkLoc(ByVal cloc As String) As Boolean
+        If firstRun Then Return False
         ' Checks for a specific key by location to see if it is checked
         checkLoc = False
 
         ' Checks normal keys
-        For Each key In aKeys.Where(Function(k As keyCheck) k.loc.Equals(loc))
+        For Each key In aKeys.Where(Function(k As keyCheck) k.loc.Equals(cloc))
             Return key.checked
         Next
 
         ' Checks dungeon keys
         For i = 0 To 11
-            For Each key In aKeysDungeons(i).Where(Function(k As keyCheck) k.loc.Equals(loc))
+            For Each key In aKeysDungeons(i).Where(Function(k As keyCheck) k.loc.Equals(cloc))
                 Return key.checked
             Next
         Next
@@ -4355,15 +4358,15 @@ Public Class frmTrackerOfTime
                 addArea(15, asAdult)
             Case 15
                 ' KV Main to HF, GY, KF Behind Gate, KV Rooftops, Bottom of the Well
-                addAreaExit(7, 1, asAdult) 'addArea(7, asAdult)
-                addAreaExit(7, 2, asAdult) 'addArea(18, asAdult)
+                addAreaExit(7, 2, asAdult) 'addArea(7, asAdult)
+                addAreaExit(7, 3, asAdult) 'addArea(18, asAdult)
                 If asAdult Then
                     addArea(17, asAdult)
                     If item("hookshot") Or My.Settings.setHoverTricks Then addArea(16, asAdult)
-                    If iER > 1 And (checkLoc("C02") Or item("song of storms")) Then addAreaExit(7, 3, asAdult)
+                    If iER > 1 And (checkLoc("C02") Or item("song of storms")) Then addAreaExit(7, 0, asAdult)
                 Else
                     If allItems.Contains("y3") Or checkLoc("C05") Then addArea(17, asAdult)
-                    If aReachY(15) And (checkLoc("C02") Or item("song of storms")) Then addAreaExit(7, 3, asAdult) 'addArea(174, asAdult)
+                    If aReachY(15) And (checkLoc("C02") Or item("song of storms")) Then addAreaExit(7, 0, asAdult) 'addArea(174, asAdult)
                 End If
             Case 16
                 ' KV Rooftops to KV Main
@@ -4371,7 +4374,7 @@ Public Class frmTrackerOfTime
             Case 17
                 ' KV Behind Gate to KV Main, DMT Lower
                 addArea(15, asAdult)
-                addAreaExit(7, 0, asAdult) 'addArea(20, asAdult)
+                addAreaExit(7, 1, asAdult) 'addArea(20, asAdult)
             Case 18
                 ' GY Main to KV Main, KV Windmill
                 addAreaExit(8, 1, asAdult) 'addArea(15, asAdult)
@@ -4382,13 +4385,13 @@ Public Class frmTrackerOfTime
                 If item("din's fire") Then addAreaExit(8, 0, asAdult) 'addArea(150, asAdult)
             Case 20
                 ' DMT Lower to KV Behind Gate, GC Main, Dodongo's Cavern Lobby, DMT Upper
-                addAreaExit(21, 1, asAdult) 'addArea(17, asAdult)
-                addAreaExit(21, 0, asAdult) 'addArea(29, asAdult)
+                addAreaExit(21, 2, asAdult) 'addArea(17, asAdult)
+                addAreaExit(21, 1, asAdult) 'addArea(29, asAdult)
                 If asAdult Then
-                    If canBreakRocks() Or item("lift") Then addAreaExit(21, 2, asAdult) 'addArea(69, asAdult)
+                    If canBreakRocks() Or item("lift") Then addAreaExit(21, 0, asAdult) 'addArea(69, asAdult)
                     If canBreakRocks() Or (canMagicBean("B2") Or canHoverTricks()) Then addArea(21, asAdult)
                 Else
-                    If canExplode() Or item("lift") Then addAreaExit(21, 2, asAdult) 'addArea(69, asAdult)
+                    If canExplode() Or item("lift") Then addAreaExit(21, 0, asAdult) 'addArea(69, asAdult)
                     If canExplode() Then addArea(21, asAdult)
                 End If
             Case 21
@@ -4398,19 +4401,19 @@ Public Class frmTrackerOfTime
                 If Not asAdult Then addArea(16, asAdult) ' Hoot hoot
             Case 22
                 ' DMC Upper to DMT Upper, DMC Ladder, DMC Central Nearby
-                addAreaExit(22, 1, asAdult) 'addArea(21, asAdult)
+                addAreaExit(22, 2, asAdult) 'addArea(21, asAdult)
                 addArea(23, asAdult)
                 If asAdult And item("goron tunic") And item("longshot") Then addArea(26, asAdult)
             Case 23
                 ' DMC Ladder to DMT Upper, DMC Upper, DMC Lower Nearby
                 If asAdult Then
-                    addAreaExit(22, 1, asAdult) 'addArea(21, asAdult)
+                    addAreaExit(22, 2, asAdult) 'addArea(21, asAdult)
                     If item("goron tunic") Then addArea(22, asAdult)
                     If item("hover boots") Then addArea(24, asAdult)
                 End If
             Case 24
                 ' DMC Lower Nearby to GC Darunias, DMC Lower Local
-                addAreaExit(22, 0, asAdult) 'addArea(31, asAdult)
+                addAreaExit(22, 1, asAdult) 'addArea(31, asAdult)
                 If asAdult And item("goron tunic") Then addArea(25, asAdult)
             Case 25
                 ' DMC Lower Local to DMC Ladder, DMC Lower Nearby, DMC Central Nearby, DMC Fire Temple Entrance
@@ -4430,7 +4433,7 @@ Public Class frmTrackerOfTime
                     If item("hover boots") Or item("hookshot") Then addArea(24, asAdult)
                     If canMagicBean("B3") Then
                         addArea(24, asAdult)
-                        addAreaExit(22, 1, asAdult)
+                        addAreaExit(22, 0, asAdult)
                         If item("goron tunic") Then addArea(22, asAdult)
                     End If
                     If canFewerGoron() Then addArea(28, asAdult)
@@ -4439,7 +4442,7 @@ Public Class frmTrackerOfTime
                 End If
             Case 28
                 ' DMC Fire Temple Entrance to DMC Fire Temple
-                addAreaExit(22, 2, asAdult) 'addArea(108, asAdult)
+                addAreaExit(22, 0, asAdult) 'addArea(108, asAdult)
             Case 29
                 ' GC Main to DMT Lower, GC Shortcut, GC Darunia, GC Shoppe, GC Grotto Platform
                 addAreaExit(23, 1, asAdult) 'addArea(20, asAdult)
@@ -4532,11 +4535,11 @@ Public Class frmTrackerOfTime
                 If asAdult Then addAreaExit(14, 1, asAdult) 'addArea(178, asAdult)
             Case 42
                 ' LH Main to HF, LH Fishing Ledge, ZD Main, Water Temple
-                addAreaExit(12, 0, asAdult) 'addArea(7, asAdult)
+                addAreaExit(12, 1, asAdult) 'addArea(7, asAdult)
                 If asAdult Then
                     If item("scarecrow") Or canMagicBean("202") Or canChangeLake() Then addArea(43, asAdult)
-                    If item("iron boots") And (checkLoc("231") Or allItems.Contains("k")) Then addAreaExit(12, 1, asAdult) 'addArea(119, asAdult)
-                    If item("dive", 2) And (checkLoc("231") Or allItems.Contains("l")) Then addAreaExit(12, 1, asAdult) 'addArea(119, asAdult)
+                    If item("iron boots") And (checkLoc("231") Or allItems.Contains("k")) Then addAreaExit(12, 0, asAdult) 'addArea(119, asAdult)
+                    If item("dive", 2) And (checkLoc("231") Or allItems.Contains("l")) Then addAreaExit(12, 0, asAdult) 'addArea(119, asAdult)
                 Else
                     'addArea(7, asAdult)   ' Hoot hoot!
                     addArea(43, asAdult)
@@ -4567,18 +4570,18 @@ Public Class frmTrackerOfTime
                 End If
             Case 46
                 ' GF Main to GV Gerudo Side, GF Behind Gate, Gerudo Training Ground
-                addAreaExit(18, 0, asAdult) 'addArea(45, asAdult)
+                addAreaExit(18, 1, asAdult) 'addArea(45, asAdult)
                 If asAdult Then
                     If item("membership card") Then
                         addArea(47, asAdult)
-                        addAreaExit(18, 2, asAdult) 'addArea(179, asAdult)
+                        addAreaExit(18, 0, asAdult) 'addArea(179, asAdult)
                     End If
                 Else
                     If checkLoc("C00") Then addArea(47, asAdult)
                 End If
             Case 47
                 ' GF Behind Gate to HW Gerudo Side, GF Main
-                addAreaExit(18, 1, asAdult) 'addArea(48, asAdult)
+                addAreaExit(18, 2, asAdult) 'addArea(48, asAdult)
                 If asAdult Then
                     addArea(46, asAdult)
                 Else
@@ -4602,7 +4605,7 @@ Public Class frmTrackerOfTime
                 addAreaExit(17, 0, asAdult) 'addArea(132, asAdult)
             Case 51
                 ' OGC to MK, GFF, Ganon's Castle
-                addAreaExit(25, 0, asAdult) 'addArea(10, asAdult)
+                addAreaExit(25, 1, asAdult) 'addArea(10, asAdult)
                 If asAdult And item("lift", 3) Then addArea(53, asAdult)
                 If canEnterGanonsCastle() Then addArea(193, asAdult)
             Case 52
@@ -16142,6 +16145,30 @@ Public Class frmTrackerOfTime
         rainbowBridge(0) = CByte(goRead(aAddresses(4), 1))
         ' Rainbow Bridge Condition Count
         rainbowBridge(1) = CByte(goRead(aAddresses(5), 1))
+    End Sub
+    Private Sub getFloor()
+        Dim zLoc As Long = goRead(&H1DAA58)
+        If zLoc < 0 Then zLoc = zLoc + 4294967296
+        iFloor = 128 ' 1F
+        Select Case zLoc
+            Case Is >= 3297863057
+                iFloor = 8  ' B2
+            Case Is >= 3283937464
+                iFloor = 9  ' B1
+            Case Is >= 2147483648
+                iFloor = 10 ' 1F
+            Case Is <= 1137284219
+                iFloor = 10 ' 1F
+            Case Is >= 1144963721
+                iFloor = 12 ' 3F
+            Case Is >= 1136301506
+                iFloor = 11 ' 2F
+                'Case Is <= -1011029832
+                'iFloor = 9   ' B1
+                'Case Is <= -997104239
+                'iFloor = 8   ' B2
+        End Select
+        rtbAddLine(iFloor.ToString & ": " & zLoc.ToString)
     End Sub
     Private Sub getER()
         iER = 0
