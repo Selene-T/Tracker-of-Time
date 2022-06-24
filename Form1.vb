@@ -9,8 +9,8 @@ Public Class frmTrackerOfTime
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 116
-    Private Const IS_64BIT As Boolean = False
-    Private Const VER As String = "4.0.3"
+    Private Const IS_64BIT As Boolean = True
+    Private Const VER As String = "4.0.4"
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
     Private romAddrStart As Integer = &HDFE40000
@@ -79,7 +79,7 @@ Public Class frmTrackerOfTime
     ' It will not be reset when stopping the scan, as I do not want people's ER progress to reset randomly.
     ' This may be used later for an 'Entrance Reset' option.
     Private iOldER As Byte = 255
-    Private iFloor As Byte = 128
+    Private iLastFloor As Byte = 0
     Private bSpawnWarps As Boolean = False
     Private bSongWarps As Boolean = False
     Private maxLife As Byte = 0
@@ -487,7 +487,7 @@ Public Class frmTrackerOfTime
         aExitMap(17)(1) = 49    ' HW Colossus Side
         ' GF (93)
         aExitMap(18)(1) = 45    ' GV Gerudo Side
-        aExitMap(18)(2) = 47    ' HW Gerudo Side
+        aExitMap(18)(2) = 48    ' HW Gerudo Side
         ' HW (94)
         aExitMap(19)(0) = 50    ' DC
         aExitMap(19)(1) = 47    ' GF Behind Gate
@@ -698,6 +698,7 @@ Public Class frmTrackerOfTime
         goldSkulltulas = 0
         maxLife = 0
         iER = 0
+        iLastFloor = 0
         lastArea = String.Empty
         lastOutput.Clear()
         'isTriforceHunt = False
@@ -1283,28 +1284,123 @@ Public Class frmTrackerOfTime
         Next
         getAge()
 
+        Dim iRoom As Byte = 0
+        If locationCode <= 9 Then
+            iRoom = CByte(goRead(&H1D8BEE, 1))
+        End If
+
         ' First load up the map, I keep this separated so that it does not matter for ER settings
         Select Case locationCode
             Case 0
-                pbxMap.Image = My.Resources.mapDT
+                Select Case iRoom
+                    Case 10, 12
+                        pbxMap.Image = My.Resources.mapDT4  ' 3F
+                    Case 1, 2, 11
+                        pbxMap.Image = My.Resources.mapDT3  ' 2F
+                    Case 0
+                        pbxMap.Image = My.Resources.mapDT2  ' 1F
+                    Case 3 To 8
+                        pbxMap.Image = My.Resources.mapDT1  ' B1
+                    Case 9
+                        pbxMap.Image = My.Resources.mapDT0  ' B2
+                End Select
             Case 1
-                pbxMap.Image = My.Resources.mapDDC
+                Select Case iRoom
+                    Case 5, 6, 9, 10, 12, 16, 17, 18
+                        pbxMap.Image = My.Resources.mapDDC1 ' 2F
+                    Case 0 To 4, 7, 8, 11, 13 To 15
+                        pbxMap.Image = My.Resources.mapDDC0 ' 1F
+                End Select
             Case 2
-                pbxMap.Image = My.Resources.mapJB
+                Select Case iRoom
+                    Case 0 To 2, 4 To 12
+                        pbxMap.Image = My.Resources.mapJB1  ' 1F
+                    Case 3, 13 To 16
+                        pbxMap.Image = My.Resources.mapJB0  ' B1
+                End Select
             Case 3
-                pbxMap.Image = My.Resources.mapFoT
+                Select Case iRoom
+                    Case 10, 12 To 14, 19, 20, 22 To 26
+                        pbxMap.Image = My.Resources.mapFoT3 ' 2F
+                    Case 0 To 8, 11, 15, 16, 18, 21
+                        pbxMap.Image = My.Resources.mapFoT3 ' 1F
+                    Case 9
+                        pbxMap.Image = My.Resources.mapFoT3 ' B1
+                    Case 17
+                        pbxMap.Image = My.Resources.mapFoT3 ' B2
+                End Select
             Case 4
-                pbxMap.Image = My.Resources.mapFoT
+                ' For Fire Temple, we need to keep track of the last floor, for the one duplicate room during falling
+                Select Case iRoom
+                    Case 8, 30, 34, 35
+                        pbxMap.Image = My.Resources.mapFiT4 ' 5F
+                        iLastFloor = 4
+                    Case 7, 12 To 14, 27, 32, 33, 37
+                        pbxMap.Image = My.Resources.mapFiT3 ' 4F
+                        iLastFloor = 3
+                    Case 5, 9, 11, 16, 23 To 26, 28, 31
+                        pbxMap.Image = My.Resources.mapFiT2 ' 3F
+                        iLastFloor = 2
+                    Case 4, 10, 36
+                        pbxMap.Image = My.Resources.mapFiT1 ' 2F
+                        iLastFloor = 1
+                    Case 0 To 3, 15, 17 To 22
+                        pbxMap.Image = My.Resources.mapFiT0 ' 1F
+                        iLastFloor = 0
+                    Case 6
+                        ' Code is used twice when falling between floors, compare it with the last floor
+                        If iLastFloor = 4 Then
+                            ' If the last floor was 5F, load up 4F
+                            pbxMap.Image = My.Resources.mapFiT3 ' 4F
+                        Else
+                            ' Else use 2F
+                            pbxMap.Image = My.Resources.mapFiT1 ' 2F
+                        End If
+                End Select
             Case 5
-                pbxMap.Image = My.Resources.mapWaT
+                Select Case iRoom
+                    Case 0, 1, 4 To 7, 10, 11, 13, 17, 19, 20
+                        pbxMap.Image = My.Resources.mapWaT3 ' 3F
+                    Case 21, 22, 25, 29, 30, 32, 35, 39, 41
+                        pbxMap.Image = My.Resources.mapWaT2 ' 2F
+                    Case 3, 8, 9, 12, 14 To 16, 18, 23, 26, 31, 40, 42
+                        pbxMap.Image = My.Resources.mapWaT1 ' 1F
+                    Case 2, 24, 27, 28, 33, 34, 36 To 38, 43
+                        pbxMap.Image = My.Resources.mapWaT0 ' B1
+                End Select
             Case 6
-                pbxMap.Image = My.Resources.mapSpT
+                Select Case iRoom
+                    Case 22, 24 To 26, 31
+                        pbxMap.Image = My.Resources.mapSpT3  ' 4F
+                    Case 7 To 11, 16 To 21, 23, 29
+                        pbxMap.Image = My.Resources.mapSpT2  ' 3F
+                    Case 5, 6, 28, 30
+                        pbxMap.Image = My.Resources.mapSpT1  ' 2F
+                    Case 0 To 4, 12 To 15, 27
+                        pbxMap.Image = My.Resources.mapSpT0  ' 1F
+                End Select
             Case 7
-                pbxMap.Image = My.Resources.mapShT
+                Select Case iRoom
+                    Case 0 To 2, 4
+                        pbxMap.Image = My.Resources.mapShT3 ' B1
+                    Case 5 To 8
+                        pbxMap.Image = My.Resources.mapShT2 ' B2
+                    Case 9, 12, 14, 16, 21, 22
+                        pbxMap.Image = My.Resources.mapShT1 ' B3
+                    Case 3, 10, 11, 13, 15, 17 To 20, 23 To 26
+                        pbxMap.Image = My.Resources.mapShT0 ' B4
+                End Select
             Case 8
-                pbxMap.Image = My.Resources.mapBotW
+                Select Case iRoom
+                    Case 0 To 6
+                        pbxMap.Image = My.Resources.mapBotW2 ' B1
+                    Case 7, 8
+                        pbxMap.Image = My.Resources.mapBotW1 ' B2
+                    Case 9
+                        pbxMap.Image = My.Resources.mapBotW0 ' B3
+                End Select
             Case 9
-                pbxMap.Image = My.Resources.mapIC
+                pbxMap.Image = My.Resources.mapIC0  ' F1
             Case 10
                 pbxMap.Image = My.Resources.mapBlank
             Case 11
@@ -2421,6 +2517,12 @@ Public Class frmTrackerOfTime
             End If
         Next
         scanSingleChecks()
+
+        ' Check to see if Bonooru's flag is flipped, this is for when a player has a free scarecrow song
+        ' If it is, then force Pierre's check so that it does not show up
+        If checkLoc("6512") And Not checkLoc("7316") Then
+            flipKeyForced("6512", "LH", 2)
+        End If
 
         If rtbRefresh = 0 Then
             Dim newArea As String = String.Empty
@@ -3608,8 +3710,9 @@ Public Class frmTrackerOfTime
         'rtbAddLine(Hex(i))
         'Next
         'debugInfo()
-        'Dim test As Integer = goRead(&H40BF80 + 1, 1)
+        'Dim test As Integer = goRead(&H1D8BEE, 1)
         'MsgBox(test.ToString)
+
         If False Then
             Dim outputXX As String = "Visited:"
             For i = 0 To aVisited.Length - 1
@@ -3625,7 +3728,7 @@ Public Class frmTrackerOfTime
         End If
 
 
-        If True Then
+        If False Then
             Dim outputXX As String = String.Empty
             outputXX = "Adult:"
             For i = 0 To aReachA.Length - 1
@@ -8155,7 +8258,7 @@ Public Class frmTrackerOfTime
             .area = "LH"
             .zone = 42
             .name = "Scarecrow Pierre"
-            .logic = "YLL7316"
+            .logic = "ZhLL7316"
         End With
         inc(tk)
         With aKeys(tk)
@@ -8831,7 +8934,7 @@ Public Class frmTrackerOfTime
             .area = "QM"
             .zone = 10
             .name = "Sell Skull Mask"
-            .logic = "YLL6908"
+            .logic = "YLL6908hLL7714"
         End With
         inc(tk)
         With aKeys(tk)
@@ -15421,7 +15524,7 @@ Public Class frmTrackerOfTime
             Next
         End If
     End Function
-    Private Function flipKeyForced(ByVal name As String, ByVal area As String) As Boolean
+    Private Function flipKeyForced(ByVal name As String, ByVal area As String, Optional setAs As Byte = 0) As Boolean
         flipKeyForced = False
         ' Strip any extras we added to the display name to get the original key name
         name = Replace(name, "GS:", "")
@@ -15452,7 +15555,15 @@ Public Class frmTrackerOfTime
             For Each key In aKeys.Where(Function(k As keyCheck) k.name.Equals(name))
                 With key
                     If .area = area Or .area = area2 Or .area = area3 Then
-                        .forced = Not .forced
+                        Select Case setAs
+                            Case 0  ' Default: Flips
+                                .forced = Not .forced
+                            Case 1  ' Unforces
+                                .forced = False
+                            Case 2  ' Forces
+                                .forced = True
+                        End Select
+
                         flipKeyForced = True
                         Exit Function
                     End If
@@ -16145,30 +16256,6 @@ Public Class frmTrackerOfTime
         rainbowBridge(0) = CByte(goRead(aAddresses(4), 1))
         ' Rainbow Bridge Condition Count
         rainbowBridge(1) = CByte(goRead(aAddresses(5), 1))
-    End Sub
-    Private Sub getFloor()
-        Dim zLoc As Long = goRead(&H1DAA58)
-        If zLoc < 0 Then zLoc = zLoc + 4294967296
-        iFloor = 128 ' 1F
-        Select Case zLoc
-            Case Is >= 3297863057
-                iFloor = 8  ' B2
-            Case Is >= 3283937464
-                iFloor = 9  ' B1
-            Case Is >= 2147483648
-                iFloor = 10 ' 1F
-            Case Is <= 1137284219
-                iFloor = 10 ' 1F
-            Case Is >= 1144963721
-                iFloor = 12 ' 3F
-            Case Is >= 1136301506
-                iFloor = 11 ' 2F
-                'Case Is <= -1011029832
-                'iFloor = 9   ' B1
-                'Case Is <= -997104239
-                'iFloor = 8   ' B2
-        End Select
-        rtbAddLine(iFloor.ToString & ": " & zLoc.ToString)
     End Sub
     Private Sub getER()
         iER = 0

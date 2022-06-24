@@ -299,7 +299,15 @@ TrackerofTime
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
-</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapBotW">
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapBotW0">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapBotW1">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapBotW2">
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
@@ -307,7 +315,11 @@ TrackerofTime
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
-</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapDDC">
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapDDC0">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapDDC1">
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
@@ -319,15 +331,59 @@ TrackerofTime
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
-</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapDT">
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapDT0">
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
-</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapFiT">
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapDT1">
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
-</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapFoT">
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapDT2">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapDT3">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapDT4">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapFiT0">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapFiT1">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapFiT2">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapFiT3">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapFiT4">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapFoT0">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapFoT1">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapFoT2">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapFoT3">
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
@@ -355,11 +411,15 @@ TrackerofTime
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
-</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapIC">
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapIC0">
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
-</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapJB">
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapJB0">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapJB1">
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
@@ -407,11 +467,35 @@ TrackerofTime
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
-</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapShT">
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapShT0">
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
-</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapSpT">
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapShT1">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapShT2">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapShT3">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapSpT0">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapSpT1">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapSpT2">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapSpT3">
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
@@ -427,7 +511,19 @@ TrackerofTime
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
-</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapWaT">
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapWaT0">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapWaT1">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapWaT2">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:Tracker_of_Time.My.Resources.Resources.mapWaT3">
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>

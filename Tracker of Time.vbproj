@@ -24,7 +24,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>4.0.2.0</ApplicationVersion>
+    <ApplicationVersion>4.0.4.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -40,7 +40,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
@@ -229,6 +229,40 @@
     <None Include="additional\naryusLove.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="additional\mapIC0.png" />
+    <None Include="additional\mapBotW2.png" />
+    <None Include="additional\mapBotW1.png" />
+    <None Include="additional\mapBotW0.png" />
+    <None Include="additional\mapShT3.png" />
+    <None Include="additional\mapShT2.png" />
+    <None Include="additional\mapShT1.png" />
+    <None Include="additional\mapShT0.png" />
+    <None Include="additional\mapSpT3.png" />
+    <None Include="additional\mapSpT2.png" />
+    <None Include="additional\mapSpT1.png" />
+    <None Include="additional\mapSpT0.png" />
+    <None Include="additional\mapWaT3.png" />
+    <None Include="additional\mapWaT2.png" />
+    <None Include="additional\mapWaT1.png" />
+    <None Include="additional\mapWaT0.png" />
+    <None Include="additional\mapFiT4.png" />
+    <None Include="additional\mapFiT3.png" />
+    <None Include="additional\mapFiT2.png" />
+    <None Include="additional\mapFiT1.png" />
+    <None Include="additional\mapFiT0.png" />
+    <None Include="additional\mapFoT3.png" />
+    <None Include="additional\mapFoT2.png" />
+    <None Include="additional\mapFoT1.png" />
+    <None Include="additional\mapFoT0.png" />
+    <None Include="additional\mapJB1.png" />
+    <None Include="additional\mapJB0.png" />
+    <None Include="additional\mapDDC1.png" />
+    <None Include="additional\mapDDC0.png" />
+    <None Include="additional\mapDT4.png" />
+    <None Include="additional\mapDT3.png" />
+    <None Include="additional\mapDT2.png" />
+    <None Include="additional\mapDT1.png" />
+    <None Include="additional\mapDT0.png" />
     <None Include="additional\mapOGC.png" />
     <None Include="additional\mapToTOutside2.png" />
     <None Include="additional\mapMKEntrance2.png" />
@@ -261,7 +295,6 @@
     <None Include="additional\mapMKEntrance.png" />
     <None Include="additional\mapLLR.png" />
     <None Include="additional\mapHF.png" />
-    <None Include="additional\mapDT.png" />
     <None Include="additional\mapFoT.png" />
     <None Include="additional\mapSFM.png" />
     <None Include="additional\mapBlank.png" />
