@@ -108,6 +108,9 @@ Partial Class frmTrackerOfTime
         Me.lcxTunic = New System.Windows.Forms.Label()
         Me.ltbShopsanity = New System.Windows.Forms.Label()
         Me.pnlSettings = New System.Windows.Forms.Panel()
+        Me.nlbGTGTricks = New System.Windows.Forms.Label()
+        Me.lcxGTGLensless = New System.Windows.Forms.Label()
+        Me.lcxHideQuests = New System.Windows.Forms.Label()
         Me.ltbGSLocation = New System.Windows.Forms.Label()
         Me.lcxShortForm = New System.Windows.Forms.Label()
         Me.lcxFiTScarecrow = New System.Windows.Forms.Label()
@@ -182,94 +185,15 @@ Partial Class frmTrackerOfTime
         Me.tmrFixIt = New System.Windows.Forms.Timer(Me.components)
         Me.pnlMain = New System.Windows.Forms.Panel()
         Me.pnlER = New System.Windows.Forms.Panel()
+        Me.pbxTrialFire = New System.Windows.Forms.PictureBox()
+        Me.pbxTrialShadow = New System.Windows.Forms.PictureBox()
+        Me.pbxTrialForest = New System.Windows.Forms.PictureBox()
+        Me.pbxTrialLight = New System.Windows.Forms.PictureBox()
+        Me.pbxTrialWater = New System.Windows.Forms.PictureBox()
+        Me.pbxTrialSpirit = New System.Windows.Forms.PictureBox()
+        Me.pbxMap = New System.Windows.Forms.PictureBox()
         Me.rtbOutputRight = New System.Windows.Forms.RichTextBox()
         Me.rtbOutputLeft = New System.Windows.Forms.RichTextBox()
-        Me.pnlSongsMedals = New System.Windows.Forms.Panel()
-        Me.pnlDekuTree = New System.Windows.Forms.Panel()
-        Me.lblDekuTree = New System.Windows.Forms.Label()
-        Me.checkMQ1 = New System.Windows.Forms.CheckBox()
-        Me.pnlDodongosCavern = New System.Windows.Forms.Panel()
-        Me.lblDodongosCavern = New System.Windows.Forms.Label()
-        Me.checkMQ2 = New System.Windows.Forms.CheckBox()
-        Me.pnlLostWoods = New System.Windows.Forms.Panel()
-        Me.lblLostWoods = New System.Windows.Forms.Label()
-        Me.pnlHyruleField = New System.Windows.Forms.Panel()
-        Me.lblHyruleField = New System.Windows.Forms.Label()
-        Me.pnlLonLonRanch = New System.Windows.Forms.Panel()
-        Me.lblLonLonRanch = New System.Windows.Forms.Label()
-        Me.pnlKokiriForest = New System.Windows.Forms.Panel()
-        Me.lblKokiriForest = New System.Windows.Forms.Label()
-        Me.pnlLakeHylia = New System.Windows.Forms.Panel()
-        Me.lblLakeHylia = New System.Windows.Forms.Label()
-        Me.pnlSacredForestMeadow = New System.Windows.Forms.Panel()
-        Me.lblSacredForestMeadow = New System.Windows.Forms.Label()
-        Me.pnlGerudoFortress = New System.Windows.Forms.Panel()
-        Me.lblGerudoFortress = New System.Windows.Forms.Label()
-        Me.pnlHauntedWasteland = New System.Windows.Forms.Panel()
-        Me.lblHauntedWasteland = New System.Windows.Forms.Label()
-        Me.pnlMarket = New System.Windows.Forms.Panel()
-        Me.lblMarket = New System.Windows.Forms.Label()
-        Me.pnlGanonsCastle = New System.Windows.Forms.Panel()
-        Me.lblGanonsCastle = New System.Windows.Forms.Label()
-        Me.checkMQ12 = New System.Windows.Forms.CheckBox()
-        Me.pnlHyruleCastle = New System.Windows.Forms.Panel()
-        Me.lblHyruleCastle = New System.Windows.Forms.Label()
-        Me.pnlWaterTemple = New System.Windows.Forms.Panel()
-        Me.lblWaterTemple = New System.Windows.Forms.Label()
-        Me.checkMQ6 = New System.Windows.Forms.CheckBox()
-        Me.pnlGraveyard = New System.Windows.Forms.Panel()
-        Me.lblGraveyard = New System.Windows.Forms.Label()
-        Me.pnlIceCavern = New System.Windows.Forms.Panel()
-        Me.lblIceCavern = New System.Windows.Forms.Label()
-        Me.checkMQ10 = New System.Windows.Forms.CheckBox()
-        Me.pnlDMCrater = New System.Windows.Forms.Panel()
-        Me.lblDMCrater = New System.Windows.Forms.Label()
-        Me.pnlForestTemple = New System.Windows.Forms.Panel()
-        Me.lblForestTemple = New System.Windows.Forms.Label()
-        Me.checkMQ4 = New System.Windows.Forms.CheckBox()
-        Me.pnlGoronCity = New System.Windows.Forms.Panel()
-        Me.lblGoronCity = New System.Windows.Forms.Label()
-        Me.pnlBottomOfTheWell = New System.Windows.Forms.Panel()
-        Me.lblBottomOfTheWell = New System.Windows.Forms.Label()
-        Me.checkMQ9 = New System.Windows.Forms.CheckBox()
-        Me.pnlGerudoValley = New System.Windows.Forms.Panel()
-        Me.lblGerudoValley = New System.Windows.Forms.Label()
-        Me.pnlSpiritTemple = New System.Windows.Forms.Panel()
-        Me.lblSpiritTemple = New System.Windows.Forms.Label()
-        Me.checkMQ7 = New System.Windows.Forms.CheckBox()
-        Me.pnlZorasRiver = New System.Windows.Forms.Panel()
-        Me.lblZorasRiver = New System.Windows.Forms.Label()
-        Me.pnlShadowTemple = New System.Windows.Forms.Panel()
-        Me.lblShadowTemple = New System.Windows.Forms.Label()
-        Me.checkMQ8 = New System.Windows.Forms.CheckBox()
-        Me.pnlZorasDomain = New System.Windows.Forms.Panel()
-        Me.lblZorasDomain = New System.Windows.Forms.Label()
-        Me.pnlOutsideGanonsCastle = New System.Windows.Forms.Panel()
-        Me.lblOutsideGanonsCastle = New System.Windows.Forms.Label()
-        Me.pnlTempleOfTime = New System.Windows.Forms.Panel()
-        Me.lblTempleOfTime = New System.Windows.Forms.Label()
-        Me.pnlQuestGoldSkulltulas = New System.Windows.Forms.Panel()
-        Me.lblQuestGoldSkulltulas = New System.Windows.Forms.Label()
-        Me.pnlDMTrail = New System.Windows.Forms.Panel()
-        Me.lblDMTrail = New System.Windows.Forms.Label()
-        Me.pnlJabuJabusBelly = New System.Windows.Forms.Panel()
-        Me.lblJabuJabusBelly = New System.Windows.Forms.Label()
-        Me.checkMQ3 = New System.Windows.Forms.CheckBox()
-        Me.pnlDesertColossus = New System.Windows.Forms.Panel()
-        Me.lblDesertColossus = New System.Windows.Forms.Label()
-        Me.pnlGerudoTrainingGround = New System.Windows.Forms.Panel()
-        Me.lblGerudoTrainingGround = New System.Windows.Forms.Label()
-        Me.checkMQ11 = New System.Windows.Forms.CheckBox()
-        Me.pnlZorasFountain = New System.Windows.Forms.Panel()
-        Me.lblZorasFountain = New System.Windows.Forms.Label()
-        Me.pnlKakarikoVillage = New System.Windows.Forms.Panel()
-        Me.lblKakarikoVillage = New System.Windows.Forms.Label()
-        Me.pnlQuestMasks = New System.Windows.Forms.Panel()
-        Me.lblQuestMasks = New System.Windows.Forms.Label()
-        Me.pnlFireTemple = New System.Windows.Forms.Panel()
-        Me.lblFireTemple = New System.Windows.Forms.Label()
-        Me.checkMQ5 = New System.Windows.Forms.CheckBox()
-        Me.pbxMap = New System.Windows.Forms.PictureBox()
         Me.pnlWorldMap = New System.Windows.Forms.Panel()
         Me.zFiT = New System.Windows.Forms.Label()
         Me.zGTG = New System.Windows.Forms.Label()
@@ -350,6 +274,7 @@ Partial Class frmTrackerOfTime
         Me.pbx03 = New System.Windows.Forms.PictureBox()
         Me.pbx02 = New System.Windows.Forms.PictureBox()
         Me.pbx01 = New System.Windows.Forms.PictureBox()
+        Me.pnlSongsMedals = New System.Windows.Forms.Panel()
         Me.pbxSpawnAdult = New System.Windows.Forms.PictureBox()
         Me.pbxSpawnYoung = New System.Windows.Forms.PictureBox()
         Me.pbxSongOfStorms = New System.Windows.Forms.PictureBox()
@@ -373,6 +298,14 @@ Partial Class frmTrackerOfTime
         Me.pbxBoleroOfFire = New System.Windows.Forms.PictureBox()
         Me.pbxMinuetOfForest = New System.Windows.Forms.PictureBox()
         Me.pbxZeldasLullaby = New System.Windows.Forms.PictureBox()
+        Me.pnlDekuTree = New System.Windows.Forms.Panel()
+        Me.lblDekuTree = New System.Windows.Forms.Label()
+        Me.checkMQ1 = New System.Windows.Forms.CheckBox()
+        Me.pnlDodongosCavern = New System.Windows.Forms.Panel()
+        Me.lblDodongosCavern = New System.Windows.Forms.Label()
+        Me.checkMQ2 = New System.Windows.Forms.CheckBox()
+        Me.pnlLostWoods = New System.Windows.Forms.Panel()
+        Me.lblLostWoods = New System.Windows.Forms.Label()
         Me.pnlDungeonItems = New System.Windows.Forms.Panel()
         Me.pbxTriforce = New System.Windows.Forms.PictureBox()
         Me.pbxGoldSkulltula = New System.Windows.Forms.PictureBox()
@@ -413,48 +346,95 @@ Partial Class frmTrackerOfTime
         Me.pbxDCMap = New System.Windows.Forms.PictureBox()
         Me.pbxDTCompass = New System.Windows.Forms.PictureBox()
         Me.pbxDTMap = New System.Windows.Forms.PictureBox()
+        Me.pnlHyruleField = New System.Windows.Forms.Panel()
+        Me.lblHyruleField = New System.Windows.Forms.Label()
+        Me.pnlLonLonRanch = New System.Windows.Forms.Panel()
+        Me.lblLonLonRanch = New System.Windows.Forms.Label()
+        Me.pnlKokiriForest = New System.Windows.Forms.Panel()
+        Me.lblKokiriForest = New System.Windows.Forms.Label()
+        Me.pnlLakeHylia = New System.Windows.Forms.Panel()
+        Me.lblLakeHylia = New System.Windows.Forms.Label()
+        Me.pnlSacredForestMeadow = New System.Windows.Forms.Panel()
+        Me.lblSacredForestMeadow = New System.Windows.Forms.Label()
+        Me.pnlGerudoFortress = New System.Windows.Forms.Panel()
+        Me.lblGerudoFortress = New System.Windows.Forms.Label()
+        Me.pnlHauntedWasteland = New System.Windows.Forms.Panel()
+        Me.lblHauntedWasteland = New System.Windows.Forms.Label()
+        Me.pnlMarket = New System.Windows.Forms.Panel()
+        Me.lblMarket = New System.Windows.Forms.Label()
+        Me.pnlGanonsCastle = New System.Windows.Forms.Panel()
+        Me.lblGanonsCastle = New System.Windows.Forms.Label()
+        Me.checkMQ12 = New System.Windows.Forms.CheckBox()
+        Me.pnlHyruleCastle = New System.Windows.Forms.Panel()
+        Me.lblHyruleCastle = New System.Windows.Forms.Label()
+        Me.pnlWaterTemple = New System.Windows.Forms.Panel()
+        Me.lblWaterTemple = New System.Windows.Forms.Label()
+        Me.checkMQ6 = New System.Windows.Forms.CheckBox()
+        Me.pnlGraveyard = New System.Windows.Forms.Panel()
+        Me.lblGraveyard = New System.Windows.Forms.Label()
+        Me.pnlIceCavern = New System.Windows.Forms.Panel()
+        Me.lblIceCavern = New System.Windows.Forms.Label()
+        Me.checkMQ10 = New System.Windows.Forms.CheckBox()
+        Me.pnlDMCrater = New System.Windows.Forms.Panel()
+        Me.lblDMCrater = New System.Windows.Forms.Label()
+        Me.pnlForestTemple = New System.Windows.Forms.Panel()
+        Me.lblForestTemple = New System.Windows.Forms.Label()
+        Me.checkMQ4 = New System.Windows.Forms.CheckBox()
+        Me.pnlGoronCity = New System.Windows.Forms.Panel()
+        Me.lblGoronCity = New System.Windows.Forms.Label()
+        Me.pnlBottomOfTheWell = New System.Windows.Forms.Panel()
+        Me.lblBottomOfTheWell = New System.Windows.Forms.Label()
+        Me.checkMQ9 = New System.Windows.Forms.CheckBox()
+        Me.pnlGerudoValley = New System.Windows.Forms.Panel()
+        Me.lblGerudoValley = New System.Windows.Forms.Label()
+        Me.pnlSpiritTemple = New System.Windows.Forms.Panel()
+        Me.lblSpiritTemple = New System.Windows.Forms.Label()
+        Me.checkMQ7 = New System.Windows.Forms.CheckBox()
+        Me.pnlZorasRiver = New System.Windows.Forms.Panel()
+        Me.lblZorasRiver = New System.Windows.Forms.Label()
+        Me.pnlShadowTemple = New System.Windows.Forms.Panel()
+        Me.lblShadowTemple = New System.Windows.Forms.Label()
+        Me.checkMQ8 = New System.Windows.Forms.CheckBox()
+        Me.pnlZorasDomain = New System.Windows.Forms.Panel()
+        Me.lblZorasDomain = New System.Windows.Forms.Label()
+        Me.pnlOutsideGanonsCastle = New System.Windows.Forms.Panel()
+        Me.lblOutsideGanonsCastle = New System.Windows.Forms.Label()
+        Me.pnlTempleOfTime = New System.Windows.Forms.Panel()
+        Me.lblTempleOfTime = New System.Windows.Forms.Label()
+        Me.pnlQuestGoldSkulltulas = New System.Windows.Forms.Panel()
+        Me.lblQuestGoldSkulltulas = New System.Windows.Forms.Label()
+        Me.pnlDMTrail = New System.Windows.Forms.Panel()
+        Me.lblDMTrail = New System.Windows.Forms.Label()
+        Me.pnlJabuJabusBelly = New System.Windows.Forms.Panel()
+        Me.lblJabuJabusBelly = New System.Windows.Forms.Label()
+        Me.checkMQ3 = New System.Windows.Forms.CheckBox()
+        Me.pnlDesertColossus = New System.Windows.Forms.Panel()
+        Me.lblDesertColossus = New System.Windows.Forms.Label()
+        Me.pnlGerudoTrainingGround = New System.Windows.Forms.Panel()
+        Me.lblGerudoTrainingGround = New System.Windows.Forms.Label()
+        Me.checkMQ11 = New System.Windows.Forms.CheckBox()
+        Me.pnlZorasFountain = New System.Windows.Forms.Panel()
+        Me.lblZorasFountain = New System.Windows.Forms.Label()
+        Me.pnlKakarikoVillage = New System.Windows.Forms.Panel()
+        Me.lblKakarikoVillage = New System.Windows.Forms.Label()
+        Me.pnlQuestMasks = New System.Windows.Forms.Panel()
+        Me.lblQuestMasks = New System.Windows.Forms.Label()
+        Me.pnlFireTemple = New System.Windows.Forms.Panel()
+        Me.lblFireTemple = New System.Windows.Forms.Label()
+        Me.checkMQ5 = New System.Windows.Forms.CheckBox()
+        Me.tmrTT = New System.Windows.Forms.Timer(Me.components)
+        Me.tmrFastScan = New System.Windows.Forms.Timer(Me.components)
         Me.pnlHidden.SuspendLayout()
         Me.mnuOptions.SuspendLayout()
         Me.pnlSettings.SuspendLayout()
         Me.pnlMain.SuspendLayout()
         Me.pnlER.SuspendLayout()
-        Me.pnlSongsMedals.SuspendLayout()
-        Me.pnlDekuTree.SuspendLayout()
-        Me.pnlDodongosCavern.SuspendLayout()
-        Me.pnlLostWoods.SuspendLayout()
-        Me.pnlHyruleField.SuspendLayout()
-        Me.pnlLonLonRanch.SuspendLayout()
-        Me.pnlKokiriForest.SuspendLayout()
-        Me.pnlLakeHylia.SuspendLayout()
-        Me.pnlSacredForestMeadow.SuspendLayout()
-        Me.pnlGerudoFortress.SuspendLayout()
-        Me.pnlHauntedWasteland.SuspendLayout()
-        Me.pnlMarket.SuspendLayout()
-        Me.pnlGanonsCastle.SuspendLayout()
-        Me.pnlHyruleCastle.SuspendLayout()
-        Me.pnlWaterTemple.SuspendLayout()
-        Me.pnlGraveyard.SuspendLayout()
-        Me.pnlIceCavern.SuspendLayout()
-        Me.pnlDMCrater.SuspendLayout()
-        Me.pnlForestTemple.SuspendLayout()
-        Me.pnlGoronCity.SuspendLayout()
-        Me.pnlBottomOfTheWell.SuspendLayout()
-        Me.pnlGerudoValley.SuspendLayout()
-        Me.pnlSpiritTemple.SuspendLayout()
-        Me.pnlZorasRiver.SuspendLayout()
-        Me.pnlShadowTemple.SuspendLayout()
-        Me.pnlZorasDomain.SuspendLayout()
-        Me.pnlOutsideGanonsCastle.SuspendLayout()
-        Me.pnlTempleOfTime.SuspendLayout()
-        Me.pnlQuestGoldSkulltulas.SuspendLayout()
-        Me.pnlDMTrail.SuspendLayout()
-        Me.pnlJabuJabusBelly.SuspendLayout()
-        Me.pnlDesertColossus.SuspendLayout()
-        Me.pnlGerudoTrainingGround.SuspendLayout()
-        Me.pnlZorasFountain.SuspendLayout()
-        Me.pnlKakarikoVillage.SuspendLayout()
-        Me.pnlQuestMasks.SuspendLayout()
-        Me.pnlFireTemple.SuspendLayout()
+        CType(Me.pbxTrialFire, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbxTrialShadow, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbxTrialForest, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbxTrialLight, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbxTrialWater, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbxTrialSpirit, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbxMap, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlWorldMap.SuspendLayout()
         Me.pnlEquips.SuspendLayout()
@@ -504,6 +484,7 @@ Partial Class frmTrackerOfTime
         CType(Me.pbx03, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbx02, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbx01, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pnlSongsMedals.SuspendLayout()
         CType(Me.pbxSpawnAdult, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbxSpawnYoung, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbxSongOfStorms, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -527,6 +508,9 @@ Partial Class frmTrackerOfTime
         CType(Me.pbxBoleroOfFire, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbxMinuetOfForest, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbxZeldasLullaby, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pnlDekuTree.SuspendLayout()
+        Me.pnlDodongosCavern.SuspendLayout()
+        Me.pnlLostWoods.SuspendLayout()
         Me.pnlDungeonItems.SuspendLayout()
         CType(Me.pbxTriforce, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbxGoldSkulltula, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -567,6 +551,39 @@ Partial Class frmTrackerOfTime
         CType(Me.pbxDCMap, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbxDTCompass, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbxDTMap, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pnlHyruleField.SuspendLayout()
+        Me.pnlLonLonRanch.SuspendLayout()
+        Me.pnlKokiriForest.SuspendLayout()
+        Me.pnlLakeHylia.SuspendLayout()
+        Me.pnlSacredForestMeadow.SuspendLayout()
+        Me.pnlGerudoFortress.SuspendLayout()
+        Me.pnlHauntedWasteland.SuspendLayout()
+        Me.pnlMarket.SuspendLayout()
+        Me.pnlGanonsCastle.SuspendLayout()
+        Me.pnlHyruleCastle.SuspendLayout()
+        Me.pnlWaterTemple.SuspendLayout()
+        Me.pnlGraveyard.SuspendLayout()
+        Me.pnlIceCavern.SuspendLayout()
+        Me.pnlDMCrater.SuspendLayout()
+        Me.pnlForestTemple.SuspendLayout()
+        Me.pnlGoronCity.SuspendLayout()
+        Me.pnlBottomOfTheWell.SuspendLayout()
+        Me.pnlGerudoValley.SuspendLayout()
+        Me.pnlSpiritTemple.SuspendLayout()
+        Me.pnlZorasRiver.SuspendLayout()
+        Me.pnlShadowTemple.SuspendLayout()
+        Me.pnlZorasDomain.SuspendLayout()
+        Me.pnlOutsideGanonsCastle.SuspendLayout()
+        Me.pnlTempleOfTime.SuspendLayout()
+        Me.pnlQuestGoldSkulltulas.SuspendLayout()
+        Me.pnlDMTrail.SuspendLayout()
+        Me.pnlJabuJabusBelly.SuspendLayout()
+        Me.pnlDesertColossus.SuspendLayout()
+        Me.pnlGerudoTrainingGround.SuspendLayout()
+        Me.pnlZorasFountain.SuspendLayout()
+        Me.pnlKakarikoVillage.SuspendLayout()
+        Me.pnlQuestMasks.SuspendLayout()
+        Me.pnlFireTemple.SuspendLayout()
         Me.SuspendLayout()
         '
         'tmrAutoScan
@@ -1306,7 +1323,7 @@ Partial Class frmTrackerOfTime
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(13, 877)
+        Me.Label1.Location = New System.Drawing.Point(13, 961)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(128, 26)
         Me.Label1.TabIndex = 233
@@ -1523,6 +1540,9 @@ Partial Class frmTrackerOfTime
         '
         'pnlSettings
         '
+        Me.pnlSettings.Controls.Add(Me.nlbGTGTricks)
+        Me.pnlSettings.Controls.Add(Me.lcxGTGLensless)
+        Me.pnlSettings.Controls.Add(Me.lcxHideQuests)
         Me.pnlSettings.Controls.Add(Me.ltbGSLocation)
         Me.pnlSettings.Controls.Add(Me.lcxShortForm)
         Me.pnlSettings.Controls.Add(Me.lcxFiTScarecrow)
@@ -1613,6 +1633,37 @@ Partial Class frmTrackerOfTime
         Me.pnlSettings.Size = New System.Drawing.Size(597, 1039)
         Me.pnlSettings.TabIndex = 253
         '
+        'nlbGTGTricks
+        '
+        Me.nlbGTGTricks.AutoSize = True
+        Me.nlbGTGTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.nlbGTGTricks.Location = New System.Drawing.Point(401, 696)
+        Me.nlbGTGTricks.Name = "nlbGTGTricks"
+        Me.nlbGTGTricks.Size = New System.Drawing.Size(76, 13)
+        Me.nlbGTGTricks.TabIndex = 335
+        Me.nlbGTGTricks.Text = "GTG Tricks:"
+        '
+        'lcxGTGLensless
+        '
+        Me.lcxGTGLensless.Location = New System.Drawing.Point(401, 713)
+        Me.lcxGTGLensless.Name = "lcxGTGLensless"
+        Me.lcxGTGLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxGTGLensless.Size = New System.Drawing.Size(159, 20)
+        Me.lcxGTGLensless.TabIndex = 334
+        Me.lcxGTGLensless.Tag = ""
+        Me.lcxGTGLensless.Text = "Lensless GTG"
+        Me.lcxGTGLensless.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxHideQuests
+        '
+        Me.lcxHideQuests.Location = New System.Drawing.Point(401, 211)
+        Me.lcxHideQuests.Name = "lcxHideQuests"
+        Me.lcxHideQuests.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxHideQuests.Size = New System.Drawing.Size(159, 20)
+        Me.lcxHideQuests.TabIndex = 333
+        Me.lcxHideQuests.Text = "Hide Big Poes"
+        Me.lcxHideQuests.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
         'ltbGSLocation
         '
         Me.ltbGSLocation.Location = New System.Drawing.Point(21, 253)
@@ -1625,7 +1676,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShortForm
         '
-        Me.lcxShortForm.Location = New System.Drawing.Point(401, 250)
+        Me.lcxShortForm.Location = New System.Drawing.Point(401, 269)
         Me.lcxShortForm.Name = "lcxShortForm"
         Me.lcxShortForm.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShortForm.Size = New System.Drawing.Size(155, 20)
@@ -1655,7 +1706,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxExpand
         '
-        Me.lcxExpand.Location = New System.Drawing.Point(401, 231)
+        Me.lcxExpand.Location = New System.Drawing.Point(401, 250)
         Me.lcxExpand.Name = "lcxExpand"
         Me.lcxExpand.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxExpand.Size = New System.Drawing.Size(155, 20)
@@ -1665,7 +1716,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShowMap
         '
-        Me.lcxShowMap.Location = New System.Drawing.Point(401, 212)
+        Me.lcxShowMap.Location = New System.Drawing.Point(401, 231)
         Me.lcxShowMap.Name = "lcxShowMap"
         Me.lcxShowMap.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShowMap.Size = New System.Drawing.Size(155, 20)
@@ -1697,7 +1748,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxBotWMQPits
         '
-        Me.lcxBotWMQPits.Location = New System.Drawing.Point(401, 816)
+        Me.lcxBotWMQPits.Location = New System.Drawing.Point(401, 673)
         Me.lcxBotWMQPits.Name = "lcxBotWMQPits"
         Me.lcxBotWMQPits.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxBotWMQPits.Size = New System.Drawing.Size(159, 20)
@@ -1708,7 +1759,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTMQPit
         '
-        Me.lcxShTMQPit.Location = New System.Drawing.Point(401, 724)
+        Me.lcxShTMQPit.Location = New System.Drawing.Point(401, 581)
         Me.lcxShTMQPit.Name = "lcxShTMQPit"
         Me.lcxShTMQPit.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTMQPit.Size = New System.Drawing.Size(159, 36)
@@ -1719,7 +1770,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSpTLensless
         '
-        Me.lcxSpTLensless.Location = New System.Drawing.Point(401, 462)
+        Me.lcxSpTLensless.Location = New System.Drawing.Point(201, 816)
         Me.lcxSpTLensless.Name = "lcxSpTLensless"
         Me.lcxSpTLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSpTLensless.Size = New System.Drawing.Size(181, 20)
@@ -1771,7 +1822,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTPlatform
         '
-        Me.lcxShTPlatform.Location = New System.Drawing.Point(401, 622)
+        Me.lcxShTPlatform.Location = New System.Drawing.Point(401, 479)
         Me.lcxShTPlatform.Name = "lcxShTPlatform"
         Me.lcxShTPlatform.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTPlatform.Size = New System.Drawing.Size(195, 36)
@@ -1853,7 +1904,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxBotWDeadHand
         '
-        Me.lcxBotWDeadHand.Location = New System.Drawing.Point(401, 797)
+        Me.lcxBotWDeadHand.Location = New System.Drawing.Point(401, 654)
         Me.lcxBotWDeadHand.Name = "lcxBotWDeadHand"
         Me.lcxBotWDeadHand.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxBotWDeadHand.Size = New System.Drawing.Size(181, 20)
@@ -1866,7 +1917,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbBotWTricks.AutoSize = True
         Me.nlbBotWTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbBotWTricks.Location = New System.Drawing.Point(401, 761)
+        Me.nlbBotWTricks.Location = New System.Drawing.Point(401, 618)
         Me.nlbBotWTricks.Name = "nlbBotWTricks"
         Me.nlbBotWTricks.Size = New System.Drawing.Size(155, 13)
         Me.nlbBotWTricks.TabIndex = 304
@@ -1874,7 +1925,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxBotWLensless
         '
-        Me.lcxBotWLensless.Location = New System.Drawing.Point(401, 778)
+        Me.lcxBotWLensless.Location = New System.Drawing.Point(401, 635)
         Me.lcxBotWLensless.Name = "lcxBotWLensless"
         Me.lcxBotWLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxBotWLensless.Size = New System.Drawing.Size(159, 20)
@@ -1885,7 +1936,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTStatue
         '
-        Me.lcxShTStatue.Location = New System.Drawing.Point(401, 674)
+        Me.lcxShTStatue.Location = New System.Drawing.Point(401, 531)
         Me.lcxShTStatue.Name = "lcxShTStatue"
         Me.lcxShTStatue.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTStatue.Size = New System.Drawing.Size(159, 20)
@@ -1896,7 +1947,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTMQGap
         '
-        Me.lcxShTMQGap.Location = New System.Drawing.Point(401, 692)
+        Me.lcxShTMQGap.Location = New System.Drawing.Point(401, 549)
         Me.lcxShTMQGap.Name = "lcxShTMQGap"
         Me.lcxShTMQGap.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTMQGap.Size = New System.Drawing.Size(159, 36)
@@ -1907,7 +1958,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTUmbrella
         '
-        Me.lcxShTUmbrella.Location = New System.Drawing.Point(401, 655)
+        Me.lcxShTUmbrella.Location = New System.Drawing.Point(401, 512)
         Me.lcxShTUmbrella.Name = "lcxShTUmbrella"
         Me.lcxShTUmbrella.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTUmbrella.Size = New System.Drawing.Size(124, 20)
@@ -1920,7 +1971,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbShTTricks.AutoSize = True
         Me.nlbShTTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbShTTricks.Location = New System.Drawing.Point(401, 587)
+        Me.nlbShTTricks.Location = New System.Drawing.Point(401, 444)
         Me.nlbShTTricks.Name = "nlbShTTricks"
         Me.nlbShTTricks.Size = New System.Drawing.Size(140, 13)
         Me.nlbShTTricks.TabIndex = 299
@@ -1928,7 +1979,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTLensless
         '
-        Me.lcxShTLensless.Location = New System.Drawing.Point(401, 604)
+        Me.lcxShTLensless.Location = New System.Drawing.Point(401, 461)
         Me.lcxShTLensless.Name = "lcxShTLensless"
         Me.lcxShTLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTLensless.Size = New System.Drawing.Size(150, 20)
@@ -1939,7 +1990,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSpTMQSunRoom
         '
-        Me.lcxSpTMQSunRoom.Location = New System.Drawing.Point(401, 550)
+        Me.lcxSpTMQSunRoom.Location = New System.Drawing.Point(201, 904)
         Me.lcxSpTMQSunRoom.Name = "lcxSpTMQSunRoom"
         Me.lcxSpTMQSunRoom.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSpTMQSunRoom.Size = New System.Drawing.Size(195, 36)
@@ -1950,7 +2001,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSpTMQLowAdult
         '
-        Me.lcxSpTMQLowAdult.Location = New System.Drawing.Point(401, 532)
+        Me.lcxSpTMQLowAdult.Location = New System.Drawing.Point(201, 886)
         Me.lcxSpTMQLowAdult.Name = "lcxSpTMQLowAdult"
         Me.lcxSpTMQLowAdult.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSpTMQLowAdult.Size = New System.Drawing.Size(195, 20)
@@ -1961,7 +2012,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSpTBombchu
         '
-        Me.lcxSpTBombchu.Location = New System.Drawing.Point(401, 481)
+        Me.lcxSpTBombchu.Location = New System.Drawing.Point(201, 835)
         Me.lcxSpTBombchu.Name = "lcxSpTBombchu"
         Me.lcxSpTBombchu.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSpTBombchu.Size = New System.Drawing.Size(181, 20)
@@ -1974,7 +2025,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbSpTTricks.AutoSize = True
         Me.nlbSpTTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbSpTTricks.Location = New System.Drawing.Point(401, 445)
+        Me.nlbSpTTricks.Location = New System.Drawing.Point(201, 799)
         Me.nlbSpTTricks.Name = "nlbSpTTricks"
         Me.nlbSpTTricks.Size = New System.Drawing.Size(124, 13)
         Me.nlbSpTTricks.TabIndex = 294
@@ -1982,7 +2033,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSpTWall
         '
-        Me.lcxSpTWall.Location = New System.Drawing.Point(401, 499)
+        Me.lcxSpTWall.Location = New System.Drawing.Point(201, 853)
         Me.lcxSpTWall.Name = "lcxSpTWall"
         Me.lcxSpTWall.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSpTWall.Size = New System.Drawing.Size(182, 36)
@@ -2356,7 +2407,7 @@ Partial Class frmTrackerOfTime
         Me.rtbDebug.BackColor = System.Drawing.SystemColors.Control
         Me.rtbDebug.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.rtbDebug.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rtbDebug.Location = New System.Drawing.Point(4, 437)
+        Me.rtbDebug.Location = New System.Drawing.Point(4, 563)
         Me.rtbDebug.MaxLength = 4096
         Me.rtbDebug.Name = "rtbDebug"
         Me.rtbDebug.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical
@@ -2427,12 +2478,88 @@ Partial Class frmTrackerOfTime
         '
         Me.pnlER.AllowDrop = True
         Me.pnlER.BackColor = System.Drawing.Color.Black
+        Me.pnlER.Controls.Add(Me.pbxTrialFire)
+        Me.pnlER.Controls.Add(Me.pbxTrialShadow)
+        Me.pnlER.Controls.Add(Me.pbxTrialForest)
+        Me.pnlER.Controls.Add(Me.pbxTrialLight)
+        Me.pnlER.Controls.Add(Me.pbxTrialWater)
+        Me.pnlER.Controls.Add(Me.pbxTrialSpirit)
         Me.pnlER.Controls.Add(Me.pbxMap)
         Me.pnlER.Location = New System.Drawing.Point(1, 537)
         Me.pnlER.Name = "pnlER"
         Me.pnlER.Size = New System.Drawing.Size(562, 492)
         Me.pnlER.TabIndex = 328
         Me.pnlER.Visible = False
+        '
+        'pbxTrialFire
+        '
+        Me.pbxTrialFire.Image = Global.Tracker_of_Time.My.Resources.Resources.trialFire
+        Me.pbxTrialFire.Location = New System.Drawing.Point(209, 37)
+        Me.pbxTrialFire.Name = "pbxTrialFire"
+        Me.pbxTrialFire.Size = New System.Drawing.Size(24, 24)
+        Me.pbxTrialFire.TabIndex = 341
+        Me.pbxTrialFire.TabStop = False
+        Me.pbxTrialFire.Visible = False
+        '
+        'pbxTrialShadow
+        '
+        Me.pbxTrialShadow.Image = Global.Tracker_of_Time.My.Resources.Resources.trialShadow
+        Me.pbxTrialShadow.Location = New System.Drawing.Point(333, 37)
+        Me.pbxTrialShadow.Name = "pbxTrialShadow"
+        Me.pbxTrialShadow.Size = New System.Drawing.Size(24, 24)
+        Me.pbxTrialShadow.TabIndex = 340
+        Me.pbxTrialShadow.TabStop = False
+        Me.pbxTrialShadow.Visible = False
+        '
+        'pbxTrialForest
+        '
+        Me.pbxTrialForest.Image = Global.Tracker_of_Time.My.Resources.Resources.trialForest
+        Me.pbxTrialForest.Location = New System.Drawing.Point(331, 253)
+        Me.pbxTrialForest.Name = "pbxTrialForest"
+        Me.pbxTrialForest.Size = New System.Drawing.Size(24, 24)
+        Me.pbxTrialForest.TabIndex = 339
+        Me.pbxTrialForest.TabStop = False
+        Me.pbxTrialForest.Visible = False
+        '
+        'pbxTrialLight
+        '
+        Me.pbxTrialLight.Image = Global.Tracker_of_Time.My.Resources.Resources.trialLight
+        Me.pbxTrialLight.Location = New System.Drawing.Point(146, 145)
+        Me.pbxTrialLight.Name = "pbxTrialLight"
+        Me.pbxTrialLight.Size = New System.Drawing.Size(24, 24)
+        Me.pbxTrialLight.TabIndex = 338
+        Me.pbxTrialLight.TabStop = False
+        Me.pbxTrialLight.Visible = False
+        '
+        'pbxTrialWater
+        '
+        Me.pbxTrialWater.Image = Global.Tracker_of_Time.My.Resources.Resources.trialWater
+        Me.pbxTrialWater.Location = New System.Drawing.Point(394, 145)
+        Me.pbxTrialWater.Name = "pbxTrialWater"
+        Me.pbxTrialWater.Size = New System.Drawing.Size(24, 24)
+        Me.pbxTrialWater.TabIndex = 337
+        Me.pbxTrialWater.TabStop = False
+        Me.pbxTrialWater.Visible = False
+        '
+        'pbxTrialSpirit
+        '
+        Me.pbxTrialSpirit.Image = Global.Tracker_of_Time.My.Resources.Resources.trialSpirit
+        Me.pbxTrialSpirit.Location = New System.Drawing.Point(208, 253)
+        Me.pbxTrialSpirit.Name = "pbxTrialSpirit"
+        Me.pbxTrialSpirit.Size = New System.Drawing.Size(24, 24)
+        Me.pbxTrialSpirit.TabIndex = 336
+        Me.pbxTrialSpirit.TabStop = False
+        Me.pbxTrialSpirit.Visible = False
+        '
+        'pbxMap
+        '
+        Me.pbxMap.BackColor = System.Drawing.Color.Black
+        Me.pbxMap.Image = Global.Tracker_of_Time.My.Resources.Resources.mapBlank
+        Me.pbxMap.Location = New System.Drawing.Point(4, 37)
+        Me.pbxMap.Name = "pbxMap"
+        Me.pbxMap.Size = New System.Drawing.Size(556, 417)
+        Me.pbxMap.TabIndex = 0
+        Me.pbxMap.TabStop = False
         '
         'rtbOutputRight
         '
@@ -2459,865 +2586,6 @@ Partial Class frmTrackerOfTime
         Me.rtbOutputLeft.TabIndex = 220
         Me.rtbOutputLeft.TabStop = False
         Me.rtbOutputLeft.Text = ""
-        '
-        'pnlSongsMedals
-        '
-        Me.pnlSongsMedals.BackColor = System.Drawing.Color.Black
-        Me.pnlSongsMedals.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.pnlSongsMedals.Controls.Add(Me.pbxSpawnAdult)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxSpawnYoung)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxSongOfStorms)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxSongOfTime)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxSunsSong)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxSariasSong)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxEponasSong)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxStoneZora)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxStoneGoron)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxStoneKokiri)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxMedalForest)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxMedalFire)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxMedalWater)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxMedalLight)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxMedalShadow)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxMedalSpirit)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxPreludeOfLight)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxNocturneOfShadow)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxRequiemOfSpirit)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxSerenadeOfWater)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxBoleroOfFire)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxMinuetOfForest)
-        Me.pnlSongsMedals.Controls.Add(Me.pbxZeldasLullaby)
-        Me.pnlSongsMedals.Location = New System.Drawing.Point(1, 207)
-        Me.pnlSongsMedals.Name = "pnlSongsMedals"
-        Me.pnlSongsMedals.Size = New System.Drawing.Size(562, 150)
-        Me.pnlSongsMedals.TabIndex = 225
-        '
-        'pnlDekuTree
-        '
-        Me.pnlDekuTree.Controls.Add(Me.lblDekuTree)
-        Me.pnlDekuTree.Controls.Add(Me.checkMQ1)
-        Me.pnlDekuTree.Location = New System.Drawing.Point(375, 543)
-        Me.pnlDekuTree.Name = "pnlDekuTree"
-        Me.pnlDekuTree.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlDekuTree.Size = New System.Drawing.Size(188, 25)
-        Me.pnlDekuTree.TabIndex = 168
-        '
-        'lblDekuTree
-        '
-        Me.lblDekuTree.AutoSize = True
-        Me.lblDekuTree.Location = New System.Drawing.Point(2, 6)
-        Me.lblDekuTree.Name = "lblDekuTree"
-        Me.lblDekuTree.Size = New System.Drawing.Size(81, 13)
-        Me.lblDekuTree.TabIndex = 8
-        Me.lblDekuTree.Text = "Deku Tree: 0/0"
-        '
-        'checkMQ1
-        '
-        Me.checkMQ1.AutoSize = True
-        Me.checkMQ1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.checkMQ1.Location = New System.Drawing.Point(4, 4)
-        Me.checkMQ1.Name = "checkMQ1"
-        Me.checkMQ1.Size = New System.Drawing.Size(40, 17)
-        Me.checkMQ1.TabIndex = 43
-        Me.checkMQ1.TabStop = False
-        Me.checkMQ1.Text = "MQ"
-        Me.checkMQ1.UseVisualStyleBackColor = True
-        Me.checkMQ1.Visible = False
-        '
-        'pnlDodongosCavern
-        '
-        Me.pnlDodongosCavern.Controls.Add(Me.lblDodongosCavern)
-        Me.pnlDodongosCavern.Controls.Add(Me.checkMQ2)
-        Me.pnlDodongosCavern.Location = New System.Drawing.Point(375, 567)
-        Me.pnlDodongosCavern.Name = "pnlDodongosCavern"
-        Me.pnlDodongosCavern.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlDodongosCavern.Size = New System.Drawing.Size(188, 25)
-        Me.pnlDodongosCavern.TabIndex = 169
-        '
-        'lblDodongosCavern
-        '
-        Me.lblDodongosCavern.AutoSize = True
-        Me.lblDodongosCavern.Location = New System.Drawing.Point(2, 6)
-        Me.lblDodongosCavern.Name = "lblDodongosCavern"
-        Me.lblDodongosCavern.Size = New System.Drawing.Size(118, 13)
-        Me.lblDodongosCavern.TabIndex = 85
-        Me.lblDodongosCavern.Text = "Dodongo's Cavern: 0/0"
-        '
-        'checkMQ2
-        '
-        Me.checkMQ2.AutoSize = True
-        Me.checkMQ2.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.checkMQ2.Location = New System.Drawing.Point(4, 4)
-        Me.checkMQ2.Name = "checkMQ2"
-        Me.checkMQ2.Size = New System.Drawing.Size(40, 17)
-        Me.checkMQ2.TabIndex = 44
-        Me.checkMQ2.TabStop = False
-        Me.checkMQ2.Text = "MQ"
-        Me.checkMQ2.UseVisualStyleBackColor = True
-        Me.checkMQ2.Visible = False
-        '
-        'pnlLostWoods
-        '
-        Me.pnlLostWoods.Controls.Add(Me.lblLostWoods)
-        Me.pnlLostWoods.Location = New System.Drawing.Point(1, 567)
-        Me.pnlLostWoods.Name = "pnlLostWoods"
-        Me.pnlLostWoods.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlLostWoods.Size = New System.Drawing.Size(188, 25)
-        Me.pnlLostWoods.TabIndex = 172
-        '
-        'lblLostWoods
-        '
-        Me.lblLostWoods.AutoSize = True
-        Me.lblLostWoods.Location = New System.Drawing.Point(2, 6)
-        Me.lblLostWoods.Name = "lblLostWoods"
-        Me.lblLostWoods.Size = New System.Drawing.Size(87, 13)
-        Me.lblLostWoods.TabIndex = 19
-        Me.lblLostWoods.Text = "Lost Woods: 0/0"
-        '
-        'pnlHyruleField
-        '
-        Me.pnlHyruleField.Controls.Add(Me.lblHyruleField)
-        Me.pnlHyruleField.Location = New System.Drawing.Point(1, 615)
-        Me.pnlHyruleField.Name = "pnlHyruleField"
-        Me.pnlHyruleField.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlHyruleField.Size = New System.Drawing.Size(188, 25)
-        Me.pnlHyruleField.TabIndex = 173
-        '
-        'lblHyruleField
-        '
-        Me.lblHyruleField.AutoSize = True
-        Me.lblHyruleField.Location = New System.Drawing.Point(2, 6)
-        Me.lblHyruleField.Name = "lblHyruleField"
-        Me.lblHyruleField.Size = New System.Drawing.Size(85, 13)
-        Me.lblHyruleField.TabIndex = 25
-        Me.lblHyruleField.Text = "Hyrule Field: 0/0"
-        '
-        'pnlLonLonRanch
-        '
-        Me.pnlLonLonRanch.Controls.Add(Me.lblLonLonRanch)
-        Me.pnlLonLonRanch.Location = New System.Drawing.Point(1, 639)
-        Me.pnlLonLonRanch.Name = "pnlLonLonRanch"
-        Me.pnlLonLonRanch.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlLonLonRanch.Size = New System.Drawing.Size(188, 25)
-        Me.pnlLonLonRanch.TabIndex = 174
-        '
-        'lblLonLonRanch
-        '
-        Me.lblLonLonRanch.AutoSize = True
-        Me.lblLonLonRanch.Location = New System.Drawing.Point(2, 6)
-        Me.lblLonLonRanch.Name = "lblLonLonRanch"
-        Me.lblLonLonRanch.Size = New System.Drawing.Size(104, 13)
-        Me.lblLonLonRanch.TabIndex = 55
-        Me.lblLonLonRanch.Text = "Lon Lon Ranch: 0/0"
-        '
-        'pnlKokiriForest
-        '
-        Me.pnlKokiriForest.Controls.Add(Me.lblKokiriForest)
-        Me.pnlKokiriForest.Location = New System.Drawing.Point(1, 543)
-        Me.pnlKokiriForest.Name = "pnlKokiriForest"
-        Me.pnlKokiriForest.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlKokiriForest.Size = New System.Drawing.Size(188, 25)
-        Me.pnlKokiriForest.TabIndex = 171
-        '
-        'lblKokiriForest
-        '
-        Me.lblKokiriForest.AutoSize = True
-        Me.lblKokiriForest.Location = New System.Drawing.Point(2, 6)
-        Me.lblKokiriForest.Name = "lblKokiriForest"
-        Me.lblKokiriForest.Size = New System.Drawing.Size(88, 13)
-        Me.lblKokiriForest.TabIndex = 16
-        Me.lblKokiriForest.Text = "Kokiri Forest: 0/0"
-        '
-        'pnlLakeHylia
-        '
-        Me.pnlLakeHylia.Controls.Add(Me.lblLakeHylia)
-        Me.pnlLakeHylia.Location = New System.Drawing.Point(188, 639)
-        Me.pnlLakeHylia.Name = "pnlLakeHylia"
-        Me.pnlLakeHylia.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlLakeHylia.Size = New System.Drawing.Size(188, 25)
-        Me.pnlLakeHylia.TabIndex = 175
-        '
-        'lblLakeHylia
-        '
-        Me.lblLakeHylia.AutoSize = True
-        Me.lblLakeHylia.Location = New System.Drawing.Point(2, 6)
-        Me.lblLakeHylia.Name = "lblLakeHylia"
-        Me.lblLakeHylia.Size = New System.Drawing.Size(80, 13)
-        Me.lblLakeHylia.TabIndex = 26
-        Me.lblLakeHylia.Text = "Lake Hylia: 0/0"
-        '
-        'pnlSacredForestMeadow
-        '
-        Me.pnlSacredForestMeadow.Controls.Add(Me.lblSacredForestMeadow)
-        Me.pnlSacredForestMeadow.Location = New System.Drawing.Point(1, 591)
-        Me.pnlSacredForestMeadow.Name = "pnlSacredForestMeadow"
-        Me.pnlSacredForestMeadow.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlSacredForestMeadow.Size = New System.Drawing.Size(188, 25)
-        Me.pnlSacredForestMeadow.TabIndex = 226
-        '
-        'lblSacredForestMeadow
-        '
-        Me.lblSacredForestMeadow.AutoSize = True
-        Me.lblSacredForestMeadow.Location = New System.Drawing.Point(2, 6)
-        Me.lblSacredForestMeadow.Name = "lblSacredForestMeadow"
-        Me.lblSacredForestMeadow.Size = New System.Drawing.Size(140, 13)
-        Me.lblSacredForestMeadow.TabIndex = 19
-        Me.lblSacredForestMeadow.Text = "Sacred Forest Meadow: 0/0"
-        '
-        'pnlGerudoFortress
-        '
-        Me.pnlGerudoFortress.Controls.Add(Me.lblGerudoFortress)
-        Me.pnlGerudoFortress.Location = New System.Drawing.Point(188, 687)
-        Me.pnlGerudoFortress.Name = "pnlGerudoFortress"
-        Me.pnlGerudoFortress.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlGerudoFortress.Size = New System.Drawing.Size(188, 25)
-        Me.pnlGerudoFortress.TabIndex = 177
-        '
-        'lblGerudoFortress
-        '
-        Me.lblGerudoFortress.AutoSize = True
-        Me.lblGerudoFortress.Location = New System.Drawing.Point(2, 6)
-        Me.lblGerudoFortress.Name = "lblGerudoFortress"
-        Me.lblGerudoFortress.Size = New System.Drawing.Size(105, 13)
-        Me.lblGerudoFortress.TabIndex = 178
-        Me.lblGerudoFortress.Text = "Gerudo Fortress: 0/0"
-        '
-        'pnlHauntedWasteland
-        '
-        Me.pnlHauntedWasteland.Controls.Add(Me.lblHauntedWasteland)
-        Me.pnlHauntedWasteland.Location = New System.Drawing.Point(188, 711)
-        Me.pnlHauntedWasteland.Name = "pnlHauntedWasteland"
-        Me.pnlHauntedWasteland.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlHauntedWasteland.Size = New System.Drawing.Size(188, 25)
-        Me.pnlHauntedWasteland.TabIndex = 178
-        '
-        'lblHauntedWasteland
-        '
-        Me.lblHauntedWasteland.AutoSize = True
-        Me.lblHauntedWasteland.Location = New System.Drawing.Point(2, 6)
-        Me.lblHauntedWasteland.Name = "lblHauntedWasteland"
-        Me.lblHauntedWasteland.Size = New System.Drawing.Size(125, 13)
-        Me.lblHauntedWasteland.TabIndex = 179
-        Me.lblHauntedWasteland.Text = "Haunted Wasteland: 0/0"
-        '
-        'pnlMarket
-        '
-        Me.pnlMarket.Controls.Add(Me.lblMarket)
-        Me.pnlMarket.Location = New System.Drawing.Point(1, 663)
-        Me.pnlMarket.Name = "pnlMarket"
-        Me.pnlMarket.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlMarket.Size = New System.Drawing.Size(188, 25)
-        Me.pnlMarket.TabIndex = 180
-        '
-        'lblMarket
-        '
-        Me.lblMarket.AutoSize = True
-        Me.lblMarket.Location = New System.Drawing.Point(2, 6)
-        Me.lblMarket.Name = "lblMarket"
-        Me.lblMarket.Size = New System.Drawing.Size(85, 13)
-        Me.lblMarket.TabIndex = 181
-        Me.lblMarket.Text = "The Market: 0/0"
-        '
-        'pnlGanonsCastle
-        '
-        Me.pnlGanonsCastle.Controls.Add(Me.lblGanonsCastle)
-        Me.pnlGanonsCastle.Controls.Add(Me.checkMQ12)
-        Me.pnlGanonsCastle.Location = New System.Drawing.Point(375, 807)
-        Me.pnlGanonsCastle.Name = "pnlGanonsCastle"
-        Me.pnlGanonsCastle.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlGanonsCastle.Size = New System.Drawing.Size(188, 25)
-        Me.pnlGanonsCastle.TabIndex = 219
-        '
-        'lblGanonsCastle
-        '
-        Me.lblGanonsCastle.AutoSize = True
-        Me.lblGanonsCastle.Location = New System.Drawing.Point(2, 6)
-        Me.lblGanonsCastle.Name = "lblGanonsCastle"
-        Me.lblGanonsCastle.Size = New System.Drawing.Size(101, 13)
-        Me.lblGanonsCastle.TabIndex = 138
-        Me.lblGanonsCastle.Text = "Ganon's Castle: 0/0"
-        '
-        'checkMQ12
-        '
-        Me.checkMQ12.AutoSize = True
-        Me.checkMQ12.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.checkMQ12.Location = New System.Drawing.Point(4, 4)
-        Me.checkMQ12.Name = "checkMQ12"
-        Me.checkMQ12.Size = New System.Drawing.Size(40, 17)
-        Me.checkMQ12.TabIndex = 51
-        Me.checkMQ12.TabStop = False
-        Me.checkMQ12.Text = "MQ"
-        Me.checkMQ12.UseVisualStyleBackColor = True
-        Me.checkMQ12.Visible = False
-        '
-        'pnlHyruleCastle
-        '
-        Me.pnlHyruleCastle.Controls.Add(Me.lblHyruleCastle)
-        Me.pnlHyruleCastle.Location = New System.Drawing.Point(1, 711)
-        Me.pnlHyruleCastle.Name = "pnlHyruleCastle"
-        Me.pnlHyruleCastle.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlHyruleCastle.Size = New System.Drawing.Size(188, 25)
-        Me.pnlHyruleCastle.TabIndex = 181
-        '
-        'lblHyruleCastle
-        '
-        Me.lblHyruleCastle.AutoSize = True
-        Me.lblHyruleCastle.Location = New System.Drawing.Point(2, 6)
-        Me.lblHyruleCastle.Name = "lblHyruleCastle"
-        Me.lblHyruleCastle.Size = New System.Drawing.Size(92, 13)
-        Me.lblHyruleCastle.TabIndex = 182
-        Me.lblHyruleCastle.Text = "Hyrule Castle: 0/0"
-        '
-        'pnlWaterTemple
-        '
-        Me.pnlWaterTemple.Controls.Add(Me.lblWaterTemple)
-        Me.pnlWaterTemple.Controls.Add(Me.checkMQ6)
-        Me.pnlWaterTemple.Location = New System.Drawing.Point(375, 663)
-        Me.pnlWaterTemple.Name = "pnlWaterTemple"
-        Me.pnlWaterTemple.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlWaterTemple.Size = New System.Drawing.Size(188, 25)
-        Me.pnlWaterTemple.TabIndex = 218
-        '
-        'lblWaterTemple
-        '
-        Me.lblWaterTemple.AutoSize = True
-        Me.lblWaterTemple.Location = New System.Drawing.Point(2, 6)
-        Me.lblWaterTemple.Name = "lblWaterTemple"
-        Me.lblWaterTemple.Size = New System.Drawing.Size(97, 13)
-        Me.lblWaterTemple.TabIndex = 137
-        Me.lblWaterTemple.Text = "Water Temple: 0/0"
-        '
-        'checkMQ6
-        '
-        Me.checkMQ6.AutoSize = True
-        Me.checkMQ6.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.checkMQ6.Location = New System.Drawing.Point(4, 4)
-        Me.checkMQ6.Name = "checkMQ6"
-        Me.checkMQ6.Size = New System.Drawing.Size(40, 17)
-        Me.checkMQ6.TabIndex = 49
-        Me.checkMQ6.TabStop = False
-        Me.checkMQ6.Text = "MQ"
-        Me.checkMQ6.UseVisualStyleBackColor = True
-        Me.checkMQ6.Visible = False
-        '
-        'pnlGraveyard
-        '
-        Me.pnlGraveyard.Controls.Add(Me.lblGraveyard)
-        Me.pnlGraveyard.Location = New System.Drawing.Point(1, 759)
-        Me.pnlGraveyard.Name = "pnlGraveyard"
-        Me.pnlGraveyard.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlGraveyard.Size = New System.Drawing.Size(188, 25)
-        Me.pnlGraveyard.TabIndex = 183
-        '
-        'lblGraveyard
-        '
-        Me.lblGraveyard.AutoSize = True
-        Me.lblGraveyard.Location = New System.Drawing.Point(2, 6)
-        Me.lblGraveyard.Name = "lblGraveyard"
-        Me.lblGraveyard.Size = New System.Drawing.Size(79, 13)
-        Me.lblGraveyard.TabIndex = 78
-        Me.lblGraveyard.Text = "Graveyard: 0/0"
-        '
-        'pnlIceCavern
-        '
-        Me.pnlIceCavern.Controls.Add(Me.lblIceCavern)
-        Me.pnlIceCavern.Controls.Add(Me.checkMQ10)
-        Me.pnlIceCavern.Location = New System.Drawing.Point(375, 759)
-        Me.pnlIceCavern.Name = "pnlIceCavern"
-        Me.pnlIceCavern.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlIceCavern.Size = New System.Drawing.Size(188, 25)
-        Me.pnlIceCavern.TabIndex = 209
-        '
-        'lblIceCavern
-        '
-        Me.lblIceCavern.AutoSize = True
-        Me.lblIceCavern.Location = New System.Drawing.Point(2, 6)
-        Me.lblIceCavern.Name = "lblIceCavern"
-        Me.lblIceCavern.Size = New System.Drawing.Size(82, 13)
-        Me.lblIceCavern.TabIndex = 117
-        Me.lblIceCavern.Text = "Ice Cavern: 0/0"
-        '
-        'checkMQ10
-        '
-        Me.checkMQ10.AutoSize = True
-        Me.checkMQ10.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.checkMQ10.Location = New System.Drawing.Point(4, 4)
-        Me.checkMQ10.Name = "checkMQ10"
-        Me.checkMQ10.Size = New System.Drawing.Size(40, 17)
-        Me.checkMQ10.TabIndex = 53
-        Me.checkMQ10.TabStop = False
-        Me.checkMQ10.Text = "MQ"
-        Me.checkMQ10.UseVisualStyleBackColor = True
-        Me.checkMQ10.Visible = False
-        '
-        'pnlDMCrater
-        '
-        Me.pnlDMCrater.Controls.Add(Me.lblDMCrater)
-        Me.pnlDMCrater.Location = New System.Drawing.Point(1, 807)
-        Me.pnlDMCrater.Name = "pnlDMCrater"
-        Me.pnlDMCrater.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlDMCrater.Size = New System.Drawing.Size(188, 25)
-        Me.pnlDMCrater.TabIndex = 185
-        '
-        'lblDMCrater
-        '
-        Me.lblDMCrater.AutoSize = True
-        Me.lblDMCrater.Location = New System.Drawing.Point(2, 6)
-        Me.lblDMCrater.Name = "lblDMCrater"
-        Me.lblDMCrater.Size = New System.Drawing.Size(137, 13)
-        Me.lblDMCrater.TabIndex = 133
-        Me.lblDMCrater.Text = "Death Mountain Crater: 0/0"
-        '
-        'pnlForestTemple
-        '
-        Me.pnlForestTemple.Controls.Add(Me.lblForestTemple)
-        Me.pnlForestTemple.Controls.Add(Me.checkMQ4)
-        Me.pnlForestTemple.Location = New System.Drawing.Point(375, 615)
-        Me.pnlForestTemple.Name = "pnlForestTemple"
-        Me.pnlForestTemple.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlForestTemple.Size = New System.Drawing.Size(188, 25)
-        Me.pnlForestTemple.TabIndex = 200
-        '
-        'lblForestTemple
-        '
-        Me.lblForestTemple.AutoSize = True
-        Me.lblForestTemple.Location = New System.Drawing.Point(2, 6)
-        Me.lblForestTemple.Name = "lblForestTemple"
-        Me.lblForestTemple.Size = New System.Drawing.Size(97, 13)
-        Me.lblForestTemple.TabIndex = 0
-        Me.lblForestTemple.Text = "Forest Temple: 0/0"
-        '
-        'checkMQ4
-        '
-        Me.checkMQ4.AutoSize = True
-        Me.checkMQ4.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.checkMQ4.Location = New System.Drawing.Point(4, 4)
-        Me.checkMQ4.Name = "checkMQ4"
-        Me.checkMQ4.Size = New System.Drawing.Size(40, 17)
-        Me.checkMQ4.TabIndex = 45
-        Me.checkMQ4.TabStop = False
-        Me.checkMQ4.Text = "MQ"
-        Me.checkMQ4.UseVisualStyleBackColor = True
-        Me.checkMQ4.Visible = False
-        '
-        'pnlGoronCity
-        '
-        Me.pnlGoronCity.Controls.Add(Me.lblGoronCity)
-        Me.pnlGoronCity.Location = New System.Drawing.Point(188, 543)
-        Me.pnlGoronCity.Name = "pnlGoronCity"
-        Me.pnlGoronCity.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlGoronCity.Size = New System.Drawing.Size(188, 25)
-        Me.pnlGoronCity.TabIndex = 186
-        '
-        'lblGoronCity
-        '
-        Me.lblGoronCity.AutoSize = True
-        Me.lblGoronCity.Location = New System.Drawing.Point(2, 6)
-        Me.lblGoronCity.Name = "lblGoronCity"
-        Me.lblGoronCity.Size = New System.Drawing.Size(79, 13)
-        Me.lblGoronCity.TabIndex = 93
-        Me.lblGoronCity.Text = "Goron City: 0/0"
-        '
-        'pnlBottomOfTheWell
-        '
-        Me.pnlBottomOfTheWell.Controls.Add(Me.lblBottomOfTheWell)
-        Me.pnlBottomOfTheWell.Controls.Add(Me.checkMQ9)
-        Me.pnlBottomOfTheWell.Location = New System.Drawing.Point(375, 735)
-        Me.pnlBottomOfTheWell.Name = "pnlBottomOfTheWell"
-        Me.pnlBottomOfTheWell.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlBottomOfTheWell.Size = New System.Drawing.Size(188, 25)
-        Me.pnlBottomOfTheWell.TabIndex = 217
-        '
-        'lblBottomOfTheWell
-        '
-        Me.lblBottomOfTheWell.AutoSize = True
-        Me.lblBottomOfTheWell.Location = New System.Drawing.Point(2, 6)
-        Me.lblBottomOfTheWell.Name = "lblBottomOfTheWell"
-        Me.lblBottomOfTheWell.Size = New System.Drawing.Size(117, 13)
-        Me.lblBottomOfTheWell.TabIndex = 137
-        Me.lblBottomOfTheWell.Text = "Bottom of the Well: 0/0"
-        '
-        'checkMQ9
-        '
-        Me.checkMQ9.AutoSize = True
-        Me.checkMQ9.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.checkMQ9.Location = New System.Drawing.Point(4, 4)
-        Me.checkMQ9.Name = "checkMQ9"
-        Me.checkMQ9.Size = New System.Drawing.Size(40, 17)
-        Me.checkMQ9.TabIndex = 54
-        Me.checkMQ9.TabStop = False
-        Me.checkMQ9.Text = "MQ"
-        Me.checkMQ9.UseVisualStyleBackColor = True
-        Me.checkMQ9.Visible = False
-        '
-        'pnlGerudoValley
-        '
-        Me.pnlGerudoValley.Controls.Add(Me.lblGerudoValley)
-        Me.pnlGerudoValley.Location = New System.Drawing.Point(188, 663)
-        Me.pnlGerudoValley.Name = "pnlGerudoValley"
-        Me.pnlGerudoValley.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlGerudoValley.Size = New System.Drawing.Size(188, 25)
-        Me.pnlGerudoValley.TabIndex = 176
-        '
-        'lblGerudoValley
-        '
-        Me.lblGerudoValley.AutoSize = True
-        Me.lblGerudoValley.Location = New System.Drawing.Point(2, 6)
-        Me.lblGerudoValley.Name = "lblGerudoValley"
-        Me.lblGerudoValley.Size = New System.Drawing.Size(96, 13)
-        Me.lblGerudoValley.TabIndex = 28
-        Me.lblGerudoValley.Text = "Gerudo Valley: 0/0"
-        '
-        'pnlSpiritTemple
-        '
-        Me.pnlSpiritTemple.Controls.Add(Me.lblSpiritTemple)
-        Me.pnlSpiritTemple.Controls.Add(Me.checkMQ7)
-        Me.pnlSpiritTemple.Location = New System.Drawing.Point(375, 687)
-        Me.pnlSpiritTemple.Name = "pnlSpiritTemple"
-        Me.pnlSpiritTemple.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlSpiritTemple.Size = New System.Drawing.Size(188, 25)
-        Me.pnlSpiritTemple.TabIndex = 216
-        '
-        'lblSpiritTemple
-        '
-        Me.lblSpiritTemple.AutoSize = True
-        Me.lblSpiritTemple.Location = New System.Drawing.Point(2, 6)
-        Me.lblSpiritTemple.Name = "lblSpiritTemple"
-        Me.lblSpiritTemple.Size = New System.Drawing.Size(91, 13)
-        Me.lblSpiritTemple.TabIndex = 136
-        Me.lblSpiritTemple.Text = "Spirit Temple: 0/0"
-        '
-        'checkMQ7
-        '
-        Me.checkMQ7.AutoSize = True
-        Me.checkMQ7.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.checkMQ7.Location = New System.Drawing.Point(4, 4)
-        Me.checkMQ7.Name = "checkMQ7"
-        Me.checkMQ7.Size = New System.Drawing.Size(40, 17)
-        Me.checkMQ7.TabIndex = 48
-        Me.checkMQ7.TabStop = False
-        Me.checkMQ7.Text = "MQ"
-        Me.checkMQ7.UseVisualStyleBackColor = True
-        Me.checkMQ7.Visible = False
-        '
-        'pnlZorasRiver
-        '
-        Me.pnlZorasRiver.Controls.Add(Me.lblZorasRiver)
-        Me.pnlZorasRiver.Location = New System.Drawing.Point(188, 567)
-        Me.pnlZorasRiver.Name = "pnlZorasRiver"
-        Me.pnlZorasRiver.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlZorasRiver.Size = New System.Drawing.Size(188, 25)
-        Me.pnlZorasRiver.TabIndex = 187
-        '
-        'lblZorasRiver
-        '
-        Me.lblZorasRiver.AutoSize = True
-        Me.lblZorasRiver.Location = New System.Drawing.Point(2, 6)
-        Me.lblZorasRiver.Name = "lblZorasRiver"
-        Me.lblZorasRiver.Size = New System.Drawing.Size(87, 13)
-        Me.lblZorasRiver.TabIndex = 0
-        Me.lblZorasRiver.Text = "Zora's River: 0/0"
-        '
-        'pnlShadowTemple
-        '
-        Me.pnlShadowTemple.Controls.Add(Me.lblShadowTemple)
-        Me.pnlShadowTemple.Controls.Add(Me.checkMQ8)
-        Me.pnlShadowTemple.Location = New System.Drawing.Point(375, 711)
-        Me.pnlShadowTemple.Name = "pnlShadowTemple"
-        Me.pnlShadowTemple.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlShadowTemple.Size = New System.Drawing.Size(188, 25)
-        Me.pnlShadowTemple.TabIndex = 215
-        '
-        'lblShadowTemple
-        '
-        Me.lblShadowTemple.AutoSize = True
-        Me.lblShadowTemple.Location = New System.Drawing.Point(2, 6)
-        Me.lblShadowTemple.Name = "lblShadowTemple"
-        Me.lblShadowTemple.Size = New System.Drawing.Size(107, 13)
-        Me.lblShadowTemple.TabIndex = 136
-        Me.lblShadowTemple.Text = "Shadow Temple: 0/0"
-        '
-        'checkMQ8
-        '
-        Me.checkMQ8.AutoSize = True
-        Me.checkMQ8.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.checkMQ8.Location = New System.Drawing.Point(4, 4)
-        Me.checkMQ8.Name = "checkMQ8"
-        Me.checkMQ8.Size = New System.Drawing.Size(40, 17)
-        Me.checkMQ8.TabIndex = 47
-        Me.checkMQ8.TabStop = False
-        Me.checkMQ8.Text = "MQ"
-        Me.checkMQ8.UseVisualStyleBackColor = True
-        Me.checkMQ8.Visible = False
-        '
-        'pnlZorasDomain
-        '
-        Me.pnlZorasDomain.Controls.Add(Me.lblZorasDomain)
-        Me.pnlZorasDomain.Location = New System.Drawing.Point(188, 591)
-        Me.pnlZorasDomain.Name = "pnlZorasDomain"
-        Me.pnlZorasDomain.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlZorasDomain.Size = New System.Drawing.Size(188, 25)
-        Me.pnlZorasDomain.TabIndex = 188
-        '
-        'lblZorasDomain
-        '
-        Me.lblZorasDomain.AutoSize = True
-        Me.lblZorasDomain.Location = New System.Drawing.Point(2, 6)
-        Me.lblZorasDomain.Name = "lblZorasDomain"
-        Me.lblZorasDomain.Size = New System.Drawing.Size(98, 13)
-        Me.lblZorasDomain.TabIndex = 113
-        Me.lblZorasDomain.Text = "Zora's Domain: 0/0"
-        '
-        'pnlOutsideGanonsCastle
-        '
-        Me.pnlOutsideGanonsCastle.Controls.Add(Me.lblOutsideGanonsCastle)
-        Me.pnlOutsideGanonsCastle.Location = New System.Drawing.Point(188, 759)
-        Me.pnlOutsideGanonsCastle.Name = "pnlOutsideGanonsCastle"
-        Me.pnlOutsideGanonsCastle.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlOutsideGanonsCastle.Size = New System.Drawing.Size(188, 25)
-        Me.pnlOutsideGanonsCastle.TabIndex = 180
-        '
-        'lblOutsideGanonsCastle
-        '
-        Me.lblOutsideGanonsCastle.AutoSize = True
-        Me.lblOutsideGanonsCastle.Location = New System.Drawing.Point(2, 6)
-        Me.lblOutsideGanonsCastle.Name = "lblOutsideGanonsCastle"
-        Me.lblOutsideGanonsCastle.Size = New System.Drawing.Size(140, 13)
-        Me.lblOutsideGanonsCastle.TabIndex = 179
-        Me.lblOutsideGanonsCastle.Text = "Outside Ganon's Castle: 0/0"
-        '
-        'pnlTempleOfTime
-        '
-        Me.pnlTempleOfTime.Controls.Add(Me.lblTempleOfTime)
-        Me.pnlTempleOfTime.Location = New System.Drawing.Point(1, 687)
-        Me.pnlTempleOfTime.Name = "pnlTempleOfTime"
-        Me.pnlTempleOfTime.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlTempleOfTime.Size = New System.Drawing.Size(188, 25)
-        Me.pnlTempleOfTime.TabIndex = 201
-        '
-        'lblTempleOfTime
-        '
-        Me.lblTempleOfTime.AutoSize = True
-        Me.lblTempleOfTime.Location = New System.Drawing.Point(2, 6)
-        Me.lblTempleOfTime.Name = "lblTempleOfTime"
-        Me.lblTempleOfTime.Size = New System.Drawing.Size(103, 13)
-        Me.lblTempleOfTime.TabIndex = 0
-        Me.lblTempleOfTime.Text = "Temple of Time: 0/0"
-        '
-        'pnlQuestGoldSkulltulas
-        '
-        Me.pnlQuestGoldSkulltulas.Controls.Add(Me.lblQuestGoldSkulltulas)
-        Me.pnlQuestGoldSkulltulas.Location = New System.Drawing.Point(188, 783)
-        Me.pnlQuestGoldSkulltulas.Name = "pnlQuestGoldSkulltulas"
-        Me.pnlQuestGoldSkulltulas.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlQuestGoldSkulltulas.Size = New System.Drawing.Size(188, 25)
-        Me.pnlQuestGoldSkulltulas.TabIndex = 207
-        '
-        'lblQuestGoldSkulltulas
-        '
-        Me.lblQuestGoldSkulltulas.AutoSize = True
-        Me.lblQuestGoldSkulltulas.Location = New System.Drawing.Point(2, 6)
-        Me.lblQuestGoldSkulltulas.Name = "lblQuestGoldSkulltulas"
-        Me.lblQuestGoldSkulltulas.Size = New System.Drawing.Size(149, 13)
-        Me.lblQuestGoldSkulltulas.TabIndex = 0
-        Me.lblQuestGoldSkulltulas.Text = "Quest: Skulltula Rewards: 0/0"
-        '
-        'pnlDMTrail
-        '
-        Me.pnlDMTrail.Controls.Add(Me.lblDMTrail)
-        Me.pnlDMTrail.Location = New System.Drawing.Point(1, 783)
-        Me.pnlDMTrail.Name = "pnlDMTrail"
-        Me.pnlDMTrail.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlDMTrail.Size = New System.Drawing.Size(188, 25)
-        Me.pnlDMTrail.TabIndex = 184
-        '
-        'lblDMTrail
-        '
-        Me.lblDMTrail.AutoSize = True
-        Me.lblDMTrail.Location = New System.Drawing.Point(2, 6)
-        Me.lblDMTrail.Name = "lblDMTrail"
-        Me.lblDMTrail.Size = New System.Drawing.Size(129, 13)
-        Me.lblDMTrail.TabIndex = 80
-        Me.lblDMTrail.Text = "Death Mountain Trail: 0/0"
-        '
-        'pnlJabuJabusBelly
-        '
-        Me.pnlJabuJabusBelly.Controls.Add(Me.lblJabuJabusBelly)
-        Me.pnlJabuJabusBelly.Controls.Add(Me.checkMQ3)
-        Me.pnlJabuJabusBelly.Location = New System.Drawing.Point(375, 591)
-        Me.pnlJabuJabusBelly.Name = "pnlJabuJabusBelly"
-        Me.pnlJabuJabusBelly.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlJabuJabusBelly.Size = New System.Drawing.Size(188, 25)
-        Me.pnlJabuJabusBelly.TabIndex = 214
-        '
-        'lblJabuJabusBelly
-        '
-        Me.lblJabuJabusBelly.AutoSize = True
-        Me.lblJabuJabusBelly.Location = New System.Drawing.Point(2, 6)
-        Me.lblJabuJabusBelly.Name = "lblJabuJabusBelly"
-        Me.lblJabuJabusBelly.Size = New System.Drawing.Size(111, 13)
-        Me.lblJabuJabusBelly.TabIndex = 0
-        Me.lblJabuJabusBelly.Text = "Jabu-Jabu's Belly: 0/0"
-        '
-        'checkMQ3
-        '
-        Me.checkMQ3.AutoSize = True
-        Me.checkMQ3.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.checkMQ3.Location = New System.Drawing.Point(4, 4)
-        Me.checkMQ3.Name = "checkMQ3"
-        Me.checkMQ3.Size = New System.Drawing.Size(40, 17)
-        Me.checkMQ3.TabIndex = 46
-        Me.checkMQ3.TabStop = False
-        Me.checkMQ3.Text = "MQ"
-        Me.checkMQ3.UseVisualStyleBackColor = True
-        Me.checkMQ3.Visible = False
-        '
-        'pnlDesertColossus
-        '
-        Me.pnlDesertColossus.Controls.Add(Me.lblDesertColossus)
-        Me.pnlDesertColossus.Location = New System.Drawing.Point(188, 735)
-        Me.pnlDesertColossus.Name = "pnlDesertColossus"
-        Me.pnlDesertColossus.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlDesertColossus.Size = New System.Drawing.Size(188, 25)
-        Me.pnlDesertColossus.TabIndex = 179
-        '
-        'lblDesertColossus
-        '
-        Me.lblDesertColossus.AutoSize = True
-        Me.lblDesertColossus.Location = New System.Drawing.Point(2, 6)
-        Me.lblDesertColossus.Name = "lblDesertColossus"
-        Me.lblDesertColossus.Size = New System.Drawing.Size(106, 13)
-        Me.lblDesertColossus.TabIndex = 180
-        Me.lblDesertColossus.Text = "Desert Colossus: 0/0"
-        '
-        'pnlGerudoTrainingGround
-        '
-        Me.pnlGerudoTrainingGround.Controls.Add(Me.lblGerudoTrainingGround)
-        Me.pnlGerudoTrainingGround.Controls.Add(Me.checkMQ11)
-        Me.pnlGerudoTrainingGround.Location = New System.Drawing.Point(375, 783)
-        Me.pnlGerudoTrainingGround.Name = "pnlGerudoTrainingGround"
-        Me.pnlGerudoTrainingGround.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlGerudoTrainingGround.Size = New System.Drawing.Size(188, 25)
-        Me.pnlGerudoTrainingGround.TabIndex = 213
-        '
-        'lblGerudoTrainingGround
-        '
-        Me.lblGerudoTrainingGround.AutoSize = True
-        Me.lblGerudoTrainingGround.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblGerudoTrainingGround.Location = New System.Drawing.Point(2, 6)
-        Me.lblGerudoTrainingGround.Name = "lblGerudoTrainingGround"
-        Me.lblGerudoTrainingGround.Size = New System.Drawing.Size(144, 13)
-        Me.lblGerudoTrainingGround.TabIndex = 0
-        Me.lblGerudoTrainingGround.Text = "Gerudo Training Ground: 0/0"
-        '
-        'checkMQ11
-        '
-        Me.checkMQ11.AutoSize = True
-        Me.checkMQ11.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.checkMQ11.Location = New System.Drawing.Point(4, 4)
-        Me.checkMQ11.Name = "checkMQ11"
-        Me.checkMQ11.Size = New System.Drawing.Size(40, 17)
-        Me.checkMQ11.TabIndex = 52
-        Me.checkMQ11.TabStop = False
-        Me.checkMQ11.Text = "MQ"
-        Me.checkMQ11.UseVisualStyleBackColor = True
-        Me.checkMQ11.Visible = False
-        '
-        'pnlZorasFountain
-        '
-        Me.pnlZorasFountain.Controls.Add(Me.lblZorasFountain)
-        Me.pnlZorasFountain.Location = New System.Drawing.Point(188, 615)
-        Me.pnlZorasFountain.Name = "pnlZorasFountain"
-        Me.pnlZorasFountain.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlZorasFountain.Size = New System.Drawing.Size(188, 25)
-        Me.pnlZorasFountain.TabIndex = 208
-        '
-        'lblZorasFountain
-        '
-        Me.lblZorasFountain.AutoSize = True
-        Me.lblZorasFountain.Location = New System.Drawing.Point(2, 6)
-        Me.lblZorasFountain.Name = "lblZorasFountain"
-        Me.lblZorasFountain.Size = New System.Drawing.Size(103, 13)
-        Me.lblZorasFountain.TabIndex = 114
-        Me.lblZorasFountain.Text = "Zora's Fountain: 0/0"
-        '
-        'pnlKakarikoVillage
-        '
-        Me.pnlKakarikoVillage.Controls.Add(Me.lblKakarikoVillage)
-        Me.pnlKakarikoVillage.Location = New System.Drawing.Point(1, 735)
-        Me.pnlKakarikoVillage.Name = "pnlKakarikoVillage"
-        Me.pnlKakarikoVillage.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlKakarikoVillage.Size = New System.Drawing.Size(188, 25)
-        Me.pnlKakarikoVillage.TabIndex = 182
-        '
-        'lblKakarikoVillage
-        '
-        Me.lblKakarikoVillage.AutoSize = True
-        Me.lblKakarikoVillage.Location = New System.Drawing.Point(2, 6)
-        Me.lblKakarikoVillage.Name = "lblKakarikoVillage"
-        Me.lblKakarikoVillage.Size = New System.Drawing.Size(106, 13)
-        Me.lblKakarikoVillage.TabIndex = 72
-        Me.lblKakarikoVillage.Text = "Kakariko Village: 0/0"
-        '
-        'pnlQuestMasks
-        '
-        Me.pnlQuestMasks.Controls.Add(Me.lblQuestMasks)
-        Me.pnlQuestMasks.Location = New System.Drawing.Point(188, 807)
-        Me.pnlQuestMasks.Name = "pnlQuestMasks"
-        Me.pnlQuestMasks.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlQuestMasks.Size = New System.Drawing.Size(188, 25)
-        Me.pnlQuestMasks.TabIndex = 210
-        '
-        'lblQuestMasks
-        '
-        Me.lblQuestMasks.AutoSize = True
-        Me.lblQuestMasks.Location = New System.Drawing.Point(2, 6)
-        Me.lblQuestMasks.Name = "lblQuestMasks"
-        Me.lblQuestMasks.Size = New System.Drawing.Size(95, 13)
-        Me.lblQuestMasks.TabIndex = 103
-        Me.lblQuestMasks.Text = "Quest: Masks: 0/0"
-        '
-        'pnlFireTemple
-        '
-        Me.pnlFireTemple.Controls.Add(Me.lblFireTemple)
-        Me.pnlFireTemple.Controls.Add(Me.checkMQ5)
-        Me.pnlFireTemple.Location = New System.Drawing.Point(375, 639)
-        Me.pnlFireTemple.Name = "pnlFireTemple"
-        Me.pnlFireTemple.Padding = New System.Windows.Forms.Padding(1)
-        Me.pnlFireTemple.Size = New System.Drawing.Size(188, 25)
-        Me.pnlFireTemple.TabIndex = 212
-        '
-        'lblFireTemple
-        '
-        Me.lblFireTemple.AutoSize = True
-        Me.lblFireTemple.Location = New System.Drawing.Point(2, 6)
-        Me.lblFireTemple.Name = "lblFireTemple"
-        Me.lblFireTemple.Size = New System.Drawing.Size(85, 13)
-        Me.lblFireTemple.TabIndex = 135
-        Me.lblFireTemple.Text = "Fire Temple: 0/0"
-        '
-        'checkMQ5
-        '
-        Me.checkMQ5.AutoSize = True
-        Me.checkMQ5.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.checkMQ5.Location = New System.Drawing.Point(4, 4)
-        Me.checkMQ5.Name = "checkMQ5"
-        Me.checkMQ5.Size = New System.Drawing.Size(40, 17)
-        Me.checkMQ5.TabIndex = 50
-        Me.checkMQ5.TabStop = False
-        Me.checkMQ5.Text = "MQ"
-        Me.checkMQ5.UseVisualStyleBackColor = True
-        Me.checkMQ5.Visible = False
-        '
-        'pbxMap
-        '
-        Me.pbxMap.BackColor = System.Drawing.Color.Black
-        Me.pbxMap.Image = Global.Tracker_of_Time.My.Resources.Resources.mapBlank
-        Me.pbxMap.Location = New System.Drawing.Point(4, 37)
-        Me.pbxMap.Name = "pbxMap"
-        Me.pbxMap.Size = New System.Drawing.Size(556, 417)
-        Me.pbxMap.TabIndex = 0
-        Me.pbxMap.TabStop = False
         '
         'pnlWorldMap
         '
@@ -4114,6 +3382,38 @@ Partial Class frmTrackerOfTime
         Me.pbx01.TabIndex = 0
         Me.pbx01.TabStop = False
         '
+        'pnlSongsMedals
+        '
+        Me.pnlSongsMedals.BackColor = System.Drawing.Color.Black
+        Me.pnlSongsMedals.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.pnlSongsMedals.Controls.Add(Me.pbxSpawnAdult)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxSpawnYoung)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxSongOfStorms)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxSongOfTime)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxSunsSong)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxSariasSong)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxEponasSong)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxStoneZora)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxStoneGoron)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxStoneKokiri)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxMedalForest)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxMedalFire)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxMedalWater)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxMedalLight)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxMedalShadow)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxMedalSpirit)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxPreludeOfLight)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxNocturneOfShadow)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxRequiemOfSpirit)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxSerenadeOfWater)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxBoleroOfFire)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxMinuetOfForest)
+        Me.pnlSongsMedals.Controls.Add(Me.pbxZeldasLullaby)
+        Me.pnlSongsMedals.Location = New System.Drawing.Point(1, 207)
+        Me.pnlSongsMedals.Name = "pnlSongsMedals"
+        Me.pnlSongsMedals.Size = New System.Drawing.Size(562, 150)
+        Me.pnlSongsMedals.TabIndex = 225
+        '
         'pbxSpawnAdult
         '
         Me.pbxSpawnAdult.AccessibleRole = System.Windows.Forms.AccessibleRole.None
@@ -4328,6 +3628,88 @@ Partial Class frmTrackerOfTime
         Me.pbxZeldasLullaby.Size = New System.Drawing.Size(50, 50)
         Me.pbxZeldasLullaby.TabIndex = 15
         Me.pbxZeldasLullaby.TabStop = False
+        '
+        'pnlDekuTree
+        '
+        Me.pnlDekuTree.Controls.Add(Me.lblDekuTree)
+        Me.pnlDekuTree.Controls.Add(Me.checkMQ1)
+        Me.pnlDekuTree.Location = New System.Drawing.Point(375, 543)
+        Me.pnlDekuTree.Name = "pnlDekuTree"
+        Me.pnlDekuTree.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlDekuTree.Size = New System.Drawing.Size(188, 25)
+        Me.pnlDekuTree.TabIndex = 168
+        '
+        'lblDekuTree
+        '
+        Me.lblDekuTree.AutoSize = True
+        Me.lblDekuTree.Location = New System.Drawing.Point(2, 6)
+        Me.lblDekuTree.Name = "lblDekuTree"
+        Me.lblDekuTree.Size = New System.Drawing.Size(81, 13)
+        Me.lblDekuTree.TabIndex = 8
+        Me.lblDekuTree.Text = "Deku Tree: 0/0"
+        '
+        'checkMQ1
+        '
+        Me.checkMQ1.AutoSize = True
+        Me.checkMQ1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.checkMQ1.Location = New System.Drawing.Point(4, 4)
+        Me.checkMQ1.Name = "checkMQ1"
+        Me.checkMQ1.Size = New System.Drawing.Size(40, 17)
+        Me.checkMQ1.TabIndex = 43
+        Me.checkMQ1.TabStop = False
+        Me.checkMQ1.Text = "MQ"
+        Me.checkMQ1.UseVisualStyleBackColor = True
+        Me.checkMQ1.Visible = False
+        '
+        'pnlDodongosCavern
+        '
+        Me.pnlDodongosCavern.Controls.Add(Me.lblDodongosCavern)
+        Me.pnlDodongosCavern.Controls.Add(Me.checkMQ2)
+        Me.pnlDodongosCavern.Location = New System.Drawing.Point(375, 567)
+        Me.pnlDodongosCavern.Name = "pnlDodongosCavern"
+        Me.pnlDodongosCavern.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlDodongosCavern.Size = New System.Drawing.Size(188, 25)
+        Me.pnlDodongosCavern.TabIndex = 169
+        '
+        'lblDodongosCavern
+        '
+        Me.lblDodongosCavern.AutoSize = True
+        Me.lblDodongosCavern.Location = New System.Drawing.Point(2, 6)
+        Me.lblDodongosCavern.Name = "lblDodongosCavern"
+        Me.lblDodongosCavern.Size = New System.Drawing.Size(118, 13)
+        Me.lblDodongosCavern.TabIndex = 85
+        Me.lblDodongosCavern.Text = "Dodongo's Cavern: 0/0"
+        '
+        'checkMQ2
+        '
+        Me.checkMQ2.AutoSize = True
+        Me.checkMQ2.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.checkMQ2.Location = New System.Drawing.Point(4, 4)
+        Me.checkMQ2.Name = "checkMQ2"
+        Me.checkMQ2.Size = New System.Drawing.Size(40, 17)
+        Me.checkMQ2.TabIndex = 44
+        Me.checkMQ2.TabStop = False
+        Me.checkMQ2.Text = "MQ"
+        Me.checkMQ2.UseVisualStyleBackColor = True
+        Me.checkMQ2.Visible = False
+        '
+        'pnlLostWoods
+        '
+        Me.pnlLostWoods.Controls.Add(Me.lblLostWoods)
+        Me.pnlLostWoods.Location = New System.Drawing.Point(1, 567)
+        Me.pnlLostWoods.Name = "pnlLostWoods"
+        Me.pnlLostWoods.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlLostWoods.Size = New System.Drawing.Size(188, 25)
+        Me.pnlLostWoods.TabIndex = 172
+        '
+        'lblLostWoods
+        '
+        Me.lblLostWoods.AutoSize = True
+        Me.lblLostWoods.Location = New System.Drawing.Point(2, 6)
+        Me.lblLostWoods.Name = "lblLostWoods"
+        Me.lblLostWoods.Size = New System.Drawing.Size(87, 13)
+        Me.lblLostWoods.TabIndex = 19
+        Me.lblLostWoods.Text = "Lost Woods: 0/0"
         '
         'pnlDungeonItems
         '
@@ -4732,6 +4114,749 @@ Partial Class frmTrackerOfTime
         Me.pbxDTMap.TabIndex = 245
         Me.pbxDTMap.TabStop = False
         '
+        'pnlHyruleField
+        '
+        Me.pnlHyruleField.Controls.Add(Me.lblHyruleField)
+        Me.pnlHyruleField.Location = New System.Drawing.Point(1, 615)
+        Me.pnlHyruleField.Name = "pnlHyruleField"
+        Me.pnlHyruleField.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlHyruleField.Size = New System.Drawing.Size(188, 25)
+        Me.pnlHyruleField.TabIndex = 173
+        '
+        'lblHyruleField
+        '
+        Me.lblHyruleField.AutoSize = True
+        Me.lblHyruleField.Location = New System.Drawing.Point(2, 6)
+        Me.lblHyruleField.Name = "lblHyruleField"
+        Me.lblHyruleField.Size = New System.Drawing.Size(85, 13)
+        Me.lblHyruleField.TabIndex = 25
+        Me.lblHyruleField.Text = "Hyrule Field: 0/0"
+        '
+        'pnlLonLonRanch
+        '
+        Me.pnlLonLonRanch.Controls.Add(Me.lblLonLonRanch)
+        Me.pnlLonLonRanch.Location = New System.Drawing.Point(1, 639)
+        Me.pnlLonLonRanch.Name = "pnlLonLonRanch"
+        Me.pnlLonLonRanch.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlLonLonRanch.Size = New System.Drawing.Size(188, 25)
+        Me.pnlLonLonRanch.TabIndex = 174
+        '
+        'lblLonLonRanch
+        '
+        Me.lblLonLonRanch.AutoSize = True
+        Me.lblLonLonRanch.Location = New System.Drawing.Point(2, 6)
+        Me.lblLonLonRanch.Name = "lblLonLonRanch"
+        Me.lblLonLonRanch.Size = New System.Drawing.Size(104, 13)
+        Me.lblLonLonRanch.TabIndex = 55
+        Me.lblLonLonRanch.Text = "Lon Lon Ranch: 0/0"
+        '
+        'pnlKokiriForest
+        '
+        Me.pnlKokiriForest.Controls.Add(Me.lblKokiriForest)
+        Me.pnlKokiriForest.Location = New System.Drawing.Point(1, 543)
+        Me.pnlKokiriForest.Name = "pnlKokiriForest"
+        Me.pnlKokiriForest.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlKokiriForest.Size = New System.Drawing.Size(188, 25)
+        Me.pnlKokiriForest.TabIndex = 171
+        '
+        'lblKokiriForest
+        '
+        Me.lblKokiriForest.AutoSize = True
+        Me.lblKokiriForest.Location = New System.Drawing.Point(2, 6)
+        Me.lblKokiriForest.Name = "lblKokiriForest"
+        Me.lblKokiriForest.Size = New System.Drawing.Size(88, 13)
+        Me.lblKokiriForest.TabIndex = 16
+        Me.lblKokiriForest.Text = "Kokiri Forest: 0/0"
+        '
+        'pnlLakeHylia
+        '
+        Me.pnlLakeHylia.Controls.Add(Me.lblLakeHylia)
+        Me.pnlLakeHylia.Location = New System.Drawing.Point(188, 639)
+        Me.pnlLakeHylia.Name = "pnlLakeHylia"
+        Me.pnlLakeHylia.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlLakeHylia.Size = New System.Drawing.Size(188, 25)
+        Me.pnlLakeHylia.TabIndex = 175
+        '
+        'lblLakeHylia
+        '
+        Me.lblLakeHylia.AutoSize = True
+        Me.lblLakeHylia.Location = New System.Drawing.Point(2, 6)
+        Me.lblLakeHylia.Name = "lblLakeHylia"
+        Me.lblLakeHylia.Size = New System.Drawing.Size(80, 13)
+        Me.lblLakeHylia.TabIndex = 26
+        Me.lblLakeHylia.Text = "Lake Hylia: 0/0"
+        '
+        'pnlSacredForestMeadow
+        '
+        Me.pnlSacredForestMeadow.Controls.Add(Me.lblSacredForestMeadow)
+        Me.pnlSacredForestMeadow.Location = New System.Drawing.Point(1, 591)
+        Me.pnlSacredForestMeadow.Name = "pnlSacredForestMeadow"
+        Me.pnlSacredForestMeadow.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlSacredForestMeadow.Size = New System.Drawing.Size(188, 25)
+        Me.pnlSacredForestMeadow.TabIndex = 226
+        '
+        'lblSacredForestMeadow
+        '
+        Me.lblSacredForestMeadow.AutoSize = True
+        Me.lblSacredForestMeadow.Location = New System.Drawing.Point(2, 6)
+        Me.lblSacredForestMeadow.Name = "lblSacredForestMeadow"
+        Me.lblSacredForestMeadow.Size = New System.Drawing.Size(140, 13)
+        Me.lblSacredForestMeadow.TabIndex = 19
+        Me.lblSacredForestMeadow.Text = "Sacred Forest Meadow: 0/0"
+        '
+        'pnlGerudoFortress
+        '
+        Me.pnlGerudoFortress.Controls.Add(Me.lblGerudoFortress)
+        Me.pnlGerudoFortress.Location = New System.Drawing.Point(188, 687)
+        Me.pnlGerudoFortress.Name = "pnlGerudoFortress"
+        Me.pnlGerudoFortress.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlGerudoFortress.Size = New System.Drawing.Size(188, 25)
+        Me.pnlGerudoFortress.TabIndex = 177
+        '
+        'lblGerudoFortress
+        '
+        Me.lblGerudoFortress.AutoSize = True
+        Me.lblGerudoFortress.Location = New System.Drawing.Point(2, 6)
+        Me.lblGerudoFortress.Name = "lblGerudoFortress"
+        Me.lblGerudoFortress.Size = New System.Drawing.Size(105, 13)
+        Me.lblGerudoFortress.TabIndex = 178
+        Me.lblGerudoFortress.Text = "Gerudo Fortress: 0/0"
+        '
+        'pnlHauntedWasteland
+        '
+        Me.pnlHauntedWasteland.Controls.Add(Me.lblHauntedWasteland)
+        Me.pnlHauntedWasteland.Location = New System.Drawing.Point(188, 711)
+        Me.pnlHauntedWasteland.Name = "pnlHauntedWasteland"
+        Me.pnlHauntedWasteland.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlHauntedWasteland.Size = New System.Drawing.Size(188, 25)
+        Me.pnlHauntedWasteland.TabIndex = 178
+        '
+        'lblHauntedWasteland
+        '
+        Me.lblHauntedWasteland.AutoSize = True
+        Me.lblHauntedWasteland.Location = New System.Drawing.Point(2, 6)
+        Me.lblHauntedWasteland.Name = "lblHauntedWasteland"
+        Me.lblHauntedWasteland.Size = New System.Drawing.Size(125, 13)
+        Me.lblHauntedWasteland.TabIndex = 179
+        Me.lblHauntedWasteland.Text = "Haunted Wasteland: 0/0"
+        '
+        'pnlMarket
+        '
+        Me.pnlMarket.Controls.Add(Me.lblMarket)
+        Me.pnlMarket.Location = New System.Drawing.Point(1, 663)
+        Me.pnlMarket.Name = "pnlMarket"
+        Me.pnlMarket.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlMarket.Size = New System.Drawing.Size(188, 25)
+        Me.pnlMarket.TabIndex = 180
+        '
+        'lblMarket
+        '
+        Me.lblMarket.AutoSize = True
+        Me.lblMarket.Location = New System.Drawing.Point(2, 6)
+        Me.lblMarket.Name = "lblMarket"
+        Me.lblMarket.Size = New System.Drawing.Size(85, 13)
+        Me.lblMarket.TabIndex = 181
+        Me.lblMarket.Text = "The Market: 0/0"
+        '
+        'pnlGanonsCastle
+        '
+        Me.pnlGanonsCastle.Controls.Add(Me.lblGanonsCastle)
+        Me.pnlGanonsCastle.Controls.Add(Me.checkMQ12)
+        Me.pnlGanonsCastle.Location = New System.Drawing.Point(375, 807)
+        Me.pnlGanonsCastle.Name = "pnlGanonsCastle"
+        Me.pnlGanonsCastle.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlGanonsCastle.Size = New System.Drawing.Size(188, 25)
+        Me.pnlGanonsCastle.TabIndex = 219
+        '
+        'lblGanonsCastle
+        '
+        Me.lblGanonsCastle.AutoSize = True
+        Me.lblGanonsCastle.Location = New System.Drawing.Point(2, 6)
+        Me.lblGanonsCastle.Name = "lblGanonsCastle"
+        Me.lblGanonsCastle.Size = New System.Drawing.Size(101, 13)
+        Me.lblGanonsCastle.TabIndex = 138
+        Me.lblGanonsCastle.Text = "Ganon's Castle: 0/0"
+        '
+        'checkMQ12
+        '
+        Me.checkMQ12.AutoSize = True
+        Me.checkMQ12.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.checkMQ12.Location = New System.Drawing.Point(4, 4)
+        Me.checkMQ12.Name = "checkMQ12"
+        Me.checkMQ12.Size = New System.Drawing.Size(40, 17)
+        Me.checkMQ12.TabIndex = 51
+        Me.checkMQ12.TabStop = False
+        Me.checkMQ12.Text = "MQ"
+        Me.checkMQ12.UseVisualStyleBackColor = True
+        Me.checkMQ12.Visible = False
+        '
+        'pnlHyruleCastle
+        '
+        Me.pnlHyruleCastle.Controls.Add(Me.lblHyruleCastle)
+        Me.pnlHyruleCastle.Location = New System.Drawing.Point(1, 711)
+        Me.pnlHyruleCastle.Name = "pnlHyruleCastle"
+        Me.pnlHyruleCastle.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlHyruleCastle.Size = New System.Drawing.Size(188, 25)
+        Me.pnlHyruleCastle.TabIndex = 181
+        '
+        'lblHyruleCastle
+        '
+        Me.lblHyruleCastle.AutoSize = True
+        Me.lblHyruleCastle.Location = New System.Drawing.Point(2, 6)
+        Me.lblHyruleCastle.Name = "lblHyruleCastle"
+        Me.lblHyruleCastle.Size = New System.Drawing.Size(92, 13)
+        Me.lblHyruleCastle.TabIndex = 182
+        Me.lblHyruleCastle.Text = "Hyrule Castle: 0/0"
+        '
+        'pnlWaterTemple
+        '
+        Me.pnlWaterTemple.Controls.Add(Me.lblWaterTemple)
+        Me.pnlWaterTemple.Controls.Add(Me.checkMQ6)
+        Me.pnlWaterTemple.Location = New System.Drawing.Point(375, 663)
+        Me.pnlWaterTemple.Name = "pnlWaterTemple"
+        Me.pnlWaterTemple.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlWaterTemple.Size = New System.Drawing.Size(188, 25)
+        Me.pnlWaterTemple.TabIndex = 218
+        '
+        'lblWaterTemple
+        '
+        Me.lblWaterTemple.AutoSize = True
+        Me.lblWaterTemple.Location = New System.Drawing.Point(2, 6)
+        Me.lblWaterTemple.Name = "lblWaterTemple"
+        Me.lblWaterTemple.Size = New System.Drawing.Size(97, 13)
+        Me.lblWaterTemple.TabIndex = 137
+        Me.lblWaterTemple.Text = "Water Temple: 0/0"
+        '
+        'checkMQ6
+        '
+        Me.checkMQ6.AutoSize = True
+        Me.checkMQ6.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.checkMQ6.Location = New System.Drawing.Point(4, 4)
+        Me.checkMQ6.Name = "checkMQ6"
+        Me.checkMQ6.Size = New System.Drawing.Size(40, 17)
+        Me.checkMQ6.TabIndex = 49
+        Me.checkMQ6.TabStop = False
+        Me.checkMQ6.Text = "MQ"
+        Me.checkMQ6.UseVisualStyleBackColor = True
+        Me.checkMQ6.Visible = False
+        '
+        'pnlGraveyard
+        '
+        Me.pnlGraveyard.Controls.Add(Me.lblGraveyard)
+        Me.pnlGraveyard.Location = New System.Drawing.Point(1, 759)
+        Me.pnlGraveyard.Name = "pnlGraveyard"
+        Me.pnlGraveyard.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlGraveyard.Size = New System.Drawing.Size(188, 25)
+        Me.pnlGraveyard.TabIndex = 183
+        '
+        'lblGraveyard
+        '
+        Me.lblGraveyard.AutoSize = True
+        Me.lblGraveyard.Location = New System.Drawing.Point(2, 6)
+        Me.lblGraveyard.Name = "lblGraveyard"
+        Me.lblGraveyard.Size = New System.Drawing.Size(79, 13)
+        Me.lblGraveyard.TabIndex = 78
+        Me.lblGraveyard.Text = "Graveyard: 0/0"
+        '
+        'pnlIceCavern
+        '
+        Me.pnlIceCavern.Controls.Add(Me.lblIceCavern)
+        Me.pnlIceCavern.Controls.Add(Me.checkMQ10)
+        Me.pnlIceCavern.Location = New System.Drawing.Point(375, 759)
+        Me.pnlIceCavern.Name = "pnlIceCavern"
+        Me.pnlIceCavern.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlIceCavern.Size = New System.Drawing.Size(188, 25)
+        Me.pnlIceCavern.TabIndex = 209
+        '
+        'lblIceCavern
+        '
+        Me.lblIceCavern.AutoSize = True
+        Me.lblIceCavern.Location = New System.Drawing.Point(2, 6)
+        Me.lblIceCavern.Name = "lblIceCavern"
+        Me.lblIceCavern.Size = New System.Drawing.Size(82, 13)
+        Me.lblIceCavern.TabIndex = 117
+        Me.lblIceCavern.Text = "Ice Cavern: 0/0"
+        '
+        'checkMQ10
+        '
+        Me.checkMQ10.AutoSize = True
+        Me.checkMQ10.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.checkMQ10.Location = New System.Drawing.Point(4, 4)
+        Me.checkMQ10.Name = "checkMQ10"
+        Me.checkMQ10.Size = New System.Drawing.Size(40, 17)
+        Me.checkMQ10.TabIndex = 53
+        Me.checkMQ10.TabStop = False
+        Me.checkMQ10.Text = "MQ"
+        Me.checkMQ10.UseVisualStyleBackColor = True
+        Me.checkMQ10.Visible = False
+        '
+        'pnlDMCrater
+        '
+        Me.pnlDMCrater.Controls.Add(Me.lblDMCrater)
+        Me.pnlDMCrater.Location = New System.Drawing.Point(1, 807)
+        Me.pnlDMCrater.Name = "pnlDMCrater"
+        Me.pnlDMCrater.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlDMCrater.Size = New System.Drawing.Size(188, 25)
+        Me.pnlDMCrater.TabIndex = 185
+        '
+        'lblDMCrater
+        '
+        Me.lblDMCrater.AutoSize = True
+        Me.lblDMCrater.Location = New System.Drawing.Point(2, 6)
+        Me.lblDMCrater.Name = "lblDMCrater"
+        Me.lblDMCrater.Size = New System.Drawing.Size(137, 13)
+        Me.lblDMCrater.TabIndex = 133
+        Me.lblDMCrater.Text = "Death Mountain Crater: 0/0"
+        '
+        'pnlForestTemple
+        '
+        Me.pnlForestTemple.Controls.Add(Me.lblForestTemple)
+        Me.pnlForestTemple.Controls.Add(Me.checkMQ4)
+        Me.pnlForestTemple.Location = New System.Drawing.Point(375, 615)
+        Me.pnlForestTemple.Name = "pnlForestTemple"
+        Me.pnlForestTemple.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlForestTemple.Size = New System.Drawing.Size(188, 25)
+        Me.pnlForestTemple.TabIndex = 200
+        '
+        'lblForestTemple
+        '
+        Me.lblForestTemple.AutoSize = True
+        Me.lblForestTemple.Location = New System.Drawing.Point(2, 6)
+        Me.lblForestTemple.Name = "lblForestTemple"
+        Me.lblForestTemple.Size = New System.Drawing.Size(97, 13)
+        Me.lblForestTemple.TabIndex = 0
+        Me.lblForestTemple.Text = "Forest Temple: 0/0"
+        '
+        'checkMQ4
+        '
+        Me.checkMQ4.AutoSize = True
+        Me.checkMQ4.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.checkMQ4.Location = New System.Drawing.Point(4, 4)
+        Me.checkMQ4.Name = "checkMQ4"
+        Me.checkMQ4.Size = New System.Drawing.Size(40, 17)
+        Me.checkMQ4.TabIndex = 45
+        Me.checkMQ4.TabStop = False
+        Me.checkMQ4.Text = "MQ"
+        Me.checkMQ4.UseVisualStyleBackColor = True
+        Me.checkMQ4.Visible = False
+        '
+        'pnlGoronCity
+        '
+        Me.pnlGoronCity.Controls.Add(Me.lblGoronCity)
+        Me.pnlGoronCity.Location = New System.Drawing.Point(188, 543)
+        Me.pnlGoronCity.Name = "pnlGoronCity"
+        Me.pnlGoronCity.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlGoronCity.Size = New System.Drawing.Size(188, 25)
+        Me.pnlGoronCity.TabIndex = 186
+        '
+        'lblGoronCity
+        '
+        Me.lblGoronCity.AutoSize = True
+        Me.lblGoronCity.Location = New System.Drawing.Point(2, 6)
+        Me.lblGoronCity.Name = "lblGoronCity"
+        Me.lblGoronCity.Size = New System.Drawing.Size(79, 13)
+        Me.lblGoronCity.TabIndex = 93
+        Me.lblGoronCity.Text = "Goron City: 0/0"
+        '
+        'pnlBottomOfTheWell
+        '
+        Me.pnlBottomOfTheWell.Controls.Add(Me.lblBottomOfTheWell)
+        Me.pnlBottomOfTheWell.Controls.Add(Me.checkMQ9)
+        Me.pnlBottomOfTheWell.Location = New System.Drawing.Point(375, 735)
+        Me.pnlBottomOfTheWell.Name = "pnlBottomOfTheWell"
+        Me.pnlBottomOfTheWell.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlBottomOfTheWell.Size = New System.Drawing.Size(188, 25)
+        Me.pnlBottomOfTheWell.TabIndex = 217
+        '
+        'lblBottomOfTheWell
+        '
+        Me.lblBottomOfTheWell.AutoSize = True
+        Me.lblBottomOfTheWell.Location = New System.Drawing.Point(2, 6)
+        Me.lblBottomOfTheWell.Name = "lblBottomOfTheWell"
+        Me.lblBottomOfTheWell.Size = New System.Drawing.Size(117, 13)
+        Me.lblBottomOfTheWell.TabIndex = 137
+        Me.lblBottomOfTheWell.Text = "Bottom of the Well: 0/0"
+        '
+        'checkMQ9
+        '
+        Me.checkMQ9.AutoSize = True
+        Me.checkMQ9.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.checkMQ9.Location = New System.Drawing.Point(4, 4)
+        Me.checkMQ9.Name = "checkMQ9"
+        Me.checkMQ9.Size = New System.Drawing.Size(40, 17)
+        Me.checkMQ9.TabIndex = 54
+        Me.checkMQ9.TabStop = False
+        Me.checkMQ9.Text = "MQ"
+        Me.checkMQ9.UseVisualStyleBackColor = True
+        Me.checkMQ9.Visible = False
+        '
+        'pnlGerudoValley
+        '
+        Me.pnlGerudoValley.Controls.Add(Me.lblGerudoValley)
+        Me.pnlGerudoValley.Location = New System.Drawing.Point(188, 663)
+        Me.pnlGerudoValley.Name = "pnlGerudoValley"
+        Me.pnlGerudoValley.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlGerudoValley.Size = New System.Drawing.Size(188, 25)
+        Me.pnlGerudoValley.TabIndex = 176
+        '
+        'lblGerudoValley
+        '
+        Me.lblGerudoValley.AutoSize = True
+        Me.lblGerudoValley.Location = New System.Drawing.Point(2, 6)
+        Me.lblGerudoValley.Name = "lblGerudoValley"
+        Me.lblGerudoValley.Size = New System.Drawing.Size(96, 13)
+        Me.lblGerudoValley.TabIndex = 28
+        Me.lblGerudoValley.Text = "Gerudo Valley: 0/0"
+        '
+        'pnlSpiritTemple
+        '
+        Me.pnlSpiritTemple.Controls.Add(Me.lblSpiritTemple)
+        Me.pnlSpiritTemple.Controls.Add(Me.checkMQ7)
+        Me.pnlSpiritTemple.Location = New System.Drawing.Point(375, 687)
+        Me.pnlSpiritTemple.Name = "pnlSpiritTemple"
+        Me.pnlSpiritTemple.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlSpiritTemple.Size = New System.Drawing.Size(188, 25)
+        Me.pnlSpiritTemple.TabIndex = 216
+        '
+        'lblSpiritTemple
+        '
+        Me.lblSpiritTemple.AutoSize = True
+        Me.lblSpiritTemple.Location = New System.Drawing.Point(2, 6)
+        Me.lblSpiritTemple.Name = "lblSpiritTemple"
+        Me.lblSpiritTemple.Size = New System.Drawing.Size(91, 13)
+        Me.lblSpiritTemple.TabIndex = 136
+        Me.lblSpiritTemple.Text = "Spirit Temple: 0/0"
+        '
+        'checkMQ7
+        '
+        Me.checkMQ7.AutoSize = True
+        Me.checkMQ7.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.checkMQ7.Location = New System.Drawing.Point(4, 4)
+        Me.checkMQ7.Name = "checkMQ7"
+        Me.checkMQ7.Size = New System.Drawing.Size(40, 17)
+        Me.checkMQ7.TabIndex = 48
+        Me.checkMQ7.TabStop = False
+        Me.checkMQ7.Text = "MQ"
+        Me.checkMQ7.UseVisualStyleBackColor = True
+        Me.checkMQ7.Visible = False
+        '
+        'pnlZorasRiver
+        '
+        Me.pnlZorasRiver.Controls.Add(Me.lblZorasRiver)
+        Me.pnlZorasRiver.Location = New System.Drawing.Point(188, 567)
+        Me.pnlZorasRiver.Name = "pnlZorasRiver"
+        Me.pnlZorasRiver.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlZorasRiver.Size = New System.Drawing.Size(188, 25)
+        Me.pnlZorasRiver.TabIndex = 187
+        '
+        'lblZorasRiver
+        '
+        Me.lblZorasRiver.AutoSize = True
+        Me.lblZorasRiver.Location = New System.Drawing.Point(2, 6)
+        Me.lblZorasRiver.Name = "lblZorasRiver"
+        Me.lblZorasRiver.Size = New System.Drawing.Size(87, 13)
+        Me.lblZorasRiver.TabIndex = 0
+        Me.lblZorasRiver.Text = "Zora's River: 0/0"
+        '
+        'pnlShadowTemple
+        '
+        Me.pnlShadowTemple.Controls.Add(Me.lblShadowTemple)
+        Me.pnlShadowTemple.Controls.Add(Me.checkMQ8)
+        Me.pnlShadowTemple.Location = New System.Drawing.Point(375, 711)
+        Me.pnlShadowTemple.Name = "pnlShadowTemple"
+        Me.pnlShadowTemple.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlShadowTemple.Size = New System.Drawing.Size(188, 25)
+        Me.pnlShadowTemple.TabIndex = 215
+        '
+        'lblShadowTemple
+        '
+        Me.lblShadowTemple.AutoSize = True
+        Me.lblShadowTemple.Location = New System.Drawing.Point(2, 6)
+        Me.lblShadowTemple.Name = "lblShadowTemple"
+        Me.lblShadowTemple.Size = New System.Drawing.Size(107, 13)
+        Me.lblShadowTemple.TabIndex = 136
+        Me.lblShadowTemple.Text = "Shadow Temple: 0/0"
+        '
+        'checkMQ8
+        '
+        Me.checkMQ8.AutoSize = True
+        Me.checkMQ8.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.checkMQ8.Location = New System.Drawing.Point(4, 4)
+        Me.checkMQ8.Name = "checkMQ8"
+        Me.checkMQ8.Size = New System.Drawing.Size(40, 17)
+        Me.checkMQ8.TabIndex = 47
+        Me.checkMQ8.TabStop = False
+        Me.checkMQ8.Text = "MQ"
+        Me.checkMQ8.UseVisualStyleBackColor = True
+        Me.checkMQ8.Visible = False
+        '
+        'pnlZorasDomain
+        '
+        Me.pnlZorasDomain.Controls.Add(Me.lblZorasDomain)
+        Me.pnlZorasDomain.Location = New System.Drawing.Point(188, 591)
+        Me.pnlZorasDomain.Name = "pnlZorasDomain"
+        Me.pnlZorasDomain.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlZorasDomain.Size = New System.Drawing.Size(188, 25)
+        Me.pnlZorasDomain.TabIndex = 188
+        '
+        'lblZorasDomain
+        '
+        Me.lblZorasDomain.AutoSize = True
+        Me.lblZorasDomain.Location = New System.Drawing.Point(2, 6)
+        Me.lblZorasDomain.Name = "lblZorasDomain"
+        Me.lblZorasDomain.Size = New System.Drawing.Size(98, 13)
+        Me.lblZorasDomain.TabIndex = 113
+        Me.lblZorasDomain.Text = "Zora's Domain: 0/0"
+        '
+        'pnlOutsideGanonsCastle
+        '
+        Me.pnlOutsideGanonsCastle.Controls.Add(Me.lblOutsideGanonsCastle)
+        Me.pnlOutsideGanonsCastle.Location = New System.Drawing.Point(188, 759)
+        Me.pnlOutsideGanonsCastle.Name = "pnlOutsideGanonsCastle"
+        Me.pnlOutsideGanonsCastle.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlOutsideGanonsCastle.Size = New System.Drawing.Size(188, 25)
+        Me.pnlOutsideGanonsCastle.TabIndex = 180
+        '
+        'lblOutsideGanonsCastle
+        '
+        Me.lblOutsideGanonsCastle.AutoSize = True
+        Me.lblOutsideGanonsCastle.Location = New System.Drawing.Point(2, 6)
+        Me.lblOutsideGanonsCastle.Name = "lblOutsideGanonsCastle"
+        Me.lblOutsideGanonsCastle.Size = New System.Drawing.Size(140, 13)
+        Me.lblOutsideGanonsCastle.TabIndex = 179
+        Me.lblOutsideGanonsCastle.Text = "Outside Ganon's Castle: 0/0"
+        '
+        'pnlTempleOfTime
+        '
+        Me.pnlTempleOfTime.Controls.Add(Me.lblTempleOfTime)
+        Me.pnlTempleOfTime.Location = New System.Drawing.Point(1, 687)
+        Me.pnlTempleOfTime.Name = "pnlTempleOfTime"
+        Me.pnlTempleOfTime.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlTempleOfTime.Size = New System.Drawing.Size(188, 25)
+        Me.pnlTempleOfTime.TabIndex = 201
+        '
+        'lblTempleOfTime
+        '
+        Me.lblTempleOfTime.AutoSize = True
+        Me.lblTempleOfTime.Location = New System.Drawing.Point(2, 6)
+        Me.lblTempleOfTime.Name = "lblTempleOfTime"
+        Me.lblTempleOfTime.Size = New System.Drawing.Size(103, 13)
+        Me.lblTempleOfTime.TabIndex = 0
+        Me.lblTempleOfTime.Text = "Temple of Time: 0/0"
+        '
+        'pnlQuestGoldSkulltulas
+        '
+        Me.pnlQuestGoldSkulltulas.Controls.Add(Me.lblQuestGoldSkulltulas)
+        Me.pnlQuestGoldSkulltulas.Location = New System.Drawing.Point(188, 783)
+        Me.pnlQuestGoldSkulltulas.Name = "pnlQuestGoldSkulltulas"
+        Me.pnlQuestGoldSkulltulas.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlQuestGoldSkulltulas.Size = New System.Drawing.Size(188, 25)
+        Me.pnlQuestGoldSkulltulas.TabIndex = 207
+        '
+        'lblQuestGoldSkulltulas
+        '
+        Me.lblQuestGoldSkulltulas.AutoSize = True
+        Me.lblQuestGoldSkulltulas.Location = New System.Drawing.Point(2, 6)
+        Me.lblQuestGoldSkulltulas.Name = "lblQuestGoldSkulltulas"
+        Me.lblQuestGoldSkulltulas.Size = New System.Drawing.Size(149, 13)
+        Me.lblQuestGoldSkulltulas.TabIndex = 0
+        Me.lblQuestGoldSkulltulas.Text = "Quest: Skulltula Rewards: 0/0"
+        '
+        'pnlDMTrail
+        '
+        Me.pnlDMTrail.Controls.Add(Me.lblDMTrail)
+        Me.pnlDMTrail.Location = New System.Drawing.Point(1, 783)
+        Me.pnlDMTrail.Name = "pnlDMTrail"
+        Me.pnlDMTrail.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlDMTrail.Size = New System.Drawing.Size(188, 25)
+        Me.pnlDMTrail.TabIndex = 184
+        '
+        'lblDMTrail
+        '
+        Me.lblDMTrail.AutoSize = True
+        Me.lblDMTrail.Location = New System.Drawing.Point(2, 6)
+        Me.lblDMTrail.Name = "lblDMTrail"
+        Me.lblDMTrail.Size = New System.Drawing.Size(129, 13)
+        Me.lblDMTrail.TabIndex = 80
+        Me.lblDMTrail.Text = "Death Mountain Trail: 0/0"
+        '
+        'pnlJabuJabusBelly
+        '
+        Me.pnlJabuJabusBelly.Controls.Add(Me.lblJabuJabusBelly)
+        Me.pnlJabuJabusBelly.Controls.Add(Me.checkMQ3)
+        Me.pnlJabuJabusBelly.Location = New System.Drawing.Point(375, 591)
+        Me.pnlJabuJabusBelly.Name = "pnlJabuJabusBelly"
+        Me.pnlJabuJabusBelly.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlJabuJabusBelly.Size = New System.Drawing.Size(188, 25)
+        Me.pnlJabuJabusBelly.TabIndex = 214
+        '
+        'lblJabuJabusBelly
+        '
+        Me.lblJabuJabusBelly.AutoSize = True
+        Me.lblJabuJabusBelly.Location = New System.Drawing.Point(2, 6)
+        Me.lblJabuJabusBelly.Name = "lblJabuJabusBelly"
+        Me.lblJabuJabusBelly.Size = New System.Drawing.Size(111, 13)
+        Me.lblJabuJabusBelly.TabIndex = 0
+        Me.lblJabuJabusBelly.Text = "Jabu-Jabu's Belly: 0/0"
+        '
+        'checkMQ3
+        '
+        Me.checkMQ3.AutoSize = True
+        Me.checkMQ3.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.checkMQ3.Location = New System.Drawing.Point(4, 4)
+        Me.checkMQ3.Name = "checkMQ3"
+        Me.checkMQ3.Size = New System.Drawing.Size(40, 17)
+        Me.checkMQ3.TabIndex = 46
+        Me.checkMQ3.TabStop = False
+        Me.checkMQ3.Text = "MQ"
+        Me.checkMQ3.UseVisualStyleBackColor = True
+        Me.checkMQ3.Visible = False
+        '
+        'pnlDesertColossus
+        '
+        Me.pnlDesertColossus.Controls.Add(Me.lblDesertColossus)
+        Me.pnlDesertColossus.Location = New System.Drawing.Point(188, 735)
+        Me.pnlDesertColossus.Name = "pnlDesertColossus"
+        Me.pnlDesertColossus.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlDesertColossus.Size = New System.Drawing.Size(188, 25)
+        Me.pnlDesertColossus.TabIndex = 179
+        '
+        'lblDesertColossus
+        '
+        Me.lblDesertColossus.AutoSize = True
+        Me.lblDesertColossus.Location = New System.Drawing.Point(2, 6)
+        Me.lblDesertColossus.Name = "lblDesertColossus"
+        Me.lblDesertColossus.Size = New System.Drawing.Size(106, 13)
+        Me.lblDesertColossus.TabIndex = 180
+        Me.lblDesertColossus.Text = "Desert Colossus: 0/0"
+        '
+        'pnlGerudoTrainingGround
+        '
+        Me.pnlGerudoTrainingGround.Controls.Add(Me.lblGerudoTrainingGround)
+        Me.pnlGerudoTrainingGround.Controls.Add(Me.checkMQ11)
+        Me.pnlGerudoTrainingGround.Location = New System.Drawing.Point(375, 783)
+        Me.pnlGerudoTrainingGround.Name = "pnlGerudoTrainingGround"
+        Me.pnlGerudoTrainingGround.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlGerudoTrainingGround.Size = New System.Drawing.Size(188, 25)
+        Me.pnlGerudoTrainingGround.TabIndex = 213
+        '
+        'lblGerudoTrainingGround
+        '
+        Me.lblGerudoTrainingGround.AutoSize = True
+        Me.lblGerudoTrainingGround.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblGerudoTrainingGround.Location = New System.Drawing.Point(2, 6)
+        Me.lblGerudoTrainingGround.Name = "lblGerudoTrainingGround"
+        Me.lblGerudoTrainingGround.Size = New System.Drawing.Size(144, 13)
+        Me.lblGerudoTrainingGround.TabIndex = 0
+        Me.lblGerudoTrainingGround.Text = "Gerudo Training Ground: 0/0"
+        '
+        'checkMQ11
+        '
+        Me.checkMQ11.AutoSize = True
+        Me.checkMQ11.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.checkMQ11.Location = New System.Drawing.Point(4, 4)
+        Me.checkMQ11.Name = "checkMQ11"
+        Me.checkMQ11.Size = New System.Drawing.Size(40, 17)
+        Me.checkMQ11.TabIndex = 52
+        Me.checkMQ11.TabStop = False
+        Me.checkMQ11.Text = "MQ"
+        Me.checkMQ11.UseVisualStyleBackColor = True
+        Me.checkMQ11.Visible = False
+        '
+        'pnlZorasFountain
+        '
+        Me.pnlZorasFountain.Controls.Add(Me.lblZorasFountain)
+        Me.pnlZorasFountain.Location = New System.Drawing.Point(188, 615)
+        Me.pnlZorasFountain.Name = "pnlZorasFountain"
+        Me.pnlZorasFountain.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlZorasFountain.Size = New System.Drawing.Size(188, 25)
+        Me.pnlZorasFountain.TabIndex = 208
+        '
+        'lblZorasFountain
+        '
+        Me.lblZorasFountain.AutoSize = True
+        Me.lblZorasFountain.Location = New System.Drawing.Point(2, 6)
+        Me.lblZorasFountain.Name = "lblZorasFountain"
+        Me.lblZorasFountain.Size = New System.Drawing.Size(103, 13)
+        Me.lblZorasFountain.TabIndex = 114
+        Me.lblZorasFountain.Text = "Zora's Fountain: 0/0"
+        '
+        'pnlKakarikoVillage
+        '
+        Me.pnlKakarikoVillage.Controls.Add(Me.lblKakarikoVillage)
+        Me.pnlKakarikoVillage.Location = New System.Drawing.Point(1, 735)
+        Me.pnlKakarikoVillage.Name = "pnlKakarikoVillage"
+        Me.pnlKakarikoVillage.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlKakarikoVillage.Size = New System.Drawing.Size(188, 25)
+        Me.pnlKakarikoVillage.TabIndex = 182
+        '
+        'lblKakarikoVillage
+        '
+        Me.lblKakarikoVillage.AutoSize = True
+        Me.lblKakarikoVillage.Location = New System.Drawing.Point(2, 6)
+        Me.lblKakarikoVillage.Name = "lblKakarikoVillage"
+        Me.lblKakarikoVillage.Size = New System.Drawing.Size(106, 13)
+        Me.lblKakarikoVillage.TabIndex = 72
+        Me.lblKakarikoVillage.Text = "Kakariko Village: 0/0"
+        '
+        'pnlQuestMasks
+        '
+        Me.pnlQuestMasks.Controls.Add(Me.lblQuestMasks)
+        Me.pnlQuestMasks.Location = New System.Drawing.Point(188, 807)
+        Me.pnlQuestMasks.Name = "pnlQuestMasks"
+        Me.pnlQuestMasks.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlQuestMasks.Size = New System.Drawing.Size(188, 25)
+        Me.pnlQuestMasks.TabIndex = 210
+        '
+        'lblQuestMasks
+        '
+        Me.lblQuestMasks.AutoSize = True
+        Me.lblQuestMasks.Location = New System.Drawing.Point(2, 6)
+        Me.lblQuestMasks.Name = "lblQuestMasks"
+        Me.lblQuestMasks.Size = New System.Drawing.Size(95, 13)
+        Me.lblQuestMasks.TabIndex = 103
+        Me.lblQuestMasks.Text = "Quest: Masks: 0/0"
+        '
+        'pnlFireTemple
+        '
+        Me.pnlFireTemple.Controls.Add(Me.lblFireTemple)
+        Me.pnlFireTemple.Controls.Add(Me.checkMQ5)
+        Me.pnlFireTemple.Location = New System.Drawing.Point(375, 639)
+        Me.pnlFireTemple.Name = "pnlFireTemple"
+        Me.pnlFireTemple.Padding = New System.Windows.Forms.Padding(1)
+        Me.pnlFireTemple.Size = New System.Drawing.Size(188, 25)
+        Me.pnlFireTemple.TabIndex = 212
+        '
+        'lblFireTemple
+        '
+        Me.lblFireTemple.AutoSize = True
+        Me.lblFireTemple.Location = New System.Drawing.Point(2, 6)
+        Me.lblFireTemple.Name = "lblFireTemple"
+        Me.lblFireTemple.Size = New System.Drawing.Size(85, 13)
+        Me.lblFireTemple.TabIndex = 135
+        Me.lblFireTemple.Text = "Fire Temple: 0/0"
+        '
+        'checkMQ5
+        '
+        Me.checkMQ5.AutoSize = True
+        Me.checkMQ5.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.checkMQ5.Location = New System.Drawing.Point(4, 4)
+        Me.checkMQ5.Name = "checkMQ5"
+        Me.checkMQ5.Size = New System.Drawing.Size(40, 17)
+        Me.checkMQ5.TabIndex = 50
+        Me.checkMQ5.TabStop = False
+        Me.checkMQ5.Text = "MQ"
+        Me.checkMQ5.UseVisualStyleBackColor = True
+        Me.checkMQ5.Visible = False
+        '
+        'tmrTT
+        '
+        Me.tmrTT.Interval = 5000
+        '
+        'tmrFastScan
+        '
+        Me.tmrFastScan.Interval = 1000
+        '
         'frmTrackerOfTime
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -4755,13 +4880,131 @@ Partial Class frmTrackerOfTime
         Me.pnlSettings.PerformLayout()
         Me.pnlMain.ResumeLayout(False)
         Me.pnlER.ResumeLayout(False)
+        CType(Me.pbxTrialFire, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxTrialShadow, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxTrialForest, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxTrialLight, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxTrialWater, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxTrialSpirit, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxMap, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pnlWorldMap.ResumeLayout(False)
+        Me.pnlEquips.ResumeLayout(False)
+        CType(Me.pbxGerudosCard, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxScale, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxStoneOfAgony, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxGauntlet, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxWallet, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxBombBag, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxQuiver, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxBulletBag, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxHoverBoots, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxKokiriBoots, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxIronBoots, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxZoraTunic, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxKokiriTunic, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxGoronTunic, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxMirrorShield, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxDekuShield, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxHylianShield, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxKokiriSword, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxMasterSword, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxBrokenKnife, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxBiggoronsSword, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pnlItems.ResumeLayout(False)
+        CType(Me.pbx24, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx23, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx22, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx21, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx20, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx19, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx18, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx17, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx16, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx15, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx14, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx13, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx10, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx08, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx12, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx11, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx09, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx07, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx06, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx05, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx04, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx03, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx02, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbx01, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pnlSongsMedals.ResumeLayout(False)
+        CType(Me.pbxSpawnAdult, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxSpawnYoung, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxSongOfStorms, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxSongOfTime, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxSunsSong, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxSariasSong, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxEponasSong, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxStoneZora, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxStoneGoron, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxStoneKokiri, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxMedalForest, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxMedalFire, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxMedalWater, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxMedalLight, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxMedalShadow, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxMedalSpirit, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxPreludeOfLight, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxNocturneOfShadow, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxRequiemOfSpirit, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxSerenadeOfWater, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxBoleroOfFire, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxMinuetOfForest, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxZeldasLullaby, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pnlDekuTree.ResumeLayout(False)
         Me.pnlDekuTree.PerformLayout()
         Me.pnlDodongosCavern.ResumeLayout(False)
         Me.pnlDodongosCavern.PerformLayout()
         Me.pnlLostWoods.ResumeLayout(False)
         Me.pnlLostWoods.PerformLayout()
+        Me.pnlDungeonItems.ResumeLayout(False)
+        CType(Me.pbxTriforce, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxGoldSkulltula, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxMagicBar, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxPoH, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxHeartContainer, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxGCBossKey, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxGCSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxGTGSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxBotWSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxShTBossKey, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxShTSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxSpTBossKey, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxSpTSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxWTBossKey, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxWTSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxFiTBossKey, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxFiTSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxFoTBossKey, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxFoTSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxICCompass, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxICMap, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxBotWCompass, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxBotWMap, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxShTCompass, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxShTMap, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxSpTCompass, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxSpTMap, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxWTCompass, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxWTMap, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxFiTCompass, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxFiTMap, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxFoTCompass, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxFotMap, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxJBCompass, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxJBMap, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxDCCompass, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxDCMap, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxDTCompass, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbxDTMap, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pnlHyruleField.ResumeLayout(False)
         Me.pnlHyruleField.PerformLayout()
         Me.pnlLonLonRanch.ResumeLayout(False)
@@ -4828,118 +5071,6 @@ Partial Class frmTrackerOfTime
         Me.pnlQuestMasks.PerformLayout()
         Me.pnlFireTemple.ResumeLayout(False)
         Me.pnlFireTemple.PerformLayout()
-        CType(Me.pbxMap, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pnlWorldMap.ResumeLayout(False)
-        Me.pnlEquips.ResumeLayout(False)
-        CType(Me.pbxGerudosCard, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxScale, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxStoneOfAgony, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxGauntlet, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxWallet, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxBombBag, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxQuiver, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxBulletBag, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxHoverBoots, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxKokiriBoots, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxIronBoots, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxZoraTunic, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxKokiriTunic, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxGoronTunic, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxMirrorShield, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxDekuShield, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxHylianShield, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxKokiriSword, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxMasterSword, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxBrokenKnife, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxBiggoronsSword, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pnlItems.ResumeLayout(False)
-        CType(Me.pbx24, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx23, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx22, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx21, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx20, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx19, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx18, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx17, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx16, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx15, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx14, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx13, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx10, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx08, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx12, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx11, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx09, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx07, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx06, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx05, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx04, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx03, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx02, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbx01, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxSpawnAdult, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxSpawnYoung, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxSongOfStorms, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxSongOfTime, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxSunsSong, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxSariasSong, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxEponasSong, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxStoneZora, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxStoneGoron, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxStoneKokiri, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxMedalForest, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxMedalFire, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxMedalWater, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxMedalLight, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxMedalShadow, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxMedalSpirit, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxPreludeOfLight, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxNocturneOfShadow, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxRequiemOfSpirit, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxSerenadeOfWater, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxBoleroOfFire, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxMinuetOfForest, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxZeldasLullaby, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pnlDungeonItems.ResumeLayout(False)
-        CType(Me.pbxTriforce, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxGoldSkulltula, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxMagicBar, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxPoH, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxHeartContainer, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxGCBossKey, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxGCSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxGTGSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxBotWSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxShTBossKey, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxShTSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxSpTBossKey, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxSpTSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxWTBossKey, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxWTSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxFiTBossKey, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxFiTSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxFoTBossKey, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxFoTSmallKey, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxICCompass, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxICMap, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxBotWCompass, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxBotWMap, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxShTCompass, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxShTMap, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxSpTCompass, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxSpTMap, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxWTCompass, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxWTMap, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxFiTCompass, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxFiTMap, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxFoTCompass, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxFotMap, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxJBCompass, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxJBMap, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxDCCompass, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxDCMap, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxDTCompass, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbxDTMap, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -5097,7 +5228,6 @@ Partial Class frmTrackerOfTime
     Friend WithEvents lcxFiTScarecrow As System.Windows.Forms.Label
     Friend WithEvents pnlMain As System.Windows.Forms.Panel
     Friend WithEvents lcxShortForm As System.Windows.Forms.Label
-    Friend WithEvents rtbDebug As System.Windows.Forms.RichTextBox
     Friend WithEvents ltbGSLocation As System.Windows.Forms.Label
     Friend WithEvents rtbOutputRight As System.Windows.Forms.RichTextBox
     Friend WithEvents rtbOutputLeft As System.Windows.Forms.RichTextBox
@@ -5332,5 +5462,17 @@ Partial Class frmTrackerOfTime
     Friend WithEvents pnlER As System.Windows.Forms.Panel
     Friend WithEvents pbxMap As System.Windows.Forms.PictureBox
     Friend WithEvents MiniMapToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tmrTT As System.Windows.Forms.Timer
+    Friend WithEvents lcxHideQuests As System.Windows.Forms.Label
+    Friend WithEvents nlbGTGTricks As System.Windows.Forms.Label
+    Friend WithEvents lcxGTGLensless As System.Windows.Forms.Label
+    Friend WithEvents rtbDebug As System.Windows.Forms.RichTextBox
+    Friend WithEvents pbxTrialFire As System.Windows.Forms.PictureBox
+    Friend WithEvents pbxTrialShadow As System.Windows.Forms.PictureBox
+    Friend WithEvents pbxTrialForest As System.Windows.Forms.PictureBox
+    Friend WithEvents pbxTrialLight As System.Windows.Forms.PictureBox
+    Friend WithEvents pbxTrialWater As System.Windows.Forms.PictureBox
+    Friend WithEvents pbxTrialSpirit As System.Windows.Forms.PictureBox
+    Friend WithEvents tmrFastScan As System.Windows.Forms.Timer
 
 End Class

@@ -881,6 +881,30 @@ Namespace My
                 Me("setGSLoc") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setHideQuests() As Boolean
+            Get
+                Return CType(Me("setHideQuests"),Boolean)
+            End Get
+            Set
+                Me("setHideQuests") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setGTGLensless() As Boolean
+            Get
+                Return CType(Me("setGTGLensless"),Boolean)
+            End Get
+            Set
+                Me("setGTGLensless") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

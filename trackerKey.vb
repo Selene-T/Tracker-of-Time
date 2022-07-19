@@ -29,4 +29,16 @@
             logic = String.Empty
         End Sub
     End Class
+
+    Public Class mapIcon
+        Public loc As String
+        Public x As Integer
+        Public y As Integer
+
+        Public Sub New()
+            loc = String.Empty
+            x = 0
+            y = 0
+        End Sub
+    End Class
 End Module

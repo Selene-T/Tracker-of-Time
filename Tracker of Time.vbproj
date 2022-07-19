@@ -108,6 +108,7 @@
       <DependentUpon>Form1.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ieee-754 float.vb" />
     <Compile Include="Memory.vb" />
     <Compile Include="MemPlus.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -229,6 +230,27 @@
     <None Include="additional\naryusLove.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="additional\mapHW2.png" />
+    <None Include="additional\trialWater.png" />
+    <None Include="additional\trialSpirit.png" />
+    <None Include="additional\trialShadow.png" />
+    <None Include="additional\trialLight.png" />
+    <None Include="additional\trialForest.png" />
+    <None Include="additional\trialFire.png" />
+    <None Include="additional\mapGAC7.png" />
+    <None Include="additional\mapGAC6.png" />
+    <None Include="additional\mapGAC5.png" />
+    <None Include="additional\mapGAC4.png" />
+    <None Include="additional\mapGAC3.png" />
+    <None Include="additional\mapGAC2.png" />
+    <None Include="additional\mapGAC1.png" />
+    <None Include="additional\mapGAC0.png" />
+    <None Include="additional\mapGTG.png" />
+    <None Include="additional\mapHW.png" />
+    <None Include="additional\mapOToT.png" />
+    <None Include="additional\mapMKBA.png" />
+    <None Include="additional\mapMKE.png" />
+    <None Include="additional\mapLW.png" />
     <None Include="additional\mapIC0.png" />
     <None Include="additional\mapBotW2.png" />
     <None Include="additional\mapBotW1.png" />
