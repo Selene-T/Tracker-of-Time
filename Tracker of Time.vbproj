@@ -126,6 +126,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="soh.vb" />
     <Compile Include="trackerKey.vb" />
   </ItemGroup>
   <ItemGroup>

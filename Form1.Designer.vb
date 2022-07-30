@@ -597,7 +597,7 @@ Partial Class frmTrackerOfTime
         Me.btnTest.Size = New System.Drawing.Size(88, 23)
         Me.btnTest.TabIndex = 42
         Me.btnTest.TabStop = False
-        Me.btnTest.Text = "Test Button"
+        Me.btnTest.Text = "Dump Vars"
         Me.btnTest.UseVisualStyleBackColor = True
         '
         'Button2

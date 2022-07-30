@@ -3,15 +3,15 @@ Option Strict On
 
 Public Class frmTrackerOfTime
 
-    Public Declare Function GetWindowThreadProcessId Lib "User32" (ByVal hwnd As Integer, ByRef lpdwProcessId As Integer) As Integer
-    Public Declare Function OpenProcess Lib "kernel32" (ByVal dwDesiredAccess As Integer, ByVal bInheritHandle As Integer, ByVal dwProcessId As Integer) As Integer
-    Public Declare Function ReadProcessMemory Lib "kernel32" Alias "ReadProcessMemory" (ByVal hProcess As Integer, ByVal lpBaseAddress As Integer, ByRef lpBuffer As Integer, ByVal nSize As Integer, ByRef lpNumberOfBytesWritten As Integer) As Integer
+    'Public Declare Function GetWindowThreadProcessId Lib "User32" (ByVal hwnd As Integer, ByRef lpdwProcessId As Integer) As Integer
+    'Public Declare Function OpenProcess Lib "kernel32" (ByVal dwDesiredAccess As Integer, ByVal bInheritHandle As Integer, ByVal dwProcessId As Integer) As Integer
+    'Public Declare Function ReadProcessMemory Lib "kernel32" Alias "ReadProcessMemory" (ByVal hProcess As Integer, ByVal lpBaseAddress As Integer, ByRef lpBuffer As Integer, ByVal nSize As Integer, ByRef lpNumberOfBytesWritten As Integer) As Integer
 
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 117
     Private Const IS_64BIT As Boolean = True
-    Private Const VER As String = "4.0.5"
+    Private Const VER As String = "4.0.6"
     Private p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
@@ -20,6 +20,7 @@ Public Class frmTrackerOfTime
     Private emulator As String = String.Empty
     Private keepRunning As Boolean = False
     Private zeldazFails As Integer = 0
+    Private isSoH As Boolean = False
 
     ' Variables for a variety of rom info used in the scan
     Private pedestalRead As Byte = 0
@@ -44,7 +45,7 @@ Public Class frmTrackerOfTime
     Private lastOutput As New List(Of String)
 
     ' Arrays for location scanning and their settings
-    Private arrLocation(CHECK_COUNT) As Integer
+    Public arrLocation(CHECK_COUNT) As Integer
     Private arrChests(CHECK_COUNT) As Integer
     Private arrHigh(CHECK_COUNT) As Byte
     Private arrLow(CHECK_COUNT) As Byte
@@ -130,7 +131,7 @@ Public Class frmTrackerOfTime
             incB(iCheat)
             If iCheat = aCheat.Length Then
                 btnTest.Visible = True
-                Button2.Visible = True
+                'Button2.Visible = True
                 iCheat = 0
             End If
         Else
@@ -571,7 +572,7 @@ Public Class frmTrackerOfTime
 
         ' Clear visits to overworld maps
         For i = 0 To 26
-            aVisited(i) = False    ' Debug RESTORE
+            aVisited(i) = False
         Next
 
         ' Unlink all the overworld map exits
@@ -671,7 +672,7 @@ Public Class frmTrackerOfTime
 
         ' Clear visits to overworld maps
         For i = 27 To 37
-            aVisited(i) = False    ' Debug RESTORE
+            aVisited(i) = False
         Next
 
         ' Unlink all the dungeon related exits
@@ -1010,6 +1011,7 @@ Public Class frmTrackerOfTime
         End With
     End Sub
     Private Sub getHearts()
+        If isSoH Then Exit Sub
         ' Check if player has enhanced defence
         Dim isEnhanced As Boolean = CBool(IIf(goRead(&H11A60C + 2, 1) > 0, True, False))
 
@@ -1363,32 +1365,17 @@ Public Class frmTrackerOfTime
                             pbxMap.Image = My.Resources.mapFoT0 ' B2
                     End Select
                 Case 4
-                    ' For Fire Temple, we need to keep track of the last floor, for the one duplicate room during falling
                     Select Case iRoom
                         Case 8, 30, 34, 35
                             pbxMap.Image = My.Resources.mapFiT4 ' 5F
-                            'iLastFloor = 4
                         Case 7, 12 To 14, 27, 32, 33, 37
                             pbxMap.Image = My.Resources.mapFiT3 ' 4F
-                            'iLastFloor = 3
                         Case 5, 9, 11, 16, 23 To 26, 28, 31
                             pbxMap.Image = My.Resources.mapFiT2 ' 3F
-                            'iLastFloor = 2
                         Case 4, 10, 36
                             pbxMap.Image = My.Resources.mapFiT1 ' 2F
-                            'iLastFloor = 1
                         Case 0 To 3, 15, 17 To 22
                             pbxMap.Image = My.Resources.mapFiT0 ' 1F
-                            'iLastFloor = 0
-                            'Case 6
-                            ' Code is used twice when falling between floors, compare it with the last floor
-                            'If iLastFloor = 4 Then
-                            ' If the last floor was 5F, load up 4F
-                            'pbxMap.Image = My.Resources.mapFiT3 ' 4F
-                            'Else
-                            ' Else use 2F
-                            'pbxMap.Image = My.Resources.mapFiT1 ' 2F
-                            'End If
                     End Select
                 Case 5
                     Select Case iRoom
@@ -2035,7 +2022,6 @@ Public Class frmTrackerOfTime
                 fixHex(exitCode, 3)
                 exitCode = exit2label(exitCode, iNewReach)
 
-                'exitCode = "X" ' Debug REMOVE
 
                 ' If aReachExit is not 255, set exit to the new iNewReach
                 If Not iNewReach = 255 Then
@@ -2113,6 +2099,35 @@ Public Class frmTrackerOfTime
         Select Case iLastMinimap
             Case 0
                 If Not aMQ(0) Then
+                    Select Case iRoom
+                        Case 10, 12 ' 3F
+                            aIconLoc(0) = "3102"
+                            aIconPos.Add(New Point(213, 178))
+                            aIconLoc(1) = "3106"
+                            aIconPos.Add(New Point(273, 208))
+                            aIconLoc(2) = "7803"
+                            aIconPos.Add(New Point(273, 224))
+                        Case 1, 2, 11 '2F
+                            aIconLoc(0) = "3101"
+                            aIconPos.Add(New Point(254, 350))
+                            aIconLoc(1) = "3105"
+                            aIconPos.Add(New Point(270, 362))
+                        Case 0 '1F
+                            aIconLoc(0) = "3103"
+                            aIconPos.Add(New Point(466, 214))
+                        Case 3 To 8 'B1
+                            aIconLoc(0) = "3104"
+                            aIconPos.Add(New Point(419, 131))
+                            aIconLoc(1) = "7802"
+                            aIconPos.Add(New Point(429, 172))
+                            aIconLoc(2) = "7801"
+                            aIconPos.Add(New Point(379, 120))
+                            aIconLoc(3) = "7800"
+                            aIconPos.Add(New Point(64, 84))
+                        Case 9 'B2
+                            aIconLoc(0) = "1031"
+                            aIconPos.Add(New Point(300, 33))
+                    End Select
                 Else
                     Select Case iRoom
                         Case 10, 12 ' 3F
@@ -2150,6 +2165,42 @@ Public Class frmTrackerOfTime
                 End If
             Case 1
                 If Not aMQ(1) Then
+                    Select Case iRoom
+                        Case 5, 6, 9, 10, 12, 16, 17, 18 ' 2F
+                            aIconLoc(0) = "3206"
+                            aIconPos.Add(New Point(307, 314))
+                            aIconLoc(1) = "3204"
+                            aIconPos.Add(New Point(289, 242))
+                            aIconLoc(2) = "3210"
+                            aIconPos.Add(New Point(156, 223))
+                            aIconLoc(3) = "7810"
+                            aIconPos.Add(New Point(109, 205))
+                            aIconLoc(4) = "7808"
+                            aIconPos.Add(New Point(109, 253))
+                            aIconLoc(5) = "8501"
+                            aIconPos.Add(New Point(293, 200))
+                            aIconLoc(6) = "8504"
+                            aIconPos.Add(New Point(313, 200))
+                        Case 0 To 4, 7, 8, 11, 13 To 15 ' 1F
+                            aIconLoc(0) = "3208"
+                            aIconPos.Add(New Point(158, 239))
+                            aIconLoc(1) = "3205"
+                            aIconPos.Add(New Point(109, 319))
+                            aIconLoc(2) = "4400"
+                            aIconPos.Add(New Point(179, 140))
+                            aIconLoc(3) = "1131"
+                            aIconPos.Add(New Point(179, 156))
+                            aIconLoc(4) = "7812"
+                            aIconPos.Add(New Point(344, 361))
+                            aIconLoc(5) = "7809"
+                            aIconPos.Add(New Point(334, 291))
+                            aIconLoc(6) = "7811"
+                            aIconPos.Add(New Point(289, 39))
+                            aIconLoc(7) = "8505"
+                            aIconPos.Add(New Point(158, 304))
+                            aIconLoc(8) = "8502"
+                            aIconPos.Add(New Point(339, 129))
+                    End Select
                 Else
                     Select Case iRoom
                         Case 5, 6, 9, 10, 12, 16, 17, 18 ' 2F
@@ -2192,6 +2243,28 @@ Public Class frmTrackerOfTime
                 End If
             Case 2
                 If Not aMQ(2) Then
+                    Select Case iRoom
+                        Case 0 To 2, 4 To 12 ' 1F
+                            aIconLoc(0) = "3301"
+                            aIconPos.Add(New Point(350, 107))
+                            aIconLoc(1) = "3302"
+                            aIconPos.Add(New Point(184, 107))
+                            aIconLoc(2) = "3304"
+                            aIconPos.Add(New Point(229, 53))
+                            aIconLoc(3) = "1231"
+                            aIconPos.Add(New Point(341, 232))
+                            aIconLoc(5) = "7818"
+                            aIconPos.Add(New Point(347, 270))
+                        Case 3, 13 To 16 ' B1
+                            aIconLoc(0) = "7819"
+                            aIconPos.Add(New Point(324, 224))
+                            aIconLoc(1) = "7817"
+                            aIconPos.Add(New Point(254, 163))
+                            aIconLoc(2) = "7816"
+                            aIconPos.Add(New Point(270, 159))
+                            aIconLoc(3) = "8601"
+                            aIconPos.Add(New Point(221, 264))
+                    End Select
                 Else
                     Select Case iRoom
                         Case 0 To 2, 4 To 12 ' 1F
@@ -2234,8 +2307,56 @@ Public Class frmTrackerOfTime
                 End If
             Case 3
                 If Not aMQ(3) Then
-                Else
+                    Select Case iRoom
+                        Case 10, 12 To 14, 19, 20, 23 To 26 ' 2F
+                            aIconLoc(0) = "3403"
+                            aIconPos.Add(New Point(258, 335))
+                            aIconLoc(1) = "3401"
+                            aIconPos.Add(New Point(277, 100))
+                            aIconLoc(2) = "3404"
+                            aIconPos.Add(New Point(145, 198))
+                            aIconLoc(3) = "3414"
+                            aIconPos.Add(New Point(149, 51))
+                            aIconLoc(4) = "3413"
+                            aIconPos.Add(New Point(235, 44))
+                            aIconLoc(5) = "3412"
+                            aIconPos.Add(New Point(277, 56))
+                            aIconLoc(6) = "3415"
+                            aIconPos.Add(New Point(315, 44))
+                            aIconLoc(7) = "7825"
+                            aIconPos.Add(New Point(296, 335))
+                            aIconLoc(8) = "7826"
+                            aIconPos.Add(New Point(186, 87))
 
+                        Case 0 To 8, 11, 15, 16, 18, 21, 22 ' 1F
+                            aIconLoc(0) = "3403"
+                            aIconPos.Add(New Point(258, 335))
+                            aIconLoc(1) = "3400"
+                            aIconPos.Add(New Point(277, 59))
+                            aIconLoc(2) = "3405"
+                            aIconPos.Add(New Point(384, 110))
+                            aIconLoc(3) = "3402"
+                            aIconPos.Add(New Point(114, 153))
+                            aIconLoc(4) = "3407"
+                            aIconPos.Add(New Point(419, 133))
+                            aIconLoc(5) = "7825"
+                            aIconPos.Add(New Point(296, 335))
+                            aIconLoc(6) = "7827"
+                            aIconPos.Add(New Point(295, 125))
+                            aIconLoc(7) = "7824"
+                            aIconPos.Add(New Point(359, 100))
+                        Case 9 ' B1
+                            aIconLoc(0) = "3409"
+                            aIconPos.Add(New Point(195, 169))
+                        Case 17 ' B2
+                            aIconLoc(0) = "3411"
+                            aIconPos.Add(New Point(243, 219))
+                            aIconLoc(1) = "1331"
+                            aIconPos.Add(New Point(279, 104))
+                            aIconLoc(2) = "7828"
+                            aIconPos.Add(New Point(243, 203))
+                    End Select
+                Else
                     Select Case iRoom
                         Case 10, 12 To 14, 19, 20, 23 To 26 ' 2F
                             aIconLoc(0) = "3403"
@@ -2283,6 +2404,53 @@ Public Class frmTrackerOfTime
                 End If
             Case 4
                 If Not aMQ(4) Then
+                    Select Case iRoom
+                        Case 8, 30, 34, 35 ' 5F
+                            aIconLoc(0) = "3513"
+                            aIconPos.Add(New Point(419, 163))
+                            aIconLoc(1) = "3505"
+                            aIconPos.Add(New Point(123, 221))
+                            aIconLoc(2) = "7903"
+                            aIconPos.Add(New Point(395, 185))
+                        Case 7, 12 To 14, 27, 32, 33, 37 ' 4F
+                            aIconLoc(0) = "7904"
+                            aIconPos.Add(New Point(370, 117))
+                        Case 5, 9, 11, 16, 23 To 26, 28, 31 ' 3F
+                            aIconLoc(0) = "3503"
+                            aIconPos.Add(New Point(432, 271))
+                            aIconLoc(1) = "3508"
+                            aIconPos.Add(New Point(374, 57))
+                            aIconLoc(2) = "3510"
+                            aIconPos.Add(New Point(360, 174))
+                            aIconLoc(3) = "3506"
+                            aIconPos.Add(New Point(418, 294))
+                            aIconLoc(4) = "3507"
+                            aIconPos.Add(New Point(236, 96))
+                            aIconLoc(5) = "3509"
+                            aIconPos.Add(New Point(166, 191))
+                            aIconLoc(6) = "7902"
+                            aIconPos.Add(New Point(440, 105))
+                        Case 4, 10, 36 ' 2F
+                            aIconLoc(0) = "3511"
+                            aIconPos.Add(New Point(458, 188))
+                        Case 0 To 3, 15, 17 To 22 ' 1F
+                            aIconLoc(0) = "3501"
+                            aIconPos.Add(New Point(193, 263))
+                            aIconLoc(1) = "3500"
+                            aIconPos.Add(New Point(262, 87))
+                            aIconLoc(2) = "3512"
+                            aIconPos.Add(New Point(262, 151))
+                            aIconLoc(3) = "3504"
+                            aIconPos.Add(New Point(430, 69))
+                            aIconLoc(4) = "3502"
+                            aIconPos.Add(New Point(393, 343))
+                            aIconLoc(5) = "1431"
+                            aIconPos.Add(New Point(166, 191))
+                            aIconLoc(6) = "7901"
+                            aIconPos.Add(New Point(330, 68))
+                            aIconLoc(7) = "7900"
+                            aIconPos.Add(New Point(362, 66))
+                    End Select
                 Else
                     Select Case iRoom
                         Case 8, 30, 34, 35 ' 5F
@@ -2332,13 +2500,57 @@ Public Class frmTrackerOfTime
                 If Not aMQ(5) Then
                     Select Case iRoom
                         Case 0, 1, 4 To 7, 10, 11, 13, 17, 19, 20, 30, 31, 43 ' 3F
-
+                            aIconLoc(0) = "3602"
+                            aIconPos.Add(New Point(431, 311))
+                            aIconLoc(1) = "3609"
+                            aIconPos.Add(New Point(416, 246))
+                            aIconLoc(2) = "3608"
+                            aIconPos.Add(New Point(375, 356))
+                            aIconLoc(3) = "3607"
+                            aIconPos.Add(New Point(154, 57))
+                            aIconLoc(4) = "1531"
+                            aIconPos.Add(New Point(323, 171))
+                            aIconLoc(5) = "7910"
+                            aIconPos.Add(New Point(316, 279))
+                            aIconLoc(6) = "7909"
+                            aIconPos.Add(New Point(221, 274))
                         Case 22, 25, 29, 32, 35, 39, 41 ' 2F
-
+                            aIconLoc(0) = "3600"
+                            aIconPos.Add(New Point(415, 311))
+                            aIconLoc(1) = "3603"
+                            aIconPos.Add(New Point(230, 139))
+                            aIconLoc(2) = "7909"
+                            aIconPos.Add(New Point(221, 274))
+                            aIconLoc(3) = "7912"
+                            aIconPos.Add(New Point(173, 105))
                         Case 3, 8, 9, 12, 14 To 16, 18, 21, 23, 24, 26, 28, 33, 34, 36 To 38, 40, 42 ' 1F
-
+                            aIconLoc(0) = "3601"
+                            aIconPos.Add(New Point(431, 311))
+                            aIconLoc(1) = "3603"
+                            aIconPos.Add(New Point(230, 139))
+                            aIconLoc(2) = "3610"
+                            aIconPos.Add(New Point(206, 181))
+                            aIconLoc(3) = "3605"
+                            aIconPos.Add(New Point(253, 120))
+                            aIconLoc(4) = "7908"
+                            aIconPos.Add(New Point(204, 346))
+                            aIconLoc(5) = "7909"
+                            aIconPos.Add(New Point(221, 274))
+                            aIconLoc(6) = "7912"
+                            aIconPos.Add(New Point(173, 105))
+                            aIconLoc(7) = "7911"
+                            aIconPos.Add(New Point(266, 158))
                         Case 2, 27 ' B1
-
+                            aIconLoc(0) = "3606"
+                            aIconPos.Add(New Point(369, 333))
+                            aIconLoc(1) = "3610"
+                            aIconPos.Add(New Point(206, 181))
+                            aIconLoc(2) = "7908"
+                            aIconPos.Add(New Point(204, 346))
+                            aIconLoc(3) = "7909"
+                            aIconPos.Add(New Point(221, 274))
+                            aIconLoc(4) = "7911"
+                            aIconPos.Add(New Point(256, 158))
                     End Select
                 Else
                     Select Case iRoom
@@ -2378,13 +2590,59 @@ Public Class frmTrackerOfTime
                 If Not aMQ(6) Then
                     Select Case iRoom
                         Case 22, 24 To 26, 31 ' 4F
-
+                            aIconLoc(0) = "3710"
+                            aIconPos.Add(New Point(322, 75))
+                            aIconLoc(1) = "3718"
+                            aIconPos.Add(New Point(197, 131))
                         Case 7 To 11, 16 To 21, 23, 29 ' 3F
-
+                            aIconLoc(0) = "3701"
+                            aIconPos.Add(New Point(136, 244))
+                            aIconLoc(1) = "3511"
+                            aIconPos.Add(New Point(162, 349))
+                            aIconLoc(2) = "3715"
+                            aIconPos.Add(New Point(315, 100))
+                            aIconLoc(3) = "3705"
+                            aIconPos.Add(New Point(428, 151))
+                            aIconLoc(4) = "3721"
+                            aIconPos.Add(New Point(441, 296))
+                            aIconLoc(5) = "3720"
+                            aIconPos.Add(New Point(424, 296))
+                            aIconLoc(6) = "5509"
+                            aIconPos.Add(New Point(379, 349))
+                            aIconLoc(7) = "1631"
+                            aIconPos.Add(New Point(261, 64))
+                            aIconLoc(8) = "7916"
+                            aIconPos.Add(New Point(108, 306))
+                            aIconLoc(9) = "7918"
+                            aIconPos.Add(New Point(213, 83))
                         Case 5, 6, 28, 30 ' 2F
-
+                            aIconLoc(0) = "3706"
+                            aIconPos.Add(New Point(176, 108))
+                            aIconLoc(1) = "3712"
+                            aIconPos.Add(New Point(184, 124))
+                            aIconLoc(2) = "3703"
+                            aIconPos.Add(New Point(261, 119))
+                            aIconLoc(3) = "3713"
+                            aIconPos.Add(New Point(370, 136))
+                            aIconLoc(4) = "3714"
+                            aIconPos.Add(New Point(370, 152))
+                            aIconLoc(5) = "3702"
+                            aIconPos.Add(New Point(234, 110))
+                            aIconLoc(6) = "7919"
+                            aIconPos.Add(New Point(160, 108))
                         Case 0 To 4, 12 To 15, 27 ' 1F
-
+                            aIconLoc(0) = "3708"
+                            aIconPos.Add(New Point(102, 97))
+                            aIconLoc(1) = "3700"
+                            aIconPos.Add(New Point(221, 104))
+                            aIconLoc(2) = "3704"
+                            aIconPos.Add(New Point(297, 97))
+                            aIconLoc(3) = "3707"
+                            aIconPos.Add(New Point(405, 55))
+                            aIconLoc(4) = "7920"
+                            aIconPos.Add(New Point(221, 124))
+                            aIconLoc(5) = "7917"
+                            aIconPos.Add(New Point(393, 118))
                     End Select
                 Else
                     Select Case iRoom
@@ -2452,8 +2710,67 @@ Public Class frmTrackerOfTime
                 End If
             Case 7
                 If Not aMQ(7) Then
+                    Select Case iRoom
+                        Case 0 To 2, 4 ' B1
+                            aIconLoc(0) = "3801"
+                            aIconPos.Add(New Point(235, 115))
+                            aIconLoc(1) = "3807"
+                            aIconPos.Add(New Point(175, 144))
+                        Case 5 To 8 ' B2
+                            aIconLoc(0) = "3803"
+                            aIconPos.Add(New Point(382, 200))
+                            aIconLoc(1) = "3802"
+                            aIconPos.Add(New Point(399, 122))
+                        Case 9, 16, 22 ' B3
+                            aIconLoc(0) = "3812"
+                            aIconPos.Add(New Point(459, 265))
+                            aIconLoc(1) = "3822"
+                            aIconPos.Add(New Point(459, 281))
+                            aIconLoc(2) = "501"
+                            aIconPos.Add(New Point(269, 224))
+                            aIconLoc(3) = "7927"
+                            aIconPos.Add(New Point(475, 273))
+                            aIconLoc(4) = "7924"
+                            aIconPos.Add(New Point(253, 224))
+                            aIconLoc(5) = "7928"
+                            aIconPos.Add(New Point(404, 99))
+                            aIconLoc(6) = "7926"
+                            aIconPos.Add(New Point(81, 103))
+                        Case 3, 10 To 15, 17 To 21, 23 To 26 ' B4
+                            aIconLoc(0) = "3805"
+                            aIconPos.Add(New Point(220, 334))
+                            aIconLoc(1) = "3804"
+                            aIconPos.Add(New Point(250, 334))
+                            aIconLoc(2) = "3806"
+                            aIconPos.Add(New Point(205, 359))
+                            aIconLoc(3) = "3809"
+                            aIconPos.Add(New Point(324, 220))
+                            aIconLoc(4) = "504"
+                            aIconPos.Add(New Point(269, 224))
+                            aIconLoc(5) = "3821"
+                            aIconPos.Add(New Point(463, 157))
+                            aIconLoc(6) = "3808"
+                            aIconPos.Add(New Point(431, 110))
+                            aIconLoc(7) = "3820"
+                            aIconPos.Add(New Point(439, 126))
+                            aIconLoc(8) = "3810"
+                            aIconPos.Add(New Point(130, 53))
+                            aIconLoc(9) = "3811"
+                            aIconPos.Add(New Point(153, 53))
+                            aIconLoc(10) = "3813"
+                            aIconPos.Add(New Point(141, 163))
+                            aIconLoc(11) = "1731"
+                            aIconPos.Add(New Point(195, 213))
+                            aIconLoc(12) = "7925"
+                            aIconPos.Add(New Point(235, 359))
+                            aIconLoc(13) = "7924"
+                            aIconPos.Add(New Point(253, 224))
+                            aIconLoc(14) = "7928"
+                            aIconPos.Add(New Point(404, 99))
+                            aIconLoc(15) = "7926"
+                            aIconPos.Add(New Point(81, 103))
+                    End Select
                 Else
-
                     Select Case iRoom
                         Case 0 To 2, 4 ' B1
                             aIconLoc(0) = "3801"
@@ -2521,6 +2838,45 @@ Public Class frmTrackerOfTime
                 End If
             Case 8
                 If Not aMQ(8) Then
+                    Select Case iRoom
+                        Case 0 To 6 ' B1
+                            aIconLoc(0) = "3908"
+                            aIconPos.Add(New Point(261, 151))
+                            aIconLoc(1) = "3905"
+                            aIconPos.Add(New Point(359, 151))
+                            aIconLoc(2) = "3901"
+                            aIconPos.Add(New Point(269, 129))
+                            aIconLoc(3) = "3914"
+                            aIconPos.Add(New Point(351, 129))
+                            aIconLoc(4) = "3904"
+                            aIconPos.Add(New Point(192, 21))
+                            aIconLoc(5) = "601"
+                            aIconPos.Add(New Point(78, 106))
+                            aIconLoc(6) = "3903"
+                            aIconPos.Add(New Point(444, 196))
+                            aIconLoc(7) = "3920"
+                            aIconPos.Add(New Point(471, 196))
+                            aIconLoc(8) = "3910"
+                            aIconPos.Add(New Point(432, 70))
+                            aIconLoc(9) = "3912"
+                            aIconPos.Add(New Point(415, 100))
+                            aIconLoc(10) = "8000"
+                            aIconPos.Add(New Point(431, 100))
+                            aIconLoc(11) = "8002"
+                            aIconPos.Add(New Point(273, 55))
+                            aIconLoc(12) = "8001"
+                            aIconPos.Add(New Point(341, 53))
+                        Case 7, 8 ' B2
+                            aIconLoc(0) = "3902"
+                            aIconPos.Add(New Point(295, 143))
+                            aIconLoc(1) = "3916"
+                            aIconPos.Add(New Point(312, 194))
+                            aIconLoc(2) = "3909"
+                            aIconPos.Add(New Point(177, 96))
+                        Case 9 ' B3
+                            aIconLoc(0) = "3907"
+                            aIconPos.Add(New Point(386, 171))
+                    End Select
                 Else
                     Select Case iRoom
                         Case 0 To 6 ' B1
@@ -2536,8 +2892,6 @@ Public Class frmTrackerOfTime
                             aIconPos.Add(New Point(273, 66))
                             aIconLoc(5) = "8002"
                             aIconPos.Add(New Point(69, 84))
-                        Case 7, 8 ' B2
-
                         Case 9 ' B3
                             aIconLoc(0) = "3901"
                             aIconPos.Add(New Point(387, 169))
@@ -2547,6 +2901,22 @@ Public Class frmTrackerOfTime
                 End If
             Case 9 ' IC
                 If Not aMQ(9) Then
+                    aIconLoc(0) = "4000"
+                    aIconPos.Add(New Point(355, 26))
+                    aIconLoc(1) = "4001"
+                    aIconPos.Add(New Point(410, 237))
+                    aIconLoc(2) = "701"
+                    aIconPos.Add(New Point(404, 196))
+                    aIconLoc(3) = "4002"
+                    aIconPos.Add(New Point(178, 228))
+                    aIconLoc(4) = "6402"
+                    aIconPos.Add(New Point(194, 228))
+                    aIconLoc(5) = "8009"
+                    aIconPos.Add(New Point(279, 152))
+                    aIconLoc(6) = "8010"
+                    aIconPos.Add(New Point(420, 204))
+                    aIconLoc(7) = "8008"
+                    aIconPos.Add(New Point(198, 104))
                 Else ' 1F
                     aIconLoc(0) = "4001"
                     aIconPos.Add(New Point(411, 237))
@@ -2567,7 +2937,50 @@ Public Class frmTrackerOfTime
                 End If
             Case 11 ' GTG
                 If Not aMQ(10) Then
-
+                    aIconLoc(0) = "4219"
+                    aIconPos.Add(New Point(252, 320))
+                    aIconLoc(1) = "4207"
+                    aIconPos.Add(New Point(289, 320))
+                    aIconLoc(2) = "4200"
+                    aIconPos.Add(New Point(134, 314))
+                    aIconLoc(3) = "4201"
+                    aIconPos.Add(New Point(401, 339))
+                    aIconLoc(4) = "4217"
+                    aIconPos.Add(New Point(163, 115))
+                    aIconLoc(5) = "4215"
+                    aIconPos.Add(New Point(133, 35))
+                    aIconLoc(6) = "4214"
+                    aIconPos.Add(New Point(149, 35))
+                    aIconLoc(7) = "4220"
+                    aIconPos.Add(New Point(149, 19))
+                    aIconLoc(8) = "4202"
+                    aIconPos.Add(New Point(133, 19))
+                    aIconLoc(9) = "4203"
+                    aIconPos.Add(New Point(278, 120))
+                    aIconLoc(10) = "4204"
+                    aIconPos.Add(New Point(271, 210))
+                    aIconLoc(11) = "4218"
+                    aIconPos.Add(New Point(399, 103))
+                    aIconLoc(12) = "4216"
+                    aIconPos.Add(New Point(399, 121))
+                    aIconLoc(13) = "4205"
+                    aIconPos.Add(New Point(291, 226))
+                    aIconLoc(14) = "4208"
+                    aIconPos.Add(New Point(303, 210))
+                    aIconLoc(15) = "801"
+                    aIconPos.Add(New Point(372, 224))
+                    aIconLoc(16) = "4213"
+                    aIconPos.Add(New Point(461, 220))
+                    aIconLoc(17) = "4211"
+                    aIconPos.Add(New Point(274, 247))
+                    aIconLoc(18) = "4206"
+                    aIconPos.Add(New Point(226, 223))
+                    aIconLoc(19) = "4210"
+                    aIconPos.Add(New Point(236, 187))
+                    aIconLoc(20) = "4209"
+                    aIconPos.Add(New Point(252, 187))
+                    aIconLoc(21) = "4212"
+                    aIconPos.Add(New Point(271, 226))
                 Else ' F1
                     aIconLoc(0) = "4219"
                     aIconPos.Add(New Point(252, 320))
@@ -2606,6 +3019,55 @@ Public Class frmTrackerOfTime
                 End If
             Case 10, 13 ' GAT & GAC
                 If Not aMQ(11) Then
+                    Select Case iRoom
+                        Case 0 ' Main Upper
+                            aIconLoc(0) = "4111"
+                            aIconPos.Add(New Point(270, 112))
+                        Case 1 ' Main Lower
+                            aIconLoc(0) = "8709"
+                            aIconPos.Add(New Point(292, 255))
+                            aIconLoc(1) = "8706"
+                            aIconPos.Add(New Point(278, 271))
+                            aIconLoc(2) = "8704"
+                            aIconPos.Add(New Point(262, 271))
+                            aIconLoc(3) = "8708"
+                            aIconPos.Add(New Point(248, 255))
+                        Case 2 ' Forest Trial
+                            aIconLoc(0) = "4309"
+                            aIconPos.Add(New Point(213, 111))
+                        Case 3 ' Water Trial
+                            aIconLoc(0) = "4307"
+                            aIconPos.Add(New Point(196, 200))
+                            aIconLoc(1) = "4306"
+                            aIconPos.Add(New Point(196, 245))
+                        Case 4 ' Shadow Trial
+                            aIconLoc(0) = "4308"
+                            aIconPos.Add(New Point(183, 292))
+                            aIconLoc(1) = "4305"
+                            aIconPos.Add(New Point(305, 173))
+                        Case 6 ' Light Trial
+                            aIconLoc(0) = "4312"
+                            aIconPos.Add(New Point(430, 217))
+                            aIconLoc(1) = "4311"
+                            aIconPos.Add(New Point(410, 221))
+                            aIconLoc(2) = "4313"
+                            aIconPos.Add(New Point(390, 217))
+                            aIconLoc(3) = "4314"
+                            aIconPos.Add(New Point(430, 181))
+                            aIconLoc(4) = "4310"
+                            aIconPos.Add(New Point(410, 177))
+                            aIconLoc(5) = "4315"
+                            aIconPos.Add(New Point(390, 181))
+                            aIconLoc(6) = "4316"
+                            aIconPos.Add(New Point(410, 199))
+                            aIconLoc(7) = "4317"
+                            aIconPos.Add(New Point(351, 191))
+                        Case 7 ' Spirit Trial
+                            aIconLoc(0) = "4318"
+                            aIconPos.Add(New Point(219, 140))
+                            aIconLoc(1) = "4320"
+                            aIconPos.Add(New Point(196, 182))
+                    End Select
                 Else
                     Select Case iRoom
                         Case 0 ' Main Upper
@@ -3691,6 +4153,7 @@ Public Class frmTrackerOfTime
     ' Scan each of the chests data
     Private Sub readChestData()
         If emulator = String.Empty Then
+            isSoH = False
             If IS_64BIT = False Then
                 attachToProject64()
                 If emulator = String.Empty Then attachToM64PY()
@@ -3700,11 +4163,12 @@ Public Class frmTrackerOfTime
                 If emulator = String.Empty Then attachToM64P()
                 If emulator = String.Empty Then attachToRetroArch()
                 If emulator = String.Empty Then attachToModLoader64()
+                'If emulator = String.Empty Then attachToSoH()
             End If
             If Not emulator = String.Empty Then
                 Me.Text = "Tracker of Time v" & VER & " (" & emulator & ")"
                 Select Case LCase(emulator)
-                    Case "emuhawk", "rmg", "mupen64plus-gui", "retroarch - mupen64plus", "retroarch - parallel", "modloader64-gui"
+                    Case "emuhawk", "rmg", "mupen64plus-gui", "retroarch - mupen64plus", "retroarch - parallel", "modloader64-gui", "soh"
                         emulator = "variousX64"
                 End Select
             End If
@@ -4766,6 +5230,7 @@ Public Class frmTrackerOfTime
     End Sub
 
     Private Function checkZeldaz() As Byte
+        If isSoH Then Return 2
         ' Checks for the 'ZELDAZ' within the memory to make sure you are playing Ocarina of Time, and that it is still reading the correct memory region
         checkZeldaz = 0
         Dim zeldaz1 As Integer = goRead(&H11A5EC)
@@ -4784,9 +5249,11 @@ Public Class frmTrackerOfTime
         If checkZeldaz = 2 Then getRandoVer()
     End Function
     Private Function isLoadedGame() As Boolean
+        Dim addrLoaded As Integer = &H11B92C
+        If isSoH Then addrLoaded = &HEC8600
         ' Checks the game state (2=game menu, 1=title screen, 0=gameplay), if 0 and a successful ZELDAZ check, then true
         isLoadedGame = False
-        If goRead(&H11B92C, 1) = 0 And checkZeldaz() = 2 Then isLoadedGame = True
+        If goRead(addrLoaded, 1) = 0 And checkZeldaz() = 2 Then isLoadedGame = True
     End Function
     Private Sub debugInfo()
         emulator = String.Empty
@@ -4799,6 +5266,7 @@ Public Class frmTrackerOfTime
             If emulator = String.Empty Then attachToM64P()
             If emulator = String.Empty Then attachToRetroArch()
             If emulator = String.Empty Then attachToModLoader64()
+            If emulator = String.Empty Then attachToSoH()
         End If
         If Not emulator = String.Empty Then
             Me.Text = "Tracker of Time v" & VER & " (" & emulator & ")"
@@ -4975,25 +5443,20 @@ Public Class frmTrackerOfTime
         'pnlER.Visible = Not pnlER.Visible
         'goScan(False)
         'rtbOutputLeft.Clear()
-        Dim linkRot As Double = ((goRead(&H1DAA74, 15) / 65535 * 360) - 90) * -1
+        'Dim linkRot As Double = ((goRead(&H1DAA74, 15) / 65535 * 360) - 90) * -1
 
-        Me.Text = linkRot.ToString
+        'Me.Text = linkRot.ToString
         'MsgBox(Hex(goRead(&H400CEB, 1)))
         'MsgBox(My.Settings.setSmallKeys.ToString)
         'For Each i As Integer In aAddresses
         'rtbAddLine(Hex(i))
         'Next
         'debugInfo()
-        'Dim test As Integer = goRead(&H1D8BEE, 1)
-        'MsgBox(test.ToString)
-        Dim opp As Boolean = Not pbxTrialFire.Visible
-        pbxTrialFire.Visible = opp
-        pbxTrialForest.Visible = opp
-        pbxTrialWater.Visible = opp
-        pbxTrialSpirit.Visible = opp
-        pbxTrialShadow.Visible = opp
-        pbxTrialLight.Visible = opp
 
+        '        MsgBox(Hex(goRead(&HEC85FE)))
+        'MsgBox(checkLoc("7420").ToString)
+
+        dump()
 
         If False Then
             Dim outputXX As String = "Visited:"
@@ -7042,7 +7505,7 @@ Public Class frmTrackerOfTime
 
     End Sub
 
-    Private Function dungeonKeyCounter(ByVal dungeon As Byte, ByVal theseDoors As String) As Boolean        ', Optional safeDoors As String = "x") As Boolean
+    Private Function dungeonKeyCounter(ByVal dungeon As Byte, ByVal theseDoors As String) As Boolean
         ' Works to count dungeon keys and unlocked doors
         dungeonKeyCounter = False
         Dim countDoors As Byte = 0
@@ -8382,7 +8845,7 @@ Public Class frmTrackerOfTime
             .zone = 7
             .name = "Grotto Near Gerudo Valley"
             .gs = True
-            .logic = "YG03xfo.ZG00G24k"
+            .logic = "YG03xfo.ZrG24k"
         End With
         inc(tk)
         With aKeys(tk)
@@ -8400,7 +8863,7 @@ Public Class frmTrackerOfTime
             .zone = 7
             .name = "Grotto Near Gerudo Valley"
             .cow = True
-            .logic = "YG03xfhLL7713.ZG00G24hLL7713"
+            .logic = "YG03xfhLL7713.ZrG24hLL7713"
         End With
         inc(tk)
         With aKeys(tk)
@@ -12749,7 +13212,7 @@ Public Class frmTrackerOfTime
                 .area = "SPT3"
                 .zone = 144
                 .name = "Silver Block Hallway Chest"
-                .logic = "Yg"
+                .logic = "YQ1144de.Yg"
             End With
             With aKeysDungeons(6)(7)
                 .loc = "3703"
@@ -14953,6 +15416,30 @@ Public Class frmTrackerOfTime
         Next
     End Sub
 
+    Private Sub attachToSoH()
+        emulator = String.Empty
+        If Not IS_64BIT Then Exit Sub
+        ' Look for soh.exe
+        Dim target As Process = Nothing
+        Try
+            target = Process.GetProcessesByName("soh")(0)
+        Catch ex As Exception
+            Return
+        End Try
+        ' If found, grab base address
+        For Each mo As ProcessModule In target.Modules
+            If LCase(mo.ModuleName) = "soh.exe" Then
+                romAddrStart64 = mo.BaseAddress.ToInt64
+                Exit For
+            End If
+        Next
+        ' Finally, attach to soh.exe
+        SetProcessName("soh")
+        emulator = "soh"
+
+        isSoH = True
+        sohSetup()
+    End Sub
     Private Sub attachToBizHawk()
         emulator = String.Empty
         If Not IS_64BIT Then Exit Sub
@@ -18174,6 +18661,22 @@ Public Class frmTrackerOfTime
                 Exit Sub
             End If
         End If
+    End Sub
+
+    Private Sub dump()
+        ' Dump values to help debug issues for users, start with the current items
+        Dim sText As String = allItems & vbCrLf
+        Dim sHex As String = String.Empty
+        ' Next read all the values of arrLocation
+        For i = 0 To arrLocation.Length - 1
+            sHex = Hex(goRead(arrLocation(i)))
+            fixHex(sHex)
+            sText = sText & i.ToString & ": " & sHex & vbCrLf
+        Next
+        ' Add in the single checks that do not make it to arrLocations, mainly Bean Plants and a few events
+        sText = sText & checkLoc("B0") & checkLoc("B1") & checkLoc("B2") & checkLoc("B3") & checkLoc("B4") & vbCrLf
+        sText = sText & checkLoc("C00") & checkLoc("C01") & checkLoc("C02") & checkLoc("C03") & checkLoc("C04") & checkLoc("C05")
+        Clipboard.SetText(sText)
     End Sub
 End Class
 
