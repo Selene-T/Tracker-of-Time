@@ -11,7 +11,7 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 117
     Private Const IS_64BIT As Boolean = True
-    Private Const VER As String = "4.0.6"
+    Private Const VER As String = "4.0.7"
     Private p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
@@ -46,7 +46,7 @@ Public Class frmTrackerOfTime
 
     ' Arrays for location scanning and their settings
     Public arrLocation(CHECK_COUNT) As Integer
-    Private arrChests(CHECK_COUNT) As Integer
+    Private arrChests(CHECK_COUNT) As Long
     Private arrHigh(CHECK_COUNT) As Byte
     Private arrLow(CHECK_COUNT) As Byte
 
@@ -98,7 +98,7 @@ Public Class frmTrackerOfTime
 
     ' Variables for detecting room info
     Private Const CUR_ROOM_ADDR As Integer = &H1C8544
-    Private lastRoomScan As Integer = 0
+    Private lastRoomScan As Long = 0
 
     ' Cheat menu vars
     Private iCheat As Byte = 0
@@ -901,8 +901,10 @@ Public Class frmTrackerOfTime
         canAdult = False
         canYoung = False
 
+        Dim addrAge As Integer = If(isSoH, SAV(&H4), &H11A5D4)
+
         ' If 0 or 1 , set the age as accessable
-        Select Case CByte(goRead(&H11A5D4, 1))
+        Select Case CByte(goRead(addrAge, 1))
             Case 0
                 canAdult = True
                 isAdult = True
@@ -924,12 +926,14 @@ Public Class frmTrackerOfTime
 
         For i = 0 To 2
             ' Scans at &H11A678, &H11A67C, and &H11A680 
-            tempItems = Hex(goRead(&H11A678 + (i * 4)))
+            tempItems = Hex(goRead(If(isSoH, soh.SAV(&HAC), &H11A678) + (i * 4)))
 
             ' Make sure all leading 0's are put back
             While tempItems.Length < 8
                 tempItems = "0" & tempItems
             End While
+
+            endianFlip(tempItems)
 
             ' Add info into main string
             stringItems = stringItems & tempItems
@@ -983,7 +987,7 @@ Public Class frmTrackerOfTime
     End Sub
     Private Sub getGoldSkulltulas()
         ' Get gold skulltula count
-        Dim bGS As Byte = CByte(goRead(&H11A6A0 + 2, 1))
+        Dim bGS As Byte = CByte(goRead(If(isSoH, soh.SAV(&HD4), &H11A6A0 + 2), 1))
 
         ' Checks to see if the number of gold skulltula's have changed, if not then do not bother to do all that
         If bGS = goldSkulltulas Then Exit Sub
@@ -1011,12 +1015,16 @@ Public Class frmTrackerOfTime
         End With
     End Sub
     Private Sub getHearts()
-        If isSoH Then Exit Sub
+        'If isSoH Then Exit Sub
+        Dim enhFlagAddr As Integer = If(isSoH, soh.SAV(&H36 - 2), &H11A60C)
+        Dim bHeartsAddr As Integer = If(isSoH, soh.SAV(&H28), &H11A5FC)
+        Dim bPOHAddr As Integer = If(isSoH, soh.SAV(&HA8), &H11A674)
+
         ' Check if player has enhanced defence
-        Dim isEnhanced As Boolean = CBool(IIf(goRead(&H11A60C + 2, 1) > 0, True, False))
+        Dim isEnhanced As Boolean = CBool(IIf(goRead(enhFlagAddr + 2, 1) > 0, True, False))
 
         ' Get max heart container value, divide by 16 to undo their 16x multiplyer
-        Dim bHearts As Byte = CByte(goRead(&H11A5FC, 15) / 16)
+        Dim bHearts As Byte = CByte(goRead(bHeartsAddr, 15) / 16)
         maxLife = bHearts
 
         ' Just a percaution, limit hearts to 99, even though 20 is the max. Never know what people may do to their save file 
@@ -1049,7 +1057,11 @@ Public Class frmTrackerOfTime
         End With
 
         ' Now for the heart pieces
-        bHearts = CByte(goRead(&H11A674 + 3, 1))
+        If isSoH Then
+            bHearts = CByte(goRead(bPOHAddr) >> 24)
+        Else
+            bHearts = CByte(goRead(bPOHAddr + 3, 1))
+        End If
 
         With pbxPoH
             ' If not visible, make visible
@@ -1073,46 +1085,10 @@ Public Class frmTrackerOfTime
             End Select
         End With
     End Sub
-    Private Sub getItemAmounts()
-        ' Get the amount of each item
-        Dim items1 As String = Hex(goRead(&H11A65C))
-        Dim items2 As String = Hex(goRead(&H11A660))
-        Dim items3 As String = Hex(goRead(&H11A664))
-        Dim items4 As String = Hex(goRead(&H11A668))
 
-        fixHex(items1)
-        fixHex(items2)
-        fixHex(items3)
-        fixHex(items4)
-
-        Dim itemsAll As String = items1 & items2 & items3 & Mid(items4, 1, 6)
-        Dim itemAmount As Byte = 0
-
-        For i = 0 To 14
-            itemAmount = CByte("&H" & Mid(itemsAll, (i * 2) + 1, 2))
-            If aGetQuantity(i) = True Then
-                With aoInventory(i)
-                    ' If single digits
-                    Dim xPos As Byte = 34
-                    ' If double digits
-                    If itemAmount > 9 Then xPos = 19
-                    ' If triple digits
-                    If itemAmount > 99 Then xPos = 3
-                    ' Font for items numbers
-                    Dim fontItem = New Font("Lucida Console", 24, FontStyle.Bold, GraphicsUnit.Pixel)
-
-                    ' Draw the value over the lower right of the item's picturebox, first in black to give it some definition, then in white
-                    Graphics.FromImage(.Image).DrawString(itemAmount.ToString, fontItem, New SolidBrush(Color.Black), xPos - 6, 28)
-                    Graphics.FromImage(.Image).DrawString(itemAmount.ToString, fontItem, New SolidBrush(Color.White), xPos - 5, 29)
-                End With
-            End If
-        Next
-        ' Since the last check is Magic Beans, store that value to our beans
-        magicBeans = itemAmount
-    End Sub
     Private Sub getMagic()
         ' Get magic check. This one is a curious one as there are many areas to check, and none perfect. Should someone hack their file to have magic, this should hopefully find it though
-        Dim bMagic As Byte = CByte(goRead(&H11A600 + 1, 1))
+        Dim bMagic As Byte = CByte(goRead(If(isSoH, soh.SAV(&H2C), &H11A600 + 1), 1))
 
         With pbxMagicBar
             ' If not visible, make visible
@@ -1137,12 +1113,14 @@ Public Class frmTrackerOfTime
         pedestalRead = CByte(goRead(&H11B4FC, 1))
     End Sub
     Private Sub getSmallKeys()
+        ' If(isSoH, soh.SAV(&HAC), &H11A678) (start of dugeonkeys array)
+
         ' Variables used to grab values and store the needed parts into an easy to use string
         Dim tempKeys As String = String.Empty
         Dim stringKeys As String = String.Empty
 
         '  Grab keys for just Forest Temple
-        tempKeys = Hex(goRead(&H11A68C, 1))
+        tempKeys = Hex(goRead(If(isSoH, soh.SAV(&HC3), &H11A68C), 1))
 
         ' Make sure all leading 0's are put back
         fixHex(tempKeys, 2)
@@ -1151,28 +1129,31 @@ Public Class frmTrackerOfTime
         stringKeys = tempKeys
 
         ' Grab keys for Fire, Water, Spirit, and Shadow Temple
-        tempKeys = Hex(goRead(&H11A690))
+        tempKeys = Hex(goRead(If(isSoH, soh.SAV(&HC4), &H11A690)))
 
         ' Make sure all leading 0's are put back
         fixHex(tempKeys)
+        If isSoH Then endianFlip(tempKeys)
 
         ' Add all four of the grabbed Temple keys
         stringKeys = stringKeys & tempKeys
 
         ' Grab keys for Bottom of the Well and Gerudo Training Ground
-        tempKeys = Hex(goRead(&H11A694))
+        tempKeys = Hex(goRead(If(isSoH, soh.SAV(&HC8), &H11A694)))
 
         ' Make sure all leading 0's are put back
         fixHex(tempKeys)
+        If isSoH Then endianFlip(tempKeys)
 
         ' Add Bottom of the Well and Gerudo Training Ground keys
         stringKeys = stringKeys & Mid(tempKeys, 1, 2) & Mid(tempKeys, 7, 2)
 
         ' Grab keys for Ganon's Castle
-        tempKeys = Hex(goRead(&H11A698))
+        tempKeys = Hex(goRead(If(isSoH, soh.SAV(&HC9), &H11A698)))
 
         ' Make sure all leading 0's are put back
         fixHex(tempKeys)
+        If isSoH Then endianFlip(tempKeys)
 
         ' Add Ganon's Castle keys
         stringKeys = stringKeys & Mid(tempKeys, 3, 2)
@@ -1218,6 +1199,9 @@ Public Class frmTrackerOfTime
         Next
     End Sub
     Private Sub getTriforce()
+        ' soh doesn't have Triforce Hunt as of 3.0.0
+        If isSoH Then Exit Sub
+
         ' Get Triforce count
         Dim iTriforce As Byte = CByte(goRead(&H11AE94, 1))
 
@@ -1294,8 +1278,6 @@ Public Class frmTrackerOfTime
 
     Private Sub scanER()
         ' ER scanning
-        'If iER = 0 Then Exit Sub
-
         Dim isOverworld As Boolean = False
         Dim isDungeon As Boolean = False
         Dim doTrials As Boolean = False
@@ -1307,7 +1289,7 @@ Public Class frmTrackerOfTime
         ' For building the arrays for scenes with Dungeon entrances
         Dim ent As Byte = 0
 
-        Dim locationCode As Integer = goRead(CUR_ROOM_ADDR + 2, 15)
+        Dim locationCode As Integer = CInt(IIf(isSoH, GDATA(&H200, 1), goRead(CUR_ROOM_ADDR + 2, 15)))
         Dim locationArray As Byte = 255
         Dim readExits(6) As Integer     ' Exits read for current map
         Dim aAlign(6) As Byte           ' Sets text alignment: 0 = Left | 1 = Centre | 2 = Right
@@ -1316,10 +1298,13 @@ Public Class frmTrackerOfTime
             aAlign(i) = 0
             readExits(i) = 0
         Next
+
         getAge()
 
+        'Dim addrRoom As Integer = If(isSoH, &HD16D9C, &H1D8BEE)
+        Dim addrRoom As Integer = If(isSoH, SAV(-&H1B17C4), &H1D8BEE)
         If locationCode <= 9 Then
-            iRoom = CByte(goRead(&H1D8BEE, 1))
+            iRoom = CByte(goRead(addrRoom, 1))
         End If
 
         ' First load up the map, I keep this separated so that it does not matter for ER settings
@@ -3804,7 +3789,7 @@ Public Class frmTrackerOfTime
                 ' MK Entrance
                 exit2label = "MK Entrance"
                 reachMap = 197
-            Case "063", "067", "07E", "0B1", "16D", "1CD", "1D1", "1D5", "25A", "25E", "262", "263", "29E", "29F", "2A2", "388", _
+            Case "063", "067", "07E", "0B1", "16D", "1CD", "1D1", "1D5", "25A", "25E", "262", "263", "29E", "29F", "2A2", "388",
                     "3B8", "3BC", "3C0", "43B", "507", "528", "52C", "530"
                 ' MK
                 exit2label = "MK"
@@ -3842,7 +3827,7 @@ Public Class frmTrackerOfTime
                 ' HC Zelda's Courtyard
                 exit2label = "Zelda's Courtyard"
                 reachMap = 13
-            Case "03B", "072", "0B7", "0DB", "195", "201", "2FD", "2A6", "345", "349", "34D", "351", "384", "39C", "3EC", "44B", _
+            Case "03B", "072", "0B7", "0DB", "195", "201", "2FD", "2A6", "345", "349", "34D", "351", "384", "39C", "3EC", "44B",
                     "453", "463", "4EE", "4FF", "550", "5C8", "5DC"
                 ' KV Main
                 exit2label = "KV"
@@ -4163,7 +4148,7 @@ Public Class frmTrackerOfTime
                 If emulator = String.Empty Then attachToM64P()
                 If emulator = String.Empty Then attachToRetroArch()
                 If emulator = String.Empty Then attachToModLoader64()
-                'If emulator = String.Empty Then attachToSoH()
+                If emulator = String.Empty Then attachToSoH()
             End If
             If Not emulator = String.Empty Then
                 Me.Text = "Tracker of Time v" & VER & " (" & emulator & ")"
@@ -4183,7 +4168,9 @@ Public Class frmTrackerOfTime
             stopScanning()
             Exit Sub
         End If
-        Dim locationCode As Integer = goRead(CUR_ROOM_ADDR + 2, 15)
+
+        Dim locationCode As Integer = CInt(IIf(isSoH, GDATA(&H200, 1), goRead(CUR_ROOM_ADDR + 2, 15)))
+
         'Me.Text = locationCode.ToString
         Dim doMath As Integer = 0
         If Not keepRunning Then
@@ -4191,38 +4178,48 @@ Public Class frmTrackerOfTime
             Exit Sub
         End If
 
-        Dim chestCheck As Integer
+        Dim chestCheck As Long = 0
         Dim foundChests As Double = 0
         Dim compareTo As Double = 0
         Dim strI As String = String.Empty
         Dim strII As String = String.Empty
         Dim doCheck As Boolean = False
-        Dim checkAgain = False
+        Dim checkAgain As Boolean = False
 
         For i = 0 To arrLocation.Length - 1
+            ' 118 is only for SoH
+            If i = 118 And Not isSoH Then Exit For
             If i Mod 5 = 0 Then Application.DoEvents()
             checkAgain = True
             Select Case i
-                Case 0 To 59, Is >= 100
+                Case 0 To 59, 100 To 117
                     ' These are the area checks, either chest, standing items, area events, as they will need to be checked as they happen
 
-                    doMath = (locationCode * 28) + 212 + &H11A5D0
-                    tempVar = &H1CA1D8
+                    doMath = (locationCode * 28) + &H11A6A4
+                    If isSoH Then doMath = doMath + &HDADF94
+                    tempVar = CInt(IIf(isSoH, &H2388, &H1CA1D8))
 
+                    Dim doFlip As Boolean = False
                     Select Case i
                         Case 0 To 2, 103 To 113, 115 To 117
                             ' Scene Checks
                             inc(doMath, 4)
-                            tempVar = &H1CA1C8
+                            ' -0x10 from default
+                            dec(tempVar, 16)
                         Case 3 To 30, 100 To 102, 114
                             ' Standing Checks
                             inc(doMath, 12)
-                            tempVar = &H1CA1E4
+                            inc(tempVar, 12)
                     End Select
 
                     If doMath = arrLocation(i) Then
                         checkAgain = False
-                        chestCheck = goRead(tempVar, arrHigh(i))
+                        If isSoH Then
+                            chestCheck = GDATA(tempVar)
+                        Else
+                            chestCheck = goRead(tempVar, arrHigh(i))
+                        End If
+
                         If Not keepRunning Then
                             stopScanning()
                             Exit Sub
@@ -4249,15 +4246,31 @@ Public Class frmTrackerOfTime
             End Select
 
             If checkAgain Then
-                chestCheck = goRead(arrLocation(i), arrHigh(i))
                 If Not keepRunning Then
                     stopScanning()
                     Exit Sub
                 End If
-                'If Not chestCheck = arrChests(i) Then
-                arrChests(i) = chestCheck
-                parseChestData(i)
-                'End If
+
+                If isSoH Then
+                    chestCheck = goRead(arrLocation(i))
+                Else
+                    chestCheck = goRead(arrLocation(i), arrHigh(i))
+                End If
+
+                If isSoH Then
+                    Select Case i
+                        Case 61 To 67
+                            Dim tempHex As String = Hex(chestCheck)
+                            fixHex(tempHex)
+                            tempHex = Mid(tempHex, 5) & Mid(tempHex, 1, 4)
+                            chestCheck = CUInt("&H" & tempHex)
+                    End Select
+                End If
+
+                If Not chestCheck = arrChests(i) Then
+                    arrChests(i) = chestCheck
+                    parseChestData(i)
+                End If
             End If
         Next
         scanSingleChecks()
@@ -4391,27 +4404,53 @@ Public Class frmTrackerOfTime
         End If
     End Sub
     Private Sub scanSingleChecks()
+        Dim arrSingles(9) As Integer
+
+        If isSoH Then
+            arrSingles(0) = SAV(&HAD0)  ' &HEC9030
+            arrSingles(1) = SAV(&HAEC)  ' &HEC904C
+            arrSingles(2) = SAV(&HB0C)  ' &HEC906C
+            arrSingles(3) = SAV(&HB78)  ' &HEC90D8
+            arrSingles(4) = SAV(&H9F0)  ' &HEC8F50
+            arrSingles(5) = SAV(&HB08)  ' &HEC9068
+            arrSingles(6) = 0
+            arrSingles(7) = SAV(&HEE4)  ' &HEC9444
+            arrSingles(8) = SAV(&HF08)  ' &HEC9468
+        Else
+            arrSingles(0) = &H11B09C
+            arrSingles(1) = &H11B0B8
+            arrSingles(2) = &H11B128
+            arrSingles(3) = &H11B144
+            arrSingles(4) = &H11AFBC
+            arrSingles(5) = &H11B0D4
+            arrSingles(6) = &H11B150
+            arrSingles(7) = &H11B4B0
+            arrSingles(8) = &H11B4D4
+        End If
+
         ' LW Bean Planted
-        If My.Settings.setSkulltula > 0 And My.Settings.setGSLoc >= 1 Then setLoc("B0", checkBit(&H11B09C, 22))
+        If My.Settings.setSkulltula > 0 And My.Settings.setGSLoc >= 1 Then setLoc("B0", checkBit(arrSingles(0), 22))
         ' DC Bean Planted
-        setLoc("B1", checkBit(&H11B0B8, 24))
+        setLoc("B1", checkBit(arrSingles(1), 24))
         ' DMT Bean Planted
-        setLoc("B2", checkBit(&H11B128, 6))
+        setLoc("B2", checkBit(arrSingles(2), 6))
         ' DMC Bean Planted
-        setLoc("B3", checkBit(&H11B144, 3))
+        setLoc("B3", checkBit(arrSingles(3), 3))
         ' GY Bean Planted
-        setLoc("B4", checkBit(&H11AFBC, 3))
+        setLoc("B4", checkBit(arrSingles(4), 3))
 
         ' GV Opened Gate to Haunted Wasteland
-        setLoc("C00", checkBit(&H11B0D4, 3))
+        setLoc("C00", checkBit(arrSingles(5), 3))
         ' DMC Deku Near Ladder
-        If My.Settings.setScrub Then setLoc("C01", checkBit(&H11B150, 6))
+        If My.Settings.setScrub Then
+            setLoc("C01", checkBit(arrSingles(6), 6))
+        End If
         ' EV: KV Well Drained
-        setLoc("C02", checkBit(&H11B4B0, 23))
+        setLoc("C02", checkBit(arrSingles(7), 23))
         ' EV: LH Restored
-        setLoc("C04", checkBit(&H11B4B0, 25))
+        setLoc("C04", checkBit(arrSingles(7), 25))
         ' Deliver Zelda's Letter | Unlock Mask Shoppe
-        setLoc("C05", checkBit(&H11B4D4, 6))
+        setLoc("C05", checkBit(arrSingles(8), 6))
 
         ' Bombchu's in Logic setting
         Dim updateSetting As Boolean = False
@@ -4503,17 +4542,19 @@ Public Class frmTrackerOfTime
         Dim gotHit As Boolean = False
         Dim startI As Byte = 31
 
-        Select Case arrHigh(loc)
-            Case 0 To 7
-                startI = 7
-                compareTo = 128
-            Case 8 To 15
-                startI = 15
-                compareTo = 32768
-            Case Else
-                startI = 31
-                compareTo = 2147483648
-        End Select
+        If Not isSoH Then
+            Select Case arrHigh(loc)
+                Case 0 To 7
+                    startI = 7
+                    compareTo = 128
+                Case 8 To 15
+                    startI = 15
+                    compareTo = 32768
+                Case Else
+                    startI = 31
+                    compareTo = 2147483648
+            End Select
+        End If
 
         If IS_64BIT Then
             'startI = 31
@@ -5250,7 +5291,7 @@ Public Class frmTrackerOfTime
     End Function
     Private Function isLoadedGame() As Boolean
         Dim addrLoaded As Integer = &H11B92C
-        If isSoH Then addrLoaded = &HEC8600
+        If isSoH Then addrLoaded = soh.SAV(&H1320)
         ' Checks the game state (2=game menu, 1=title screen, 0=gameplay), if 0 and a successful ZELDAZ check, then true
         isLoadedGame = False
         If goRead(addrLoaded, 1) = 0 And checkZeldaz() = 2 Then isLoadedGame = True
@@ -5310,6 +5351,9 @@ Public Class frmTrackerOfTime
     End Sub
     Private Sub checkMQs()
         If Not isLoadedGame() Then Exit Sub
+
+        ' soh 3.0.0 has no MQ dungeons
+        If isSoH Then Exit Sub
 
         For i = 0 To aMQ.Length - 1
             aMQ(i) = False
@@ -5454,9 +5498,10 @@ Public Class frmTrackerOfTime
         'debugInfo()
 
         '        MsgBox(Hex(goRead(&HEC85FE)))
-        'MsgBox(checkLoc("7420").ToString)
-
-        dump()
+        'MsgBox(checkLoc("11806").ToString)
+        'Dim test As Integer = goRead(arrLocation(118))
+        'MsgBox(Hex(test))
+        'dump()
 
         If False Then
             Dim outputXX As String = "Visited:"
@@ -6496,12 +6541,12 @@ Public Class frmTrackerOfTime
                         End If
                     Else
                         If (aReachY(60) And item("deku shield")) Or (aReachA(60) And item("hylian shield")) Then addArea(61, asAdult)
-                        If (((aReachY(60) And canBurnYoung()) Or (aReachA(60) And (canBurnAdult() Or item("bow")))) And _
-                                ((aReachY(60) And item("slingshot")) Or (aReachA(60) And item("bow")))) Or _
+                        If (((aReachY(60) And canBurnYoung()) Or (aReachA(60) And (canBurnAdult() Or item("bow")))) And
+                                ((aReachY(60) And item("slingshot")) Or (aReachA(60) And item("bow")))) Or
                             (Not asAdult And (My.Settings.setDekuB1Skip Or aReachA(60) Or checkLoc("10316"))) Then addArea(62, asAdult)
                         ' TODO: False is placeholder for "(logic_deku_b1_webs_with_bow and can_use(Bow)))"
-                        If (((aReachY(60) And canBurnYoung()) Or (aReachA(60) And canBurnAdult())) Or _
-                                False) And _
+                        If (((aReachY(60) And canBurnYoung()) Or (aReachA(60) And canBurnAdult())) Or
+                                False) And
                             (Not asAdult And (My.Settings.setDekuB1Skip Or aReachA(60) Or checkLoc("10316"))) Then addArea(63, asAdult)
                     End If
                 Else
@@ -6522,7 +6567,7 @@ Public Class frmTrackerOfTime
                             If My.Settings.setDekuB1Skip Or checkLoc("10316") Then addArea(68, asAdult)
                         End If
                     Else
-                        If ((aReachY(60) And item("slingshot")) Or (aReachA(60) And item("bow"))) And _
+                        If ((aReachY(60) And item("slingshot")) Or (aReachA(60) And item("bow"))) And
                             ((aReachY(60) And canBurnYoung()) Or (aReachA(60) And (canBurnAdult() Or item("bow")))) Then addArea(64, asAdult)
                         If ((aReachY(60) And item("slingshot")) Or (aReachA(60) And item("bow"))) And ((aReachY(60) And canBurnYoung()) Or (aReachA(60) And canBurnAdult())) Then addArea(65, asAdult)
                         If My.Settings.setDekuB1Skip Or aReachA(60) Or checkLoc("10316") Then addArea(68, asAdult)
@@ -6541,7 +6586,7 @@ Public Class frmTrackerOfTime
                     If Not asAdult And item("deku shield") Or item("hylian shield") Then addArea(66, asAdult)
                 Else
                     ' TODO: False is placeholder for "logic_deku_mq_log"
-                    If False Or (Not asAdult And (item("deku shield") Or item("hylian shield"))) Or _
+                    If False Or (Not asAdult And (item("deku shield") Or item("hylian shield"))) Or
                         (asAdult And (item("longshot") Or (item("hookshot") And item("iron boots")))) Then addArea(66, asAdult)
                 End If
             Case 66
@@ -6550,8 +6595,8 @@ Public Class frmTrackerOfTime
                 If iER < 2 Then
                     If Not asAdult And (item("deku stick") Or item("din's fire")) And (item("kokiri sword") Or canProjectile(0) Or (item("deku nuts") And item("deku stick"))) Then addArea(67, asAdult)
                 Else
-                    If ((aReachY(66) And item("deku stick")) Or item("din's fire") Or _
-                        (aReachA(65) And item("fire arrows"))) And _
+                    If ((aReachY(66) And item("deku stick")) Or item("din's fire") Or
+                        (aReachA(65) And item("fire arrows"))) And
                     (aReachA(66) Or item("kokiri sword") Or (aReachY(67) And canProjectile(0)) Or (item("deku nuts") And item("deku stick"))) Then addArea(67, asAdult)
                 End If
             Case 67
@@ -6764,7 +6809,7 @@ Public Class frmTrackerOfTime
 
                     ' FoT MQ Keys in Dungeon
                     If asAdult And My.Settings.setSmallKeys = 0 Then
-                        If item("bow") And item("song of time") And ((item("lift") And Not My.Settings.setFoTMQPuzzle) Or (My.Settings.setFoTMQPuzzle And item("bombchu") And item("hookshot"))) And _
+                        If item("bow") And item("song of time") And ((item("lift") And Not My.Settings.setFoTMQPuzzle) Or (My.Settings.setFoTMQPuzzle And item("bombchu") And item("hookshot"))) And
                             ((item("hover boots") And (item("hookshot") Or Not My.Settings.setFoTBackdoor)) Or Not My.Settings.setFoTMQTwisted) Then
                             canDungeon(3) = True
                         Else
@@ -6886,7 +6931,7 @@ Public Class frmTrackerOfTime
 
                     ' FiT Keys in Dungeon
                     If asAdult And My.Settings.setSmallKeys = 0 Then
-                        If item("goron tunic") And item("hammer") And item("bow") And canExplode() And (item("lift") Or My.Settings.setFiTClimb) And _
+                        If item("goron tunic") And item("hammer") And item("bow") And canExplode() And (item("lift") Or My.Settings.setFiTClimb) And
                             (item("scarecrow") Or (My.Settings.setFiTScarecrow And item("longshot"))) And (item("hover boots") Or Not My.Settings.setFiTMaze) Then
                             canDungeon(4) = True
                         Else
@@ -6927,7 +6972,7 @@ Public Class frmTrackerOfTime
             Case 109
                 ' FiT: Big Lava Room to Lower, Middle
                 addArea(108, asAdult)
-                If asAdult And item("goron tunic") And dungeonKeyCounter(4, "293024") And (item("lift") Or My.Settings.setFiTClimb) And _
+                If asAdult And item("goron tunic") And dungeonKeyCounter(4, "293024") And (item("lift") Or My.Settings.setFiTClimb) And
                     (canExplode() Or item("bow") Or item("hookshot")) Then addArea(110, asAdult)
             Case 110
                 ' FiT: Middle to Upper
@@ -7009,10 +7054,10 @@ Public Class frmTrackerOfTime
 
                 If asAdult Then
                     If (item("bow") Or item("din's fire") Or (dungeonKeyCounter(5, "06") And item("hookshot"))) And item("zelda's lullaby") Then addArea(125, asAdult)
-                    If item("zelda's lullaby") And (item("hookshot") Or item("hover boots")) And _
+                    If item("zelda's lullaby") And (item("hookshot") Or item("hover boots")) And
                         (My.Settings.setWaTCrackNothing Or (My.Settings.setWaTCrackHovers And item("hover boots"))) Then addArea(123, asAdult)
                     If dungeonKeyCounter(5, "01") And (item("longshot") Or (My.Settings.setWaTBKR And item("hover boots"))) And (item("iron boots") Or item("zelda's lullaby")) Then addArea(122, asAdult)
-                    If item("zelda's lullaby") And item("lift") And _
+                    If item("zelda's lullaby") And item("lift") And
                         (item("iron boots") And item("hookshot")) Or (My.Settings.setWaTDragonDive And (item("bombchu") Or item("bow") Or item("hookshot")) And (item("dive") Or item("iron boots"))) _
                         Then addArea(124, asAdult)
                 Else
@@ -7049,7 +7094,7 @@ Public Class frmTrackerOfTime
 
                     ' SpT Keys in Dungeon
                     If aReachY(132) And aReachA(132) And My.Settings.setSmallKeys = 0 Then
-                        If item("lift", 2) And canExplode() And item("hookshot") And item("zelda's lullaby") And item("hover boots") And item("mirror shield") And (My.Settings.setSpTLensless Or item("lens of truth")) And _
+                        If item("lift", 2) And canExplode() And item("hookshot") And item("zelda's lullaby") And item("hover boots") And item("mirror shield") And (My.Settings.setSpTLensless Or item("lens of truth")) And
                             canProjectile(1) And (item("boomerang") Or item("slingshot")) And (item("din's fire") Or item("fire arrows")) Then
                             canDungeon(6) = True
                         Else
@@ -7078,8 +7123,8 @@ Public Class frmTrackerOfTime
 
                     ' SpT MQ Keys in Dungeon
                     If aReachY(132) And aReachA(132) And My.Settings.setSmallKeys = 0 Then
-                        If item("longshot") And item("bombchus") And item("slingshot") And item("din's fire") And item("zelda's lullaby") And item("song of time") And item("hammer") And item("mirror shield") And item("bow") And _
-                            (My.Settings.setSpTLensless Or item("lens of truth")) And (item("fire arrows") Or My.Settings.setSpTMQLowAdult) And _
+                        If item("longshot") And item("bombchus") And item("slingshot") And item("din's fire") And item("zelda's lullaby") And item("song of time") And item("hammer") And item("mirror shield") And item("bow") And
+                            (My.Settings.setSpTLensless Or item("lens of truth")) And (item("fire arrows") Or My.Settings.setSpTMQLowAdult) And
                             (item("deku sticks") Or item("kokiri sword") Or item("bombs")) Then
                             canDungeon(6) = True
                         Else
@@ -7121,8 +7166,8 @@ Public Class frmTrackerOfTime
                 addArea(50, asAdult)
             Case 139
                 ' SpT: Beyond Central Locked Door to Beyond Final Locked Door
-                If asAdult And (dungeonKeyCounter(6, "132728") Or (canSpiritShortcut() And dungeonKeyCounter(6, "2728"))) And _
-                    (My.Settings.setSpTWall Or item("longshot") Or item("bombchu") Or _
+                If asAdult And (dungeonKeyCounter(6, "132728") Or (canSpiritShortcut() And dungeonKeyCounter(6, "2728"))) And
+                    (My.Settings.setSpTWall Or item("longshot") Or item("bombchu") Or
                      ((item("bombs") Or item("deku nuts") Or item("din's fire")) And (item("bow") Or item("hookshot") Or item("hammer")))) Then addArea(140, asAdult)
             Case 140
                 ' SpT: Beyond Final Locked Door to Boss Platform
@@ -7168,8 +7213,8 @@ Public Class frmTrackerOfTime
 
                     ' ShT Keys in Dungeon
                     If asAdult And My.Settings.setSmallKeys = 0 Then
-                        If item("hover boots") And item("hookshot") And item("zelda's lullaby") And item("din's fire") And canExplode() And (item("lift") Or My.Settings.setShTUmbrella) And _
-                            (item("lens of truth") Or (My.Settings.setShTLensless And My.Settings.setShTPlatform)) And _
+                        If item("hover boots") And item("hookshot") And item("zelda's lullaby") And item("din's fire") And canExplode() And (item("lift") Or My.Settings.setShTUmbrella) And
+                            (item("lens of truth") Or (My.Settings.setShTLensless And My.Settings.setShTPlatform)) And
                             ((item("bow") Or item("scarecrow", 2)) And (item("bombchus") Or Not My.Settings.setShTStatue)) Then
                             canDungeon(7) = True
                         Else
@@ -7198,7 +7243,7 @@ Public Class frmTrackerOfTime
 
                     ' ShT MQ Keys in Dungeon
                     If asAdult And My.Settings.setSmallKeys = 0 Then
-                        If item("bow") And item("hover boots") And item("longshot") And item("song of time") And item("zelda's lullaby") And canExplode() And (item("lift") Or My.Settings.setShTUmbrella) And _
+                        If item("bow") And item("hover boots") And item("longshot") And item("song of time") And item("zelda's lullaby") And canExplode() And (item("lift") Or My.Settings.setShTUmbrella) And
                             (canBurnAdult() Or My.Settings.setShTMQPit) And (item("lens of truth") Or (My.Settings.setShTLensless And My.Settings.setShTPlatform)) Then
                             canDungeon(7) = True
                         Else
@@ -7291,7 +7336,7 @@ Public Class frmTrackerOfTime
 
                     ' BotW Keys in Dungeon
                     If Not asAdult And My.Settings.setSmallKeys = 0 Then
-                        If item("zelda's lullaby") And canExplode() And (item("lens of truth") Or My.Settings.setBotWLensless) And (item("deku stick") Or item("din's fire")) And _
+                        If item("zelda's lullaby") And canExplode() And (item("lens of truth") Or My.Settings.setBotWLensless) And (item("deku stick") Or item("din's fire")) And
                             (item("kokiri sword") Or (item("deku stick") And My.Settings.setBotWDeadHand)) Then
                             canDungeon(8) = True
                         Else
@@ -7307,7 +7352,7 @@ Public Class frmTrackerOfTime
 
                     ' BotW MQ Keys in Dungeon
                     If Not asAdult And My.Settings.setSmallKeys = 0 Then
-                        If canExplode() And (item("lens of truth") Or My.Settings.setBotWLensless) And (item("kokiri sword") Or (item("deku stick") And My.Settings.setBotWDeadHand)) And _
+                        If canExplode() And (item("lens of truth") Or My.Settings.setBotWLensless) And (item("kokiri sword") Or (item("deku stick") And My.Settings.setBotWDeadHand)) And
                             (item("zelda's lullaby") Or My.Settings.setBotWMQPits) Then
                             canDungeon(8) = True
                         Else
@@ -7362,7 +7407,7 @@ Public Class frmTrackerOfTime
 
                     ' GTG Keys in Dungeon
                     If asAdult And My.Settings.setSmallKeys = 0 Then
-                        If item("bow") And item("hammer") And item("hookshot") And item("iron boots") And item("song of time") And item("lift", 2) And canExplode() And canFewerZora() And _
+                        If item("bow") And item("hammer") And item("hookshot") And item("iron boots") And item("song of time") And item("lift", 2) And canExplode() And canFewerZora() And
                             (item("lens of truth") Or My.Settings.setGTGLensless) Then
                             canDungeon(10) = True
                         Else
@@ -7389,7 +7434,7 @@ Public Class frmTrackerOfTime
 
                     ' GTG MQ Keys in Dungeon
                     If asAdult And My.Settings.setSmallKeys = 0 Then
-                        If item("bottle") And item("bow") And item("hammer") And item("hover boots") And item("iron boots") And item("longshot") And item("song of time") And _
+                        If item("bottle") And item("bow") And item("hammer") And item("hover boots") And item("iron boots") And item("longshot") And item("song of time") And
                             item("lift", 2) And canBurnAdult() And canFewerZora() And (item("lens of truth") Or My.Settings.setGTGLensless) Then
                             canDungeon(10) = True
                         Else
@@ -15438,7 +15483,10 @@ Public Class frmTrackerOfTime
         emulator = "soh"
 
         isSoH = True
-        sohSetup()
+        For Each key In aKeys.Where(Function(k As keyCheck) k.loc.Equals("6306"))
+            key.loc = "5930"
+        Next
+        soh.sohSetup(romAddrStart64)
     End Sub
     Private Sub attachToBizHawk()
         emulator = String.Empty
@@ -16083,8 +16131,9 @@ Public Class frmTrackerOfTime
         Dim temp As String = String.Empty
         Dim cTemp As Integer = 0
 
+        Dim addrItems As Integer = CInt(IIf(isSoH, &HEC85D8, &H11A644))
 
-        For i = &H11A644 To &H11A658 Step 4
+        For i = addrItems To addrItems + 20 Step 4
             temp = Hex(goRead(i))
             fixHex(temp)
             items = items & temp
@@ -16093,6 +16142,10 @@ Public Class frmTrackerOfTime
             quantity = quantity & temp
         Next
 
+        If isSoH Then
+            endianFlip(items)
+            endianFlip(quantity)
+        End If
         ' Storing items to an easy-to-scan string for logic detection
         allItems = String.Empty
 
@@ -16300,8 +16353,43 @@ Public Class frmTrackerOfTime
                 End If
             End With
         Next
-        getItemAmounts()
+
+        Dim iAmount As Byte = 0
+        For i = 0 To 14
+            iAmount = CByte("&H" & Mid(quantity, (i * 2) + 1, 2))
+            If aGetQuantity(i) = True Then
+                With aoInventory(i)
+                    ' If single digits
+                    Dim xPos As Byte = 34
+                    ' If double digits
+                    If iAmount > 9 Then xPos = 19
+                    ' If triple digits
+                    If iAmount > 99 Then xPos = 3
+                    ' Font for items numbers
+                    Dim fontItem = New Font("Lucida Console", 24, FontStyle.Bold, GraphicsUnit.Pixel)
+
+                    ' Draw the value over the lower right of the item's picturebox, first in black to give it some definition, then in white
+                    Graphics.FromImage(.Image).DrawString(iAmount.ToString, fontItem, New SolidBrush(Color.Black), xPos - 6, 28)
+                    Graphics.FromImage(.Image).DrawString(iAmount.ToString, fontItem, New SolidBrush(Color.White), xPos - 5, 29)
+                End With
+            End If
+        Next
+        ' Since the last check is Magic Beans, store that value to our beans
+        magicBeans = iAmount
     End Sub
+
+    Private Sub endianFlip(ByRef input As String)
+        Dim sDWORD As New List(Of String)
+        For i = 1 To input.Length Step 8
+            sDWORD.Add(Mid(input, i, 8))
+        Next
+        input = String.Empty
+        Dim sCurrent As String = String.Empty
+        For i = 0 To sDWORD.Count - 1
+            input = input & Mid(sDWORD(i), 7, 2) & Mid(sDWORD(i), 5, 2) & Mid(sDWORD(i), 3, 2) & Mid(sDWORD(i), 1, 2)
+        Next
+    End Sub
+
     Private Sub updateDungeonItems()
         If isLoadedGame() = False Then Exit Sub
         getSmallKeys()
@@ -16729,8 +16817,8 @@ Public Class frmTrackerOfTime
         Dim message As String = String.Empty
         Select Case text
             Case lcxLogic.Text
-                message = "Attempts to bold any checks you can currently reach, and any area with checks. Minor glitches or tricks may get you more checks than detected." & vbCrLf & vbCrLf & _
-                            "Note: Enabling logic will slow down the scanning.  It may take 2-3 scans to fully update, and may act up when changing areas due to location shifting" & _
+                message = "Attempts to bold any checks you can currently reach, and any area with checks. Minor glitches or tricks may get you more checks than detected." & vbCrLf & vbCrLf &
+                            "Note: Enabling logic will slow down the scanning.  It may take 2-3 scans to fully update, and may act up when changing areas due to location shifting" &
                             "mid-scan.  It is also a lot of work that may not be perfect.  A few logic tricks are able to be set if you know how to do them to help display more."
             Case lblGoldSkulltulas.Text
                 message = "Adds Gold Skulltulas to the checks for each area. Can be set to stop tracking at 50 Tokens."
@@ -16857,7 +16945,7 @@ Public Class frmTrackerOfTime
             Case lcxShowMap.Text
                 message = "Uses a visual map rather than text. You do not get to see the number of checks for each area, but it looks prettier for streaming."
             Case lcxExpand.Text
-                message = "The application is trimmed down for 1920x1080 displays. This will expand the application to see the bottom part of the overwold map, and the output box will show all checks with no cut-off." & vbCrLf & vbCrLf & _
+                message = "The application is trimmed down for 1920x1080 displays. This will expand the application to see the bottom part of the overwold map, and the output box will show all checks with no cut-off." & vbCrLf & vbCrLf &
                     "Note: Steps have been taken to reduce any cut-off of checks you can reach. It only happens in rare occasions, will be fixed once you collect a few checks from the area, and if they are reachable, they should show in place of ones you cannot reach."
             Case lcxShortForm.Text
                 message = "Shorten the application height and adds scrollbars to allow it to fit into 1366x768 resolutions."
@@ -16979,7 +17067,8 @@ Public Class frmTrackerOfTime
             canDungeon(i) = False
         Next
     End Sub
-    Private Sub updateLTB(ByVal ltbName As String)
+
+    Public Sub updateLTB(ByVal ltbName As String)
         Select Case ltbName
             Case ltbShopsanity.Name
                 Select Case My.Settings.setShop
@@ -17038,7 +17127,7 @@ Public Class frmTrackerOfTime
     End Sub
 
 
-    Private Sub updateSettingsPanel()
+    Public Sub updateSettingsPanel()
         'pnlSettings.Invalidate()
         ' LCX are the Label comboboxes I use for custom checkbox drawing. This updates how to draw them
 
@@ -17553,22 +17642,17 @@ Public Class frmTrackerOfTime
     End Function
     Private Sub getPlayerName()
         ' Grab the first 4 characters
-        Dim sPlayerName1 As String = Hex(goRead(&H11A5F4))
+        Dim sPlayerName1 As String = Hex(goRead(If(isSoH, soh.SAV(&H1E), &H11A5F4)))
         ' Grab the last 4 characters
-        Dim sPlayerName2 As String = Hex(goRead(&H11A5F8))
+        Dim sPlayerName2 As String = Hex(goRead(If(isSoH, soh.SAV(&H22), &H11A5F8)))
 
-        ' Make sure to fill the 0's
-        While sPlayerName1.Length < 8
-            sPlayerName1 = "0" & sPlayerName1
-        End While
-
-        ' Make sure to fill the 0's
-        While sPlayerName2.Length < 8
-            sPlayerName2 = "0" & sPlayerName2
-        End While
+        fixHex(sPlayerName1) ' pad to 8 chars
+        fixHex(sPlayerName2)
 
         ' Combine into one
-        sPlayerName1 = sPlayerName1 & sPlayerName2
+        sPlayerName1 &= sPlayerName2
+
+        If isSoH Then endianFlip(sPlayerName1)
 
         ' Check with the stored player name, if it is the same, exit sub and do not redraw it
         If playerName = sPlayerName1 Then Exit Sub
@@ -17596,6 +17680,28 @@ Public Class frmTrackerOfTime
             Case 0 To 9
                 ' 0 to 9, 48 to 57, so +48, but instead just turn it a string
                 decodeLetter = valLetter.ToString
+            Case 10 To 35
+                ' A-Z for soh
+                If isSoH Then
+                    decodeLetter = Chr(valLetter + 55)
+                End If
+            Case 36 To 61
+                ' a-z for soh
+                If isSoH Then
+                    decodeLetter = Chr(valLetter + 61)
+                End If
+            Case 62
+                If isSoH Then
+                    decodeLetter = " "
+                End If
+            Case 63
+                If isSoH Then
+                    decodeLetter = "-"
+                End If
+            Case 64
+                If isSoH Then
+                    decodeLetter = "."
+                End If
             Case 171 To 196
                 ' A-Z, normally 65 to 90, so -106
                 decodeLetter = Chr(valLetter - 106)
@@ -17611,37 +17717,51 @@ Public Class frmTrackerOfTime
         End Select
     End Function
     Private Sub getWarps()
-        Dim arrOffsets() As Integer = {&H903D0, &H903E0, &H3AB22E, &H3AB22C, &H3AB232, &H3AB230, &H3AB236, &H3AB234}
-        Dim sRead As String = String.Empty
-        ' If the Minuet and Bolero warps are 0, then player is in a load screen or pause menu. Abort.
-        If goRead(arrOffsets(3)) = 0 Then Exit Sub
-
-        For i = 0 To aReachA.Length - 1
-            aReachA(i) = False
-            aReachY(i) = False
-        Next
-
-        For i = 0 To 7
-            sRead = Hex(goRead(arrOffsets(i), 15))
-            If Not sRead = "0" Then
-                fixHex(sRead, 3)
-                aWarps(i) = sRead
-            End If
-        Next
-        Dim iStart As Byte = 0
-        Dim iEnd As Byte = 7
-        If aWarps(0) & aWarps(1) = "5F40BB" Then
-            ' If both spawn warps are vanilla, then skip having to check them and set displaying them to false
+        If isSoH Then   ' SoH will load the default exit codes
+            aWarps(0) = "5F4"
+            aWarps(1) = "0BB"
+            aWarps(2) = "600"
+            aWarps(3) = "4F6"
+            aWarps(4) = "604"
+            aWarps(5) = "1F1"
+            aWarps(6) = "568"
+            aWarps(7) = "5F4"
             bSpawnWarps = False
-        Else
-            bSpawnWarps = True
-        End If
-        If aWarps(2) & aWarps(3) & aWarps(4) & aWarps(5) & aWarps(6) & aWarps(7) = "6004F66041F15685F4" Then
-            ' If all warps are vanilla, then skip having to check them and set displaying them to false
             bSongWarps = False
         Else
-            bSongWarps = True
+            Dim arrOffsets() As Integer = {&H903D0, &H903E0, &H3AB22E, &H3AB22C, &H3AB232, &H3AB230, &H3AB236, &H3AB234}
+            Dim sRead As String = String.Empty
+            ' If the Minuet and Bolero warps are 0, then player is in a load screen or pause menu. Abort.
+            If goRead(arrOffsets(3)) = 0 Then Exit Sub
+
+            For i = 0 To aReachA.Length - 1
+                aReachA(i) = False
+                aReachY(i) = False
+            Next
+
+            For i = 0 To 7
+                sRead = Hex(goRead(arrOffsets(i), 15))
+                If Not sRead = "0" Then
+                    fixHex(sRead, 3)
+                    aWarps(i) = sRead
+                End If
+            Next
+            Dim iStart As Byte = 0
+            Dim iEnd As Byte = 7
+            If aWarps(0) & aWarps(1) = "5F40BB" Then
+                ' If both spawn warps are vanilla, then skip having to check them and set displaying them to false
+                bSpawnWarps = False
+            Else
+                bSpawnWarps = True
+            End If
+            If aWarps(2) & aWarps(3) & aWarps(4) & aWarps(5) & aWarps(6) & aWarps(7) = "" Then
+                ' If all warps are vanilla, then skip having to check them and set displaying them to false
+                bSongWarps = False
+            Else
+                bSongWarps = True
+            End If
         End If
+
         For i As Byte = 0 To 7
             Select Case aWarps(i)
                 Case "09C", "0BB", "0C1", "0C9", "211", "266", "26A", "272", "286", "33C", "433", "437", "443", "447"
@@ -17676,7 +17796,7 @@ Public Class frmTrackerOfTime
                     ' LLR
                     aWarps(i) = "LLR"
                     addReach(9, i)
-                Case "033", "063", "067", "07E", "0B1", "16D", "1CD", "1D1", "1D5", "25A", "25E", "26E", "276", "2A2", "388", _
+                Case "033", "063", "067", "07E", "0B1", "16D", "1CD", "1D1", "1D5", "25A", "25E", "26E", "276", "2A2", "388",
                         "3B8", "3BC", "3C0", "43B", "507", "528", "52C", "530"
                     ' MK
                     aWarps(i) = "MK"
@@ -17689,7 +17809,7 @@ Public Class frmTrackerOfTime
                     ' HC
                     aWarps(i) = "HC"
                     addReach(13, i)
-                Case "03B", "072", "0B7", "0DB", "195", "201", "2FD", "345", "349", "34D", "351", "384", "39C", "3EC", "44B", _
+                Case "03B", "072", "0B7", "0DB", "195", "201", "2FD", "345", "349", "34D", "351", "384", "39C", "3EC", "44B",
                         "453", "463", "4EE", "4FF", "550", "5C8", "5DC"
                     ' KV Main
                     aWarps(i) = "KV"
@@ -18051,6 +18171,8 @@ Public Class frmTrackerOfTime
         rainbowBridge(1) = CByte(goRead(aAddresses(5), 1))
     End Sub
     Private Sub getER()
+        'If isSoH Then Exit Sub ' soh 3.0.0 has no entrance rando
+
         iER = 0
         ' Overworld ER check
         If Not aAddresses(18) = 0 Then
@@ -18534,7 +18656,7 @@ Public Class frmTrackerOfTime
         Next
     End Sub
 
-     Private Function getGanonMap() As Byte
+    Private Function getGanonMap() As Byte
         getGanonMap = 0
 
         ' 0: Main Region Upper
