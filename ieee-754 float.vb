@@ -52,7 +52,7 @@ Module ieee_754_float
         If Mid(sBinary, 1, 1) = "1" Then bin2float = bin2float * -1
     End Function
 
-    Private Sub fixBinaryLength(ByRef bin1 As String, Optional ByRef bin2 As String = "", Optional ByRef bin3 As String = "")
+    Public Sub fixBinaryLength(ByRef bin1 As String, Optional ByRef bin2 As String = "", Optional ByRef bin3 As String = "")
         While bin1.Length < 32
             bin1 = "0" & bin1
         End While

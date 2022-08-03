@@ -9,7 +9,7 @@ Public Class frmTrackerOfTime
 
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
-    Private Const CHECK_COUNT As Byte = 117
+    Private Const CHECK_COUNT As Byte = 124
     Private Const IS_64BIT As Boolean = True
     Private Const VER As String = "4.0.7"
     Private p As Process = Nothing
@@ -21,6 +21,8 @@ Public Class frmTrackerOfTime
     Private keepRunning As Boolean = False
     Private zeldazFails As Integer = 0
     Private isSoH As Boolean = False
+    Private wasSoH As Boolean = False
+    Private locSwap(30) As String
 
     ' Variables for a variety of rom info used in the scan
     Private pedestalRead As Byte = 0
@@ -28,6 +30,8 @@ Public Class frmTrackerOfTime
     Private randoVer As String = String.Empty
     Private rainbowBridge(1) As Byte
     Private aGetQuantity(14) As Boolean
+    Private aRandoSet() As Byte
+    Private lastFirstEnum As Byte = 255
 
     ' Arrays for tracking checks
     Private keyCount As Integer = 337
@@ -35,7 +39,10 @@ Public Class frmTrackerOfTime
     Private aKeysDungeons(11)() As keyCheck
     Private canDungeon(11) As Boolean
     Private aQuestRewardsCollected(22) As Boolean
-    Private aQIChecks(22) As Boolean
+    Private aEquipment(31) As Boolean
+    Private aQuestItems(31) As Boolean
+    Private aUpgrades(31) As Boolean
+    Private knifeCheck As Boolean
 
     ' RTB variables
     Private emboldenList As New List(Of String)
@@ -166,18 +173,6 @@ Public Class frmTrackerOfTime
             arrLow(i) = 31
         Next
 
-        For Each checkBox In pnlHidden.Controls.OfType(Of CheckBox)().Where(Function(cb As CheckBox) cb.Name.Contains("cb65"))
-            AddHandler checkBox.CheckedChanged, AddressOf cccCarpenters
-        Next
-        For Each checkBox In pnlHidden.Controls.OfType(Of CheckBox)().Where(Function(cb As CheckBox) cb.Name.Contains("cb74"))
-            AddHandler checkBox.CheckedChanged, AddressOf cccEquipment
-        Next
-        For Each checkBox In pnlHidden.Controls.OfType(Of CheckBox)().Where(Function(cb As CheckBox) cb.Name.Contains("cb75"))
-            AddHandler checkBox.CheckedChanged, AddressOf cccEquipment
-        Next
-        For Each checkBox In pnlHidden.Controls.OfType(Of CheckBox)().Where(Function(cb As CheckBox) cb.Name.Contains("cb76"))
-            AddHandler checkBox.CheckedChanged, AddressOf cccUpgrades
-        Next
         ' Used to handle the click event for all of the label checkboxes
         For Each Label In pnlSettings.Controls.OfType(Of Label)().Where(Function(lbl As Label) Mid(lbl.Name, 1, 3) = "lcx" Or Mid(lbl.Name, 1, 3) = "lbl")
             AddHandler Label.MouseClick, AddressOf handleLCXMouseClick
@@ -732,6 +727,7 @@ Public Class frmTrackerOfTime
         lastArea = String.Empty
         lastOutput.Clear()
         lastTip = 255
+        lastFirstEnum = 255
         'isTriforceHunt = False
 
         For i = 0 To 7
@@ -750,6 +746,11 @@ Public Class frmTrackerOfTime
         For i = 0 To aAddresses.Length - 1
             aAddresses(i) = 0
         Next
+        For i = 0 To aEquipment.Length - 1
+            aEquipment(i) = False
+            aQuestItems(i) = False
+            aUpgrades(i) = False
+        Next
 
         bSpawnWarps = False
         bSongWarps = False
@@ -758,7 +759,6 @@ Public Class frmTrackerOfTime
 
         ' Clean up the UI
         clearItems()
-        setupKeys()
         updateLabels()
         updateLabelsDungeons()
         pbxSpawnYoung.Image = My.Resources.spawnLocations
@@ -766,134 +766,139 @@ Public Class frmTrackerOfTime
 
         ' Process the high/lows, but only the first time
         If firstRun Then
-            getHighLows()
+            redirectChecks(True)
             firstRun = False
-        End If
 
-        arrLocation(0) = &H11AD18 + 4       ' DMC/DMT/OGC Great Fairy Fountain
-        arrLocation(1) = &H11AF80 + 4       ' Hyrule Field (Events) Big Poes Captured and Ocarina of Time
-        arrLocation(2) = &H11B028 + 4       ' Lake Hylia (Events) Ruto's Letter, Open Water Temple, and Bean Plant
-        arrLocation(3) = &H11A714 + 12      ' Fire Temple (Standing)
-        arrLocation(4) = &H11A730 + 12      ' Water Temple (Standing)
-        arrLocation(5) = &H11A768 + 12      ' Shadow Temple (Standing)
-        arrLocation(6) = &H11A784 + 12      ' Bottom of the Well (Standing)
-        arrLocation(7) = &H11A7A0 + 12      ' Ice Cavern (Standing)
-        arrLocation(8) = &H11A7D8 + 12      ' Gerudo Training Ground (Standing)
-        arrLocation(9) = &H11A810 + 12      ' Ganon’s Castle #1 (Standing)
-        arrLocation(10) = &H11A880 + 12     ' Deku Tree Boss Room (Standing)
-        arrLocation(11) = &H11A89C + 12     ' Dodongo's Cavern Boss Room (Standing)
-        arrLocation(12) = &H11A8B8 + 12     ' Jabu-Jabu's Belly Boss Room (Standing)
-        arrLocation(13) = &H11A8D4 + 12     ' Forest Temple Boss Room (Standing)
-        arrLocation(14) = &H11A8F0 + 12     ' Fire Temple Boss Room (Standing)
-        arrLocation(15) = &H11A90C + 12     ' Water Temple Boss Room (Standing)
-        arrLocation(16) = &H11A928 + 12     ' Spirit Temple Boss Room (Standing)
-        arrLocation(17) = &H11A944 + 12     ' Shadow Temple Boss Room (Standing)
-        arrLocation(18) = &H11ACA8 + 12     ' Impa’s House (Standing)
-        arrLocation(19) = &H11AD6C + 12     ' All Grottos (Standing)
-        arrLocation(20) = &H11AE84 + 12     ' Windmill / Dampe's Grave (Standing)
-        arrLocation(21) = &H11AEF4 + 12     ' Lon Lon Tower Item (Standing)
-        arrLocation(22) = &H11AFB8 + 12     ' Graveyard (Standing)
-        arrLocation(23) = &H11AFD4 + 12     ' Zora's River (Standing)
-        arrLocation(24) = &H11B028 + 12     ' Lake Hylia (Standing)
-        arrLocation(25) = &H11B060 + 12     ' Zora's Fountain (Standing)
-        arrLocation(26) = &H11B07C + 12     ' Gerudo Valley (Standing)
-        arrLocation(27) = &H11B0B4 + 12     ' Desert Colossus (Standing)
-        arrLocation(28) = &H11B124 + 12     ' Death Mountain Trail (Standing)
-        arrLocation(29) = &H11B140 + 12     ' Death Mountain Crater (Standing)
-        arrLocation(30) = &H11B15C + 12     ' Goron City (Standing)
-        arrLocation(31) = &H11A6A4          ' Deku Tree
-        arrLocation(32) = &H11A6C0          ' Dodongo's Cavern
-        arrLocation(33) = &H11A6DC          ' Jabu-Jabu's Belly
-        arrLocation(34) = &H11A6F8          ' Forest Temple
-        arrLocation(35) = &H11A714          ' Fire Temple
-        arrLocation(36) = &H11A730          ' Water Temple
-        arrLocation(37) = &H11A74C          ' Spirit Temple
-        arrLocation(38) = &H11A768          ' Shadow Temple
-        arrLocation(39) = &H11A784          ' Bottom of the Well
-        arrLocation(40) = &H11A7A0          ' Ice Cavern
-        arrLocation(41) = &H11A7BC          ' Ganon’s Castle #2
-        arrLocation(42) = &H11A7D8          ' Gerudo Training Ground
-        arrLocation(43) = &H11A810          ' Ganon’s Castle #1
-        arrLocation(44) = &H11A89C          ' Dodongo's Cavern Boss Room
-        arrLocation(45) = &H11AB04          ' Mido’s House
-        arrLocation(46) = &H11AD6C          ' All Grottos
-        arrLocation(47) = &H11AD88          ' Grave with Sun Song Chest
-        arrLocation(48) = &H11ADA4          ' Graveyard Under Grave
-        arrLocation(49) = &H11ADC0          ' Royal Grave
-        arrLocation(50) = &H11AE84          ' Windmill / Dampe
-        arrLocation(51) = &H11AFF0          ' Kokiri Forest
-        arrLocation(52) = &H11B028          ' Lake Hylia
-        arrLocation(53) = &H11B044          ' Zora's Domain
-        arrLocation(54) = &H11B07C          ' Gerudo Valley
-        arrLocation(55) = &H11B0B4          ' Desert Colossus
-        arrLocation(56) = &H11B0D0          ' Gerudo’s Fortress
-        arrLocation(57) = &H11B0EC          ' Haunted Wasteland
-        arrLocation(58) = &H11B124          ' Death Mountain Trail
-        arrLocation(59) = &H11B15C          ' Goron City
-        arrLocation(60) = &H11A640          ' *Biggoron Check
-        arrLocation(61) = &H11B490          ' *Big Fish
-        arrLocation(62) = &H11B4A4          ' *Events 1: Egg from Malon, Obtained Epona, Won Cow
-        arrLocation(63) = &H11B4A8          ' *Events 2: Zora Diving Game, Darunia’s Joy
-        arrLocation(64) = &H11B4AC          ' *Events 3: Zelda’s Letter, Song from Impa, Sun Song??, opened Temple of Time, Rainbow Bridge
-        arrLocation(65) = &H11B4B4          ' *Events 5: Scarecrow as Adult
-        arrLocation(66) = &H11B4B8          ' *Events 6: Song at Colossus, Trials
-        arrLocation(67) = &H11B4BC          ' *Events 7: Saria Gift, Skulltula trades, Barrier Lowered
-        arrLocation(68) = &H11B4C0          ' *Item Collect #1
-        arrLocation(69) = &H11B4C4          ' *Item Collection #2
-        arrLocation(70) = &H11B4E8          ' *Item: Rolling Goron as Young + Adult Link
-        arrLocation(71) = &H11B4EC          ' *Thaw Zora King
-        arrLocation(72) = &H11B4F8          ' *Items: 1st and 2nd Scrubs, Lost Dog
-        arrLocation(73) = &H11B894          ' *Scarecrow Song
-        arrLocation(74) = &H11A66C          ' *Equipment checks, figured this would be easier
-        arrLocation(75) = &H11A60C          ' *Check for Biggoron's Sword
-        arrLocation(76) = &H11A670          ' *Upgrades
-        arrLocation(77) = &H11A674          ' *Quest Items and Songs
-        arrLocation(78) = &H11B46C          ' **Gold Skulltulas 1
-        arrLocation(79) = &H11B470          ' **Gold Skulltulas 2
-        arrLocation(80) = &H11B474          ' **Gold Skulltulas 3
-        arrLocation(81) = &H11B478          ' **Gold Skulltulas 4
-        arrLocation(82) = &H11B47C          ' **Gold Skulltulas 5
-        arrLocation(83) = &H11B480          ' **Gold Skulltulas 6
-        arrLocation(84) = &H11A6B4          ' ***Scrub Shuffle (Deku Tree)
-        arrLocation(85) = &H11A6D0          ' ***Scrub Shuffle (Dodongo's Cavern)
-        arrLocation(86) = &H11A6EC          ' ***Scrub Shuffle (Jabu-Jabu's Belly)
-        arrLocation(87) = &H11A820          ' ***Scrub Shuffle (Ganon's Castle)
-        arrLocation(88) = &H11A874          ' ***Scrub Shuffle (Hyrule Field Grotto)
-        arrLocation(89) = &H11A900          ' ***Scrub Shuffle (Zora's River Grotto)
-        arrLocation(90) = &H11A954          ' ***Scrub Shuffle (Sacred Forest Meadow Grotto)
-        arrLocation(91) = &H11A970          ' ***Scrub Shuffle (Lake Hylia Grotto)
-        arrLocation(92) = &H11A98C          ' ***Scrub Shuffle (Gerudo Valley Grotto)
-        arrLocation(93) = &H11AA18          ' ***Scrub Shuffle (Lost Woods Grotto)
-        arrLocation(94) = &H11AA88          ' ***Scrub Shuffle (Death Mountain Crater Grotto)
-        arrLocation(95) = &H11AAC0          ' ***Scrub Shuffle (Goron City)
-        arrLocation(96) = &H11AADC          ' ***Scrub Shuffle (Lon Lon Ranch)
-        arrLocation(97) = &H11AAF8          ' ***Scrub Shuffle (Desert Colossus)
-        arrLocation(98) = &H11B0A8          ' ***Scrub Shuffle (Lost Woods)
-        arrLocation(99) = &H11AB84         ' *Shopsanity Checks
-        arrLocation(100) = &H11AC54 + 12    ' Link's House (Standing)
-        arrLocation(101) = &H11AC8C + 12    ' Lon Lon Ranch Stables (Standing)
-        arrLocation(102) = &H11A6DC + 12    ' Jabu-Jabu's Belly (Standing)
-        arrLocation(103) = &H11A6A4 + 4     ' Deku Tree (Events)
-        arrLocation(104) = &H11A6C0 + 4     ' Dodongo's Cavern (Events)
-        arrLocation(105) = &H11A6DC + 4     ' Jabu-Jabu's Belly (Events)
-        arrLocation(106) = &H11A6F8 + 4     ' Forest Temple (Events)
-        arrLocation(107) = &H11A714 + 4     ' Fire Temple (Events)
-        arrLocation(108) = &H11A730 + 4     ' Water Temple (Events)
-        arrLocation(109) = &H11A74C + 4     ' Spirit Temple (Events)
-        arrLocation(110) = &H11A768 + 4     ' Shadow Temple (Events)
-        arrLocation(111) = &H11A7A0 + 4     ' Ice Cavern (Events)
-        arrLocation(112) = &H11A7D8 + 4     ' Gerudo Training Ground (Events)
-        arrLocation(113) = &H11A810 + 4     ' Ganon’s Castle #1 (Events)
-        arrLocation(114) = &H11B0EC + 12    ' Haunted Wasteland (Standing)
-        arrLocation(115) = &H11B15C + 4     ' Goron City (Events)
-        arrLocation(116) = &H11AFD4 + 4     ' Zora's River (Events)
-        arrLocation(117) = &H11A784 + 4     ' BotW (Events)
+            arrLocation(0) = &H11AD18 + 4       ' DMC/DMT/OGC Great Fairy Fountain (Events)
+            arrLocation(1) = &H11AF80 + 4       ' Hyrule Field (Events) Big Poes Captured and Ocarina of Time
+            arrLocation(2) = &H11B028 + 4       ' Lake Hylia (Events) Ruto's Letter, Open Water Temple, and Bean Plant
+            arrLocation(3) = &H11A714 + 12      ' Fire Temple (Standing)
+            arrLocation(4) = &H11A730 + 12      ' Water Temple (Standing)
+            arrLocation(5) = &H11A768 + 12      ' Shadow Temple (Standing)
+            arrLocation(6) = &H11A784 + 12      ' Bottom of the Well (Standing)
+            arrLocation(7) = &H11A7A0 + 12      ' Ice Cavern (Standing)
+            arrLocation(8) = &H11A7D8 + 12      ' Gerudo Training Ground (Standing)
+            arrLocation(9) = &H11A810 + 12      ' Ganon’s Castle #1 (Standing)
+            arrLocation(10) = &H11A880 + 12     ' Deku Tree Boss Room (Standing)
+            arrLocation(11) = &H11A89C + 12     ' Dodongo's Cavern Boss Room (Standing)
+            arrLocation(12) = &H11A8B8 + 12     ' Jabu-Jabu's Belly Boss Room (Standing)
+            arrLocation(13) = &H11A8D4 + 12     ' Forest Temple Boss Room (Standing)
+            arrLocation(14) = &H11A8F0 + 12     ' Fire Temple Boss Room (Standing)
+            arrLocation(15) = &H11A90C + 12     ' Water Temple Boss Room (Standing)
+            arrLocation(16) = &H11A928 + 12     ' Spirit Temple Boss Room (Standing)
+            arrLocation(17) = &H11A944 + 12     ' Shadow Temple Boss Room (Standing)
+            arrLocation(18) = &H11ACA8 + 12     ' Impa’s House (Standing)
+            arrLocation(19) = &H11AD6C + 12     ' All Grottos (Standing)
+            arrLocation(20) = &H11AE84 + 12     ' Windmill / Dampe's Grave (Standing)
+            arrLocation(21) = &H11AEF4 + 12     ' Lon Lon Tower Item (Standing)
+            arrLocation(22) = &H11AFB8 + 12     ' Graveyard (Standing)
+            arrLocation(23) = &H11AFD4 + 12     ' Zora's River (Standing)
+            arrLocation(24) = &H11B028 + 12     ' Lake Hylia (Standing)
+            arrLocation(25) = &H11B060 + 12     ' Zora's Fountain (Standing)
+            arrLocation(26) = &H11B07C + 12     ' Gerudo Valley (Standing)
+            arrLocation(27) = &H11B0B4 + 12     ' Desert Colossus (Standing)
+            arrLocation(28) = &H11B124 + 12     ' Death Mountain Trail (Standing)
+            arrLocation(29) = &H11B140 + 12     ' Death Mountain Crater (Standing)
+            arrLocation(30) = &H11B15C + 12     ' Goron City (Standing)
+            arrLocation(31) = &H11A6A4          ' Deku Tree
+            arrLocation(32) = &H11A6C0          ' Dodongo's Cavern
+            arrLocation(33) = &H11A6DC          ' Jabu-Jabu's Belly
+            arrLocation(34) = &H11A6F8          ' Forest Temple
+            arrLocation(35) = &H11A714          ' Fire Temple
+            arrLocation(36) = &H11A730          ' Water Temple
+            arrLocation(37) = &H11A74C          ' Spirit Temple
+            arrLocation(38) = &H11A768          ' Shadow Temple
+            arrLocation(39) = &H11A784          ' Bottom of the Well
+            arrLocation(40) = &H11A7A0          ' Ice Cavern
+            arrLocation(41) = &H11A7BC          ' Ganon’s Castle #2
+            arrLocation(42) = &H11A7D8          ' Gerudo Training Ground
+            arrLocation(43) = &H11A810          ' Ganon’s Castle #1
+            arrLocation(44) = &H11A89C          ' Dodongo's Cavern Boss Room
+            arrLocation(45) = &H11AB04          ' Mido’s House
+            arrLocation(46) = &H11AD6C          ' All Grottos
+            arrLocation(47) = &H11AD88          ' Grave with Sun Song Chest
+            arrLocation(48) = &H11ADA4          ' Graveyard Under Grave
+            arrLocation(49) = &H11ADC0          ' Royal Grave
+            arrLocation(50) = &H11AE84          ' Windmill / Dampe
+            arrLocation(51) = &H11AFF0          ' Kokiri Forest
+            arrLocation(52) = &H11B028          ' Lake Hylia
+            arrLocation(53) = &H11B044          ' Zora's Domain
+            arrLocation(54) = &H11B07C          ' Gerudo Valley
+            arrLocation(55) = &H11B0B4          ' Desert Colossus
+            arrLocation(56) = &H11B0D0          ' Gerudo’s Fortress
+            arrLocation(57) = &H11B0EC          ' Haunted Wasteland
+            arrLocation(58) = &H11B124          ' Death Mountain Trail
+            arrLocation(59) = &H11B15C          ' Goron City
+            arrLocation(60) = &H11A640          ' *Biggoron Check
+            arrLocation(61) = &H11B490          ' *Big Fish
+            arrLocation(62) = &H11B4A4          ' *Events 1: Egg from Malon, Obtained Epona, Won Cow
+            arrLocation(63) = &H11B4A8          ' *Events 2: Zora Diving Game, Darunia’s Joy
+            arrLocation(64) = &H11B4AC          ' *Events 3: Zelda’s Letter, Song from Impa, Sun Song??, opened Temple of Time, Rainbow Bridge
+            arrLocation(65) = &H11B4B4          ' *Events 5: Scarecrow as Adult
+            arrLocation(66) = &H11B4B8          ' *Events 6: Song at Colossus, Trials
+            arrLocation(67) = &H11B4BC          ' *Events 7: Saria Gift, Skulltula trades, Barrier Lowered
+            arrLocation(68) = &H11B4C0          ' *Item Collect #1
+            arrLocation(69) = &H11B4C4          ' *Item Collection #2
+            arrLocation(70) = &H11B4E8          ' *Item: Rolling Goron as Young + Adult Link
+            arrLocation(71) = &H11B4EC          ' *Thaw Zora King
+            arrLocation(72) = &H11B4F8          ' *Items: 1st and 2nd Scrubs, Lost Dog
+            arrLocation(73) = &H11B894          ' *Scarecrow Song
+            arrLocation(74) = &H11A66C          ' *Equipment checks, figured this would be easier
+            arrLocation(75) = &H11A60C          ' *Check for Biggoron's Sword
+            arrLocation(76) = &H11A670          ' *Upgrades
+            arrLocation(77) = &H11A674          ' *Quest Items and Songs
+            arrLocation(78) = &H11B46C          ' **Gold Skulltulas 1
+            arrLocation(79) = &H11B470          ' **Gold Skulltulas 2
+            arrLocation(80) = &H11B474          ' **Gold Skulltulas 3
+            arrLocation(81) = &H11B478          ' **Gold Skulltulas 4
+            arrLocation(82) = &H11B47C          ' **Gold Skulltulas 5
+            arrLocation(83) = &H11B480          ' **Gold Skulltulas 6
+            arrLocation(84) = &H11A6B4          ' ***Scrub Shuffle (Deku Tree)
+            arrLocation(85) = &H11A6D0          ' ***Scrub Shuffle (Dodongo's Cavern)
+            arrLocation(86) = &H11A6EC          ' ***Scrub Shuffle (Jabu-Jabu's Belly)
+            arrLocation(87) = &H11A820          ' ***Scrub Shuffle (Ganon's Castle)
+            arrLocation(88) = &H11A874          ' ***Scrub Shuffle (Hyrule Field Grotto)
+            arrLocation(89) = &H11A900          ' ***Scrub Shuffle (Zora's River Grotto)
+            arrLocation(90) = &H11A954          ' ***Scrub Shuffle (Sacred Forest Meadow Grotto)
+            arrLocation(91) = &H11A970          ' ***Scrub Shuffle (Lake Hylia Grotto)
+            arrLocation(92) = &H11A98C          ' ***Scrub Shuffle (Gerudo Valley Grotto)
+            arrLocation(93) = &H11AA18          ' ***Scrub Shuffle (Lost Woods Grotto)
+            arrLocation(94) = &H11AA88          ' ***Scrub Shuffle (Death Mountain Crater Grotto)
+            arrLocation(95) = &H11AAC0          ' ***Scrub Shuffle (Goron City)
+            arrLocation(96) = &H11AADC          ' ***Scrub Shuffle (Lon Lon Ranch)
+            arrLocation(97) = &H11AAF8          ' ***Scrub Shuffle (Desert Colossus)
+            arrLocation(98) = &H11B0A8          ' ***Scrub Shuffle (Lost Woods)
+            arrLocation(99) = &H11AB84         ' *Shopsanity Checks
+            arrLocation(100) = &H11AC54 + 12    ' Link's House (Standing)
+            arrLocation(101) = &H11AC8C + 12    ' Lon Lon Ranch Stables (Standing)
+            arrLocation(102) = &H11A6DC + 12    ' Jabu-Jabu's Belly (Standing)
+            arrLocation(103) = &H11A6A4 + 4     ' Deku Tree (Events)
+            arrLocation(104) = &H11A6C0 + 4     ' Dodongo's Cavern (Events)
+            arrLocation(105) = &H11A6DC + 4     ' Jabu-Jabu's Belly (Events)
+            arrLocation(106) = &H11A6F8 + 4     ' Forest Temple (Events)
+            arrLocation(107) = &H11A714 + 4     ' Fire Temple (Events)
+            arrLocation(108) = &H11A730 + 4     ' Water Temple (Events)
+            arrLocation(109) = &H11A74C + 4     ' Spirit Temple (Events)
+            arrLocation(110) = &H11A768 + 4     ' Shadow Temple (Events)
+            arrLocation(111) = &H11A7A0 + 4     ' Ice Cavern (Events)
+            arrLocation(112) = &H11A7D8 + 4     ' Gerudo Training Ground (Events)
+            arrLocation(113) = &H11A810 + 4     ' Ganon’s Castle #1 (Events)
+            arrLocation(114) = &H11B0EC + 12    ' Haunted Wasteland (Standing)
+            arrLocation(115) = &H11B15C + 4     ' Goron City (Events)
+            arrLocation(116) = &H11AFD4 + 4     ' Zora's River (Events)
+            arrLocation(117) = &H11A784 + 4     ' BotW (Events)
+            arrLocation(118) = &H11B178         ' Lon Lon Ranch
+            arrLocation(119) = &H11B00C         ' Sacred Forest Meadow
+            arrLocation(120) = &H11ADDC         ' Shooting Gallery
+            arrLocation(121) = &H11AD50         ' GF DC/HC/ZF
+            arrLocation(122) = &H11AD18         ' DMC/DMT/OGC Great Fairy Fountain
+            arrLocation(123) = &H11ADF8         ' Temple of Time
+            arrLocation(124) = &H11AF80         ' Hyrule Field
+        End If
 
         For i As Integer = 0 To arrLocation.Length - 1
             arrChests(i) = 0
         Next
-        updateShoppes()
-
     End Sub
 
     Private Sub getAge()
@@ -1480,6 +1485,7 @@ Public Class frmTrackerOfTime
                     pbxMap.Image = My.Resources.mapDC
                 Case 93, 12
                     pbxMap.Image = My.Resources.mapGF
+                    locationCode = 93
                 Case 94
                     pbxMap.Image = My.Resources.mapHW2
                 Case 95
@@ -2238,7 +2244,7 @@ Public Class frmTrackerOfTime
                             aIconPos.Add(New Point(229, 53))
                             aIconLoc(3) = "1231"
                             aIconPos.Add(New Point(341, 232))
-                            aIconLoc(5) = "7818"
+                            aIconLoc(4) = "7818"
                             aIconPos.Add(New Point(347, 270))
                         Case 3, 13 To 16 ' B1
                             aIconLoc(0) = "7819"
@@ -2730,7 +2736,7 @@ Public Class frmTrackerOfTime
                             aIconPos.Add(New Point(205, 359))
                             aIconLoc(3) = "3809"
                             aIconPos.Add(New Point(324, 220))
-                            aIconLoc(4) = "504"
+                            aIconLoc(4) = "501"
                             aIconPos.Add(New Point(269, 224))
                             aIconLoc(5) = "3821"
                             aIconPos.Add(New Point(463, 157))
@@ -3150,7 +3156,7 @@ Public Class frmTrackerOfTime
             Case 67 ' ToT
                 aIconLoc(0) = "6405"
                 aIconPos.Add(New Point(270, 115))
-                aIconLoc(1) = "6720"
+                aIconLoc(1) = locSwap(5)
                 aIconPos.Add(New Point(270, 299))
             Case 81 ' HF
                 aIconLoc(0) = "4600"
@@ -3165,7 +3171,7 @@ Public Class frmTrackerOfTime
                 aIconPos.Add(New Point(204, 99))
                 aIconLoc(5) = "103"
                 aIconPos.Add(New Point(315, 66))
-                aIconLoc(6) = "6625"
+                aIconLoc(6) = locSwap(9)
                 aIconPos.Add(New Point(299, 66))
                 aIconLoc(7) = "8016"
                 aIconPos.Add(New Point(132, 185))
@@ -3212,7 +3218,7 @@ Public Class frmTrackerOfTime
                 aIconPos.Add(New Point(332, 198))
                 aIconLoc(5) = "1801"
                 aIconPos.Add(New Point(306, 345))
-                aIconLoc(6) = "6830"
+                aIconLoc(6) = locSwap(14)
                 aIconPos.Add(New Point(315, 288))
                 aIconLoc(7) = "2001"
                 aIconPos.Add(New Point(412, 240))
@@ -3256,7 +3262,7 @@ Public Class frmTrackerOfTime
                     aIconPos.Add(New Point(337, 142))
                 End If
             Case 83 ' GY
-                aIconLoc(0) = "2208"
+                aIconLoc(0) = locSwap(2)
                 aIconPos.Add(New Point(156, 203))
                 aIconLoc(1) = "4800"
                 aIconPos.Add(New Point(178, 214))
@@ -3266,7 +3272,7 @@ Public Class frmTrackerOfTime
                 aIconPos.Add(New Point(226, 231))
                 aIconLoc(4) = "4900"
                 aIconPos.Add(New Point(286, 201))
-                aIconLoc(5) = "6410"
+                aIconLoc(5) = locSwap(8)
                 aIconPos.Add(New Point(286, 217))
                 aIconLoc(6) = "5000"
                 aIconPos.Add(New Point(171, 152))
@@ -3336,7 +3342,7 @@ Public Class frmTrackerOfTime
             Case 86 ' SFM
                 aIconLoc(0) = "4617"
                 aIconPos.Add(New Point(262, 345))
-                aIconLoc(1) = "6407"
+                aIconLoc(1) = locSwap(6)
                 aIconPos.Add(New Point(265, 64))
                 aIconLoc(2) = "6400"
                 aIconPos.Add(New Point(281, 64))
@@ -3361,7 +3367,7 @@ Public Class frmTrackerOfTime
                 aIconPos.Add(New Point(231, 172))
                 aIconLoc(6) = "6800"
                 aIconPos.Add(New Point(247, 172))
-                aIconLoc(7) = "5200"
+                aIconLoc(7) = locSwap(3)
                 aIconPos.Add(New Point(361, 310))
                 aIconLoc(8) = "8216"
                 aIconPos.Add(New Point(239, 156))
@@ -3399,7 +3405,7 @@ Public Class frmTrackerOfTime
                     aIconPos.Add(New Point(398, 305))
                 End If
             Case 89 ' ZF
-                aIconLoc(0) = "6808"
+                aIconLoc(0) = locSwap(10)
                 aIconPos.Add(New Point(378, 380))
                 aIconLoc(1) = "2501"
                 aIconPos.Add(New Point(424, 172))
@@ -3447,7 +3453,7 @@ Public Class frmTrackerOfTime
                 aIconPos.Add(New Point(318, 239))
                 aIconLoc(6) = "6806"
                 aIconPos.Add(New Point(169, 217))
-                aIconLoc(7) = "6814"
+                aIconLoc(7) = locSwap(13)
                 aIconPos.Add(New Point(227, 118))
                 aIconLoc(8) = "6815"
                 aIconPos.Add(New Point(243, 118))
@@ -3471,7 +3477,7 @@ Public Class frmTrackerOfTime
                 aIconLoc(17) = "6909"
                 aIconPos.Add(New Point(185, 217))
             Case 92 ' DC
-                aIconLoc(0) = "6810"
+                aIconLoc(0) = locSwap(12)
                 aIconPos.Add(New Point(321, 96))
                 aIconLoc(1) = "6628"
                 aIconPos.Add(New Point(124, 190))
@@ -3520,7 +3526,7 @@ Public Class frmTrackerOfTime
                 aIconPos.Add(New Point(139, 87))
                 aIconLoc(2) = "6409"
                 aIconPos.Add(New Point(155, 87))
-                aIconLoc(3) = "6809"
+                aIconLoc(3) = locSwap(11)
                 aIconPos.Add(New Point(334, 246))
                 aIconLoc(4) = "8117"
                 aIconPos.Add(New Point(223, 141))
@@ -3531,7 +3537,7 @@ Public Class frmTrackerOfTime
                 aIconPos.Add(New Point(286, 239))
                 aIconLoc(1) = "2830"
                 aIconPos.Add(New Point(241, 198))
-                aIconLoc(2) = "024"
+                aIconLoc(2) = locSwap(1)
                 aIconPos.Add(New Point(294, 31))
                 aIconLoc(3) = "4623"
                 aIconPos.Add(New Point(288, 185))
@@ -3554,7 +3560,7 @@ Public Class frmTrackerOfTime
                 aIconPos.Add(New Point(300, 280))
                 aIconLoc(2) = "2908"
                 aIconPos.Add(New Point(242, 198))
-                aIconLoc(3) = "016"
+                aIconLoc(3) = locSwap(0)
                 aIconPos.Add(New Point(187, 269))
                 aIconLoc(4) = "6401"
                 aIconPos.Add(New Point(237, 160))
@@ -3583,7 +3589,7 @@ Public Class frmTrackerOfTime
                 aIconPos.Add(New Point(273, 254))
                 aIconLoc(5) = "3031"
                 aIconPos.Add(New Point(266, 196))
-                aIconLoc(6) = "6306"
+                aIconLoc(6) = locSwap(4)
                 aIconPos.Add(New Point(273, 58))
                 aIconLoc(7) = "3001"
                 aIconPos.Add(New Point(148, 345))
@@ -3612,7 +3618,7 @@ Public Class frmTrackerOfTime
                 aIconPos.Add(New Point(164, 364))
                 aIconLoc(1) = "6818"
                 aIconPos.Add(New Point(340, 85))
-                aIconLoc(2) = "6408"
+                aIconLoc(2) = locSwap(7)
                 aIconPos.Add(New Point(251, 229))
                 aIconLoc(3) = "6208"
                 aIconPos.Add(New Point(267, 229))
@@ -4192,7 +4198,7 @@ Public Class frmTrackerOfTime
             If i Mod 5 = 0 Then Application.DoEvents()
             checkAgain = True
             Select Case i
-                Case 0 To 59, 100 To 117
+                Case 0 To 59, Is >= 100
                     ' These are the area checks, either chest, standing items, area events, as they will need to be checked as they happen
 
                     doMath = (locationCode * 28) + &H11A6A4
@@ -4259,7 +4265,7 @@ Public Class frmTrackerOfTime
 
                 If isSoH Then
                     Select Case i
-                        Case 61 To 67
+                        Case 61 To 70
                             Dim tempHex As String = Hex(chestCheck)
                             fixHex(tempHex)
                             tempHex = Mid(tempHex, 5) & Mid(tempHex, 1, 4)
@@ -4556,13 +4562,7 @@ Public Class frmTrackerOfTime
             End Select
         End If
 
-        If IS_64BIT Then
-            'startI = 31
-            'compareTo = 2147483648
-        End If
-
         If foundChests < 0 Then foundChests = foundChests + (compareTo * 2)
-
         For i = startI To 0 Step -1
             strII = i.ToString
             doCheck = False
@@ -4582,15 +4582,21 @@ Public Class frmTrackerOfTime
                     Select Case .loc
                         Case "6500", "6501", "6502", "6503"
                             checkCarpenters()
-                        Case "6410"
-                            If doCheck = True Then cb6410.Checked = True
                     End Select
-                    If .area = "INV" Then data2Checkbox(.loc, .checked)
+                    If .area = "INV" Then data2vars(.loc, .checked)
                     gotHit = True
                 End With
             Next
 
-            If gotHit = False Then
+            If gotHit = True Then
+                Select Case strI
+                    Case "74", "75"
+                        checkEquipment()
+                    Case "76"
+                        checkUpgrades()
+                End Select
+            Else
+                ' Else, keep searching
                 For ii = 0 To 11
                     For j = 0 To aKeysDungeons(ii).Length - 1
                         With aKeysDungeons(ii)(j)
@@ -4610,16 +4616,31 @@ Public Class frmTrackerOfTime
         Next
     End Sub
 
-    Private Sub data2Checkbox(ByVal box As String, ByVal val As Boolean)
-        ' This sub converts the key's check data into a checkbox's checked
-        ' This is literally just more lazy programming... I should use variables instead of invisible checkboxes
-        For Each chk In pnlHidden.Controls.OfType(Of CheckBox)()
-            ' Search all the checkboxes in the hidden panel, set its value to the key's check, and exit the sub
-            If chk.Name = "cb" & box Then
-                chk.Checked = val
+    Private Sub data2vars(ByVal var As String, ByVal val As Boolean)
+        ' 7508 is not an array, just a single variable
+        If var = "7508" Then
+            knifeCheck = val
+            Exit Sub
+        End If
+
+        ' Grab the bit offset as the array location
+        Dim bit As Byte = CByte(Mid(var, 3))
+        Dim thisArray() As Boolean
+
+        ' Depending on the arrLocation used, select the appropriate array
+        Select Case Mid(var, 1, 2)
+            Case "74"
+                thisArray = aEquipment
+            Case "76"
+                thisArray = aUpgrades
+            Case "77"
+                thisArray = aQuestItems
+            Case Else
                 Exit Sub
-            End If
-        Next
+        End Select
+
+        ' Assign value
+        thisArray(bit) = val
     End Sub
 
     Private Sub updateLabels()
@@ -5272,6 +5293,7 @@ Public Class frmTrackerOfTime
 
     Private Function checkZeldaz() As Byte
         If isSoH Then Return 2
+
         ' Checks for the 'ZELDAZ' within the memory to make sure you are playing Ocarina of Time, and that it is still reading the correct memory region
         checkZeldaz = 0
         Dim zeldaz1 As Integer = goRead(&H11A5EC)
@@ -5294,7 +5316,14 @@ Public Class frmTrackerOfTime
         If isSoH Then addrLoaded = soh.SAV(&H1320)
         ' Checks the game state (2=game menu, 1=title screen, 0=gameplay), if 0 and a successful ZELDAZ check, then true
         isLoadedGame = False
-        If goRead(addrLoaded, 1) = 0 And checkZeldaz() = 2 Then isLoadedGame = True
+        If goRead(addrLoaded, 1) = 0 And checkZeldaz() = 2 Then
+            isLoadedGame = True
+        Else
+            If isSoH Then
+                lastFirstEnum = 255 ' SOH is loaded but we're on the main menu, so clear the rando settings
+                ResetToolStripMenuItem_Click(Nothing, Nothing)
+            End If
+        End If
     End Function
     Private Sub debugInfo()
         emulator = String.Empty
@@ -5392,6 +5421,7 @@ Public Class frmTrackerOfTime
     End Sub
     Private Sub updateEverything()
         If checkZeldaz() = 2 And isLoadedGame() Then
+            If isSoH Then getSoHRandoSettings()
             getWarps()
             getRainbowBridge()
             changeScrubs()
@@ -5464,13 +5494,16 @@ Public Class frmTrackerOfTime
     End Function
     Private Sub shutupNavi()
         ' With great power, comes little care for what others have to day. Shut up Navi's timed complaints.
+
+        Dim addrNavi As Integer = &H11A60A
         Select Case emulator
             Case String.Empty
                 Exit Sub
             Case "variousX64"
-                WriteMemory(Of Int16)(romAddrStart64 + &H11A608 + 2, 0)
+                If isSoH Then addrNavi = SAV(&H32)
+                WriteMemory(Of Int16)(romAddrStart64 + addrNavi, 0)
             Case Else
-                quickWrite16(&H11A608 + 2, 0, emulator)
+                quickWrite16(addrNavi, 0, emulator)
         End Select
     End Sub
 
@@ -5502,6 +5535,11 @@ Public Class frmTrackerOfTime
         'Dim test As Integer = goRead(arrLocation(118))
         'MsgBox(Hex(test))
         'dump()
+        Dim test As String = Hex(goRead(arrLocation(121)))
+        For Each k In aKeys
+            If k.loc = "12102" Then MsgBox(Hex(arrLocation(121)) & ": " & test & ": " & checkLoc("12102").ToString)
+        Next
+
 
         If False Then
             Dim outputXX As String = "Visited:"
@@ -5529,6 +5567,14 @@ Public Class frmTrackerOfTime
                 outputXX = outputXX & vbCrLf & i.ToString & ": " & aReachY(i).ToString
             Next
             Clipboard.SetText(outputXX)
+        End If
+
+        If False Then
+            Dim text2 As String = String.Empty
+            For i = 0 To arrLocation.Length - 1
+                text = text & "frmTrackerOfTime.arrLocation(" & i.ToString & ") = SAV(&H" & Hex(arrLocation(i) - &HEC8560) & ")" & vbCrLf
+            Next
+            Clipboard.SetText(text)
         End If
     End Sub
     Private Sub changeTheme(Optional theme As Byte = 0)
@@ -5631,8 +5677,6 @@ Public Class frmTrackerOfTime
             rtbOutputRight.Top = rtbOutputLeft.Top
         End If
         pnlWorldMap.Visible = My.Settings.setMap
-        pnlHidden.Visible = False
-
 
         Application.DoEvents()
         If showSetting Then
@@ -6061,11 +6105,6 @@ Public Class frmTrackerOfTime
     Private Sub setupKeys()
         ' tK is short for thisKey
         Dim tK As Integer = 0
-
-        For i = 0 To aKeys.Length - 1
-            aKeys(i) = New keyCheck
-            aKeys(i).scan = True
-        Next
 
         makeKeysKF(tK)
         makeKeysLW(tK)
@@ -7672,29 +7711,29 @@ Public Class frmTrackerOfTime
             Case "slingshot"
                 If canYoung And allItems.Contains("g") Then Return True
             Case "zelda's lullaby"
-                If allItems.Contains("h") And aQIChecks(12) Then Return True
+                If allItems.Contains("h") And aQuestItems(12) Then Return True
             Case "epona's song"
-                If allItems.Contains("h") And aQIChecks(13) Then Return True
+                If allItems.Contains("h") And aQuestItems(13) Then Return True
             Case "saria's song"
-                If allItems.Contains("h") And aQIChecks(14) Then Return True
+                If allItems.Contains("h") And aQuestItems(14) Then Return True
             Case "sun's song"
-                If allItems.Contains("h") And aQIChecks(15) Then Return True
+                If allItems.Contains("h") And aQuestItems(15) Then Return True
             Case "song of time"
-                If allItems.Contains("h") And aQIChecks(16) Then Return True
+                If allItems.Contains("h") And aQuestItems(16) Then Return True
             Case "song of storms"
-                If allItems.Contains("h") And aQIChecks(17) Then Return True
+                If allItems.Contains("h") And aQuestItems(17) Then Return True
             Case "minuet of forest"
-                If allItems.Contains("h") And aQIChecks(6) And Not bSongWarps Then Return True
+                If allItems.Contains("h") And aQuestItems(6) And Not bSongWarps Then Return True
             Case "bolero of fire"
-                If allItems.Contains("h") And aQIChecks(7) And Not bSongWarps Then Return True
+                If allItems.Contains("h") And aQuestItems(7) And Not bSongWarps Then Return True
             Case "serenade of water"
-                If allItems.Contains("h") And aQIChecks(8) And Not bSongWarps Then Return True
+                If allItems.Contains("h") And aQuestItems(8) And Not bSongWarps Then Return True
             Case "requiem of spirit"
-                If allItems.Contains("h") And aQIChecks(9) And Not bSongWarps Then Return True
+                If allItems.Contains("h") And aQuestItems(9) And Not bSongWarps Then Return True
             Case "nocturne of shadow"
-                If allItems.Contains("h") And aQIChecks(10) And Not bSongWarps Then Return True
+                If allItems.Contains("h") And aQuestItems(10) And Not bSongWarps Then Return True
             Case "prelude of light"
-                If allItems.Contains("h") And aQIChecks(11) And Not bSongWarps Then Return True
+                If allItems.Contains("h") And aQuestItems(11) And Not bSongWarps Then Return True
             Case "scarecrow"
                 If canAdult And allItems.Contains("h") And checkLoc("6512") Then
                     If rank = 1 And allItems.Contains("k") Then
@@ -7865,9 +7904,16 @@ Public Class frmTrackerOfTime
             Return False
         End If
 
-        Dim conditionLACS As Byte = CByte(goRead(aAddresses(1), 1))
-        Dim countLACS As Byte = CByte(goRead(aAddresses(2), 1))
+        Dim conditionLACS As Byte
+        Dim countLACS As Byte
         Dim countChecks As Byte = 0
+        If isSoH Then   ' only vanilla LACS currently
+            conditionLACS = 0
+            countLACS = 0
+        Else
+            conditionLACS = CByte(goRead(aAddresses(1), 1))
+            countLACS = CByte(goRead(aAddresses(2), 1))
+        End If
         Select Case conditionLACS
             Case 0
                 ' Vanilla: Spirit Medallion and Shadow Medallion
@@ -8668,7 +8714,7 @@ Public Class frmTrackerOfTime
         End With
         inc(tK)
         With aKeys(tK)
-            .loc = "6814"
+            .loc = locSwap(13)
             .area = "LW"
             .zone = 3
             .name = "Deku Theatre Skull Mask"
@@ -8782,7 +8828,7 @@ Public Class frmTrackerOfTime
         End With
         inc(tk)
         With aKeys(tk)
-            .loc = "6407"
+            .loc = locSwap(6)
             .area = "SFM"
             .zone = 5
             .name = "Song from Saria"
@@ -8877,7 +8923,7 @@ Public Class frmTrackerOfTime
         End With
         inc(tk)
         With aKeys(tk)
-            .loc = "6625"
+            .loc = locSwap(9)
             .area = "HF"
             .zone = 7
             .name = "Song from Ocarina of Time"
@@ -8942,7 +8988,7 @@ Public Class frmTrackerOfTime
         End With
         inc(tk)
         With aKeys(tk)
-            .loc = "6408"
+            .loc = locSwap(7)
             .area = "LLR"
             .zone = 9
             .name = "Song from Malon"
@@ -9133,7 +9179,7 @@ Public Class frmTrackerOfTime
         End With
         inc(tk)
         With aKeys(tk)
-            .loc = "6720"
+            .loc = locSwap(5)
             .area = "TT"
             .zone = 11
             .name = "Light Arrows Cutscene"
@@ -9177,7 +9223,7 @@ Public Class frmTrackerOfTime
         End With
         inc(tk)
         With aKeys(tk)
-            .loc = "6809"
+            .loc = locSwap(11)
             .area = "HC"
             .zone = 54
             .name = "HC Great Fairy Fountain"
@@ -9264,7 +9310,7 @@ Public Class frmTrackerOfTime
         End With
         inc(tk)
         With aKeys(tk)
-            .loc = "6830"
+            .loc = locSwap(14)
             .area = "KV"
             .zone = 15
             .name = "Shooting Gallery"
@@ -9371,7 +9417,7 @@ Public Class frmTrackerOfTime
         ' 19 GY Upper
 
         With aKeys(tk)
-            .loc = "2208"
+            .loc = locSwap(2)
             .area = "GY"
             .zone = 18
             .name = "Dampe's Gravedigging Tour (N)"
@@ -9411,7 +9457,7 @@ Public Class frmTrackerOfTime
         End With
         inc(tk)
         With aKeys(tk)
-            .loc = "6410"
+            .loc = locSwap(8)
             .area = "GY"
             .zone = 18
             .name = "Song from Royal Family's Tomb"
@@ -9480,7 +9526,7 @@ Public Class frmTrackerOfTime
         End With
         inc(tk)
         With aKeys(tk)
-            .loc = "024"
+            .loc = locSwap(1)
             .area = "DMT"
             .zone = 21
             .name = "Great Fairy Fountain"
@@ -9589,7 +9635,7 @@ Public Class frmTrackerOfTime
         End With
         inc(tk)
         With aKeys(tk)
-            .loc = "016"
+            .loc = locSwap(0)
             .area = "DMC"
             .zone = 24
             .name = "Great Fairy Fountain"
@@ -9722,7 +9768,7 @@ Public Class frmTrackerOfTime
         End With
         inc(tk)
         With aKeys(tk)
-            .loc = "6306"
+            .loc = locSwap(4)
             .area = "GC"
             .zone = 31
             .name = "Darunia's Joy"
@@ -9982,7 +10028,7 @@ Public Class frmTrackerOfTime
         ' 41 ZF Ice Cavern Ledge
 
         With aKeys(tk)
-            .loc = "6808"
+            .loc = locSwap(10)
             .area = "ZF"
             .zone = 40
             .name = "Great Fairy Fountain"
@@ -10095,7 +10141,7 @@ Public Class frmTrackerOfTime
         End With
         inc(tk)
         With aKeys(tk)
-            .loc = "5200"
+            .loc = locSwap(3)
             .area = "LH"
             .zone = 42
             .name = "Shoot the Sun"
@@ -10422,7 +10468,7 @@ Public Class frmTrackerOfTime
         ' 50 DC
 
         With aKeys(tk)
-            .loc = "6810"
+            .loc = locSwap(12)
             .area = "DC"
             .zone = 50
             .name = "Great Fairy Fountain"
@@ -15250,19 +15296,19 @@ Public Class frmTrackerOfTime
             End With
         Next
     End Sub
-    Private Sub checkEquipment()
+		Private Sub checkEquipment()
         ' Pair the pictureboxes up with the checkboxes to make them visible or not
-        pbxKokiriSword.Visible = cb7416.Checked
-        pbxMasterSword.Visible = cb7417.Checked
-        pbxDekuShield.Visible = cb7420.Checked
-        pbxHylianShield.Visible = cb7421.Checked
-        pbxMirrorShield.Visible = cb7422.Checked
-        pbxKokiriTunic.Visible = cb7424.Checked
-        pbxGoronTunic.Visible = cb7425.Checked
-        pbxZoraTunic.Visible = cb7426.Checked
-        pbxKokiriBoots.Visible = cb7428.Checked
-        pbxIronBoots.Visible = cb7429.Checked
-        pbxHoverBoots.Visible = cb7430.Checked
+        pbxKokiriSword.Visible = aEquipment(16)
+        pbxMasterSword.Visible = aEquipment(17)
+        pbxDekuShield.Visible = aEquipment(20)
+        pbxHylianShield.Visible = aEquipment(21)
+        pbxMirrorShield.Visible = aEquipment(22)
+        pbxKokiriTunic.Visible = aEquipment(24)
+        pbxGoronTunic.Visible = aEquipment(25)
+        pbxZoraTunic.Visible = aEquipment(26)
+        pbxKokiriBoots.Visible = aEquipment(28)
+        pbxIronBoots.Visible = aEquipment(29)
+        pbxHoverBoots.Visible = aEquipment(30)
 
         ' Run the check to see if you have the Biggoron's Sword or the Knife
         biggoronSwordCheck()
@@ -15270,15 +15316,15 @@ Public Class frmTrackerOfTime
     Private Sub biggoronSwordCheck()
         '0 = none, 1 = Biggoron's Sword, 2 = Broken Knife
         Dim who As Byte = 0
-        If cb7418.Checked Then
+        If aEquipment(18) Then
             who = 1
-            If cb7508.Checked Then
+            If knifeCheck Then
                 who = 1
-            ElseIf cb7419.Checked Then
+            ElseIf aEquipment(19) Then
                 who = 2
             End If
         Else
-            If cb7419.Checked Then
+            If aEquipment(19) Then
                 who = 2
             End If
         End If
@@ -15298,36 +15344,36 @@ Public Class frmTrackerOfTime
         Dim upgrades() As Integer = {0, 0, 0, 0, 0, 0, 0, 0}
 
         ' Quivers
-        If cb7600.Checked Then upgrades(0) = upgrades(0) + 1
-        If cb7601.Checked Then upgrades(0) = upgrades(0) + 2
+        If aUpgrades(0) Then upgrades(0) = upgrades(0) + 1
+        If aUpgrades(1) Then upgrades(0) = upgrades(0) + 2
 
         ' Bomb Bags
-        If cb7603.Checked Then upgrades(1) = upgrades(1) + 1
-        If cb7604.Checked Then upgrades(1) = upgrades(1) + 2
+        If aUpgrades(3) Then upgrades(1) = upgrades(1) + 1
+        If aUpgrades(4) Then upgrades(1) = upgrades(1) + 2
 
         ' Gauntlets
-        If cb7606.Checked Then upgrades(2) = upgrades(2) + 1
-        If cb7607.Checked Then upgrades(2) = upgrades(2) + 2
+        If aUpgrades(6) Then upgrades(2) = upgrades(2) + 1
+        If aUpgrades(7) Then upgrades(2) = upgrades(2) + 2
 
         ' Scales
-        If cb7609.Checked Then upgrades(3) = upgrades(3) + 1
-        If cb7610.Checked Then upgrades(3) = upgrades(3) + 2
+        If aUpgrades(9) Then upgrades(3) = upgrades(3) + 1
+        If aUpgrades(10) Then upgrades(3) = upgrades(3) + 2
 
         ' Wallets
-        If cb7612.Checked Then upgrades(4) = upgrades(4) + 1
-        If cb7613.Checked Then upgrades(4) = upgrades(4) + 2
+        If aUpgrades(12) Then upgrades(4) = upgrades(4) + 1
+        If aUpgrades(13) Then upgrades(4) = upgrades(4) + 2
 
         ' Bullet Bag
-        If cb7614.Checked Then upgrades(5) = upgrades(5) + 1
-        If cb7615.Checked Then upgrades(5) = upgrades(5) + 2
+        If aUpgrades(14) Then upgrades(5) = upgrades(5) + 1
+        If aUpgrades(15) Then upgrades(5) = upgrades(5) + 2
 
         ' Sticks
-        If cb7617.Checked Then upgrades(6) = upgrades(6) + 1
-        If cb7618.Checked Then upgrades(6) = upgrades(6) + 2
+        If aUpgrades(17) Then upgrades(6) = upgrades(6) + 1
+        If aUpgrades(18) Then upgrades(6) = upgrades(6) + 2
 
         ' Nuts
-        If cb7620.Checked Then upgrades(7) = upgrades(7) + 1
-        If cb7621.Checked Then upgrades(7) = upgrades(7) + 2
+        If aUpgrades(20) Then upgrades(7) = upgrades(7) + 1
+        If aUpgrades(21) Then upgrades(7) = upgrades(7) + 2
 
         With pbxQuiver
             Select Case upgrades(0)
@@ -15423,18 +15469,9 @@ Public Class frmTrackerOfTime
         End With
     End Sub
     Private Sub updateQuestItems()
-        For i = 0 To 22
-
-            For Each key In aKeys
-                With key
-                    If .loc = "77" & IIf(i > 9, "", "0").ToString & i.ToString Then aQIChecks(i) = .checked
-                End With
-            Next
-        Next
-
         For i As Byte = 0 To 22
             With aoQuestItems(i)
-                If aQIChecks(i) Then
+                If aQuestItems(i) Then
                     .Image = aoQuestItemImages(i)
                 Else
                     .Image = aoQuestItemImagesEmpty(i)
@@ -15442,7 +15479,7 @@ Public Class frmTrackerOfTime
             End With
 
             ' Store for use when drawing text over each quest reward
-            aQuestRewardsCollected(i) = aQIChecks(i)
+            aQuestRewardsCollected(i) = aQuestItems(i)
 
             ' Update the added dungeon text on each medallion and stone
             Select Case i
@@ -15457,10 +15494,8 @@ Public Class frmTrackerOfTime
                 Case Else
                     If bSongWarps Then displayWarps(i)
             End Select
-
         Next
     End Sub
-
     Private Sub attachToSoH()
         emulator = String.Empty
         If Not IS_64BIT Then Exit Sub
@@ -15483,11 +15518,126 @@ Public Class frmTrackerOfTime
         emulator = "soh"
 
         isSoH = True
-        For Each key In aKeys.Where(Function(k As keyCheck) k.loc.Equals("6306"))
-            key.loc = "5930"
-        Next
-        soh.sohSetup(romAddrStart64)
+
+        ' Check if we are changing from non-SoH to SoH, or just reconnecting to SoH again
+        'For Each key In aKeys
+        'Select Case key.loc
+
+        'Case "016"      ' Redirect DMC Great Fairy
+        'key.loc = "12202"
+        'Case "024"      ' Redirect DMT Great Fairy
+        'key.loc = "12201"
+        'Case "2208"     ' Redirect Dampe's Gravedigging
+        'key.loc = "2231"
+        'Case "5200"     ' Redirect Shoot the Sun
+        'key.loc = "5231"
+        'Case "6306"     ' Redirect Darunia's Joy
+        'key.loc = "5630"
+        'Case "6720"     ' Light Arrows Cutscene Reward
+        'key.loc = "12330"
+        'Case "6407"     ' Redirect Song from Saria
+        'key.loc = "11931"
+        'Case "6408"     ' Redirect Song from Malon
+        'key.loc = "11831"
+        'Case "6410"     ' Redirect Sun's Song (you need to check the message twice!!!)
+        'key.loc = "4931"
+        'Case "6625"     ' Redirect Song From Ocarina of Time
+        'key.loc = "12431"
+        'Case "6808"     ' Redirect GF Zora
+        'key.loc = "12101"
+        'Case "6809"     ' Redirect GF Castle (Young)
+        'key.loc = "12102"
+        'Case "6810"     ' Redirect GF Desert
+        'key.loc = "12103"
+        'Case "6814"     ' Redirect Deku Theatre Skull Mask
+        'key.loc = "4631"
+        'Case "6830"     ' Shooting Gallery Adult (Child worked, todo: test child again)
+        'key.loc = "12031"
+
+
+
+        '   Case "6828"     ' Redirect Anju's Chickens
+        '   key.loc = "7728"
+        'End Select
+        'Next
+
+        If wasSoH = False Then
+            soh.sohSetup(romAddrStart64)
+            redirectChecks(False)
+        End If
+        wasSoH = True
     End Sub
+
+    Private Sub redirectChecks(Optional ByVal regularRando As Boolean = True)
+        ' Handles what the locs will be when making and checking keys
+        If regularRando Then
+            locSwap(0) = "016"      ' DMC Great Fairy
+            locSwap(1) = "024"      ' DMT Great Fairy
+            locSwap(2) = "2208"     ' Dampe's Gravedigging
+            locSwap(3) = "5200"     ' Shoot the Sun
+            locSwap(4) = "6306"     ' Darunia's Joy
+            locSwap(5) = "6720"     ' Light Arrows Cutscene Reward
+            locSwap(6) = "6407"     ' Song from Saria
+            locSwap(7) = "6408"     ' Song from Malon
+            locSwap(8) = "6410"     ' Sun's Song
+            locSwap(9) = "6625"     ' Song From Ocarina of Time
+            locSwap(10) = "6808"    ' GF Zora
+            locSwap(11) = "6809"    ' GF Castle
+            locSwap(12) = "6810"    ' GF Desert
+            locSwap(13) = "6814"    ' Deku Theatre Skull Mask
+            locSwap(14) = "6830"    ' Shooting Gallery Adult
+        Else
+            locSwap(0) = "12202"    ' DMC Great Fairy
+            locSwap(1) = "12201"    ' DMT Great Fairy
+            locSwap(2) = "2231"     ' Dampe's Gravedigging
+            locSwap(3) = "5231"     ' Shoot the Sun
+            locSwap(4) = "5630"     ' Darunia's Joy
+            locSwap(5) = "12330"    ' Light Arrows Cutscene Reward
+            locSwap(6) = "11931"    ' Song from Saria
+            locSwap(7) = "11831"    ' Song from Malon
+            locSwap(8) = "4931"     ' Sun's Song
+            locSwap(9) = "12431"    ' Song From Ocarina of Time
+            locSwap(10) = "12101"   ' GF Zora
+            locSwap(11) = "12102"   ' GF Castle
+            locSwap(12) = "12103"   ' GF Desert
+            locSwap(13) = "4631"    ' Deku Theatre Skull Mask
+            locSwap(14) = "12031"   ' Shooting Gallery Adult
+        End If
+
+        ' Clear all the keys
+        For i = 0 To aKeys.Length - 1
+            aKeys(i) = New keyCheck
+            aKeys(i).scan = True
+        Next
+
+        setupKeys()
+        ' Will need to fix the shoppes afterwards
+        If regularRando Then updateShoppes()
+        getHighLows()
+    End Sub
+
+    Private Sub getSoHRandoSettings()
+        Dim offset As Integer = SAV(&H13E8)
+        Dim varEnum As Byte = 0
+        Dim varVal As Byte = 0
+
+        Dim firstEnum As Byte = CByte(goRead(offset, 1))
+        If lastFirstEnum = firstEnum Then Exit Sub
+        lastFirstEnum = firstEnum
+
+        ReDim aRandoSet(50)
+        For i = 0 To aRandoSet.Length - 1
+            aRandoSet(i) = 0
+        Next
+
+        For i = 0 To aRandoSet.Length - 1
+            varEnum = CByte(goRead(offset + (i * 8), 1))
+            If varEnum = 0 Then Exit For
+            varVal = CByte(goRead(offset + (i * 8) + 4, 1))
+            aRandoSet(varEnum) = varVal
+        Next
+    End Sub
+
     Private Sub attachToBizHawk()
         emulator = String.Empty
         If Not IS_64BIT Then Exit Sub
@@ -16145,6 +16295,10 @@ Public Class frmTrackerOfTime
         If isSoH Then
             endianFlip(items)
             endianFlip(quantity)
+            If Mid(items, 1, 8) = "00000000" Then
+                lastFirstEnum = 255
+                Exit Sub
+            End If
         End If
         ' Storing items to an easy-to-scan string for logic detection
         allItems = String.Empty
@@ -17477,9 +17631,6 @@ Public Class frmTrackerOfTime
         stopScanning()
         pbxPoH.Image = My.Resources.poh0
         pbxMap.Image = My.Resources.mapBlank
-        For Each chk In pnlHidden.Controls.OfType(Of CheckBox)()
-            chk.Checked = False
-        Next
         rtbOutputLeft.Clear()
         rtbOutputRight.Clear()
         lastRoomScan = 0
@@ -17960,7 +18111,7 @@ Public Class frmTrackerOfTime
                     reachAreas(warp, False)
                 End If
             Case Else
-                If aQIChecks(type + 4) And allItems.Contains("h") Then
+                If aQuestItems(type + 4) And allItems.Contains("h") Then
                     If canAdult Then
                         aReachA(warp) = True
                         reachAreas(warp, True)
@@ -17980,7 +18131,7 @@ Public Class frmTrackerOfTime
             Case 1
                 If canYoung Then Return True
             Case 2 To 7
-                If aQIChecks(warp + 4) Then Return True
+                If aQuestItems(warp + 4) Then Return True
         End Select
     End Function
     Private Sub displaySpawns(ByVal spawn As Byte)
@@ -18722,14 +18873,26 @@ Public Class frmTrackerOfTime
 
     Private Function getPosition() As Double()
         ' Grab values for XYZ
-        Dim valX As Int32 = goRead(&H1DAA54)
-        Dim valY As Int32 = goRead(&H1DAA58)
-        Dim valZ As Int32 = goRead(&H1DAA5C)
+        Dim valX As String = String.Empty
+        Dim valY As String = String.Empty
+        Dim valZ As String = String.Empty
+
+        If isSoH Then
+            valX = Convert.ToString(GDATA(&H17264), 2)
+            valY = Convert.ToString(GDATA(&H17268), 2)
+            valZ = Convert.ToString(GDATA(&H1726C), 2)
+        Else
+            valX = Convert.ToString(goRead(&H1DAA54), 2)
+            valY = Convert.ToString(goRead(&H1DAA54), 2)
+            valZ = Convert.ToString(goRead(&H1DAA54), 2)
+        End If
+
+        fixBinaryLength(valX, valY, valZ)
 
         ' Convert values into IEEE-754 floating points
-        Dim coordX As Double = int2float(valX)
-        Dim coordY As Double = int2float(valY)
-        Dim coordZ As Double = int2float(valZ)
+        Dim coordX As Double = bin2float(valX)
+        Dim coordY As Double = bin2float(valY)
+        Dim coordZ As Double = bin2float(valZ)
 
         ' Return the whole array
         Return New Double() {coordX, coordY, coordZ}
@@ -18750,7 +18913,14 @@ Public Class frmTrackerOfTime
         Dim coordX As Double = ((linkPOS(0) + 4550) / 8200) * 400 + 53
         Dim coordZ As Double = ((linkPOS(2) + 3750) / 8200) * 400 + 17
 
-        Dim linkRot As Integer = goRead(&H1DAA74, 15)
+
+        Dim linkRot As Integer = 0
+
+        If isSoH Then
+            linkRot = CInt(GDATA(&H1730A, 2))
+        Else
+            linkRot = goRead(&H1DAA74, 15)
+        End If
         Dim headA As Double = (((linkRot / 65535 * 360) - 90) * -1) * Math.PI / 180
         Dim tailA As Double = (((linkRot / 65535 * 360) + 90) * -1) * Math.PI / 180
 
@@ -18825,4 +18995,3 @@ Public Class custMenu
         End With
     End Sub
 End Class
-
