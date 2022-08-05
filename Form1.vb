@@ -4190,7 +4190,6 @@ Public Class frmTrackerOfTime
         End If
 
         Dim locationCode As Integer = CInt(IIf(isSoH, GDATA(&H200, 1), goRead(CUR_ROOM_ADDR + 2, 15)))
-
         'Me.Text = locationCode.ToString
         Dim doMath As Integer = 0
         If Not keepRunning Then
@@ -4219,6 +4218,7 @@ Public Class frmTrackerOfTime
                     If isSoH Then doMath = doMath + &HDADF94
                     tempVar = CInt(IIf(isSoH, &H2388, &H1CA1D8))
 
+
                     Dim doFlip As Boolean = False
                     Select Case i
                         Case 0 To 2, 103 To 113, 115 To 117
@@ -4233,6 +4233,8 @@ Public Class frmTrackerOfTime
                     End Select
 
                     If doMath = arrLocation(i) Then
+                        Me.Text = locationCode.ToString
+
                         checkAgain = False
                         If isSoH Then
                             chestCheck = GDATA(tempVar)
@@ -16305,7 +16307,7 @@ Public Class frmTrackerOfTime
         Dim temp As String = String.Empty
         Dim cTemp As Integer = 0
 
-        Dim addrItems As Integer = CInt(IIf(isSoH, &HEC85D8, &H11A644))
+        Dim addrItems As Integer = CInt(IIf(isSoH, SAV(&H78), &H11A644))
 
         For i = addrItems To addrItems + 20 Step 4
             temp = Hex(goRead(i))

@@ -1,7 +1,7 @@
 ﻿Imports System.Runtime.InteropServices
 
 Module soh
-    Public Const gSaveCtxOff As Integer = &HEC8560
+    Public Const gSaveCtxOff As Integer = &HEC8560 + &H1D00
     Private gGameData As Long = 0
 
     Public Function SAV(offset As Integer) As Integer
@@ -20,7 +20,7 @@ Module soh
     End Function
 
     Public Sub sohSetup(ByVal startAddress As Int64)
-        gGameData = ReadMemory(Of Long)(startAddress + &HE4D878)
+        gGameData = ReadMemory(Of Long)(startAddress + &HE4D878 + &H30000)
 
         ' Check that we have Not already done this, in case this Is triggered twice in one instance
         If frmTrackerOfTime.arrLocation(0) = &H11AD1C Then ' original offset for emulators
