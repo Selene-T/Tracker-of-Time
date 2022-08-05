@@ -58,15 +58,20 @@ Module MemPlus
     End Function
 
     Public Function UpdateProcessHandle() As Boolean
-        If LastKnownPID = -1 OrElse Not ProcessIDExists(LastKnownPID) Then
-            If ProcessHandle <> IntPtr.Zero Then CloseHandle(ProcessHandle)
-            Dim p() As Process = Process.GetProcessesByName(TargetProcess)
-            If p.Length = 0 Then Return False
-            LastKnownPID = p(0).Id
-            ProcessHandle = OpenProcess(PROCESS_VM_READ Or PROCESS_VM_WRITE Or PROCESS_VM_OPERATION, False, p(0).Id)
-            If ProcessHandle = IntPtr.Zero Then Return False
-        End If
-        Return True
+        Try
+            If LastKnownPID = -1 OrElse Not ProcessIDExists(LastKnownPID) Then
+                If ProcessHandle <> IntPtr.Zero Then CloseHandle(ProcessHandle)
+                Dim p() As Process = Process.GetProcessesByName(TargetProcess)
+                If p.Length = 0 Then Return False
+                LastKnownPID = p(0).Id
+                ProcessHandle = OpenProcess(PROCESS_VM_READ Or PROCESS_VM_WRITE Or PROCESS_VM_OPERATION, False, p(0).Id)
+                If ProcessHandle = IntPtr.Zero Then Return False
+            End If
+            Return True
+        Catch ex As Exception
+            frmTrackerOfTime.stopScanning()
+            Return False
+        End Try
     End Function
 
     Public Function ReadMemory(Of T)(ByVal address As Object) As T

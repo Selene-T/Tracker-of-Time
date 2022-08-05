@@ -22,15 +22,6 @@ Module soh
     Public Sub sohSetup(ByVal startAddress As Int64)
         gGameData = ReadMemory(Of Long)(startAddress + &HE4D878)
 
-        ' Force some settings off until we can get to them
-        My.Settings.setShop = 0
-        frmTrackerOfTime.updateLTB("ltbShopsanity")
-        My.Settings.setScrub = False
-        My.Settings.setCow = False
-        frmTrackerOfTime.updateSettingsPanel()
-
-        ' Still need 68 - 73
-
         ' Check that we have Not already done this, in case this Is triggered twice in one instance
         If frmTrackerOfTime.arrLocation(0) = &H11AD1C Then ' original offset for emulators
             For i = 0 To frmTrackerOfTime.arrLocation.Length - 1
@@ -53,7 +44,7 @@ Module soh
         frmTrackerOfTime.arrLocation(70) = SAV(&HF08)          ' *Item: Rolling Goron as Young + Adult Link
         frmTrackerOfTime.arrLocation(71) = SAV(&HF0E)          ' *Thaw Zora King
         frmTrackerOfTime.arrLocation(72) = SAV(&HF1A)          ' *Items: 1st and 2nd Scrubs, Lost Dog
-        frmTrackerOfTime.arrLocation(73) = SAV(&H1288)          ' *Scarecrow Song
+        frmTrackerOfTime.arrLocation(73) = SAV(&H1288)         ' *Scarecrow Song
         frmTrackerOfTime.arrLocation(74) = SAV(&H9E)           ' *Equipment
         frmTrackerOfTime.arrLocation(75) = SAV(&H36)           ' *Check for Biggoron's Sword
         frmTrackerOfTime.arrLocation(76) = SAV(&HA4)           ' *Upgrades
@@ -173,6 +164,5 @@ Module soh
         'frmTrackerOfTime.arrLocation(122) = SAV(&H74C)
         'frmTrackerOfTime.arrLocation(123) = SAV(&H82C)
         'frmTrackerOfTime.arrLocation(124) = SAV(&H9B4)
-
     End Sub
 End Module

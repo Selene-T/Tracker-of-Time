@@ -33,9 +33,10 @@ Partial Class frmTrackerOfTime
         Me.lblShopsanity = New System.Windows.Forms.Label()
         Me.lcxScrubShuffle = New System.Windows.Forms.Label()
         Me.mnuOptions = New System.Windows.Forms.MenuStrip()
-        Me.ScanToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AutoScanToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ResetToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ScanToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DumpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MiniMapToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ShowSettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ThemesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -605,7 +606,7 @@ Partial Class frmTrackerOfTime
         'mnuOptions
         '
         Me.mnuOptions.AutoSize = False
-        Me.mnuOptions.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ScanToolStripMenuItem, Me.AutoScanToolStripMenuItem, Me.ResetToolStripMenuItem, Me.MiniMapToolStripMenuItem, Me.ShowSettingsToolStripMenuItem, Me.ThemesToolStripMenuItem})
+        Me.mnuOptions.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AutoScanToolStripMenuItem, Me.ResetToolStripMenuItem, Me.ScanToolStripMenuItem, Me.DumpToolStripMenuItem, Me.MiniMapToolStripMenuItem, Me.ShowSettingsToolStripMenuItem, Me.ThemesToolStripMenuItem})
         Me.mnuOptions.Location = New System.Drawing.Point(0, 0)
         Me.mnuOptions.Name = "mnuOptions"
         Me.mnuOptions.Padding = New System.Windows.Forms.Padding(6, 6, 0, 6)
@@ -613,32 +614,41 @@ Partial Class frmTrackerOfTime
         Me.mnuOptions.TabIndex = 243
         Me.mnuOptions.Text = "MenuStrip1"
         '
-        'ScanToolStripMenuItem
-        '
-        Me.ScanToolStripMenuItem.AutoSize = False
-        Me.ScanToolStripMenuItem.Margin = New System.Windows.Forms.Padding(1, 0, 24, 0)
-        Me.ScanToolStripMenuItem.Name = "ScanToolStripMenuItem"
-        Me.ScanToolStripMenuItem.Size = New System.Drawing.Size(73, 22)
-        Me.ScanToolStripMenuItem.Text = "Scan"
-        Me.ScanToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.TopCenter
-        '
         'AutoScanToolStripMenuItem
         '
         Me.AutoScanToolStripMenuItem.AutoSize = False
-        Me.AutoScanToolStripMenuItem.Margin = New System.Windows.Forms.Padding(0, 0, 24, 0)
+        Me.AutoScanToolStripMenuItem.Margin = New System.Windows.Forms.Padding(1, 0, 24, 0)
         Me.AutoScanToolStripMenuItem.Name = "AutoScanToolStripMenuItem"
         Me.AutoScanToolStripMenuItem.Size = New System.Drawing.Size(73, 22)
-        Me.AutoScanToolStripMenuItem.Text = "Auto Scan"
+        Me.AutoScanToolStripMenuItem.Text = "Start"
         Me.AutoScanToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'ResetToolStripMenuItem
         '
         Me.ResetToolStripMenuItem.AutoSize = False
-        Me.ResetToolStripMenuItem.Margin = New System.Windows.Forms.Padding(0, 0, 125, 0)
+        Me.ResetToolStripMenuItem.Margin = New System.Windows.Forms.Padding(0, 0, 24, 0)
         Me.ResetToolStripMenuItem.Name = "ResetToolStripMenuItem"
         Me.ResetToolStripMenuItem.Size = New System.Drawing.Size(73, 22)
         Me.ResetToolStripMenuItem.Text = "Reset"
         Me.ResetToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
+        'ScanToolStripMenuItem
+        '
+        Me.ScanToolStripMenuItem.AutoSize = False
+        Me.ScanToolStripMenuItem.Margin = New System.Windows.Forms.Padding(0, 0, 24, 0)
+        Me.ScanToolStripMenuItem.Name = "ScanToolStripMenuItem"
+        Me.ScanToolStripMenuItem.Size = New System.Drawing.Size(73, 22)
+        Me.ScanToolStripMenuItem.Text = "Scan"
+        Me.ScanToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
+        'DumpToolStripMenuItem
+        '
+        Me.DumpToolStripMenuItem.AutoSize = False
+        Me.DumpToolStripMenuItem.Margin = New System.Windows.Forms.Padding(0, 0, 27, 0)
+        Me.DumpToolStripMenuItem.Name = "DumpToolStripMenuItem"
+        Me.DumpToolStripMenuItem.Size = New System.Drawing.Size(73, 22)
+        Me.DumpToolStripMenuItem.Text = "Dump"
+        Me.DumpToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'MiniMapToolStripMenuItem
         '
@@ -934,7 +944,7 @@ Partial Class frmTrackerOfTime
         Me.lblInfo.AutoSize = True
         Me.lblInfo.Location = New System.Drawing.Point(10, 24)
         Me.lblInfo.Name = "lblInfo"
-        Me.lblInfo.Size = New System.Drawing.Size(587, 169)
+        Me.lblInfo.Size = New System.Drawing.Size(573, 169)
         Me.lblInfo.TabIndex = 328
         Me.lblInfo.Text = resources.GetString("lblInfo.Text")
         '
@@ -4650,5 +4660,6 @@ Partial Class frmTrackerOfTime
     Friend WithEvents pbxTrialWater As System.Windows.Forms.PictureBox
     Friend WithEvents pbxTrialSpirit As System.Windows.Forms.PictureBox
     Friend WithEvents tmrFastScan As System.Windows.Forms.Timer
+    Friend WithEvents DumpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

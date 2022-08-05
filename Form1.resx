@@ -125,8 +125,8 @@
   </metadata>
   <data name="lblInfo.Text" xml:space="preserve">
     <value>Instructions:
-- Mouse-over the top of the window to display controls for a single scan, auto-scanning, reset, show/hide this settings page,
-     and for changing theme.
+- Mouse-over the top of the window to display controls for to start, reset, show/hide this settings page, and for
+     changing the theme.
 - Clicking on any of the songs will show the song notes at the bottom of the application, in case you forget.
 - Left- or right-clicking on the Sacred Stones of Medallions with allow you to set reminders for yourself as to which
      dungeon they are in. 
@@ -136,7 +136,7 @@
 - Use the settings below to enable tracking of specific things like Deku Scrubs and Cows. All settings save automatically.
 - Use the tricks settings to have logic better show what checks you can reach.
 - Right-click on anything on the settings page to display more info.
-- ER Dungeons and Overworld is supported, but you have to start auto-scanning from your spawn point for accuracy.</value>
+- ER Dungeons and Overworld is supported, but you have to start the tracker from your spawn point for accuracy.</value>
   </data>
   <metadata name="tmrFixIt.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>259, 17</value>
