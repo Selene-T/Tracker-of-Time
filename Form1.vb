@@ -11,7 +11,7 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 124
     Private Const IS_64BIT As Boolean = True
-    Private Const VER As String = "4.1.1"
+    Private Const VER As String = "4.1.2"
     Private p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
@@ -30,7 +30,7 @@ Public Class frmTrackerOfTime
     Private randoVer As String = String.Empty
     Private rainbowBridge(1) As Byte
     Private aGetQuantity(14) As Boolean
-    Private aRandoSet() As Byte
+    Private aRandoSet(50) As Byte
     Private lastFirstEnum As Byte = 255
 
     ' Arrays for tracking checks
@@ -15652,7 +15652,6 @@ Public Class frmTrackerOfTime
         If lastFirstEnum = firstEnum Then Exit Sub
         lastFirstEnum = firstEnum
 
-        ReDim aRandoSet(50)
         For i = 0 To aRandoSet.Length - 1
             aRandoSet(i) = 0
         Next

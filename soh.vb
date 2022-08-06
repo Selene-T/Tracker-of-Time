@@ -150,6 +150,7 @@
         frmTrackerOfTime.arrLocation(118) = SAV(&HBAC)
         frmTrackerOfTime.arrLocation(119) = SAV(&HA40)
         frmTrackerOfTime.arrLocation(120) = SAV(&H810)
+        frmTrackerOfTime.arrLocation(121) = SAV(&H784)
         frmTrackerOfTime.arrLocation(122) = SAV(&H74C)
         frmTrackerOfTime.arrLocation(123) = SAV(&H82C)
         frmTrackerOfTime.arrLocation(124) = SAV(&H9B4)
