@@ -11,7 +11,7 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 124
     Private Const IS_64BIT As Boolean = True
-    Private Const VER As String = "4.1.2"
+    Private Const VER As String = "4.1.3"
     Private p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
@@ -946,11 +946,9 @@ Public Class frmTrackerOfTime
             tempItems = Hex(goRead(If(isSoH, soh.SAV(&HAC), &H11A678) + (i * 4)))
 
             ' Make sure all leading 0's are put back
-            While tempItems.Length < 8
-                tempItems = "0" & tempItems
-            End While
+            fixHex(tempItems)
 
-            endianFlip(tempItems)
+            If isSoH Then endianFlip(tempItems)
 
             ' Add info into main string
             stringItems = stringItems & tempItems
@@ -1126,9 +1124,7 @@ Public Class frmTrackerOfTime
             End Select
         End With
     End Sub
-    Private Sub getPedestalRead()
-        pedestalRead = CByte(goRead(&H11B4FC, 1))
-    End Sub
+
     Private Sub getSmallKeys()
         ' If(isSoH, soh.SAV(&HAC), &H11A678) (start of dugeonkeys array)
 
@@ -18250,7 +18246,6 @@ Public Class frmTrackerOfTime
         'OOTR 6.2.72:       80400020 80400834 8040AA7C 80400CD0
         'Roman 6.2.43:      80400020 80400834 8040ACC4 80400CD0
         'ROMAN 6.2.72-R2:   80400020 80400834 8040B11C 80400CD0
-
         Select Case readC
             Case "80409FD4"
                 ' AP 0.3.1
