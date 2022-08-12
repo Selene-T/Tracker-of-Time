@@ -155,42 +155,4 @@
         frmTrackerOfTime.arrLocation(123) = SAV(&H82C)
         frmTrackerOfTime.arrLocation(124) = SAV(&H9B4)
     End Sub
-
-    Public Sub sohSetupOld(ByVal startAddress As Int64)
-        gGameData = ReadMemory(Of Long)(startAddress + &HE4D878 + &H30000)
-
-        ' Check that we have Not already done this, in case this Is triggered twice in one instance
-        If frmTrackerOfTime.arrLocation(0) = &H11AD1C Then ' original offset for emulators
-            For i = 0 To frmTrackerOfTime.arrLocation.Length - 1
-                ' Skip over 60 through 99
-                If i = 60 Then i = 100
-                frmTrackerOfTime.arrLocation(i) = frmTrackerOfTime.arrLocation(i) + &HDADF9 ' add additional offset from emu into soh RAM
-            Next
-        End If
-
-        frmTrackerOfTime.arrLocation(60) = SAV(&H36)           ' *Biggoron Check
-        frmTrackerOfTime.arrLocation(61) = SAV(&HEB0)          ' *Big Fish
-        frmTrackerOfTime.arrLocation(62) = SAV(&HEC4)          ' *Events 1: Egg from Malon, Obtained Epona, Won Cow
-        frmTrackerOfTime.arrLocation(63) = SAV(&HEC8)          ' *Events 2: Zora Diving Game, Darunia’s Joy
-        frmTrackerOfTime.arrLocation(64) = SAV(&HECC)          ' *Events 3: Zelda’s Letter, Song from Impa, Sun Song??, opened Temple of Time, Rainbow Bridge
-        frmTrackerOfTime.arrLocation(65) = SAV(&HED4)          ' *Events 5: Scarecrow as Adult
-        frmTrackerOfTime.arrLocation(66) = SAV(&HED8)          ' *Events 6: Song at Colossus, Trials
-        frmTrackerOfTime.arrLocation(67) = SAV(&HEDC)          ' *Events 7: Saria Gift, Skulltula trades, Barrier Lowered
-        frmTrackerOfTime.arrLocation(68) = SAV(&HEE0)          ' *Item Collect #1
-        frmTrackerOfTime.arrLocation(69) = SAV(&HEE4)          ' *Item Collection #2
-        frmTrackerOfTime.arrLocation(70) = SAV(&HF08)          ' *Item: Rolling Goron as Young + Adult Link
-        frmTrackerOfTime.arrLocation(71) = SAV(&HF0E)          ' *Thaw Zora King
-        frmTrackerOfTime.arrLocation(72) = SAV(&HF1A)          ' *Items: 1st and 2nd Scrubs, Lost Dog
-        frmTrackerOfTime.arrLocation(73) = SAV(&H1288)         ' *Scarecrow Song
-        frmTrackerOfTime.arrLocation(74) = SAV(&H9E)           ' *Equipment
-        frmTrackerOfTime.arrLocation(75) = SAV(&H36)           ' *Check for Biggoron's Sword
-        frmTrackerOfTime.arrLocation(76) = SAV(&HA4)           ' *Upgrades
-        frmTrackerOfTime.arrLocation(77) = SAV(&HA8)           ' *Quest Items and Songs
-        frmTrackerOfTime.arrLocation(78) = SAV(&HE90)          ' **Gold Skulltulas 1
-        frmTrackerOfTime.arrLocation(79) = SAV(&HE94)          ' **Gold Skulltulas 2
-        frmTrackerOfTime.arrLocation(80) = SAV(&HE98)          ' **Gold Skulltulas 3
-        frmTrackerOfTime.arrLocation(81) = SAV(&HE9C)          ' **Gold Skulltulas 4
-        frmTrackerOfTime.arrLocation(82) = SAV(&HEA0)          ' **Gold Skulltulas 5
-        frmTrackerOfTime.arrLocation(83) = SAV(&HEA4)          ' **Gold Skulltulas 6
-    End Sub
 End Module
