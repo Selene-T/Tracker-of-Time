@@ -102,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="attachToEmulators.vb" />
+    <Compile Include="minimap.vb" />
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +111,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ieee-754 float.vb" />
+    <Compile Include="makeArrays.vb" />
     <Compile Include="Memory.vb" />
     <Compile Include="MemPlus.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

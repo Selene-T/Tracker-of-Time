@@ -20,9 +20,9 @@ Public Class frmTrackerOfTime
     Public emulator As String = String.Empty
     Private keepRunning As Boolean = False
     Private zeldazFails As Integer = 0
-    Private isSoH As Boolean = False
+    Public isSoH As Boolean = False
     Private wasSoH As Boolean = False
-    Private locSwap(18) As String
+    Public locSwap(18) As String
 
     ' Variables for a variety of rom info used in the scan
     Private pedestalRead As Byte = 0
@@ -35,8 +35,8 @@ Public Class frmTrackerOfTime
 
     ' Arrays for tracking checks
     Private keyCount As Integer = 337
-    Private aKeys(keyCount) As keyCheck
-    Private aKeysDungeons(11)() As keyCheck
+    Public aKeysOverworld(keyCount) As keyCheck
+    Public aKeysDungeons(11)() As keyCheck
     Private canDungeon(11) As Boolean
     Private aQuestRewardsCollected(22) As Boolean
     Private aEquipment(31) As Boolean
@@ -58,7 +58,7 @@ Public Class frmTrackerOfTime
     Private arrLow(CHECK_COUNT) As Byte
 
     ' Variables for from settings
-    Private firstRun As Boolean = True
+    Public firstRun As Boolean = True
     Private showSetting As Boolean = False
 
     ' Variable for the colour of the highlight, blended from both front and background colour
@@ -70,11 +70,11 @@ Public Class frmTrackerOfTime
 
     ' Variables for tracking logic checks
     Private allItems As String = String.Empty
-    Private goldSkulltulas As Byte = 0
+    Public goldSkulltulas As Byte = 0
     Private canMagic As Boolean = False
     Private canAdult As Boolean = False
     Private canYoung As Boolean = False
-    Private isAdult As Boolean = False
+    Public isAdult As Boolean = False
     Private magicBeans As Byte = 0
     Private aDungeonKeys(7) As Byte
     Private aBossKeys(7) As Boolean
@@ -82,18 +82,12 @@ Public Class frmTrackerOfTime
     Private aDungeonRewards(7) As Byte
     Private aReachA(255) As Boolean
     Private aReachY(255) As Boolean
-    Private aExitMap(37)() As Byte
-    Private aVisited(37) As Boolean
+    Public aExitMap(37)() As Byte
+    Public aVisited(37) As Boolean
     Private iER As Byte = 0
-    ' Old ER is for detecting if there is an ER change, thus triggering the clearing of exits.
-    ' It will not be reset when stopping the scan, as I do not want people's ER progress to reset randomly.
-    ' This may be used later for an 'Entrance Reset' option.
-    Private iOldER As Byte = 255
-    Private iLastMinimap As Integer = 101
-    Private iRoom As Byte = 0
-    Private aIconLoc(30) As String
-    Private aIconName(30) As String
-    Private lRegions As New List(Of Rectangle)
+    Public iRoom As Byte = 0
+    Public aIconName(30) As String
+    Public lRegions As New List(Of Rectangle)
     Private justTheTip As New ToolTip
     Private lastTip As Byte = 255
 
@@ -101,10 +95,10 @@ Public Class frmTrackerOfTime
     Private bSpawnWarps As Boolean = False
     Private bSongWarps As Boolean = False
     Private maxLife As Byte = 0
-    Private aAddresses(19) As Integer
+    Public aAddresses(19) As Integer
 
     ' Variables for detecting room info
-    Private Const CUR_ROOM_ADDR As Integer = &H1C8544
+    Public Const CUR_ROOM_ADDR As Integer = &H1C8544
     Private lastRoomScan As Long = 0
 
     ' Cheat menu vars
@@ -113,21 +107,21 @@ Public Class frmTrackerOfTime
 
 
     ' Arrays of MQ settings, a current and old to compare to so updating only happens on changes
-    Private aMQ(11) As Boolean
+    Public aMQ(11) As Boolean
     Private aMQOld(11) As Boolean
 
     ' Array of Objects
-    Private aoLabels(23) As Label
+    Private aoOverworldLabels(23) As Label
     Private aoDungeonLabels(11) As Label
     Private aoSmallKeys(7) As PictureBox
     Private aoBossKeys(10) As PictureBox
     Private aoCompasses(9) As PictureBox
     Private aoMaps(9) As PictureBox
+    Private aoEquipment(20) As PictureBox
+    Private aoInventory(23) As PictureBox
     Private aoQuestItems(22) As PictureBox
     Private aoQuestItemImages(22) As Image
     Private aoQuestItemImagesEmpty(22) As Image
-    Private aoEquipment(20) As PictureBox
-    Private aoInventory(23) As PictureBox
 
     Private Sub frmTrackerOfTime_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         stopScanning()
@@ -163,12 +157,20 @@ Public Class frmTrackerOfTime
             updateShowSettings()
         End If
         Me.Text = "Tracker of Time v" & VER
-        For i = 0 To aKeys.Length - 1
-            aKeys(i) = New keyCheck
+        For i = 0 To aKeysOverworld.Length - 1
+            aKeysOverworld(i) = New keyCheck
+        Next
+
+        ' Resize the exit map array
+        For i = 0 To aExitMap.Length - 1
+            ReDim aExitMap(i)(6)
         Next
 
         makeArrayObjects()
-        redimArrayExits()
+        erExitArray()
+
+
+
         custMenu.highlight = Me.ForeColor
         custMenu.backColour = Me.BackColor
         custMenu.foreColour = Me.ForeColor
@@ -201,172 +203,28 @@ Public Class frmTrackerOfTime
             AddHandler Label.Paint, AddressOf lblDrawBorder
         Next
 
-        populateLocations()
-
+        clearSettings()
     End Sub
 
     Private Sub makeArrayObjects()
-        ' Link the labels for displaying progress into an array
-        aoLabels(0) = lblKokiriForest
-        aoLabels(1) = lblLostWoods
-        aoLabels(2) = lblSacredForestMeadow
-        aoLabels(3) = lblHyruleField
-        aoLabels(4) = lblLonLonRanch
-        aoLabels(5) = lblMarket
-        aoLabels(6) = lblTempleOfTime
-        aoLabels(7) = lblHyruleCastle
-        aoLabels(8) = lblKakarikoVillage
-        aoLabels(9) = lblGraveyard
-        aoLabels(10) = lblDMTrail
-        aoLabels(11) = lblDMCrater
-        aoLabels(12) = lblGoronCity
-        aoLabels(13) = lblZorasRiver
-        aoLabels(14) = lblZorasDomain
-        aoLabels(15) = lblZorasFountain
-        aoLabels(16) = lblLakeHylia
-        aoLabels(17) = lblGerudoValley
-        aoLabels(18) = lblGerudoFortress
-        aoLabels(19) = lblHauntedWasteland
-        aoLabels(20) = lblDesertColossus
-        aoLabels(21) = lblOutsideGanonsCastle
-        aoLabels(22) = lblQuestGoldSkulltulas
-        aoLabels(23) = lblQuestMasks
-
-        ' Link the dungeon labels for displaying progress into an array
-        aoDungeonLabels(0) = lblDekuTree
-        aoDungeonLabels(1) = lblDodongosCavern
-        aoDungeonLabels(2) = lblJabuJabusBelly
-        aoDungeonLabels(3) = lblForestTemple
-        aoDungeonLabels(4) = lblFireTemple
-        aoDungeonLabels(5) = lblWaterTemple
-        aoDungeonLabels(6) = lblSpiritTemple
-        aoDungeonLabels(7) = lblShadowTemple
-        aoDungeonLabels(8) = lblBottomOfTheWell
-        aoDungeonLabels(9) = lblIceCavern
-        aoDungeonLabels(10) = lblGerudoTrainingGround
-        aoDungeonLabels(11) = lblGanonsCastle
-
-        ' Link the pictureboxes of each small key into an array
-        aoSmallKeys(0) = pbxFoTSmallKey
-        aoSmallKeys(1) = pbxFiTSmallKey
-        aoSmallKeys(2) = pbxWTSmallKey
-        aoSmallKeys(3) = pbxSpTSmallKey
-        aoSmallKeys(4) = pbxShTSmallKey
-        aoSmallKeys(5) = pbxBotWSmallKey
-        aoSmallKeys(6) = pbxGTGSmallKey
-        aoSmallKeys(7) = pbxGCSmallKey
-
-        ' Link the pictureboxes of each boss key into an array
-        aoBossKeys(3) = pbxFoTBossKey
-        aoBossKeys(4) = pbxFiTBossKey
-        aoBossKeys(5) = pbxWTBossKey
-        aoBossKeys(6) = pbxSpTBossKey
-        aoBossKeys(7) = pbxShTBossKey
-        aoBossKeys(10) = pbxGCBossKey
-
-        ' Link the pictureboxes of each compass into an array
-        aoCompasses(0) = pbxDTCompass
-        aoCompasses(1) = pbxDCCompass
-        aoCompasses(2) = pbxJBCompass
-        aoCompasses(3) = pbxFoTCompass
-        aoCompasses(4) = pbxFiTCompass
-        aoCompasses(5) = pbxWTCompass
-        aoCompasses(6) = pbxSpTCompass
-        aoCompasses(7) = pbxShTCompass
-        aoCompasses(8) = pbxBotWCompass
-        aoCompasses(9) = pbxICCompass
-
-        ' Link the pictureboxes of each map into an array
-        aoMaps(0) = pbxDTMap
-        aoMaps(1) = pbxDCMap
-        aoMaps(2) = pbxJBMap
-        aoMaps(3) = pbxFotMap
-        aoMaps(4) = pbxFiTMap
-        aoMaps(5) = pbxWTMap
-        aoMaps(6) = pbxSpTMap
-        aoMaps(7) = pbxShTMap
-        aoMaps(8) = pbxBotWMap
-        aoMaps(9) = pbxICMap
-
-        ' Link the pictureboxes of each quest item into an array
-        aoQuestItems(0) = pbxMedalForest
-        aoQuestItems(1) = pbxMedalFire
-        aoQuestItems(2) = pbxMedalWater
-        aoQuestItems(3) = pbxMedalSpirit
-        aoQuestItems(4) = pbxMedalShadow
-        aoQuestItems(5) = pbxMedalLight
-        aoQuestItems(6) = pbxMinuetOfForest
-        aoQuestItems(7) = pbxBoleroOfFire
-        aoQuestItems(8) = pbxSerenadeOfWater
-        aoQuestItems(9) = pbxRequiemOfSpirit
-        aoQuestItems(10) = pbxNocturneOfShadow
-        aoQuestItems(11) = pbxPreludeOfLight
-        aoQuestItems(12) = pbxZeldasLullaby
-        aoQuestItems(13) = pbxEponasSong
-        aoQuestItems(14) = pbxSariasSong
-        aoQuestItems(15) = pbxSunsSong
-        aoQuestItems(16) = pbxSongOfTime
-        aoQuestItems(17) = pbxSongOfStorms
-        aoQuestItems(18) = pbxStoneKokiri
-        aoQuestItems(19) = pbxStoneGoron
-        aoQuestItems(20) = pbxStoneZora
-        aoQuestItems(21) = pbxStoneOfAgony
-        aoQuestItems(22) = pbxGerudosCard
-
-        ' Link the pictureboxes of each equipment item into an array
-        aoEquipment(0) = pbxQuiver
-        aoEquipment(1) = pbxBulletBag
-        aoEquipment(2) = pbxKokiriSword
-        aoEquipment(3) = pbxMasterSword
-        aoEquipment(4) = pbxBiggoronsSword
-        aoEquipment(5) = pbxWallet
-        aoEquipment(6) = pbxBombBag
-        aoEquipment(7) = pbxDekuShield
-        aoEquipment(8) = pbxHylianShield
-        aoEquipment(9) = pbxMirrorShield
-        aoEquipment(10) = pbxStoneOfAgony
-        aoEquipment(11) = pbxGauntlet
-        aoEquipment(12) = pbxKokiriTunic
-        aoEquipment(13) = pbxGoronTunic
-        aoEquipment(14) = pbxZoraTunic
-        aoEquipment(15) = pbxGerudosCard
-        aoEquipment(16) = pbxScale
-        aoEquipment(17) = pbxKokiriBoots
-        aoEquipment(18) = pbxIronBoots
-        aoEquipment(19) = pbxHoverBoots
-        aoEquipment(20) = pbxBrokenKnife
-
-        ' Link the pictureboxes of each inventory item into an array
-        aoInventory(0) = pbx01
-        aoInventory(1) = pbx02
-        aoInventory(2) = pbx03
-        aoInventory(3) = pbx04
-        aoInventory(4) = pbx05
-        aoInventory(5) = pbx06
-        aoInventory(6) = pbx07
-        aoInventory(7) = pbx08
-        aoInventory(8) = pbx09
-        aoInventory(9) = pbx10
-        aoInventory(10) = pbx11
-        aoInventory(11) = pbx12
-        aoInventory(12) = pbx13
-        aoInventory(13) = pbx14
-        aoInventory(14) = pbx15
-        aoInventory(15) = pbx16
-        aoInventory(16) = pbx17
-        aoInventory(17) = pbx18
-        aoInventory(18) = pbx19
-        aoInventory(19) = pbx20
-        aoInventory(20) = pbx21
-        aoInventory(21) = pbx22
-        aoInventory(22) = pbx23
-        aoInventory(23) = pbx24
-
+        ' Creates array objects for many settings
+        aoOverworldLabels = makeLabelArray("overworld")
+        aoDungeonLabels = makeLabelArray("dungeon")
+        aoSmallKeys = makePictureBoxArray("smallkey")
+        aoBossKeys = makePictureBoxArray("bosskey")
+        aoCompasses = makePictureBoxArray("compass")
+        aoMaps = makePictureBoxArray("map")
+        aoQuestItems = makePictureBoxArray("quest")
+        aoEquipment = makePictureBoxArray("equipment")
+        aoInventory = makePictureBoxArray("inventory")
         For i As Byte = 0 To 22
             refreshQuestItemImages(i)
         Next
     End Sub
+
+
     Private Sub refreshQuestItemImages(ByVal img As Byte)
+        ' Refresh particular quest items
         Select Case img
             Case 0
                 aoQuestItemImages(img) = My.Resources.medalForest
@@ -424,6 +282,7 @@ Public Class frmTrackerOfTime
                 aoQuestItemImagesEmpty(img) = My.Resources.gerudosCardEmpty
         End Select
     End Sub
+
     Private Sub loadSettings()
         'ddThemes.SelectedIndex = My.Settings.setTheme
         changeTheme(My.Settings.setTheme)
@@ -437,280 +296,9 @@ Public Class frmTrackerOfTime
         ShowSettingsToolStripMenuItem.Text = "Settings " & IIf(showSetting, "<", ">").ToString
         resizeForm()
     End Sub
-    Private Sub redimArrayExits()
-        ' Create default arrays. 255 is blank because 0 is used for KF Main. Also start with all true because we will false out the ones after depending on the ER settings
-        For i = 0 To aExitMap.Length - 1
-            ReDim aExitMap(i)(6)
-            aVisited(i) = True
-            For ii = 0 To 6
-                aExitMap(i)(ii) = 255
-            Next
-        Next
-        createArrayExits()
-    End Sub
 
-    Private Sub createArrayExits(Optional typeOfER As Byte = 0)
-        ' Populates the exits with the default exits
-
-        ' Overworld Exits
-        ' MK Entrance (27-29)
-        aExitMap(0)(0) = 7      ' HF
-        aExitMap(0)(1) = 10     ' MK
-        ' MK Back Alley (30-31)
-        aExitMap(1)(0) = 10     ' MK
-        aExitMap(1)(1) = 10     ' MK
-        ' MK (Young) (32-33)
-        aExitMap(2)(0) = 13     ' HC
-        aExitMap(2)(1) = 197    ' MK Entrance
-        aExitMap(2)(2) = 11     ' Outside ToT
-        aExitMap(2)(3) = 199    ' MK Back Alley (right)
-        aExitMap(2)(4) = 198    ' MK Back Alley (left)
-        ' MK (Adult) (34)
-        aExitMap(3)(0) = 51     ' OGC
-        aExitMap(3)(1) = 197    ' MK Entrance
-        aExitMap(3)(2) = 11     ' Outside ToT
-        ' Outside ToT (35-37)
-        aExitMap(4)(0) = 200    ' ToT Front
-        aExitMap(4)(1) = 10     ' MK
-        ' ToT (67)
-        aExitMap(5)(0) = 11     ' Outside ToT
-        ' HF (81)
-        aExitMap(6)(0) = 15     ' KV Main
-        aExitMap(6)(1) = 4      ' LW Bridge
-        aExitMap(6)(2) = 34     ' ZR Front
-        aExitMap(6)(3) = 44     ' GV Hyrule Side
-        aExitMap(6)(4) = 197    ' MK Entrance
-        aExitMap(6)(5) = 9      ' LLR
-        aExitMap(6)(6) = 42     ' LH Main
-        ' KV (82)
-        aExitMap(7)(1) = 20     ' DMT Lower
-        aExitMap(7)(2) = 7      ' HF
-        aExitMap(7)(3) = 18     ' GY Lower
-        ' GY (83)
-        aExitMap(8)(1) = 15     ' KV Main
-        ' ZR (84)
-        aExitMap(9)(0) = 7      ' HF
-        aExitMap(9)(1) = 37     ' ZD Main
-        aExitMap(9)(2) = 2      ' LW Front
-        ' KF (85)
-        aExitMap(10)(1) = 8      ' LW Between Bridge
-        aExitMap(10)(2) = 2      ' LW Front
-        ' SFM (86)
-        aExitMap(11)(1) = 3     ' LW Behind Mido
-        ' LH (87)
-        aExitMap(12)(0) = 7     ' HF
-        aExitMap(12)(2) = 37    ' ZD Main
-        ' ZD (88)
-        aExitMap(13)(0) = 40    ' ZF Main
-        aExitMap(13)(1) = 36    ' ZR Behind Waterfall
-        aExitMap(13)(2) = 42    ' LH Main
-        ' ZF (89)
-        aExitMap(14)(2) = 38    ' ZD Behind King
-        ' GV (90)
-        aExitMap(15)(0) = 42    ' LH Main
-        aExitMap(15)(1) = 7     ' HF
-        aExitMap(15)(2) = 46    ' GF Main
-        ' LW (91)
-        aExitMap(16)(0) = 5     ' SFM Main
-        aExitMap(16)(1) = 0     ' KF Main
-        aExitMap(16)(2) = 35    ' ZR Main
-        aExitMap(16)(3) = 30    ' GC Shortcut
-        aExitMap(16)(4) = 0     ' KF Main
-        aExitMap(16)(5) = 7     ' HF
-        ' DC (92)
-        aExitMap(17)(1) = 49    ' HW Colossus Side
-        ' GF (93)
-        aExitMap(18)(1) = 45    ' GV Gerudo Side
-        aExitMap(18)(2) = 48    ' HW Gerudo Side
-        ' HW (94)
-        aExitMap(19)(0) = 50    ' DC
-        aExitMap(19)(1) = 47    ' GF Behind Gate
-        ' HC (95)
-        aExitMap(20)(0) = 10    ' MK
-        ' DMT (96)
-        aExitMap(21)(1) = 29    ' GC Main
-        aExitMap(21)(2) = 17    ' KV Behind Gate
-        aExitMap(21)(3) = 22    ' DMC Upper
-        ' DMC (97)
-        aExitMap(22)(1) = 31    ' GC Darunia
-        aExitMap(22)(2) = 21    ' DMT Upper
-        ' GC (98)
-        aExitMap(23)(0) = 25    ' DMC Lower Local
-        aExitMap(23)(1) = 20    ' DMT Lower
-        aExitMap(23)(2) = 2     ' LW Front
-        ' LLR (99)
-        aExitMap(24)(0) = 7     ' HF
-        ' OGC (100)
-        aExitMap(25)(1) = 10    ' MK
-
-        ' Dungeon Exits
-        aExitMap(10)(0) = 60    ' Deku Tree
-        aExitMap(26)(0) = 1
-        aExitMap(21)(0) = 69    ' Dodongo's Cavern
-        aExitMap(27)(0) = 20
-        aExitMap(14)(0) = 79    ' Jabu-Jabu's Belly
-        aExitMap(28)(0) = 40
-        aExitMap(11)(0) = 88    ' Forest Temple
-        aExitMap(29)(0) = 6
-        aExitMap(22)(0) = 108   ' Fire Temple
-        aExitMap(30)(0) = 28
-        aExitMap(12)(0) = 119   ' Water Temple
-        aExitMap(31)(0) = 42
-        aExitMap(17)(0) = 132   ' Spirit Temple
-        aExitMap(32)(0) = 50
-        aExitMap(8)(0) = 150    ' Shadow Temple
-        aExitMap(33)(0) = 19
-        aExitMap(7)(0) = 174    ' BotW
-        aExitMap(34)(0) = 15
-        aExitMap(14)(1) = 178   ' Ice Cavern
-        aExitMap(35)(0) = 41
-        aExitMap(18)(0) = 179   ' Gerudo Training Ground
-        aExitMap(36)(0) = 46
-        aExitMap(25)(0) = 193   ' Ganon's Castle
-        aExitMap(37)(0) = 51
-        aExitMap(37)(1) = 196
-    End Sub
-    Private Sub clearArrayExitsOverworld()
-        ' Make sure Overworld ER is active
-        If iER Mod 2 = 0 Then Exit Sub
-
-        ' Clear visits to overworld maps
-        For i = 0 To 26
-            aVisited(i) = False
-        Next
-
-        ' Unlink all the overworld map exits
-        ' MK Entrance (27-29)
-        aExitMap(0)(0) = 255    ' HF
-        aExitMap(0)(1) = 255    ' MK
-        ' MK Back Alley (30-31)
-        aExitMap(1)(0) = 255    ' MK
-        aExitMap(1)(1) = 255    ' MK
-        ' MK (Young) (32-33)
-        aExitMap(2)(0) = 255    ' HC
-        aExitMap(2)(1) = 255    ' MK Entrance
-        aExitMap(2)(2) = 255    ' Outside ToT
-        aExitMap(2)(3) = 255    ' MK Back Alley (right)
-        aExitMap(2)(4) = 255    ' MK Back Alley (left)
-        ' MK (Adult) (34)
-        aExitMap(3)(0) = 255    ' OGC
-        aExitMap(3)(1) = 255    ' MK Entrance
-        aExitMap(3)(2) = 255    ' Outside ToT
-        ' Outside ToT (35-37)
-        aExitMap(4)(0) = 255    ' ToT Front
-        aExitMap(4)(1) = 255    ' MK
-        ' ToT (67)
-        aExitMap(5)(0) = 255    ' Outside ToT
-        ' HF (81)
-        aExitMap(6)(0) = 255    ' KV Main
-        aExitMap(6)(1) = 255    ' LW Bridge
-        aExitMap(6)(2) = 255    ' ZR Front
-        aExitMap(6)(3) = 255    ' GV Hyrule Side
-        aExitMap(6)(4) = 255    ' MK Entrance
-        aExitMap(6)(5) = 255    ' LLR
-        aExitMap(6)(6) = 255    ' LH Main
-        ' KV (82)
-        aExitMap(7)(1) = 255    ' DMT Lower
-        aExitMap(7)(2) = 255    ' HF
-        aExitMap(7)(3) = 255    ' GY Lower
-        ' GY (83)
-        aExitMap(8)(1) = 255    ' KV Main
-        ' ZR (84)
-        aExitMap(9)(0) = 255    ' HF
-        aExitMap(9)(1) = 255    ' ZD Main
-        aExitMap(9)(2) = 255    ' LW Front
-        ' KF (85)
-        aExitMap(10)(1) = 255    ' LW Bridge
-        aExitMap(10)(2) = 255    ' LW Front
-        ' SFM (86)
-        aExitMap(11)(1) = 255    ' LW Behind Mido
-        ' LH (87)
-        aExitMap(12)(1) = 255    ' HF
-        aExitMap(12)(2) = 255    ' ZD Main
-        ' ZD (88)
-        aExitMap(13)(0) = 255    ' ZF Main
-        aExitMap(13)(1) = 255    ' ZR Behind Waterfall
-        aExitMap(13)(2) = 255    ' LH Main
-        ' ZF (89)
-        aExitMap(14)(2) = 255    ' ZD Behind King
-        ' GV (90)
-        aExitMap(15)(0) = 255    ' LH Main
-        aExitMap(15)(1) = 255    ' HF
-        aExitMap(15)(2) = 255    ' GF Main
-        ' LW (91)
-        aExitMap(16)(0) = 255    ' SFM Main
-        aExitMap(16)(1) = 255    ' KF Main
-        aExitMap(16)(2) = 255    ' ZR Main
-        aExitMap(16)(3) = 255    ' GC Shortcut
-        aExitMap(16)(4) = 255    ' KF Main
-        aExitMap(16)(5) = 255    ' HF
-        ' DC (92)
-        aExitMap(17)(1) = 255    ' HW C olossus Side
-        ' GF (93)
-        aExitMap(18)(1) = 255    ' GV Gerudo Side
-        aExitMap(18)(2) = 255    ' HW Gerudo Side
-        ' HW (94)
-        aExitMap(19)(0) = 255    ' DC
-        aExitMap(19)(1) = 255    ' GF Behind Gate
-        ' HC (95)
-        aExitMap(20)(0) = 255    ' MK
-        ' DMT (96)
-        aExitMap(21)(1) = 255    ' GC Main
-        aExitMap(21)(2) = 255    ' KV Behind Gate
-        aExitMap(21)(3) = 255    ' DMC Upper
-        ' DMC (97)
-        aExitMap(22)(1) = 255    ' GC Darunia
-        aExitMap(22)(2) = 255    ' DMT Upper
-        ' GC (98)
-        aExitMap(23)(0) = 255    ' DMC Lower Local
-        aExitMap(23)(1) = 255    ' DMT Lower
-        aExitMap(23)(2) = 255    ' LW Front
-        ' LLR (99)
-        aExitMap(24)(0) = 255    ' HF
-        ' OGC (100)
-        aExitMap(25)(1) = 255    ' MK
-    End Sub
-    Private Sub clearArrayExitsDungeons()
-        ' Make sure Dungeon ER is active
-        If iER < 2 Then Exit Sub
-
-        ' Clear visits to overworld maps
-        For i = 27 To 37
-            aVisited(i) = False
-        Next
-
-        ' Unlink all the dungeon related exits
-        aExitMap(10)(0) = 255   ' Deku Tree
-        aExitMap(26)(0) = 255
-        aExitMap(21)(0) = 255   ' Dodongo's Cavern
-        aExitMap(27)(0) = 255
-        aExitMap(14)(0) = 255   ' Jabu-Jabu's Belly
-        aExitMap(28)(0) = 255
-        aExitMap(11)(0) = 255   ' Forest Temple
-        aExitMap(29)(0) = 255
-        aExitMap(22)(0) = 255   ' Fire Temple
-        aExitMap(30)(0) = 255
-        aExitMap(12)(0) = 255   ' Water Temple
-        aExitMap(31)(0) = 255
-        aExitMap(17)(0) = 255   ' Spirit Temple
-        aExitMap(32)(0) = 255
-        aExitMap(8)(0) = 255    ' Shadow Temple
-        aExitMap(33)(0) = 255
-        aExitMap(7)(0) = 255    ' BotW
-        aExitMap(34)(0) = 255
-        aExitMap(14)(1) = 255   ' Ice Cavern
-        aExitMap(35)(0) = 255
-        aExitMap(18)(0) = 255   ' Gerudo Training Ground
-        aExitMap(36)(0) = 255
-        aExitMap(25)(0) = 193   ' Ganon's Castle
-        aExitMap(37)(0) = 255
-        aExitMap(37)(1) = 196
-        aVisited(37) = True     ' Since GaC is not randomized yet, we will always enabled it
-    End Sub
-
-
-    Private Sub populateLocations()
-        ' Populate location's addresses and clear up the chest data
+    Private Sub clearSettings()
+        ' Clears variables used during the scan
 
         ' Unset all MQs
         For i = 0 To aMQ.Length - 1
@@ -732,7 +320,7 @@ Public Class frmTrackerOfTime
         goldSkulltulas = 0
         maxLife = 0
         iER = 0
-        iLastMinimap = 101
+        clearLastMinimap()
         lastArea = String.Empty
         lastOutput.Clear()
         lastTip = 255
@@ -763,8 +351,8 @@ Public Class frmTrackerOfTime
 
         bSpawnWarps = False
         bSongWarps = False
-        'clearArrayExits()
-        createArrayExits()
+
+        erExitArray()
 
         ' Clean up the UI
         clearItems()
@@ -773,147 +361,21 @@ Public Class frmTrackerOfTime
         pbxSpawnYoung.Image = My.Resources.spawnLocations
         pbxSpawnAdult.Image = My.Resources.spawnLocations
 
-        ' Process the high/lows, but only the first time
-        If firstRun Then
-            redirectChecks(True)
-            firstRun = False
-            defaultArrLocations()
-        End If
+        If firstRun Then firstRunSetup()
 
         For i As Integer = 0 To arrLocation.Length - 1
             arrChests(i) = 0
         Next
     End Sub
 
-    Private Sub defaultArrLocations()
-        arrLocation(0) = &H11AD18 + 4       ' DMC/DMT/OGC Great Fairy Fountain (Events)
-        arrLocation(1) = &H11AF80 + 4       ' Hyrule Field (Events) Big Poes Captured and Ocarina of Time
-        arrLocation(2) = &H11B028 + 4       ' Lake Hylia (Events) Ruto's Letter, Open Water Temple, and Bean Plant
-        arrLocation(3) = &H11A714 + 12      ' Fire Temple (Standing)
-        arrLocation(4) = &H11A730 + 12      ' Water Temple (Standing)
-        arrLocation(5) = &H11A768 + 12      ' Shadow Temple (Standing)
-        arrLocation(6) = &H11A784 + 12      ' Bottom of the Well (Standing)
-        arrLocation(7) = &H11A7A0 + 12      ' Ice Cavern (Standing)
-        arrLocation(8) = &H11A7D8 + 12      ' Gerudo Training Ground (Standing)
-        arrLocation(9) = &H11A810 + 12      ' Ganon’s Castle #1 (Standing)
-        arrLocation(10) = &H11A880 + 12     ' Deku Tree Boss Room (Standing)
-        arrLocation(11) = &H11A89C + 12     ' Dodongo's Cavern Boss Room (Standing)
-        arrLocation(12) = &H11A8B8 + 12     ' Jabu-Jabu's Belly Boss Room (Standing)
-        arrLocation(13) = &H11A8D4 + 12     ' Forest Temple Boss Room (Standing)
-        arrLocation(14) = &H11A8F0 + 12     ' Fire Temple Boss Room (Standing)
-        arrLocation(15) = &H11A90C + 12     ' Water Temple Boss Room (Standing)
-        arrLocation(16) = &H11A928 + 12     ' Spirit Temple Boss Room (Standing)
-        arrLocation(17) = &H11A944 + 12     ' Shadow Temple Boss Room (Standing)
-        arrLocation(18) = &H11ACA8 + 12     ' Impa’s House (Standing)
-        arrLocation(19) = &H11AD6C + 12     ' All Grottos (Standing)
-        arrLocation(20) = &H11AE84 + 12     ' Windmill / Dampe's Grave (Standing)
-        arrLocation(21) = &H11AEF4 + 12     ' Lon Lon Tower Item (Standing)
-        arrLocation(22) = &H11AFB8 + 12     ' Graveyard (Standing)
-        arrLocation(23) = &H11AFD4 + 12     ' Zora's River (Standing)
-        arrLocation(24) = &H11B028 + 12     ' Lake Hylia (Standing)
-        arrLocation(25) = &H11B060 + 12     ' Zora's Fountain (Standing)
-        arrLocation(26) = &H11B07C + 12     ' Gerudo Valley (Standing)
-        arrLocation(27) = &H11B0B4 + 12     ' Desert Colossus (Standing)
-        arrLocation(28) = &H11B124 + 12     ' Death Mountain Trail (Standing)
-        arrLocation(29) = &H11B140 + 12     ' Death Mountain Crater (Standing)
-        arrLocation(30) = &H11B15C + 12     ' Goron City (Standing)
-        arrLocation(31) = &H11A6A4          ' Deku Tree
-        arrLocation(32) = &H11A6C0          ' Dodongo's Cavern
-        arrLocation(33) = &H11A6DC          ' Jabu-Jabu's Belly
-        arrLocation(34) = &H11A6F8          ' Forest Temple
-        arrLocation(35) = &H11A714          ' Fire Temple
-        arrLocation(36) = &H11A730          ' Water Temple
-        arrLocation(37) = &H11A74C          ' Spirit Temple
-        arrLocation(38) = &H11A768          ' Shadow Temple
-        arrLocation(39) = &H11A784          ' Bottom of the Well
-        arrLocation(40) = &H11A7A0          ' Ice Cavern
-        arrLocation(41) = &H11A7BC          ' Ganon’s Castle #2
-        arrLocation(42) = &H11A7D8          ' Gerudo Training Ground
-        arrLocation(43) = &H11A810          ' Ganon’s Castle #1
-        arrLocation(44) = &H11A89C          ' Dodongo's Cavern Boss Room
-        arrLocation(45) = &H11AB04          ' Mido’s House
-        arrLocation(46) = &H11AD6C          ' All Grottos
-        arrLocation(47) = &H11AD88          ' Grave with Sun Song Chest
-        arrLocation(48) = &H11ADA4          ' Graveyard Under Grave
-        arrLocation(49) = &H11ADC0          ' Royal Grave
-        arrLocation(50) = &H11AE84          ' Windmill / Dampe
-        arrLocation(51) = &H11AFF0          ' Kokiri Forest
-        arrLocation(52) = &H11B028          ' Lake Hylia
-        arrLocation(53) = &H11B044          ' Zora's Domain
-        arrLocation(54) = &H11B07C          ' Gerudo Valley
-        arrLocation(55) = &H11B0B4          ' Desert Colossus
-        arrLocation(56) = &H11B0D0          ' Gerudo’s Fortress
-        arrLocation(57) = &H11B0EC          ' Haunted Wasteland
-        arrLocation(58) = &H11B124          ' Death Mountain Trail
-        arrLocation(59) = &H11B15C          ' Goron City
-        arrLocation(60) = &H11A640          ' *Biggoron Check
-        arrLocation(61) = &H11B490          ' *Big Fish
-        arrLocation(62) = &H11B4A4          ' *Events 1: Egg from Malon, Obtained Epona, Won Cow
-        arrLocation(63) = &H11B4A8          ' *Events 2: Zora Diving Game, Darunia’s Joy
-        arrLocation(64) = &H11B4AC          ' *Events 3: Zelda’s Letter, Song from Impa, Sun Song??, opened Temple of Time, Rainbow Bridge
-        arrLocation(65) = &H11B4B4          ' *Events 5: Scarecrow as Adult
-        arrLocation(66) = &H11B4B8          ' *Events 6: Song at Colossus, Trials
-        arrLocation(67) = &H11B4BC          ' *Events 7: Saria Gift, Skulltula trades, Barrier Lowered
-        arrLocation(68) = &H11B4C0          ' *Item Collect #1
-        arrLocation(69) = &H11B4C4          ' *Item Collection #2
-        arrLocation(70) = &H11B4E8          ' *Item: Rolling Goron as Young + Adult Link
-        arrLocation(71) = &H11B4EC          ' *Thaw Zora King
-        arrLocation(72) = &H11B4F8          ' *Items: 1st and 2nd Scrubs, Lost Dog
-        arrLocation(73) = &H11B894          ' *Scarecrow Song
-        arrLocation(74) = &H11A66C          ' *Equipment checks, figured this would be easier
-        arrLocation(75) = &H11A60C          ' *Check for Biggoron's Sword
-        arrLocation(76) = &H11A670          ' *Upgrades
-        arrLocation(77) = &H11A674          ' *Quest Items and Songs
-        arrLocation(78) = &H11B46C          ' **Gold Skulltulas 1
-        arrLocation(79) = &H11B470          ' **Gold Skulltulas 2
-        arrLocation(80) = &H11B474          ' **Gold Skulltulas 3
-        arrLocation(81) = &H11B478          ' **Gold Skulltulas 4
-        arrLocation(82) = &H11B47C          ' **Gold Skulltulas 5
-        arrLocation(83) = &H11B480          ' **Gold Skulltulas 6
-        arrLocation(84) = &H11A6B4          ' ***Scrub Shuffle (Deku Tree)
-        arrLocation(85) = &H11A6D0          ' ***Scrub Shuffle (Dodongo's Cavern)
-        arrLocation(86) = &H11A6EC          ' ***Scrub Shuffle (Jabu-Jabu's Belly)
-        arrLocation(87) = &H11A820          ' ***Scrub Shuffle (Ganon's Castle)
-        arrLocation(88) = &H11A874          ' ***Scrub Shuffle (Hyrule Field Grotto)
-        arrLocation(89) = &H11A900          ' ***Scrub Shuffle (Zora's River Grotto)
-        arrLocation(90) = &H11A954          ' ***Scrub Shuffle (Sacred Forest Meadow Grotto)
-        arrLocation(91) = &H11A970          ' ***Scrub Shuffle (Lake Hylia Grotto)
-        arrLocation(92) = &H11A98C          ' ***Scrub Shuffle (Gerudo Valley Grotto)
-        arrLocation(93) = &H11AA18          ' ***Scrub Shuffle (Lost Woods Grotto)
-        arrLocation(94) = &H11AA88          ' ***Scrub Shuffle (Death Mountain Crater Grotto)
-        arrLocation(95) = &H11AAC0          ' ***Scrub Shuffle (Goron City)
-        arrLocation(96) = &H11AADC          ' ***Scrub Shuffle (Lon Lon Ranch)
-        arrLocation(97) = &H11AAF8          ' ***Scrub Shuffle (Desert Colossus)
-        arrLocation(98) = &H11B0A8          ' ***Scrub Shuffle (Lost Woods)
-        arrLocation(99) = &H11AB84         ' *Shopsanity Checks
-        arrLocation(100) = &H11AC54 + 12    ' Link's House (Standing)
-        arrLocation(101) = &H11AC8C + 12    ' Lon Lon Ranch Stables (Standing)
-        arrLocation(102) = &H11A6DC + 12    ' Jabu-Jabu's Belly (Standing)
-        arrLocation(103) = &H11A6A4 + 4     ' Deku Tree (Events)
-        arrLocation(104) = &H11A6C0 + 4     ' Dodongo's Cavern (Events)
-        arrLocation(105) = &H11A6DC + 4     ' Jabu-Jabu's Belly (Events)
-        arrLocation(106) = &H11A6F8 + 4     ' Forest Temple (Events)
-        arrLocation(107) = &H11A714 + 4     ' Fire Temple (Events)
-        arrLocation(108) = &H11A730 + 4     ' Water Temple (Events)
-        arrLocation(109) = &H11A74C + 4     ' Spirit Temple (Events)
-        arrLocation(110) = &H11A768 + 4     ' Shadow Temple (Events)
-        arrLocation(111) = &H11A7A0 + 4     ' Ice Cavern (Events)
-        arrLocation(112) = &H11A7D8 + 4     ' Gerudo Training Ground (Events)
-        arrLocation(113) = &H11A810 + 4     ' Ganon’s Castle #1 (Events)
-        arrLocation(114) = &H11B0EC + 12    ' Haunted Wasteland (Standing)
-        arrLocation(115) = &H11B15C + 4     ' Goron City (Events)
-        arrLocation(116) = &H11AFD4 + 4     ' Zora's River (Events)
-        arrLocation(117) = &H11A784 + 4     ' BotW (Events)
-        arrLocation(118) = &H11B178         ' Lon Lon Ranch
-        arrLocation(119) = &H11B00C         ' Sacred Forest Meadow
-        arrLocation(120) = &H11ADDC         ' Shooting Gallery
-        arrLocation(121) = &H11AD50         ' GF DC/HC/ZF
-        arrLocation(122) = &H11AD18         ' DMC/DMT/OGC Great Fairy Fountain
-        arrLocation(123) = &H11ADF8         ' Temple of Time
-        arrLocation(124) = &H11AF80         ' Hyrule Field
+    Private Sub firstRunSetup()
+        ' Sets up first run settings, or if switching back from SoH to non-SoH
+        redirectChecks(True)
+        makeArrLocationArray()
+        firstRun = False
     End Sub
 
-    Private Sub getAge()
+    Public Sub getAge()
         ' Checks for the current age variable, starts off with setting ages to not accessable
         canAdult = False
         canYoung = False
@@ -932,6 +394,7 @@ Public Class frmTrackerOfTime
                 If aReachY(12) Then canAdult = True
         End Select
     End Sub
+
     Private Sub getDungeonItems()
         'arrLocation(104) = &H11A678         ' *Boss Key/Compass/Map 1
         'arrLocation(105) = &H11A67C         ' *Boss Key/Compass/Map 2
@@ -1000,6 +463,9 @@ Public Class frmTrackerOfTime
 
         If Not aAddresses(9) = 0 Then scanDungeonRewards()
     End Sub
+
+
+
     Private Sub getGoldSkulltulas()
         ' Get gold skulltula count
         Dim bGS As Byte = CByte(goRead(If(isSoH, soh.SAV(&HD4), &H11A6A0 + 2), 1))
@@ -1029,6 +495,7 @@ Public Class frmTrackerOfTime
             Graphics.FromImage(.Image).DrawString(bGS.ToString, fontGS, New SolidBrush(Color.White), xPos - 5, 29)
         End With
     End Sub
+
     Private Sub getHearts()
         'If isSoH Then Exit Sub
         Dim enhFlagAddr As Integer = If(isSoH, soh.SAV(&H36 - 2), &H11A60C)
@@ -1124,6 +591,10 @@ Public Class frmTrackerOfTime
             End Select
         End With
     End Sub
+
+    Public Function getLocation() As Integer
+        Return CInt(IIf(isSoH, GDATA(&H200, 1), goRead(CUR_ROOM_ADDR + 2, 15)))
+    End Function
 
     Private Sub getSmallKeys()
         ' If(isSoH, soh.SAV(&HAC), &H11A678) (start of dugeonkeys array)
@@ -1242,2913 +713,6 @@ Public Class frmTrackerOfTime
         End With
     End Sub
 
-    Private Sub cccCarpenters(chx As Object, e As EventArgs)
-        checkCarpenters()
-    End Sub
-    Private Sub cccEquipment(chx As Object, e As EventArgs)
-        checkEquipment()
-    End Sub
-    Private Sub cccUpgrades(chx As Object, e As EventArgs)
-        checkUpgrades()
-    End Sub
-
-    Private Function checkBit(ByVal address As Integer, ByVal bit As Byte) As Boolean
-        checkBit = False
-        ' Reads word from memory
-        Dim read As String = Hex(goRead(address))
-
-        ' Fixes hex size
-        While read.Length < 8
-            read = "0" & read
-        End While
-
-        ' Grab only the hex digit we want
-        read = Mid(read, CInt(8 - Math.Floor(bit / 4)), 1)
-
-        Select Case (bit Mod 4)
-            Case 0
-                Select Case CInt("&H" & read)
-                    Case 1, 3, 5, 7, 9, 11, 13, 150
-                        Return True
-                End Select
-            Case 1
-                Select Case CInt("&H" & read)
-                    Case 2, 3, 6, 7, 10, 11, 14, 15
-                        Return True
-                End Select
-            Case 2
-                Select Case CInt("&H" & read)
-                    Case 4 To 7, 12 To 15
-                        Return True
-                End Select
-            Case 3
-                Select Case CInt("&H" & read)
-                    Case 8 To 15
-                        Return True
-                End Select
-        End Select
-    End Function
-
-    Private Sub scanER()
-        ' ER scanning
-        Dim isOverworld As Boolean = False
-        Dim isDungeon As Boolean = False
-        Dim doTrials As Boolean = False
-
-        ' Split the ER value into separate checks
-        If iER Mod 2 = 1 Then isOverworld = True
-        If iER > 1 Then isDungeon = True
-
-        ' For building the arrays for scenes with Dungeon entrances
-        Dim ent As Byte = 0
-
-        Dim locationCode As Integer = CInt(IIf(isSoH, GDATA(&H200, 1), goRead(CUR_ROOM_ADDR + 2, 15)))
-        Dim locationArray As Byte = 255
-        Dim readExits(6) As Integer     ' Exits read for current map
-        Dim aAlign(6) As Byte           ' Sets text alignment: 0 = Left | 1 = Centre | 2 = Right
-        Dim lPoints As New List(Of Point)
-        For i = 0 To aAlign.Length - 1
-            aAlign(i) = 0
-            readExits(i) = 0
-        Next
-
-        getAge()
-
-        'Dim addrRoom As Integer = If(isSoH, &HD16D9C, &H1D8BEE)
-        Dim addrRoom As Integer = If(isSoH, SAV(-&H1B17C4), &H1D8BEE)
-        If locationCode <= 9 Then
-            iRoom = CByte(goRead(addrRoom, 1))
-        End If
-
-        ' First load up the map, I keep this separated so that it does not matter for ER settings
-        For i = 0 To 1
-            Dim exitLoop = True
-            Select Case locationCode
-                Case 0
-                    Select Case iRoom
-                        Case 10, 12
-                            pbxMap.Image = My.Resources.mapDT4  ' 3F
-                        Case 1, 2, 11
-                            pbxMap.Image = My.Resources.mapDT3  ' 2F
-                        Case 0
-                            pbxMap.Image = My.Resources.mapDT2  ' 1F
-                        Case 3 To 8
-                            pbxMap.Image = My.Resources.mapDT1  ' B1
-                        Case 9
-                            pbxMap.Image = My.Resources.mapDT0  ' B2
-                    End Select
-                Case 1
-                    Select Case iRoom
-                        Case 5, 6, 9, 10, 12, 16, 17, 18
-                            pbxMap.Image = My.Resources.mapDDC1 ' 2F
-                        Case 0 To 4, 7, 8, 11, 13 To 15
-                            pbxMap.Image = My.Resources.mapDDC0 ' 1F
-                    End Select
-                Case 2
-                    Select Case iRoom
-                        Case 0 To 2, 4 To 12
-                            pbxMap.Image = My.Resources.mapJB1  ' 1F
-                        Case 3, 13 To 16
-                            pbxMap.Image = My.Resources.mapJB0  ' B1
-                    End Select
-                Case 3
-                    Select Case iRoom
-                        Case 10, 12 To 14, 19, 20, 23 To 26
-                            pbxMap.Image = My.Resources.mapFoT3 ' 2F
-                        Case 0 To 8, 11, 15, 16, 18, 21, 22
-                            pbxMap.Image = My.Resources.mapFoT2 ' 1F
-                        Case 9
-                            pbxMap.Image = My.Resources.mapFoT1 ' B1
-                        Case 17
-                            pbxMap.Image = My.Resources.mapFoT0 ' B2
-                    End Select
-                Case 4
-                    Select Case iRoom
-                        Case 8, 30, 34, 35
-                            pbxMap.Image = My.Resources.mapFiT4 ' 5F
-                        Case 7, 12 To 14, 27, 32, 33, 37
-                            pbxMap.Image = My.Resources.mapFiT3 ' 4F
-                        Case 5, 9, 11, 16, 23 To 26, 28, 31
-                            pbxMap.Image = My.Resources.mapFiT2 ' 3F
-                        Case 4, 10, 36
-                            pbxMap.Image = My.Resources.mapFiT1 ' 2F
-                        Case 0 To 3, 15, 17 To 22
-                            pbxMap.Image = My.Resources.mapFiT0 ' 1F
-                    End Select
-                Case 5
-                    Select Case iRoom
-                        Case 0, 1, 4 To 7, 10, 11, 13, 17, 19, 20, 30, 31, 43
-                            pbxMap.Image = My.Resources.mapWaT3 ' 3F
-                        Case 22, 25, 29, 32, 35, 39, 41
-                            pbxMap.Image = My.Resources.mapWaT2 ' 2F
-                        Case 3, 8, 9, 12, 14 To 16, 18, 21, 23, 24, 26, 28, 33, 34, 36 To 38, 40, 42
-                            pbxMap.Image = My.Resources.mapWaT1 ' 1F
-                        Case 2, 27
-                            pbxMap.Image = My.Resources.mapWaT0 ' B1
-                    End Select
-                Case 6
-                    Select Case iRoom
-                        Case 22, 24 To 26, 31
-                            pbxMap.Image = My.Resources.mapSpT3  ' 4F
-                        Case 7 To 11, 16 To 21, 23, 29
-                            pbxMap.Image = My.Resources.mapSpT2  ' 3F
-                        Case 5, 6, 28, 30
-                            pbxMap.Image = My.Resources.mapSpT1  ' 2F
-                        Case 0 To 4, 12 To 15, 27
-                            pbxMap.Image = My.Resources.mapSpT0  ' 1F
-                    End Select
-                Case 7
-                    Select Case iRoom
-                        Case 0 To 2, 4
-                            pbxMap.Image = My.Resources.mapShT3 ' B1
-                        Case 5 To 8
-                            pbxMap.Image = My.Resources.mapShT2 ' B2
-                        Case 9, 16, 22
-                            pbxMap.Image = My.Resources.mapShT1 ' B3
-                        Case 3, 10 To 15, 17 To 21, 23 To 26
-                            pbxMap.Image = My.Resources.mapShT0 ' B4
-                    End Select
-                Case 8
-                    Select Case iRoom
-                        Case 0 To 6
-                            pbxMap.Image = My.Resources.mapBotW2 ' B1
-                        Case 7, 8
-                            pbxMap.Image = My.Resources.mapBotW1 ' B2
-                        Case 9
-                            pbxMap.Image = My.Resources.mapBotW0 ' B3
-                    End Select
-                Case 9
-                    pbxMap.Image = My.Resources.mapIC0  ' F1
-                Case 10
-                    pbxMap.Image = My.Resources.mapGAC0
-                    doTrials = True
-                    iRoom = 0
-                Case 11
-                    pbxMap.Image = My.Resources.mapGTG    ' GTG
-                Case 13
-                    iRoom = getGanonMap()
-                    Select Case iRoom
-                        Case 1
-                            pbxMap.Image = My.Resources.mapGAC1
-                            doTrials = True
-                        Case 2
-                            pbxMap.Image = My.Resources.mapGAC2
-                        Case 3
-                            pbxMap.Image = My.Resources.mapGAC3
-                        Case 4
-                            pbxMap.Image = My.Resources.mapGAC4
-                        Case 5
-                            pbxMap.Image = My.Resources.mapGAC5
-                        Case 6
-                            pbxMap.Image = My.Resources.mapGAC6
-                        Case 7
-                            pbxMap.Image = My.Resources.mapGAC7
-                        Case Else
-                            pbxMap.Image = My.Resources.mapGAC0
-                            doTrials = True
-                    End Select
-                Case 27 To 29
-                    pbxMap.Image = My.Resources.mapMKE
-                    'If locationCode = 29 Then
-                    'pbxMap.Image = My.Resources.mapMKEntrance2
-                    'Else
-                    'pbxMap.Image = My.Resources.mapMKEntrance
-                    'End If
-                Case 30, 31
-                    pbxMap.Image = My.Resources.mapMKBA
-                Case 32, 33
-                    pbxMap.Image = My.Resources.mapMK
-                Case 34
-                    pbxMap.Image = My.Resources.mapMK2
-                Case 35 To 37
-                    pbxMap.Image = My.Resources.mapOToT
-                    'pbxMap.Image = My.Resources.mapToTOutside
-                    'Case 37
-                    'pbxMap.Image = My.Resources.mapToTOutside2
-                Case 67
-                    pbxMap.Image = My.Resources.mapToT
-                Case 81
-                    pbxMap.Image = My.Resources.mapHF
-                Case 82
-                    pbxMap.Image = My.Resources.mapKV
-                Case 83
-                    pbxMap.Image = My.Resources.mapGY
-                Case 84
-                    pbxMap.Image = My.Resources.mapZR
-                Case 85
-                    pbxMap.Image = My.Resources.mapKF
-                Case 86
-                    pbxMap.Image = My.Resources.mapSFM
-                Case 87
-                    pbxMap.Image = My.Resources.mapLH
-                Case 88
-                    pbxMap.Image = My.Resources.mapZD
-                Case 89
-                    pbxMap.Image = My.Resources.mapZF
-                Case 90
-                    pbxMap.Image = My.Resources.mapGV
-                Case 91
-                    pbxMap.Image = My.Resources.mapLW
-                Case 92
-                    pbxMap.Image = My.Resources.mapDC
-                Case 93, 12
-                    pbxMap.Image = My.Resources.mapGF
-                    locationCode = 93
-                Case 94
-                    pbxMap.Image = My.Resources.mapHW2
-                Case 95
-                    pbxMap.Image = My.Resources.mapHC
-                Case 96
-                    pbxMap.Image = My.Resources.mapDMT
-                Case 97
-                    pbxMap.Image = My.Resources.mapDMC
-                Case 98
-                    pbxMap.Image = My.Resources.mapGC
-                Case 99
-                    pbxMap.Image = My.Resources.mapLLR
-                Case 100
-                    pbxMap.Image = My.Resources.mapOGC
-                Case Else
-                    locationCode = iLastMinimap
-                    exitLoop = False
-            End Select
-            If exitLoop Then Exit For
-        Next
-        iLastMinimap = locationCode
-
-        If doTrials Then
-            updateTrials()
-        Else
-            pbxTrialFire.Visible = False
-            pbxTrialForest.Visible = False
-            pbxTrialWater.Visible = False
-            pbxTrialSpirit.Visible = False
-            pbxTrialShadow.Visible = False
-            pbxTrialLight.Visible = False
-        End If
-
-        If iER = 0 Then Exit Sub
-
-        ' Dungeon only checks
-        If isDungeon Then
-            Select Case locationCode
-                Case 0
-                    readExits(0) = &H377116     ' KF from Deku Tree
-                    If aMQ(0) Then readExits(0) = &H3770B6 ' MQ version
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(0) = 1
-                    'readExits(1) = &H377114     ' Queen Gohma from Deku Tree
-                    'lPoints.Add(New Point(278, 3))
-                    'aAlign(1) = 1
-                    locationArray = 26
-                Case 1
-                    readExits(0) = &H36FABE     ' DMT from Dodongo's Cavern
-                    If aMQ(1) Then readExits(0) = &H36FA8E ' MQ version
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(0) = 1
-                    'readExits(1) = &H36FABC     ' King Dodongo from Dodongo's Cavern
-                    'lPoints.Add(New Point(278, 3))
-                    'aAlign(1) = 1
-                    locationArray = 27
-                Case 2
-                    readExits(0) = &H36F43E     ' ZD from Jabu-Jabu's Belly
-                    If aMQ(2) Then readExits(0) = &H36F40E ' MQ version
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(0) = 1
-                    'readExits(1) = &H36F43C     ' Barinade from Jabu-Jabu's Belly
-                    'lPoints.Add(New Point(278, 3))
-                    'aAlign(1) = 1
-                    locationArray = 28
-                Case 3
-                    readExits(0) = &H36ED12     ' SFM from Forest Temple
-                    If aMQ(3) Then readExits(0) = &H36ED12 ' MQ version
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(0) = 1
-                    'readExits(1) = &H36ED10     ' Phantom Ganon from Forest Temple
-                    'lPoints.Add(New Point(278, 3))
-                    'aAlign(1) = 1
-                    locationArray = 29
-                Case 4
-                    readExits(0) = &H36A3C6     ' DMC from Fire Temple
-                    If aMQ(4) Then readExits(0) = &H36A376 ' MQ version
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(0) = 1
-                    'readExits(1) = &H36A3C4     ' Volvagia from Fire Temple
-                    'lPoints.Add(New Point(278, 3))
-                    'aAlign(1) = 1
-                    locationArray = 30
-                Case 5
-                    readExits(0) = &H36EF76     ' LH from Water Temple
-                    If aMQ(5) Then readExits(0) = &H36EF36 ' MQ version
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(0) = 1
-                    'readExits(1) = &H36EF74     ' Morpha from Temple
-                    'lPoints.Add(New Point(278, 3))
-                    'aAlign(1) = 1
-                    locationArray = 31
-                Case 6
-                    readExits(0) = &H36B1EA     ' DC from Spirit Temple
-                    If aMQ(6) Then readExits(0) = &H36B12A ' MQ version
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(0) = 1
-                    'readExits(1) = &H36B1E8     ' Twinrova from Spirit Temple
-                    'lPoints.Add(New Point(278, 3))
-                    'aAlign(1) = 1
-                    'readExits(2) = &H36B1EC     ' DC Statue Hand Right from Spirit Temple
-                    'lPoints.Add(New Point(99, 332))
-                    'aAlign(2) = 2
-                    'readExits(3) = &H36B1EE     ' DC Statue Hand Left from Spirit Temple
-                    'lPoints.Add(New Point(482, 357))
-                    locationArray = 32
-                Case 7
-                    readExits(0) = &H36C86E     ' GY from Shadow Temple
-                    If aMQ(7) Then readExits(0) = &H36C86E ' MQ version
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(0) = 1
-                    'readExits(1) = &H36C86C     ' Bongo Bongo from Shadow Temple
-                    'lPoints.Add(New Point(278, 3))
-                    'aAlign(1) = 1
-                    locationArray = 33
-                Case 8
-                    readExits(0) = &H3785C6     ' KV from BotW
-                    If aMQ(8) Then readExits(0) = &H378566 ' MQ version
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(0) = 1
-                    locationArray = 34
-                Case 9
-                    readExits(0) = &H37352E     ' ZF from Ice Cavern
-                    If aMQ(9) Then readExits(0) = &H37344E ' MQ version
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(0) = 1
-                    locationArray = 35
-                Case 10
-                    'readExits(0) = &H374348     ' Ganon's Castle from Ganon's Tower
-                    'lPoints.Add(New Point(278, 3))
-                    'aAlign(0) = 1
-                    'readExits(1) = &H37434A     ' Ganon from Ganon's Tower
-                    'lPoints.Add(New Point(278, 390))
-                    'aAlign(1) = 1
-                Case 11
-                    readExits(0) = &H373686     ' GF from GTG
-                    If aMQ(10) Then readExits(0) = &H373686 ' MQ version
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(0) = 1
-                    locationArray = 36
-                Case 13
-                    'readExits(0) = &H3634BC     ' Ganon's Tower from Ganon's Castle
-                    'lPoints.Add(New Point(278, 3))
-                    'aAlign(0) = 1
-                    readExits(0) = &H3634BE     ' OGC from Ganon's Castle
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(0) = 1
-                    locationArray = 37
-            End Select
-        End If
-
-        Select Case locationCode
-            Case 82
-                lPoints.Add(New Point(369, 223))
-                aAlign(0) = 1
-                ent = 1
-                If isDungeon Then readExits(0) = &H368A82 ' BotW from KV
-                locationArray = 7
-            Case 83
-                lPoints.Add(New Point(492, 202))
-                ent = 1
-                If isDungeon Then readExits(0) = &H378E44 ' Shadow Temple from GY
-                locationArray = 8
-            Case 85
-                lPoints.Add(New Point(440, 234))
-                aAlign(0) = 1
-                ent = 1
-                If isDungeon Then readExits(0) = &H3738F4 ' Deku Tree from KF
-                locationArray = 10
-            Case 86
-                lPoints.Add(New Point(278, 3))
-                aAlign(0) = 1
-                ent = 1
-                If isDungeon Then readExits(0) = &H36FCD4 ' Forest Temple from SFM
-                locationArray = 11
-            Case 87
-                lPoints.Add(New Point(311, 278))
-                aAlign(0) = 1
-                ent = 1
-                If isDungeon Then readExits(0) = &H3696A6 ' Water Temple from LH
-                locationArray = 12
-            Case 89
-                lPoints.Add(New Point(262, 152))
-                lPoints.Add(New Point(346, 8))
-                aAlign(1) = 1
-                ent = 2
-                If isDungeon Then
-                    readExits(0) = &H3733CC     ' Jabu-Jabu's Belly from ZF
-                    readExits(1) = &H3733D0     ' Ice Cavern from ZF
-                End If
-                locationArray = 14
-            Case 92
-                lPoints.Add(New Point(85, 163))
-                aAlign(0) = 1
-                ent = 1
-                If isDungeon Then
-                    readExits(0) = &H36B5AC     ' Spirit Temple from DC
-                    'readExits(2) = &H36B5B0     ' Spirit Temple from Statue Hand Left
-                    'lPoints.Add(New Point(84, 257))
-                    'aAlign(2) = 1
-                    'readExits(3) = &H36B5B2     ' Spirit Temple from Statue Hand Right
-                    'lPoints.Add(New Point(84, 118))
-                    'aAlign(3) = 1
-                End If
-                locationArray = 17
-            Case 93, 12
-                lPoints.Add(New Point(275, 242))
-                aAlign(0) = 1
-                ent = 1
-                If isDungeon Then readExits(0) = &H374D02 ' GTG from GF
-                locationArray = 18
-            Case 96
-                lPoints.Add(New Point(260, 174))
-                aAlign(0) = 2
-                ent = 1
-                If isDungeon Then readExits(0) = &H365FF0 ' Dodongo's Cavern from DMT
-                locationArray = 21
-            Case 97
-                lPoints.Add(New Point(308, 3))
-                aAlign(0) = 1
-                ent = 1
-                If isDungeon Then readExits(0) = &H374B9E ' Fire Temple from DMC
-                locationArray = 22
-            Case 100
-                lPoints.Add(New Point(278, 3))
-                aAlign(1) = 1
-                ent = 1
-                If isDungeon Then readExits(0) = &H37FEC0 ' Ganon's Castle from OGC
-                locationArray = 25
-        End Select
-
-        If iER Mod 2 = 1 Then
-            Select Case locationCode
-                Case 27 To 29
-                    readExits(0) = &H384650     ' HF from MK Entrance Day
-                    lPoints.Add(New Point(482, 73))
-                    aAlign(0) = 1
-                    readExits(1) = &H384652     ' MK from MK Entrance Day
-                    lPoints.Add(New Point(67, 346))
-                    aAlign(1) = 1
-                    ' For night, adjust by -0x48
-                    If locationCode = 28 Then
-                        readExits(0) = readExits(0) - &H48
-                        readExits(1) = readExits(1) - &H48
-                    End If
-                    locationArray = 0
-                Case 30, 31
-                    readExits(0) = &H383824     ' MK from Back Alley Left Day
-                    lPoints.Add(New Point(266, 307))
-                    readExits(1) = &H383826     ' MK from Back Alley Right Day
-                    lPoints.Add(New Point(266, 70))
-                    ' For night, adjust by -0x98
-                    If locationCode = 31 Then
-                        readExits(0) = readExits(0) - &H98
-                        readExits(1) = readExits(1) - &H98
-                    End If
-                    locationArray = 1
-                Case 32, 33
-                    readExits(0) = &H3824A8     ' HC from MK Day
-                    lPoints.Add(New Point(278, 3))
-                    aAlign(0) = 1
-                    readExits(1) = &H3824AA     ' MK Entrance from MK Day
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(1) = 1
-                    readExits(2) = &H3824AE     ' Outside ToT from MK Day
-                    lPoints.Add(New Point(456, 81))
-                    readExits(3) = &H3824AC     ' Back Alley Right from MK Day
-                    lPoints.Add(New Point(98, 56))
-                    aAlign(3) = 2
-                    readExits(4) = &H3824B2     ' Back Alley Left from MK Day
-                    lPoints.Add(New Point(98, 330))
-                    aAlign(4) = 2
-                    ' For night, adjust by +0x40
-                    If locationCode = 33 Then
-                        readExits(0) = readExits(0) + &H40
-                        readExits(1) = readExits(1) + &H40
-                        readExits(2) = readExits(2) + &H40
-                        readExits(3) = readExits(3) + &H40
-                        readExits(4) = readExits(4) + &H40
-                    End If
-                    locationArray = 2
-                Case 34
-                    readExits(0) = &H383478     ' OGC from MK Day
-                    lPoints.Add(New Point(278, 3))
-                    aAlign(0) = 1
-                    readExits(1) = &H38347A     ' MK Entrance from MK
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(1) = 1
-                    readExits(2) = &H38347E     ' Outside ToT from MK
-                    lPoints.Add(New Point(456, 70))
-                    locationArray = 3
-                Case 35, 36
-                    readExits(0) = &H383524     ' ToT from Outside ToT Day
-                    lPoints.Add(New Point(114, 18))
-                    aAlign(0) = 1
-                    readExits(1) = &H383526     ' MK from Outside ToT Day
-                    lPoints.Add(New Point(442, 377))
-                    aAlign(1) = 1
-                    ' For night, adjust by -0x18
-                    If locationCode = 36 Then
-                        readExits(0) = readExits(0) - &H18
-                        readExits(1) = readExits(1) - &H18
-                    End If
-                    locationArray = 4
-                Case 37
-                    readExits(0) = &H383574     ' ToT from Outside ToT
-                    lPoints.Add(New Point(114, 18))
-                    aAlign(0) = 1
-                    readExits(1) = &H383576     ' MK from Outside ToT 
-                    lPoints.Add(New Point(442, 377))
-                    aAlign(1) = 1
-                    locationArray = 4
-                Case 67
-                    readExits(0) = &H372332     ' Outside ToT from ToT
-                    lPoints.Add(New Point(278, 385))
-                    aAlign(0) = 1
-                    locationArray = 5
-                Case 81
-                    readExits(0) = &H36BF9C     ' KV from HF
-                    lPoints.Add(New Point(418, 64))
-                    readExits(1) = &H36BFA0     ' LW Bridge from HF
-                    lPoints.Add(New Point(437, 215))
-                    readExits(2) = &H36BFA2     ' ZR from HF
-                    lPoints.Add(New Point(447, 121))
-                    readExits(3) = &H36BFA4     ' GV from HF
-                    lPoints.Add(New Point(104, 183))
-                    aAlign(3) = 2
-                    readExits(4) = &H36BFA8     ' MK from HF
-                    lPoints.Add(New Point(313, 14))
-                    aAlign(4) = 1
-                    readExits(5) = &H36BFAA     ' LLR from HF
-                    lPoints.Add(New Point(280, 151))
-                    aAlign(5) = 1
-                    readExits(6) = &H36BFAE     ' LH from HF
-                    lPoints.Add(New Point(195, 380))
-                    aAlign(6) = 1
-                    locationArray = 6
-                Case 82
-                    readExits(ent) = &H368A78     ' DMT from KV
-                    lPoints.Add(New Point(298, 11))
-                    aAlign(ent) = 1
-                    incB(ent)
-                    readExits(ent) = &H368A7A     ' HF from KV
-                    lPoints.Add(New Point(57, 294))
-                    aAlign(ent) = 2
-                    incB(ent)
-                    readExits(ent) = &H368A7E     ' GY from KV
-                    lPoints.Add(New Point(493, 312))
-                    locationArray = 7
-                Case 83
-                    readExits(ent) = &H378E46     ' KV from GY
-                    lPoints.Add(New Point(57, 225))
-                    aAlign(ent) = 2
-                    locationArray = 8
-                Case 84
-                    readExits(0) = &H37951C     ' HF from ZR
-                    lPoints.Add(New Point(46, 319))
-                    aAlign(0) = 2
-                    readExits(1) = &H37951E     ' ZD from ZR
-                    lPoints.Add(New Point(509, 92))
-                    readExits(2) = &H379522     ' LW from ZR
-                    lPoints.Add(New Point(483, 157))
-                    aAlign(2) = 1
-                    locationArray = 9
-                Case 85
-                    readExits(ent) = &H3738FA     ' LW Bridge from KF
-                    lPoints.Add(New Point(79, 187))
-                    aAlign(ent) = 2
-                    incB(ent)
-                    readExits(ent) = &H373902     ' LW from KF
-                    lPoints.Add(New Point(172, 84))
-                    aAlign(ent) = 1
-                    locationArray = 10
-                Case 86
-                    readExits(ent) = &H36FCD6     ' LW from SFM
-                    lPoints.Add(New Point(278, 389))
-                    aAlign(ent) = 1
-                    locationArray = 11
-                Case 87
-                    readExits(ent) = &H3696A2     ' HF from LH
-                    lPoints.Add(New Point(276, 5))
-                    aAlign(ent) = 1
-                    incB(ent)
-                    readExits(ent) = &H3696AE     ' ZD from LH
-                    lPoints.Add(New Point(313, 126))
-                    aAlign(ent) = 1
-                    locationArray = 12
-                Case 88
-                    readExits(0) = &H37B26C     ' ZF from ZD
-                    lPoints.Add(New Point(291, 24))
-                    aAlign(0) = 1
-                    readExits(1) = &H37B26E     ' ZR from ZD
-                    lPoints.Add(New Point(182, 291))
-                    aAlign(1) = 1
-                    readExits(2) = &H37B270     ' LH from ZD
-                    lPoints.Add(New Point(352, 387))
-                    aAlign(2) = 2
-                    locationArray = 13
-                Case 89
-                    readExits(ent) = &H3733D2     ' ZD from ZF
-                    lPoints.Add(New Point(189, 268))
-                    aAlign(ent) = 2
-                    locationArray = 14
-                Case 90
-                    readExits(0) = &H373904     ' LH from GV
-                    lPoints.Add(New Point(328, 387))
-                    aAlign(0) = 1
-                    readExits(1) = &H373906     ' HF from GV
-                    lPoints.Add(New Point(464, 218))
-                    readExits(2) = &H373908     ' GF from GV
-                    lPoints.Add(New Point(84, 117))
-                    aAlign(2) = 2
-                    locationArray = 15
-                Case 91
-                    readExits(0) = &H37475C     ' SFM from LW
-                    lPoints.Add(New Point(299, 14))
-                    aAlign(0) = 1
-                    readExits(1) = &H37475E     ' KF from LW
-                    lPoints.Add(New Point(248, 251))
-                    aAlign(1) = 1
-                    readExits(2) = &H374768     ' ZR from LW
-                    lPoints.Add(New Point(423, 158))
-                    readExits(3) = &H37476A     ' GC from LW
-                    If My.Settings.setScrub Then
-                        ' Have to move it down because the scrub icons crash right over it
-                        lPoints.Add(New Point(299, 128))
-                    Else
-                        lPoints.Add(New Point(299, 117))
-                    End If
-                    aAlign(3) = 1
-                    readExits(4) = &H37476C     ' KF from LW Bridge
-                    lPoints.Add(New Point(192, 341))
-                    readExits(5) = &H37476E     ' HF from LW Bridge
-                    lPoints.Add(New Point(127, 321))
-                    aAlign(5) = 2
-                    locationArray = 16
-                Case 92
-                    readExits(ent) = &H36B5AE     ' HW from DC
-                    lPoints.Add(New Point(476, 179))
-                    locationArray = 17
-                Case 93
-                    readExits(ent) = &H374CE6     ' GV from GF
-                    lPoints.Add(New Point(277, 350))
-                    incB(ent)
-                    readExits(ent) = &H374D00     ' HW from GF
-                    lPoints.Add(New Point(145, 133))
-                    aAlign(ent) = 2
-                    locationArray = 18
-                Case 94
-                    readExits(0) = &H37EBFC     ' DC from HW
-                    lPoints.Add(New Point(10, 99))
-                    aAlign(0) = 2
-                    readExits(1) = &H37EBFE     ' GF from HW
-                    lPoints.Add(New Point(545, 336))
-                    locationArray = 19
-                Case 95
-                    readExits(0) = &H36C55E     ' MK from HC
-                    lPoints.Add(New Point(162, 365))
-                    aAlign(0) = 1
-                    'readExits(1) = &H36C562     ' GFF from HC
-                    'lPoints.Add(New Point(346, 243))
-                    'readExits(2) = &H36C55C     ' Castle Courtyard from HC
-                    'lPoints.Add(New Point(89, 32))
-                    locationArray = 20
-                Case 96
-                    readExits(ent) = &H365FEC     ' GC from DMT
-                    lPoints.Add(New Point(320, 149))
-                    incB(ent)
-                    readExits(ent) = &H365FEE     ' KV from DMT
-                    lPoints.Add(New Point(259, 384))
-                    aAlign(ent) = 1
-                    incB(ent)
-                    readExits(ent) = &H365FF2     ' DMC from DMT
-                    lPoints.Add(New Point(315, 3))
-                    aAlign(ent) = 1
-                    locationArray = 21
-                Case 97
-                    readExits(ent) = &H374B98     ' GC from DMC
-                    lPoints.Add(New Point(129, 192))
-                    aAlign(ent) = 2
-                    incB(ent)
-                    readExits(ent) = &H374B9A     ' DMT from DMC
-                    lPoints.Add(New Point(199, 387))
-                    aAlign(ent) = 1
-                    locationArray = 22
-                Case 98
-                    readExits(0) = &H37A64C     ' DMC from GC
-                    lPoints.Add(New Point(281, 3))
-                    aAlign(0) = 1
-                    readExits(1) = &H37A64E     ' DMT from GC
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(1) = 1
-                    readExits(2) = &H37A650     ' LW from GC
-                    lPoints.Add(New Point(351, 361))
-                    locationArray = 23
-                Case 99
-                    readExits(0) = &H377C12     ' HF from LLR
-                    lPoints.Add(New Point(348, 14))
-                    aAlign(0) = 1
-                    locationArray = 24
-                Case 100
-                    readExits(ent) = &H37FEC2     ' MK from OGC
-                    lPoints.Add(New Point(278, 390))
-                    aAlign(ent) = 1
-                    locationArray = 25
-            End Select
-        End If
-
-        ' Sets that you have been to the current
-        If locationArray = 255 Then Exit Sub
-        aVisited(locationArray) = True
-
-        Dim exitCode As String = String.Empty
-        Dim fontGS = New Font("Lucida Console", 24, FontStyle.Bold, GraphicsUnit.Pixel)
-        Dim ptX As Integer = 0
-        Dim ptY As Integer = 0
-        Dim iNewReach As Byte = 0
-        Dim iVisited As Byte = 0
-        Dim doDisplay As Boolean = False
-        For i = 0 To readExits.Length - 1
-            If Not readExits(i) = 0 Then
-
-                iNewReach = 255
-                exitCode = Hex(goRead(readExits(i), 15))
-                fixHex(exitCode, 3)
-                exitCode = exit2label(exitCode, iNewReach)
-
-
-                ' If aReachExit is not 255, set exit to the new iNewReach
-                If Not iNewReach = 255 Then
-                    aExitMap(locationArray)(i) = iNewReach
-                End If
-
-                ' Only run the display part if the panel is actually visable
-                If pnlER.Visible Then
-                    ' Convert the iNewReach into the location for aVisited
-                    iVisited = zone2map(iNewReach)
-                    doDisplay = True
-                    If iVisited = 255 Then
-                        doDisplay = True
-                    Else
-                        If Not aVisited(iVisited) Then exitCode = "?"
-                    End If
-                    If doDisplay Then
-                        ptX = lPoints(i).X
-                        ptY = lPoints(i).Y
-
-                        ' Make sure the text will not run off the display area
-                        Select Case aAlign(i)
-                            Case 0
-                                If ptX + ((exitCode.Length) * 15) + 4 > 548 Then
-                                    ptX = 548
-                                    aAlign(i) = 2
-                                End If
-                            Case 1
-                                Dim limitSize As Double = 0
-                                If ptX > (pbxMap.Width / 2) Then
-                                    limitSize = ptX + (((exitCode.Length) * 15) / 2) + 4
-                                    If limitSize > 548 Then
-                                        ptX = 548
-                                        aAlign(i) = 2
-                                    End If
-                                Else
-                                    limitSize = ptX - (((exitCode.Length) * 15) / 2) + 4
-                                    If limitSize < 0 Then
-                                        ptX = 0
-                                        aAlign(i) = 0
-                                    End If
-                                End If
-                            Case 2
-                                If ptX - ((exitCode.Length) * 15) - 4 < 0 Then
-                                    ptX = 0
-                                    aAlign(i) = 0
-                                End If
-                        End Select
-
-                        ' Adjust the starting position for the exit's alignment
-                        Select Case aAlign(i)
-                            Case 1
-                                ptX = CInt(ptX - ((exitCode.Length * 15) / 2) - 4)
-                            Case 2
-                                ptX = ptX - (exitCode.Length * 15) - 4
-                        End Select
-
-                        Graphics.FromImage(pbxMap.Image).DrawString(exitCode, fontGS, New SolidBrush(Color.Black), ptX + 1, ptY + 1)
-                        Graphics.FromImage(pbxMap.Image).DrawString(exitCode, fontGS, New SolidBrush(Color.White), ptX, ptY)
-                    End If
-                End If
-            End If
-        Next
-    End Sub
-    Private Sub updateMiniMap()
-        If Not pnlER.Visible Then Exit Sub
-
-        Dim aIconPos As New List(Of Point)
-        For i = 0 To aIconLoc.Length - 1
-            aIconLoc(i) = String.Empty
-            aIconName(i) = String.Empty
-        Next
-        lRegions.Clear()
-
-        Select Case iLastMinimap
-            Case 0
-                If Not aMQ(0) Then
-                    Select Case iRoom
-                        Case 10, 12 ' 3F
-                            aIconLoc(0) = "3102"
-                            aIconPos.Add(New Point(213, 178))
-                            aIconLoc(1) = "3106"
-                            aIconPos.Add(New Point(273, 208))
-                            aIconLoc(2) = "7803"
-                            aIconPos.Add(New Point(273, 224))
-                        Case 1, 2, 11 '2F
-                            aIconLoc(0) = "3101"
-                            aIconPos.Add(New Point(254, 350))
-                            aIconLoc(1) = "3105"
-                            aIconPos.Add(New Point(270, 362))
-                        Case 0 '1F
-                            aIconLoc(0) = "3103"
-                            aIconPos.Add(New Point(466, 214))
-                        Case 3 To 8 'B1
-                            aIconLoc(0) = "3104"
-                            aIconPos.Add(New Point(419, 131))
-                            aIconLoc(1) = "7802"
-                            aIconPos.Add(New Point(429, 172))
-                            aIconLoc(2) = "7801"
-                            aIconPos.Add(New Point(379, 120))
-                            aIconLoc(3) = "7800"
-                            aIconPos.Add(New Point(64, 84))
-                        Case 9 'B2
-                            aIconLoc(0) = "1031"
-                            aIconPos.Add(New Point(300, 33))
-                    End Select
-                Else
-                    Select Case iRoom
-                        Case 10, 12 ' 3F
-                            aIconLoc(0) = "3102"
-                            aIconPos.Add(New Point(273, 215))
-                            aIconLoc(1) = "3106"
-                            aIconPos.Add(New Point(213, 178))
-                        Case 1, 2, 11 '2F
-                            aIconLoc(0) = "3101"
-                            aIconPos.Add(New Point(254, 350))
-                            aIconLoc(1) = "7803"
-                            aIconPos.Add(New Point(270, 362))
-                        Case 0 '1F
-                            aIconLoc(0) = "3103"
-                            aIconPos.Add(New Point(466, 214))
-                            aIconLoc(1) = "7801"
-                            aIconPos.Add(New Point(458, 230))
-                        Case 3 To 8 'B1
-                            aIconLoc(0) = "3104"
-                            aIconPos.Add(New Point(419, 131))
-                            aIconLoc(1) = "3105"
-                            aIconPos.Add(New Point(362, 337))
-                            aIconLoc(2) = "3100"
-                            aIconPos.Add(New Point(246, 323))
-                            aIconLoc(3) = "7802"
-                            aIconPos.Add(New Point(156, 185))
-                            aIconLoc(4) = "7800"
-                            aIconPos.Add(New Point(63, 83))
-                            aIconLoc(5) = "8405"
-                            aIconPos.Add(New Point(333, 208))
-                        Case 9 'B2
-                            aIconLoc(0) = "1031"
-                            aIconPos.Add(New Point(300, 33))
-                    End Select
-                End If
-            Case 1
-                If Not aMQ(1) Then
-                    Select Case iRoom
-                        Case 5, 6, 9, 10, 12, 16, 17, 18 ' 2F
-                            aIconLoc(0) = "3206"
-                            aIconPos.Add(New Point(307, 314))
-                            aIconLoc(1) = "3204"
-                            aIconPos.Add(New Point(289, 242))
-                            aIconLoc(2) = "3210"
-                            aIconPos.Add(New Point(156, 223))
-                            aIconLoc(3) = "7810"
-                            aIconPos.Add(New Point(109, 205))
-                            aIconLoc(4) = "7808"
-                            aIconPos.Add(New Point(109, 253))
-                            aIconLoc(5) = "8501"
-                            aIconPos.Add(New Point(293, 200))
-                            aIconLoc(6) = "8504"
-                            aIconPos.Add(New Point(313, 200))
-                        Case 0 To 4, 7, 8, 11, 13 To 15 ' 1F
-                            aIconLoc(0) = "3208"
-                            aIconPos.Add(New Point(158, 239))
-                            aIconLoc(1) = "3205"
-                            aIconPos.Add(New Point(109, 319))
-                            aIconLoc(2) = "4400"
-                            aIconPos.Add(New Point(179, 140))
-                            aIconLoc(3) = "1131"
-                            aIconPos.Add(New Point(179, 156))
-                            aIconLoc(4) = "7812"
-                            aIconPos.Add(New Point(344, 361))
-                            aIconLoc(5) = "7809"
-                            aIconPos.Add(New Point(334, 291))
-                            aIconLoc(6) = "7811"
-                            aIconPos.Add(New Point(289, 39))
-                            aIconLoc(7) = "8505"
-                            aIconPos.Add(New Point(158, 304))
-                            aIconLoc(8) = "8502"
-                            aIconPos.Add(New Point(339, 129))
-                    End Select
-                Else
-                    Select Case iRoom
-                        Case 5, 6, 9, 10, 12, 16, 17, 18 ' 2F
-                            aIconLoc(0) = "3203"
-                            aIconPos.Add(New Point(293, 279))
-                            aIconLoc(1) = "3202"
-                            aIconPos.Add(New Point(303, 207))
-                            aIconLoc(2) = "3205"
-                            aIconPos.Add(New Point(107, 323))
-                            aIconLoc(3) = "7812"
-                            aIconPos.Add(New Point(319, 202))
-                            aIconLoc(4) = "7810"
-                            aIconPos.Add(New Point(390, 202))
-                            aIconLoc(5) = "8505"
-                            aIconPos.Add(New Point(104, 205))
-                        Case 0 To 4, 7, 8, 11, 13 To 15 ' 1F
-                            aIconLoc(0) = "3200"
-                            aIconPos.Add(New Point(261, 224))
-                            aIconLoc(1) = "3204"
-                            aIconPos.Add(New Point(269, 259))
-                            aIconLoc(2) = "3201"
-                            aIconPos.Add(New Point(287, 45))
-                            aIconLoc(3) = "4400"
-                            aIconPos.Add(New Point(179, 140))
-                            aIconLoc(4) = "1131"
-                            aIconPos.Add(New Point(179, 156))
-                            aIconLoc(5) = "7809"
-                            aIconPos.Add(New Point(330, 129))
-                            aIconLoc(6) = "7811"
-                            aIconPos.Add(New Point(117, 319))
-                            aIconLoc(7) = "7808"
-                            aIconPos.Add(New Point(294, 105))
-                            aIconLoc(8) = "8504"
-                            aIconPos.Add(New Point(158, 296))
-                            aIconLoc(9) = "8502"
-                            aIconPos.Add(New Point(158, 312))
-                            aIconLoc(10) = "8508"
-                            aIconPos.Add(New Point(345, 356))
-                    End Select
-                End If
-            Case 2
-                If Not aMQ(2) Then
-                    Select Case iRoom
-                        Case 0 To 2, 4 To 12 ' 1F
-                            aIconLoc(0) = "3301"
-                            aIconPos.Add(New Point(350, 107))
-                            aIconLoc(1) = "3302"
-                            aIconPos.Add(New Point(184, 107))
-                            aIconLoc(2) = "3304"
-                            aIconPos.Add(New Point(229, 53))
-                            aIconLoc(3) = "1231"
-                            aIconPos.Add(New Point(341, 232))
-                            aIconLoc(4) = "7818"
-                            aIconPos.Add(New Point(347, 270))
-                        Case 3, 13 To 16 ' B1
-                            aIconLoc(0) = "7819"
-                            aIconPos.Add(New Point(324, 224))
-                            aIconLoc(1) = "7817"
-                            aIconPos.Add(New Point(254, 163))
-                            aIconLoc(2) = "7816"
-                            aIconPos.Add(New Point(270, 159))
-                            aIconLoc(3) = "8601"
-                            aIconPos.Add(New Point(221, 264))
-                    End Select
-                Else
-                    Select Case iRoom
-                        Case 0 To 2, 4 To 12 ' 1F
-                            aIconLoc(0) = "3303"
-                            aIconPos.Add(New Point(269, 339))
-                            aIconLoc(1) = "3305"
-                            aIconPos.Add(New Point(285, 331))
-                            aIconLoc(2) = "3309"
-                            aIconPos.Add(New Point(311, 43))
-                            aIconLoc(3) = "3307"
-                            aIconPos.Add(New Point(293, 265))
-                            aIconLoc(4) = "3310"
-                            aIconPos.Add(New Point(332, 248))
-                            aIconLoc(5) = "1231"
-                            aIconPos.Add(New Point(341, 232))
-                            aIconLoc(6) = "7818"
-                            aIconPos.Add(New Point(240, 50))
-                            aIconLoc(7) = "7817"
-                            aIconPos.Add(New Point(337, 264))
-                            aIconLoc(8) = "10224"
-                            aIconPos.Add(New Point(198, 265))
-                        Case 3, 13 To 16 ' B1
-                            aIconLoc(0) = "3302"
-                            aIconPos.Add(New Point(285, 258))
-                            aIconLoc(1) = "3300"
-                            aIconPos.Add(New Point(224, 263))
-                            aIconLoc(2) = "3304"
-                            aIconPos.Add(New Point(258, 202))
-                            aIconLoc(3) = "3308"
-                            aIconPos.Add(New Point(286, 163))
-                            aIconLoc(4) = "3306"
-                            aIconPos.Add(New Point(317, 224))
-                            aIconLoc(5) = "3301"
-                            aIconPos.Add(New Point(338, 211))
-                            aIconLoc(6) = "7816"
-                            aIconPos.Add(New Point(333, 227))
-                            aIconLoc(7) = "7819"
-                            aIconPos.Add(New Point(211, 233))
-                    End Select
-                End If
-            Case 3
-                If Not aMQ(3) Then
-                    Select Case iRoom
-                        Case 10, 12 To 14, 19, 20, 23 To 26 ' 2F
-                            aIconLoc(0) = "3403"
-                            aIconPos.Add(New Point(258, 335))
-                            aIconLoc(1) = "3401"
-                            aIconPos.Add(New Point(277, 100))
-                            aIconLoc(2) = "3404"
-                            aIconPos.Add(New Point(145, 198))
-                            aIconLoc(3) = "3414"
-                            aIconPos.Add(New Point(149, 51))
-                            aIconLoc(4) = "3413"
-                            aIconPos.Add(New Point(235, 44))
-                            aIconLoc(5) = "3412"
-                            aIconPos.Add(New Point(277, 56))
-                            aIconLoc(6) = "3415"
-                            aIconPos.Add(New Point(315, 44))
-                            aIconLoc(7) = "7825"
-                            aIconPos.Add(New Point(296, 335))
-                            aIconLoc(8) = "7826"
-                            aIconPos.Add(New Point(186, 87))
-
-                        Case 0 To 8, 11, 15, 16, 18, 21, 22 ' 1F
-                            aIconLoc(0) = "3403"
-                            aIconPos.Add(New Point(258, 335))
-                            aIconLoc(1) = "3400"
-                            aIconPos.Add(New Point(277, 59))
-                            aIconLoc(2) = "3405"
-                            aIconPos.Add(New Point(384, 110))
-                            aIconLoc(3) = "3402"
-                            aIconPos.Add(New Point(114, 153))
-                            aIconLoc(4) = "3407"
-                            aIconPos.Add(New Point(419, 133))
-                            aIconLoc(5) = "7825"
-                            aIconPos.Add(New Point(296, 335))
-                            aIconLoc(6) = "7827"
-                            aIconPos.Add(New Point(295, 125))
-                            aIconLoc(7) = "7824"
-                            aIconPos.Add(New Point(359, 100))
-                        Case 9 ' B1
-                            aIconLoc(0) = "3409"
-                            aIconPos.Add(New Point(195, 169))
-                        Case 17 ' B2
-                            aIconLoc(0) = "3411"
-                            aIconPos.Add(New Point(243, 219))
-                            aIconLoc(1) = "1331"
-                            aIconPos.Add(New Point(279, 104))
-                            aIconLoc(2) = "7828"
-                            aIconPos.Add(New Point(243, 203))
-                    End Select
-                Else
-                    Select Case iRoom
-                        Case 10, 12 To 14, 19, 20, 23 To 26 ' 2F
-                            aIconLoc(0) = "3403"
-                            aIconPos.Add(New Point(296, 322))
-                            aIconLoc(1) = "3405"
-                            aIconPos.Add(New Point(348, 76))
-                            aIconLoc(2) = "3414"
-                            aIconPos.Add(New Point(149, 51))
-                            aIconLoc(3) = "3413"
-                            aIconPos.Add(New Point(235, 44))
-                            aIconLoc(4) = "3412"
-                            aIconPos.Add(New Point(277, 44))
-                            aIconLoc(5) = "3415"
-                            aIconPos.Add(New Point(315, 44))
-                        Case 0 To 8, 11, 15, 16, 18, 21, 22 ' 1F
-                            aIconLoc(0) = "3403"
-                            aIconPos.Add(New Point(296, 322))
-                            aIconLoc(1) = "3400"
-                            aIconPos.Add(New Point(277, 48))
-                            aIconLoc(2) = "3401"
-                            aIconPos.Add(New Point(361, 98))
-                            aIconLoc(3) = "3406"
-                            aIconPos.Add(New Point(426, 116))
-                            aIconLoc(4) = "3402"
-                            aIconPos.Add(New Point(113, 153))
-                            aIconLoc(5) = "7825"
-                            aIconPos.Add(New Point(271, 261))
-                            aIconLoc(6) = "7824"
-                            aIconPos.Add(New Point(342, 129))
-                            aIconLoc(7) = "7826"
-                            aIconPos.Add(New Point(185, 170))
-                            aIconLoc(8) = "7828"
-                            aIconPos.Add(New Point(160, 223))
-                        Case 9 ' B1
-                            aIconLoc(0) = "3409"
-                            aIconPos.Add(New Point(343, 171))
-                            aIconLoc(1) = "7827"
-                            aIconPos.Add(New Point(191, 163))
-                        Case 17 ' B2
-                            aIconLoc(0) = "3411"
-                            aIconPos.Add(New Point(240, 148))
-                            aIconLoc(1) = "1331"
-                            aIconPos.Add(New Point(279, 96))
-                    End Select
-                End If
-            Case 4
-                If Not aMQ(4) Then
-                    Select Case iRoom
-                        Case 8, 30, 34, 35 ' 5F
-                            aIconLoc(0) = "3513"
-                            aIconPos.Add(New Point(419, 163))
-                            aIconLoc(1) = "3505"
-                            aIconPos.Add(New Point(123, 221))
-                            aIconLoc(2) = "7903"
-                            aIconPos.Add(New Point(395, 185))
-                        Case 7, 12 To 14, 27, 32, 33, 37 ' 4F
-                            aIconLoc(0) = "7904"
-                            aIconPos.Add(New Point(370, 117))
-                        Case 5, 9, 11, 16, 23 To 26, 28, 31 ' 3F
-                            aIconLoc(0) = "3503"
-                            aIconPos.Add(New Point(432, 271))
-                            aIconLoc(1) = "3508"
-                            aIconPos.Add(New Point(374, 57))
-                            aIconLoc(2) = "3510"
-                            aIconPos.Add(New Point(360, 174))
-                            aIconLoc(3) = "3506"
-                            aIconPos.Add(New Point(418, 294))
-                            aIconLoc(4) = "3507"
-                            aIconPos.Add(New Point(236, 96))
-                            aIconLoc(5) = "3509"
-                            aIconPos.Add(New Point(166, 191))
-                            aIconLoc(6) = "7902"
-                            aIconPos.Add(New Point(440, 105))
-                        Case 4, 10, 36 ' 2F
-                            aIconLoc(0) = "3511"
-                            aIconPos.Add(New Point(458, 188))
-                        Case 0 To 3, 15, 17 To 22 ' 1F
-                            aIconLoc(0) = "3501"
-                            aIconPos.Add(New Point(193, 263))
-                            aIconLoc(1) = "3500"
-                            aIconPos.Add(New Point(262, 87))
-                            aIconLoc(2) = "3512"
-                            aIconPos.Add(New Point(262, 151))
-                            aIconLoc(3) = "3504"
-                            aIconPos.Add(New Point(430, 69))
-                            aIconLoc(4) = "3502"
-                            aIconPos.Add(New Point(393, 343))
-                            aIconLoc(5) = "1431"
-                            aIconPos.Add(New Point(166, 191))
-                            aIconLoc(6) = "7901"
-                            aIconPos.Add(New Point(330, 68))
-                            aIconLoc(7) = "7900"
-                            aIconPos.Add(New Point(362, 66))
-                    End Select
-                Else
-                    Select Case iRoom
-                        Case 8, 30, 34, 35 ' 5F
-                            aIconLoc(0) = "3505"
-                            aIconPos.Add(New Point(126, 226))
-                            aIconLoc(1) = "7902"
-                            aIconPos.Add(New Point(421, 162))
-                        Case 7, 12 To 14, 27, 32, 33, 37 ' 4F
-                            aIconLoc(0) = "7901"
-                            aIconPos.Add(New Point(196, 179))
-                        Case 5, 9, 11, 16, 23 To 26, 28, 31 ' 3F
-                            aIconLoc(0) = "3503"
-                            aIconPos.Add(New Point(429, 274))
-                            aIconLoc(1) = "3508"
-                            aIconPos.Add(New Point(374, 57))
-                            aIconLoc(2) = "3506"
-                            aIconPos.Add(New Point(418, 295))
-                            aIconLoc(3) = "328"
-                            aIconPos.Add(New Point(72, 201))
-                            aIconLoc(4) = "7903"
-                            aIconPos.Add(New Point(166, 190))
-                            aIconLoc(5) = "7904"
-                            aIconPos.Add(New Point(237, 95))
-                        Case 4, 10, 36 ' 2F
-                            aIconLoc(0) = "3511"
-                            aIconPos.Add(New Point(458, 188))
-                        Case 0 To 3, 15, 17 To 22 ' 1F
-                            aIconLoc(0) = "3502"
-                            aIconPos.Add(New Point(262, 169))
-                            aIconLoc(1) = "3500"
-                            aIconPos.Add(New Point(262, 89))
-                            aIconLoc(2) = "3512"
-                            aIconPos.Add(New Point(262, 153))
-                            aIconLoc(3) = "3507"
-                            aIconPos.Add(New Point(193, 263))
-                            aIconLoc(4) = "3501"
-                            aIconPos.Add(New Point(360, 61))
-                            aIconLoc(5) = "3504"
-                            aIconPos.Add(New Point(393, 344))
-                            aIconLoc(6) = "1431"
-                            aIconPos.Add(New Point(165, 191))
-                            aIconLoc(7) = "7900"
-                            aIconPos.Add(New Point(432, 69))
-                    End Select
-                End If
-            Case 5
-                If Not aMQ(5) Then
-                    Select Case iRoom
-                        Case 0, 1, 4 To 7, 10, 11, 13, 17, 19, 20, 30, 31, 43 ' 3F
-                            aIconLoc(0) = "3602"
-                            aIconPos.Add(New Point(431, 311))
-                            aIconLoc(1) = "3609"
-                            aIconPos.Add(New Point(416, 246))
-                            aIconLoc(2) = "3608"
-                            aIconPos.Add(New Point(375, 356))
-                            aIconLoc(3) = "3607"
-                            aIconPos.Add(New Point(154, 57))
-                            aIconLoc(4) = "1531"
-                            aIconPos.Add(New Point(323, 171))
-                            aIconLoc(5) = "7910"
-                            aIconPos.Add(New Point(316, 279))
-                            aIconLoc(6) = "7909"
-                            aIconPos.Add(New Point(221, 274))
-                        Case 22, 25, 29, 32, 35, 39, 41 ' 2F
-                            aIconLoc(0) = "3600"
-                            aIconPos.Add(New Point(415, 311))
-                            aIconLoc(1) = "3603"
-                            aIconPos.Add(New Point(230, 139))
-                            aIconLoc(2) = "7909"
-                            aIconPos.Add(New Point(221, 274))
-                            aIconLoc(3) = "7912"
-                            aIconPos.Add(New Point(173, 105))
-                        Case 3, 8, 9, 12, 14 To 16, 18, 21, 23, 24, 26, 28, 33, 34, 36 To 38, 40, 42 ' 1F
-                            aIconLoc(0) = "3601"
-                            aIconPos.Add(New Point(431, 311))
-                            aIconLoc(1) = "3603"
-                            aIconPos.Add(New Point(230, 139))
-                            aIconLoc(2) = "3610"
-                            aIconPos.Add(New Point(206, 181))
-                            aIconLoc(3) = "3605"
-                            aIconPos.Add(New Point(253, 120))
-                            aIconLoc(4) = "7908"
-                            aIconPos.Add(New Point(204, 346))
-                            aIconLoc(5) = "7909"
-                            aIconPos.Add(New Point(221, 274))
-                            aIconLoc(6) = "7912"
-                            aIconPos.Add(New Point(173, 105))
-                            aIconLoc(7) = "7911"
-                            aIconPos.Add(New Point(266, 158))
-                        Case 2, 27 ' B1
-                            aIconLoc(0) = "3606"
-                            aIconPos.Add(New Point(369, 333))
-                            aIconLoc(1) = "3610"
-                            aIconPos.Add(New Point(206, 181))
-                            aIconLoc(2) = "7908"
-                            aIconPos.Add(New Point(204, 346))
-                            aIconLoc(3) = "7909"
-                            aIconPos.Add(New Point(221, 274))
-                            aIconLoc(4) = "7911"
-                            aIconPos.Add(New Point(256, 158))
-                    End Select
-                Else
-                    Select Case iRoom
-                        Case 0, 1, 4 To 7, 10, 11, 13, 17, 19, 20, 30, 31, 43 ' 3F
-                            aIconLoc(0) = "3602"
-                            aIconPos.Add(New Point(431, 311))
-                            aIconLoc(1) = "1531"
-                            aIconPos.Add(New Point(323, 171))
-                            aIconLoc(2) = "7910"
-                            aIconPos.Add(New Point(269, 304))
-                        Case 22, 25, 29, 32, 35, 39, 41 ' 2F
-                            aIconLoc(0) = "3600"
-                            aIconPos.Add(New Point(418, 311))
-                            aIconLoc(1) = "7908"
-                            aIconPos.Add(New Point(382, 333))
-                            aIconLoc(2) = "7909"
-                            aIconPos.Add(New Point(156, 147))
-                        Case 3, 8, 9, 12, 14 To 16, 18, 21, 23, 24, 26, 28, 33, 34, 36 To 38, 40, 42 ' 1F
-                            aIconLoc(0) = "3601"
-                            aIconPos.Add(New Point(438, 311))
-                            aIconLoc(1) = "3605"
-                            aIconPos.Add(New Point(262, 238))
-                            aIconLoc(2) = "401"
-                            aIconPos.Add(New Point(247, 126))
-                            aIconLoc(3) = "7909"
-                            aIconPos.Add(New Point(156, 147))
-                            aIconLoc(4) = "7911"
-                            aIconPos.Add(New Point(321, 115))
-                            aIconLoc(5) = "7912"
-                            aIconPos.Add(New Point(202, 346))
-                        Case 2, 27 ' B1
-                            aIconLoc(0) = "3606"
-                            aIconPos.Add(New Point(370, 333))
-                    End Select
-                End If
-            Case 6
-                If Not aMQ(6) Then
-                    Select Case iRoom
-                        Case 22, 24 To 26, 31 ' 4F
-                            aIconLoc(0) = "3710"
-                            aIconPos.Add(New Point(322, 75))
-                            aIconLoc(1) = "3718"
-                            aIconPos.Add(New Point(197, 131))
-                        Case 7 To 11, 16 To 21, 23, 29 ' 3F
-                            aIconLoc(0) = "3701"
-                            aIconPos.Add(New Point(136, 244))
-                            aIconLoc(1) = "5511"
-                            aIconPos.Add(New Point(162, 349))
-                            aIconLoc(2) = "3715"
-                            aIconPos.Add(New Point(315, 100))
-                            aIconLoc(3) = "3705"
-                            aIconPos.Add(New Point(428, 151))
-                            aIconLoc(4) = "3721"
-                            aIconPos.Add(New Point(441, 296))
-                            aIconLoc(5) = "3720"
-                            aIconPos.Add(New Point(424, 296))
-                            aIconLoc(6) = "5509"
-                            aIconPos.Add(New Point(379, 349))
-                            aIconLoc(7) = "1631"
-                            aIconPos.Add(New Point(261, 64))
-                            aIconLoc(8) = "7916"
-                            aIconPos.Add(New Point(108, 306))
-                            aIconLoc(9) = "7918"
-                            aIconPos.Add(New Point(213, 83))
-                        Case 5, 6, 28, 30 ' 2F
-                            aIconLoc(0) = "3706"
-                            aIconPos.Add(New Point(176, 108))
-                            aIconLoc(1) = "3712"
-                            aIconPos.Add(New Point(184, 124))
-                            aIconLoc(2) = "3703"
-                            aIconPos.Add(New Point(261, 119))
-                            aIconLoc(3) = "3713"
-                            aIconPos.Add(New Point(370, 136))
-                            aIconLoc(4) = "3714"
-                            aIconPos.Add(New Point(370, 152))
-                            aIconLoc(5) = "3702"
-                            aIconPos.Add(New Point(234, 110))
-                            aIconLoc(6) = "7919"
-                            aIconPos.Add(New Point(160, 108))
-                        Case 0 To 4, 12 To 15, 27 ' 1F
-                            aIconLoc(0) = "3708"
-                            aIconPos.Add(New Point(102, 97))
-                            aIconLoc(1) = "3700"
-                            aIconPos.Add(New Point(221, 104))
-                            aIconLoc(2) = "3704"
-                            aIconPos.Add(New Point(297, 97))
-                            aIconLoc(3) = "3707"
-                            aIconPos.Add(New Point(405, 55))
-                            aIconLoc(4) = "7920"
-                            aIconPos.Add(New Point(221, 124))
-                            aIconLoc(5) = "7917"
-                            aIconPos.Add(New Point(393, 118))
-                    End Select
-                Else
-                    Select Case iRoom
-                        Case 22, 24 To 26, 31 ' 4F
-                            aIconLoc(0) = "3718"
-                            aIconPos.Add(New Point(261, 169))
-                            aIconLoc(1) = "7918"
-                            aIconPos.Add(New Point(304, 91))
-                            aIconLoc(2) = "7920"
-                            aIconPos.Add(New Point(321, 73))
-                        Case 7 To 11, 16 To 21, 23, 29 ' 3F
-                            aIconLoc(0) = "3701"
-                            aIconPos.Add(New Point(156, 184))
-                            aIconLoc(1) = "5511"
-                            aIconPos.Add(New Point(161, 349))
-                            aIconLoc(2) = "3702"
-                            aIconPos.Add(New Point(314, 83))
-                            aIconLoc(3) = "3725"
-                            aIconPos.Add(New Point(392, 203))
-                            aIconLoc(4) = "3724"
-                            aIconPos.Add(New Point(437, 219))
-                            aIconLoc(5) = "3705"
-                            aIconPos.Add(New Point(428, 151))
-                            aIconLoc(6) = "5509"
-                            aIconPos.Add(New Point(380, 349))
-                            aIconLoc(7) = "1631"
-                            aIconPos.Add(New Point(261, 65))
-                            aIconLoc(8) = "7916"
-                            aIconPos.Add(New Point(148, 244))
-                        Case 5, 6, 28, 30 ' 2F
-                            aIconLoc(0) = "3706"
-                            aIconPos.Add(New Point(180, 124))
-                            aIconLoc(1) = "3712"
-                            aIconPos.Add(New Point(162, 157))
-                            aIconLoc(2) = "3728"
-                            aIconPos.Add(New Point(262, 178))
-                            aIconLoc(3) = "3703"
-                            aIconPos.Add(New Point(262, 117))
-                            aIconLoc(4) = "3715"
-                            aIconPos.Add(New Point(300, 83))
-                        Case 0 To 4, 12 To 15, 27 ' 1F
-                            aIconLoc(0) = "3730"
-                            aIconPos.Add(New Point(251, 204))
-                            aIconLoc(1) = "3731"
-                            aIconPos.Add(New Point(267, 204))
-                            aIconLoc(2) = "3726"
-                            aIconPos.Add(New Point(251, 220))
-                            aIconLoc(3) = "3727"
-                            aIconPos.Add(New Point(267, 220))
-                            aIconLoc(4) = "3708"
-                            aIconPos.Add(New Point(113, 114))
-                            aIconLoc(5) = "3700"
-                            aIconPos.Add(New Point(113, 151))
-                            aIconLoc(6) = "3729"
-                            aIconPos.Add(New Point(164, 209))
-                            aIconLoc(7) = "3704"
-                            aIconPos.Add(New Point(296, 96))
-                            aIconLoc(8) = "3707"
-                            aIconPos.Add(New Point(405, 42))
-                            aIconLoc(9) = "7917"
-                            aIconPos.Add(New Point(307, 133))
-                            aIconLoc(10) = "7919"
-                            aIconPos.Add(New Point(414, 64))
-                    End Select
-                End If
-            Case 7
-                If Not aMQ(7) Then
-                    Select Case iRoom
-                        Case 0 To 2, 4 ' B1
-                            aIconLoc(0) = "3801"
-                            aIconPos.Add(New Point(235, 115))
-                            aIconLoc(1) = "3807"
-                            aIconPos.Add(New Point(175, 144))
-                        Case 5 To 8 ' B2
-                            aIconLoc(0) = "3803"
-                            aIconPos.Add(New Point(382, 200))
-                            aIconLoc(1) = "3802"
-                            aIconPos.Add(New Point(399, 122))
-                        Case 9, 16, 22 ' B3
-                            aIconLoc(0) = "3812"
-                            aIconPos.Add(New Point(459, 265))
-                            aIconLoc(1) = "3822"
-                            aIconPos.Add(New Point(459, 281))
-                            aIconLoc(2) = "501"
-                            aIconPos.Add(New Point(269, 224))
-                            aIconLoc(3) = "7927"
-                            aIconPos.Add(New Point(475, 273))
-                            aIconLoc(4) = "7924"
-                            aIconPos.Add(New Point(253, 224))
-                            aIconLoc(5) = "7928"
-                            aIconPos.Add(New Point(404, 99))
-                            aIconLoc(6) = "7926"
-                            aIconPos.Add(New Point(81, 103))
-                        Case 3, 10 To 15, 17 To 21, 23 To 26 ' B4
-                            aIconLoc(0) = "3805"
-                            aIconPos.Add(New Point(220, 334))
-                            aIconLoc(1) = "3804"
-                            aIconPos.Add(New Point(250, 334))
-                            aIconLoc(2) = "3806"
-                            aIconPos.Add(New Point(205, 359))
-                            aIconLoc(3) = "3809"
-                            aIconPos.Add(New Point(324, 220))
-                            aIconLoc(4) = "501"
-                            aIconPos.Add(New Point(269, 224))
-                            aIconLoc(5) = "3821"
-                            aIconPos.Add(New Point(463, 157))
-                            aIconLoc(6) = "3808"
-                            aIconPos.Add(New Point(431, 110))
-                            aIconLoc(7) = "3820"
-                            aIconPos.Add(New Point(439, 126))
-                            aIconLoc(8) = "3810"
-                            aIconPos.Add(New Point(130, 53))
-                            aIconLoc(9) = "3811"
-                            aIconPos.Add(New Point(153, 53))
-                            aIconLoc(10) = "3813"
-                            aIconPos.Add(New Point(141, 163))
-                            aIconLoc(11) = "1731"
-                            aIconPos.Add(New Point(195, 213))
-                            aIconLoc(12) = "7925"
-                            aIconPos.Add(New Point(235, 359))
-                            aIconLoc(13) = "7924"
-                            aIconPos.Add(New Point(253, 224))
-                            aIconLoc(14) = "7928"
-                            aIconPos.Add(New Point(404, 99))
-                            aIconLoc(15) = "7926"
-                            aIconPos.Add(New Point(81, 103))
-                    End Select
-                Else
-                    Select Case iRoom
-                        Case 0 To 2, 4 ' B1
-                            aIconLoc(0) = "3801"
-                            aIconPos.Add(New Point(235, 115))
-                            aIconLoc(1) = "3807"
-                            aIconPos.Add(New Point(175, 144))
-                        Case 5 To 8 ' B2
-                            aIconLoc(0) = "3802"
-                            aIconPos.Add(New Point(400, 121))
-                            aIconLoc(1) = "3803"
-                            aIconPos.Add(New Point(382, 199))
-                        Case 9, 16, 22 ' B3
-                            aIconLoc(0) = "3814"
-                            aIconPos.Add(New Point(404, 99))
-                            aIconLoc(1) = "3812"
-                            aIconPos.Add(New Point(469, 265))
-                            aIconLoc(2) = "3822"
-                            aIconPos.Add(New Point(469, 281))
-                            aIconLoc(3) = "3816"
-                            aIconPos.Add(New Point(254, 224))
-                            aIconLoc(4) = "506"
-                            aIconPos.Add(New Point(78, 104))
-                        Case 3, 10 To 15, 17 To 21, 23 To 26 ' B4
-                            aIconLoc(0) = "3814"
-                            aIconPos.Add(New Point(404, 99))
-                            aIconLoc(1) = "3815"
-                            aIconPos.Add(New Point(321, 329))
-                            aIconLoc(2) = "3805"
-                            aIconPos.Add(New Point(220, 334))
-                            aIconLoc(3) = "3806"
-                            aIconPos.Add(New Point(205, 359))
-                            aIconLoc(4) = "3804"
-                            aIconPos.Add(New Point(250, 334))
-                            aIconLoc(5) = "3809"
-                            aIconPos.Add(New Point(324, 220))
-                            aIconLoc(6) = "3816"
-                            aIconPos.Add(New Point(254, 224))
-                            aIconLoc(7) = "3821"
-                            aIconPos.Add(New Point(466, 165))
-                            aIconLoc(8) = "3808"
-                            aIconPos.Add(New Point(431, 115))
-                            aIconLoc(9) = "3820"
-                            aIconPos.Add(New Point(439, 131))
-                            aIconLoc(10) = "3810"
-                            aIconPos.Add(New Point(129, 52))
-                            aIconLoc(11) = "3811"
-                            aIconPos.Add(New Point(153, 52))
-                            aIconLoc(12) = "506"
-                            aIconPos.Add(New Point(78, 104))
-                            aIconLoc(13) = "3813"
-                            aIconPos.Add(New Point(141, 163))
-                            aIconLoc(14) = "1731"
-                            aIconPos.Add(New Point(195, 213))
-                            aIconLoc(15) = "7925"
-                            aIconPos.Add(New Point(235, 359))
-                            aIconLoc(16) = "7924"
-                            aIconPos.Add(New Point(466, 149))
-                            aIconLoc(17) = "7927"
-                            aIconPos.Add(New Point(423, 99))
-                            aIconLoc(18) = "7928"
-                            aIconPos.Add(New Point(207, 122))
-                            aIconLoc(19) = "7926"
-                            aIconPos.Add(New Point(185, 190))
-                    End Select
-                End If
-            Case 8
-                If Not aMQ(8) Then
-                    Select Case iRoom
-                        Case 0 To 6 ' B1
-                            aIconLoc(0) = "3908"
-                            aIconPos.Add(New Point(261, 151))
-                            aIconLoc(1) = "3905"
-                            aIconPos.Add(New Point(359, 151))
-                            aIconLoc(2) = "3901"
-                            aIconPos.Add(New Point(269, 129))
-                            aIconLoc(3) = "3914"
-                            aIconPos.Add(New Point(351, 129))
-                            aIconLoc(4) = "3904"
-                            aIconPos.Add(New Point(192, 21))
-                            aIconLoc(5) = "601"
-                            aIconPos.Add(New Point(78, 106))
-                            aIconLoc(6) = "3903"
-                            aIconPos.Add(New Point(444, 196))
-                            aIconLoc(7) = "3920"
-                            aIconPos.Add(New Point(471, 196))
-                            aIconLoc(8) = "3910"
-                            aIconPos.Add(New Point(432, 70))
-                            aIconLoc(9) = "3912"
-                            aIconPos.Add(New Point(415, 100))
-                            aIconLoc(10) = "8000"
-                            aIconPos.Add(New Point(431, 100))
-                            aIconLoc(11) = "8002"
-                            aIconPos.Add(New Point(273, 55))
-                            aIconLoc(12) = "8001"
-                            aIconPos.Add(New Point(341, 53))
-                        Case 7, 8 ' B2
-                            aIconLoc(0) = "3902"
-                            aIconPos.Add(New Point(295, 143))
-                            aIconLoc(1) = "3916"
-                            aIconPos.Add(New Point(312, 194))
-                            aIconLoc(2) = "3909"
-                            aIconPos.Add(New Point(177, 96))
-                        Case 9 ' B3
-                            aIconLoc(0) = "3907"
-                            aIconPos.Add(New Point(386, 171))
-                    End Select
-                Else
-                    Select Case iRoom
-                        Case 0 To 6 ' B1
-                            aIconLoc(0) = "3903"
-                            aIconPos.Add(New Point(312, 97))
-                            aIconLoc(1) = "601"
-                            aIconPos.Add(New Point(340, 52))
-                            aIconLoc(2) = "3902"
-                            aIconPos.Add(New Point(444, 187))
-                            aIconLoc(3) = "602"
-                            aIconPos.Add(New Point(471, 169))
-                            aIconLoc(4) = "8001"
-                            aIconPos.Add(New Point(273, 66))
-                            aIconLoc(5) = "8002"
-                            aIconPos.Add(New Point(69, 84))
-                        Case 9 ' B3
-                            aIconLoc(0) = "3901"
-                            aIconPos.Add(New Point(387, 169))
-                            aIconLoc(1) = "8000"
-                            aIconPos.Add(New Point(222, 20))
-                    End Select
-                End If
-            Case 9 ' IC
-                If Not aMQ(9) Then
-                    aIconLoc(0) = "4000"
-                    aIconPos.Add(New Point(355, 26))
-                    aIconLoc(1) = "4001"
-                    aIconPos.Add(New Point(410, 237))
-                    aIconLoc(2) = "701"
-                    aIconPos.Add(New Point(404, 196))
-                    aIconLoc(3) = "4002"
-                    aIconPos.Add(New Point(178, 228))
-                    aIconLoc(4) = "6402"
-                    aIconPos.Add(New Point(194, 228))
-                    aIconLoc(5) = "8009"
-                    aIconPos.Add(New Point(279, 152))
-                    aIconLoc(6) = "8010"
-                    aIconPos.Add(New Point(420, 204))
-                    aIconLoc(7) = "8008"
-                    aIconPos.Add(New Point(198, 104))
-                Else ' 1F
-                    aIconLoc(0) = "4001"
-                    aIconPos.Add(New Point(411, 237))
-                    aIconLoc(1) = "4000"
-                    aIconPos.Add(New Point(355, 26))
-                    aIconLoc(2) = "701"
-                    aIconPos.Add(New Point(413, 45))
-                    aIconLoc(3) = "4002"
-                    aIconPos.Add(New Point(178, 228))
-                    aIconLoc(4) = "6402"
-                    aIconPos.Add(New Point(194, 228))
-                    aIconLoc(5) = "8009"
-                    aIconPos.Add(New Point(363, 66))
-                    aIconLoc(6) = "8010"
-                    aIconPos.Add(New Point(158, 126))
-                    aIconLoc(7) = "8008"
-                    aIconPos.Add(New Point(180, 35))
-                End If
-            Case 11 ' GTG
-                If Not aMQ(10) Then
-                    aIconLoc(0) = "4219"
-                    aIconPos.Add(New Point(252, 320))
-                    aIconLoc(1) = "4207"
-                    aIconPos.Add(New Point(289, 320))
-                    aIconLoc(2) = "4200"
-                    aIconPos.Add(New Point(134, 314))
-                    aIconLoc(3) = "4201"
-                    aIconPos.Add(New Point(401, 339))
-                    aIconLoc(4) = "4217"
-                    aIconPos.Add(New Point(163, 115))
-                    aIconLoc(5) = "4215"
-                    aIconPos.Add(New Point(133, 35))
-                    aIconLoc(6) = "4214"
-                    aIconPos.Add(New Point(149, 35))
-                    aIconLoc(7) = "4220"
-                    aIconPos.Add(New Point(149, 19))
-                    aIconLoc(8) = "4202"
-                    aIconPos.Add(New Point(133, 19))
-                    aIconLoc(9) = "4203"
-                    aIconPos.Add(New Point(278, 120))
-                    aIconLoc(10) = "4204"
-                    aIconPos.Add(New Point(271, 210))
-                    aIconLoc(11) = "4218"
-                    aIconPos.Add(New Point(399, 103))
-                    aIconLoc(12) = "4216"
-                    aIconPos.Add(New Point(399, 121))
-                    aIconLoc(13) = "4205"
-                    aIconPos.Add(New Point(291, 226))
-                    aIconLoc(14) = "4208"
-                    aIconPos.Add(New Point(303, 210))
-                    aIconLoc(15) = "801"
-                    aIconPos.Add(New Point(372, 224))
-                    aIconLoc(16) = "4213"
-                    aIconPos.Add(New Point(461, 220))
-                    aIconLoc(17) = "4211"
-                    aIconPos.Add(New Point(274, 247))
-                    aIconLoc(18) = "4206"
-                    aIconPos.Add(New Point(226, 223))
-                    aIconLoc(19) = "4210"
-                    aIconPos.Add(New Point(236, 187))
-                    aIconLoc(20) = "4209"
-                    aIconPos.Add(New Point(252, 187))
-                    aIconLoc(21) = "4212"
-                    aIconPos.Add(New Point(271, 226))
-                Else ' F1
-                    aIconLoc(0) = "4219"
-                    aIconPos.Add(New Point(252, 320))
-                    aIconLoc(1) = "4207"
-                    aIconPos.Add(New Point(289, 320))
-                    aIconLoc(2) = "4211"
-                    aIconPos.Add(New Point(274, 248))
-                    aIconLoc(3) = "4206"
-                    aIconPos.Add(New Point(226, 223))
-                    aIconLoc(4) = "4210"
-                    aIconPos.Add(New Point(236, 187))
-                    aIconLoc(5) = "4209"
-                    aIconPos.Add(New Point(252, 187))
-                    aIconLoc(6) = "4201"
-                    aIconPos.Add(New Point(401, 339))
-                    aIconLoc(7) = "4213"
-                    aIconPos.Add(New Point(461, 220))
-                    aIconLoc(8) = "4200"
-                    aIconPos.Add(New Point(134, 313))
-                    aIconLoc(9) = "4217"
-                    aIconPos.Add(New Point(141, 21))
-                    aIconLoc(10) = "4202"
-                    aIconPos.Add(New Point(162, 115))
-                    aIconLoc(11) = "4203"
-                    aIconPos.Add(New Point(270, 79))
-                    aIconLoc(12) = "4218"
-                    aIconPos.Add(New Point(398, 103))
-                    aIconLoc(13) = "4214"
-                    aIconPos.Add(New Point(398, 121))
-                    aIconLoc(14) = "4205"
-                    aIconPos.Add(New Point(291, 226))
-                    aIconLoc(15) = "4208"
-                    aIconPos.Add(New Point(304, 210))
-                    aIconLoc(16) = "4204"
-                    aIconPos.Add(New Point(280, 192))
-                End If
-            Case 10, 13 ' GAT & GAC
-                If Not aMQ(11) Then
-                    Select Case iRoom
-                        Case 0 ' Main Upper
-                            aIconLoc(0) = "4111"
-                            aIconPos.Add(New Point(270, 112))
-                        Case 1 ' Main Lower
-                            aIconLoc(0) = "8709"
-                            aIconPos.Add(New Point(292, 255))
-                            aIconLoc(1) = "8706"
-                            aIconPos.Add(New Point(278, 271))
-                            aIconLoc(2) = "8704"
-                            aIconPos.Add(New Point(262, 271))
-                            aIconLoc(3) = "8708"
-                            aIconPos.Add(New Point(248, 255))
-                        Case 2 ' Forest Trial
-                            aIconLoc(0) = "4309"
-                            aIconPos.Add(New Point(213, 111))
-                        Case 3 ' Water Trial
-                            aIconLoc(0) = "4307"
-                            aIconPos.Add(New Point(196, 200))
-                            aIconLoc(1) = "4306"
-                            aIconPos.Add(New Point(196, 245))
-                        Case 4 ' Shadow Trial
-                            aIconLoc(0) = "4308"
-                            aIconPos.Add(New Point(183, 292))
-                            aIconLoc(1) = "4305"
-                            aIconPos.Add(New Point(305, 173))
-                        Case 6 ' Light Trial
-                            aIconLoc(0) = "4312"
-                            aIconPos.Add(New Point(430, 217))
-                            aIconLoc(1) = "4311"
-                            aIconPos.Add(New Point(410, 221))
-                            aIconLoc(2) = "4313"
-                            aIconPos.Add(New Point(390, 217))
-                            aIconLoc(3) = "4314"
-                            aIconPos.Add(New Point(430, 181))
-                            aIconLoc(4) = "4310"
-                            aIconPos.Add(New Point(410, 177))
-                            aIconLoc(5) = "4315"
-                            aIconPos.Add(New Point(390, 181))
-                            aIconLoc(6) = "4316"
-                            aIconPos.Add(New Point(410, 199))
-                            aIconLoc(7) = "4317"
-                            aIconPos.Add(New Point(351, 191))
-                        Case 7 ' Spirit Trial
-                            aIconLoc(0) = "4318"
-                            aIconPos.Add(New Point(219, 140))
-                            aIconLoc(1) = "4320"
-                            aIconPos.Add(New Point(196, 182))
-                    End Select
-                Else
-                    Select Case iRoom
-                        Case 0 ' Main Upper
-                            aIconLoc(0) = "4111"
-                            aIconPos.Add(New Point(270, 112))
-                        Case 1 ' Main Lower
-                            aIconLoc(0) = "8709"
-                            aIconPos.Add(New Point(292, 255))
-                            aIconLoc(1) = "8706"
-                            aIconPos.Add(New Point(278, 271))
-                            aIconLoc(2) = "8704"
-                            aIconPos.Add(New Point(262, 271))
-                            aIconLoc(3) = "8708"
-                            aIconPos.Add(New Point(248, 255))
-                            aIconLoc(4) = "8701"
-                            aIconPos.Add(New Point(248, 239))
-                        Case 2 ' Forest Trial
-                            aIconLoc(0) = "4302"
-                            aIconPos.Add(New Point(257, 166))
-                            aIconLoc(1) = "4302"
-                            aIconPos.Add(New Point(304, 212))
-                            aIconLoc(2) = "901"
-                            aIconPos.Add(New Point(246, 145))
-                        Case 3 ' Water Trial
-                            aIconLoc(0) = "4301"
-                            aIconPos.Add(New Point(167, 189))
-                        Case 4 ' Shadow Trial
-                            aIconLoc(0) = "4300"
-                            aIconPos.Add(New Point(183, 292))
-                            aIconLoc(1) = "4305"
-                            aIconPos.Add(New Point(305, 173))
-                        Case 6 ' Light Trial
-                            aIconLoc(0) = "4304"
-                            aIconPos.Add(New Point(351, 191))
-                        Case 7 ' Spirit Trial
-                            aIconLoc(0) = "4310"
-                            aIconPos.Add(New Point(219, 140))
-                            aIconLoc(1) = "4320"
-                            aIconPos.Add(New Point(196, 182))
-                            aIconLoc(2) = "4309"
-                            aIconPos.Add(New Point(262, 202))
-                            aIconLoc(3) = "4308"
-                            aIconPos.Add(New Point(284, 214))
-                            aIconLoc(4) = "4307"
-                            aIconPos.Add(New Point(272, 236))
-                            aIconLoc(5) = "4306"
-                            aIconPos.Add(New Point(250, 224))
-                    End Select
-                End If
-            Case 27 To 29   ' MK Entrance
-                aIconLoc(0) = "8119"
-                aIconPos.Add(New Point(186, 101))
-            Case 30, 31 ' MK Back Alley
-                aIconLoc(0) = "7201"
-                aIconPos.Add(New Point(160, 337))
-                If My.Settings.setShop > 0 Then
-                    aIconLoc(1) = name2loc("Bombchu Shop: Lower-Left", "MK")
-                    aIconPos.Add(New Point(201, 393))
-                    aIconLoc(2) = name2loc("Bombchu Shop: Lower-Right", "MK")
-                    aIconPos.Add(New Point(217, 393))
-                    aIconLoc(3) = name2loc("Bombchu Shop: Upper-Left", "MK")
-                    aIconPos.Add(New Point(201, 377))
-                    aIconLoc(4) = name2loc("Bombchu Shop: Upper-Right", "MK")
-                    aIconPos.Add(New Point(217, 377))
-                End If
-            Case 32, 33 ' MK Young
-                aIconLoc(0) = "6829"
-                aIconPos.Add(New Point(187, 28))
-                aIconLoc(1) = "6801"
-                aIconPos.Add(New Point(100, 191))
-                aIconLoc(2) = "6802"
-                aIconPos.Add(New Point(100, 207))
-                aIconLoc(3) = "7201"
-                aIconPos.Add(New Point(369, 324))
-                aIconLoc(4) = "6811"
-                aIconPos.Add(New Point(134, 371))
-                If My.Settings.setShop > 0 Then
-                    aIconLoc(5) = name2loc("Potion Shop: Lower-Left", "MK")
-                    aIconPos.Add(New Point(458, 208))
-                    aIconLoc(6) = name2loc("Bazaar: Lower-Left", "MK")
-                    aIconPos.Add(New Point(458, 314))
-                    aIconLoc(7) = name2loc("Potion Shop: Lower-Right", "MK")
-                    aIconPos.Add(New Point(474, 208))
-                    aIconLoc(8) = name2loc("Bazaar: Lower-Right", "MK")
-                    aIconPos.Add(New Point(474, 314))
-                    aIconLoc(9) = name2loc("Potion Shop: Upper-Left", "MK")
-                    aIconPos.Add(New Point(458, 192))
-                    aIconLoc(10) = name2loc("Bazaar: Upper-Left", "MK")
-                    aIconPos.Add(New Point(458, 298))
-                    aIconLoc(11) = name2loc("Potion Shop: Upper-Right", "MK")
-                    aIconPos.Add(New Point(474, 192))
-                    aIconLoc(12) = name2loc("Bazaar: Upper-Right", "MK")
-                    aIconPos.Add(New Point(474, 298))
-                End If
-            Case 67 ' ToT
-                aIconLoc(0) = "6405"
-                aIconPos.Add(New Point(270, 115))
-                aIconLoc(1) = locSwap(12)
-                aIconPos.Add(New Point(270, 299))
-            Case 81 ' HF
-                aIconLoc(0) = "4600"
-                aIconPos.Add(New Point(274, 66))
-                aIconLoc(1) = "4602"
-                aIconPos.Add(New Point(295, 295))
-                aIconLoc(2) = "4603"
-                aIconPos.Add(New Point(224, 332))
-                aIconLoc(3) = "6827"
-                aIconPos.Add(New Point(208, 332))
-                aIconLoc(4) = "1901"
-                aIconPos.Add(New Point(204, 99))
-                aIconLoc(5) = "103"
-                aIconPos.Add(New Point(315, 66))
-                aIconLoc(6) = locSwap(11)
-                aIconPos.Add(New Point(299, 66))
-                aIconLoc(7) = "8016"
-                aIconPos.Add(New Point(132, 185))
-                aIconLoc(8) = "8017"
-                aIconPos.Add(New Point(352, 43))
-                aIconLoc(9) = "1925"
-                aIconPos.Add(New Point(148, 185))
-                aIconLoc(10) = "8803"
-                aIconPos.Add(New Point(208, 332))
-                ' Sell Bunny Hood
-                aIconLoc(11) = "6911"
-                aIconPos.Add(New Point(244, 137))
-                ' Big Poe Hunt
-                aIconLoc(12) = "124"
-                aIconPos.Add(New Point(307, 89))
-                aIconLoc(13) = "123"
-                aIconPos.Add(New Point(260, 141))
-                aIconLoc(14) = "122"
-                aIconPos.Add(New Point(193, 75))
-                aIconLoc(15) = "130"
-                aIconPos.Add(New Point(186, 180))
-                aIconLoc(16) = "131"
-                aIconPos.Add(New Point(179, 237))
-                aIconLoc(17) = "128"
-                aIconPos.Add(New Point(298, 274))
-                aIconLoc(18) = "129"
-                aIconPos.Add(New Point(311, 295))
-                aIconLoc(19) = "127"
-                aIconPos.Add(New Point(324, 213))
-                aIconLoc(20) = "126"
-                aIconPos.Add(New Point(336, 156))
-                aIconLoc(21) = "125"
-                aIconPos.Add(New Point(387, 80))
-            Case 82 ' KV
-                aIconLoc(0) = "4610"
-                aIconPos.Add(New Point(265, 225))
-                aIconLoc(1) = "4608"
-                aIconPos.Add(New Point(357, 171))
-                aIconLoc(2) = "6828"
-                aIconPos.Add(New Point(350, 324))
-                aIconLoc(3) = "6928"
-                aIconPos.Add(New Point(350, 340))
-                aIconLoc(4) = "6805"
-                aIconPos.Add(New Point(332, 198))
-                aIconLoc(5) = "1801"
-                aIconPos.Add(New Point(306, 345))
-                aIconLoc(6) = locSwap(18)
-                aIconPos.Add(New Point(315, 288))
-                aIconLoc(7) = "2001"
-                aIconPos.Add(New Point(412, 240))
-                aIconLoc(8) = "6411"
-                aIconPos.Add(New Point(428, 240))
-                aIconLoc(9) = locSwap(7)
-                aIconPos.Add(New Point(312, 244))
-                aIconLoc(10) = "8205"
-                aIconPos.Add(New Point(234, 241))
-                aIconLoc(11) = "8203"
-                aIconPos.Add(New Point(331, 288))
-                aIconLoc(12) = "8204"
-                aIconPos.Add(New Point(245, 303))
-                aIconLoc(13) = "8201"
-                aIconPos.Add(New Point(274, 120))
-                aIconLoc(14) = "8202"
-                aIconPos.Add(New Point(308, 181))
-                aIconLoc(15) = "8206"
-                aIconPos.Add(New Point(290, 345))
-                aIconLoc(16) = "1824"
-                aIconPos.Add(New Point(274, 345))
-                ' Sell Keaton Mask
-                aIconLoc(17) = "6908"
-                aIconPos.Add(New Point(290, 81))
-                If My.Settings.setShop > 0 Then
-                    aIconLoc(18) = name2loc("Bazaar: Lower-Left", "KV")
-                    aIconPos.Add(New Point(255, 152))
-                    aIconLoc(19) = name2loc("Potion Shop: Lower-Left", "KV")
-                    aIconPos.Add(New Point(321, 158))
-                    aIconLoc(20) = name2loc("Bazaar: Lower-Right", "KV")
-                    aIconPos.Add(New Point(271, 152))
-                    aIconLoc(21) = name2loc("Potion Shop: Lower-Right", "KV")
-                    aIconPos.Add(New Point(337, 158))
-                    aIconLoc(22) = name2loc("Bazaar: Upper-Left", "KV")
-                    aIconPos.Add(New Point(255, 136))
-                    aIconLoc(23) = name2loc("Potion Shop: Upper-Left", "KV")
-                    aIconPos.Add(New Point(321, 142))
-                    aIconLoc(24) = name2loc("Bazaar: Upper-Right", "KV")
-                    aIconPos.Add(New Point(271, 136))
-                    aIconLoc(25) = name2loc("Potion Shop: Upper-Right", "KV")
-                    aIconPos.Add(New Point(337, 142))
-                End If
-            Case 83 ' GY
-                aIconLoc(0) = locSwap(3)
-                aIconPos.Add(New Point(156, 203))
-                aIconLoc(1) = "4800"
-                aIconPos.Add(New Point(178, 214))
-                aIconLoc(2) = "2204"
-                aIconPos.Add(New Point(110, 160))
-                aIconLoc(3) = "4700"
-                aIconPos.Add(New Point(226, 231))
-                aIconLoc(4) = "4900"
-                aIconPos.Add(New Point(286, 201))
-                aIconLoc(5) = locSwap(10)
-                aIconPos.Add(New Point(286, 217))
-                aIconLoc(6) = "5000"
-                aIconPos.Add(New Point(171, 152))
-                aIconLoc(7) = "2007"
-                aIconPos.Add(New Point(155, 152))
-                aIconLoc(8) = "8200"
-                aIconPos.Add(New Point(139, 160))
-                aIconLoc(9) = "8027"
-                aIconPos.Add(New Point(226, 273))
-            Case 84 ' ZR
-                aIconLoc(0) = "2304"
-                aIconPos.Add(New Point(202, 111))
-                aIconLoc(1) = "4609"
-                aIconPos.Add(New Point(198, 211))
-                aIconLoc(2) = "2311"
-                aIconPos.Add(New Point(438, 78))
-                aIconLoc(3) = "2301"
-                aIconPos.Add(New Point(117, 179))
-                aIconLoc(4) = "8209"
-                aIconPos.Add(New Point(50, 238))
-                aIconLoc(5) = "8208"
-                aIconPos.Add(New Point(454, 82))
-                aIconLoc(6) = "8212"
-                aIconPos.Add(New Point(176, 216))
-                aIconLoc(7) = "8211"
-                aIconPos.Add(New Point(381, 85))
-                aIconLoc(8) = "8909"
-                aIconPos.Add(New Point(48, 187))
-                aIconLoc(9) = "8908"
-                aIconPos.Add(New Point(64, 187))
-                aIconLoc(10) = "6700"
-                aIconPos.Add(New Point(251, 107))
-            Case 85 ' KF
-                aIconLoc(0) = "4500"
-                aIconPos.Add(New Point(144, 160))
-                aIconLoc(1) = "4501"
-                aIconPos.Add(New Point(160, 160))
-                aIconLoc(2) = "4502"
-                aIconPos.Add(New Point(144, 176))
-                aIconLoc(3) = "4503"
-                aIconPos.Add(New Point(160, 176))
-                aIconLoc(4) = "5100"
-                aIconPos.Add(New Point(162, 345))
-                aIconLoc(5) = "4612"
-                aIconPos.Add(New Point(154, 133))
-                aIconLoc(6) = "8101"
-                aIconPos.Add(New Point(104, 229))
-                aIconLoc(7) = "8102"
-                aIconPos.Add(New Point(247, 243))
-                aIconLoc(8) = "10024"
-                aIconPos.Add(New Point(177, 274))
-                ' Moved the Soil Gold Skultulla down to combine it into the shopsanity check because it needs to be moved if shopsanity is on
-                aIconLoc(9) = "8100"
-                If My.Settings.setShop = 0 Then
-                    aIconPos.Add(New Point(249, 175))
-                Else
-                    aIconPos.Add(New Point(254, 178))
-                    aIconLoc(10) = name2loc("Shop: Lower-Left", "KF")
-                    aIconPos.Add(New Point(222, 186))
-                    aIconLoc(11) = name2loc("Shop: Lower-Right", "KF")
-                    aIconPos.Add(New Point(238, 186))
-                    aIconLoc(12) = name2loc("Shop: Upper-Left", "KF")
-                    aIconPos.Add(New Point(222, 170))
-                    aIconLoc(13) = name2loc("Shop: Upper-Right", "KF")
-                    aIconPos.Add(New Point(238, 170))
-                End If
-            Case 86 ' SFM
-                aIconLoc(0) = "4617"
-                aIconPos.Add(New Point(262, 345))
-                aIconLoc(1) = locSwap(8)
-                aIconPos.Add(New Point(265, 64))
-                aIconLoc(2) = "6400"
-                aIconPos.Add(New Point(281, 64))
-                aIconLoc(3) = "8111"
-                aIconPos.Add(New Point(301, 246))
-                aIconLoc(4) = "9009"
-                aIconPos.Add(New Point(281, 94))
-                aIconLoc(5) = "9008"
-                aIconPos.Add(New Point(297, 94))
-            Case 87 ' LH
-                aIconLoc(0) = "7316"
-                aIconPos.Add(New Point(334, 144))
-                aIconLoc(1) = "6512"
-                aIconPos.Add(New Point(350, 144))
-                aIconLoc(2) = "211"
-                aIconPos.Add(New Point(306, 196))
-                aIconLoc(3) = "6110"
-                aIconPos.Add(New Point(393, 169))
-                aIconLoc(4) = "6111"
-                aIconPos.Add(New Point(393, 185))
-                aIconLoc(5) = "2430"
-                aIconPos.Add(New Point(231, 172))
-                aIconLoc(6) = "6800"
-                aIconPos.Add(New Point(247, 172))
-                aIconLoc(7) = locSwap(4)
-                aIconPos.Add(New Point(361, 310))
-                aIconLoc(8) = "8216"
-                aIconPos.Add(New Point(239, 156))
-                aIconLoc(9) = "8218"
-                aIconPos.Add(New Point(231, 188))
-                aIconLoc(10) = "8217"
-                aIconPos.Add(New Point(377, 310))
-                aIconLoc(11) = "8219"
-                aIconPos.Add(New Point(247, 188))
-                aIconLoc(12) = "8220"
-                aIconPos.Add(New Point(315, 315))
-                aIconLoc(13) = "9101"
-                aIconPos.Add(New Point(208, 265))
-                aIconLoc(14) = "9104"
-                aIconPos.Add(New Point(224, 265))
-                aIconLoc(15) = "9106"
-                aIconPos.Add(New Point(240, 265))
-            Case 88 ' ZD
-                aIconLoc(0) = "5300"
-                aIconPos.Add(New Point(309, 207))
-                aIconLoc(1) = "6308"
-                aIconPos.Add(New Point(309, 191))
-                aIconLoc(2) = "7109"
-                aIconPos.Add(New Point(398, 150))
-                aIconLoc(3) = "8214"
-                aIconPos.Add(New Point(325, 207))
-                If My.Settings.setShop > 0 Then
-                    aIconLoc(4) = name2loc("Shop: Lower-Left", "ZD")
-                    aIconPos.Add(New Point(382, 321))
-                    aIconLoc(5) = name2loc("Shop: Lower-Right", "ZD")
-                    aIconPos.Add(New Point(398, 321))
-                    aIconLoc(6) = name2loc("Shop: Upper-Left", "ZD")
-                    aIconPos.Add(New Point(382, 305))
-                    aIconLoc(7) = name2loc("Shop: Upper-Right", "ZD")
-                    aIconPos.Add(New Point(398, 305))
-                End If
-            Case 89 ' ZF
-                aIconLoc(0) = locSwap(13)
-                aIconPos.Add(New Point(378, 380))
-                aIconLoc(1) = "2501"
-                aIconPos.Add(New Point(424, 172))
-                aIconLoc(2) = "2520"
-                aIconPos.Add(New Point(353, 172))
-                aIconLoc(3) = "8210"
-                aIconPos.Add(New Point(221, 311))
-                aIconLoc(4) = "8215"
-                aIconPos.Add(New Point(361, 338))
-                aIconLoc(5) = "8213"
-                aIconPos.Add(New Point(430, 302))
-            Case 90 ' GV
-                aIconLoc(0) = "2602"
-                aIconPos.Add(New Point(267, 259))
-                aIconLoc(1) = "2601"
-                aIconPos.Add(New Point(293, 24))
-                aIconLoc(2) = "5400"
-                aIconPos.Add(New Point(210, 218))
-                aIconLoc(3) = "8225"
-                aIconPos.Add(New Point(386, 157))
-                aIconLoc(4) = "8224"
-                aIconPos.Add(New Point(261, 177))
-                aIconLoc(5) = "8227"
-                aIconPos.Add(New Point(223, 105))
-                aIconLoc(6) = "8226"
-                aIconPos.Add(New Point(216, 195))
-                aIconLoc(7) = "2624"
-                aIconPos.Add(New Point(261, 193))
-                aIconLoc(8) = "9209"
-                aIconPos.Add(New Point(202, 124))
-                aIconLoc(9) = "9208"
-                aIconPos.Add(New Point(218, 124))
-            Case 91 ' LW
-                aIconLoc(0) = "7202"
-                aIconPos.Add(New Point(163, 391))
-                aIconLoc(1) = "4620"
-                aIconPos.Add(New Point(304, 149))
-                aIconLoc(2) = "7203"
-                aIconPos.Add(New Point(280, 47))
-                aIconLoc(3) = "6717"
-                aIconPos.Add(New Point(166, 332))
-                aIconLoc(4) = "6813"
-                aIconPos.Add(New Point(307, 210))
-                aIconLoc(5) = "6807"
-                aIconPos.Add(New Point(318, 239))
-                aIconLoc(6) = "6806"
-                aIconPos.Add(New Point(169, 217))
-                aIconLoc(7) = locSwap(16)
-                aIconPos.Add(New Point(227, 118))
-                aIconLoc(8) = locSwap(17)
-                aIconPos.Add(New Point(243, 118))
-                aIconLoc(9) = "8108"
-                aIconPos.Add(New Point(155, 278))
-                aIconLoc(10) = "8109"
-                aIconPos.Add(New Point(280, 98))
-                aIconLoc(11) = "8110"
-                aIconPos.Add(New Point(296, 98))
-                aIconLoc(12) = "9810"
-                aIconPos.Add(New Point(163, 391))
-                aIconLoc(13) = "9801"
-                aIconPos.Add(New Point(296, 114))
-                aIconLoc(14) = "9802"
-                aIconPos.Add(New Point(280, 114))
-                aIconLoc(15) = "9311"
-                aIconPos.Add(New Point(272, 47))
-                aIconLoc(16) = "9304"
-                aIconPos.Add(New Point(288, 47))
-                ' Sell Skull Mask
-                aIconLoc(17) = "6909"
-                aIconPos.Add(New Point(185, 217))
-            Case 92 ' DC
-                aIconLoc(0) = locSwap(15)
-                aIconPos.Add(New Point(321, 96))
-                aIconLoc(1) = "6628"
-                aIconPos.Add(New Point(124, 190))
-                aIconLoc(2) = "2713"
-                aIconPos.Add(New Point(154, 190))
-                aIconLoc(3) = "8308"
-                aIconPos.Add(New Point(117, 209))
-                aIconLoc(4) = "8310"
-                aIconPos.Add(New Point(283, 166))
-                aIconLoc(5) = "8311"
-                aIconPos.Add(New Point(219, 317))
-                aIconLoc(6) = "9709"
-                aIconPos.Add(New Point(196, 109))
-                aIconLoc(7) = "9708"
-                aIconPos.Add(New Point(212, 109))
-            Case 93, 12 ' GF + Thieves' Hideout
-                aIconLoc(0) = "5600"
-                aIconPos.Add(New Point(311, 177))
-                aIconLoc(1) = "7200"
-                aIconPos.Add(New Point(454, 289))
-                aIconLoc(2) = "6831"
-                aIconPos.Add(New Point(454, 305))
-                aIconLoc(3) = "6500"
-                aIconPos.Add(New Point(289, 192))
-                aIconLoc(4) = "6502"
-                aIconPos.Add(New Point(289, 260))
-                aIconLoc(5) = "6503"
-                aIconPos.Add(New Point(327, 184))
-                aIconLoc(6) = "6501"
-                aIconPos.Add(New Point(307, 193))
-                aIconLoc(7) = "3801"
-                aIconPos.Add(New Point(342, 206))
-                aIconLoc(8) = "8300"
-                aIconPos.Add(New Point(440, 52))
-            Case 94 ' HW
-                aIconLoc(0) = "5700"
-                aIconPos.Add(New Point(299, 79))
-                aIconLoc(1) = "8309"
-                aIconPos.Add(New Point(299, 95))
-                aIconLoc(2) = "11401"
-                aIconPos.Add(New Point(341, 362))
-            Case 95 ' HC
-                aIconLoc(0) = "6202"
-                aIconPos.Add(New Point(171, 287))
-                aIconLoc(1) = "6416"
-                aIconPos.Add(New Point(139, 87))
-                aIconLoc(2) = "6409"
-                aIconPos.Add(New Point(155, 87))
-                aIconLoc(3) = locSwap(14)
-                aIconPos.Add(New Point(334, 246))
-                aIconLoc(4) = "8117"
-                aIconPos.Add(New Point(223, 141))
-                aIconLoc(5) = "8118"
-                aIconPos.Add(New Point(155, 279))
-            Case 96 ' DMT
-                aIconLoc(0) = "5801"
-                aIconPos.Add(New Point(286, 239))
-                aIconLoc(1) = "2830"
-                aIconPos.Add(New Point(241, 198))
-                aIconLoc(2) = locSwap(2)
-                aIconPos.Add(New Point(294, 31))
-                aIconLoc(3) = "4623"
-                aIconPos.Add(New Point(288, 185))
-                aIconLoc(4) = locSwap(5)
-                aIconPos.Add(New Point(336, 41))
-                aIconLoc(5) = "8125"
-                aIconPos.Add(New Point(233, 214))
-                aIconLoc(6) = "8126"
-                aIconPos.Add(New Point(222, 303))
-                aIconLoc(7) = "8127"
-                aIconPos.Add(New Point(249, 214))
-                aIconLoc(8) = "8128"
-                aIconPos.Add(New Point(307, 116))
-                aIconLoc(9) = "1924"
-                aIconPos.Add(New Point(270, 233))
-            Case 97 'DMC
-                aIconLoc(0) = "4626"
-                aIconPos.Add(New Point(297, 344))
-                aIconLoc(1) = "2902"
-                aIconPos.Add(New Point(300, 280))
-                aIconLoc(2) = "2908"
-                aIconPos.Add(New Point(242, 198))
-                aIconLoc(3) = locSwap(1)
-                aIconPos.Add(New Point(187, 269))
-                aIconLoc(4) = "6401"
-                aIconPos.Add(New Point(237, 160))
-                aIconLoc(5) = "8131"
-                aIconPos.Add(New Point(216, 351))
-                aIconLoc(6) = "8124"
-                aIconPos.Add(New Point(285, 176))
-                aIconLoc(7) = "C01"
-                aIconPos.Add(New Point(234, 296))
-                aIconLoc(8) = "9401"
-                aIconPos.Add(New Point(141, 153))
-                aIconLoc(9) = "9404"
-                aIconPos.Add(New Point(157, 153))
-                aIconLoc(10) = "9406"
-                aIconPos.Add(New Point(173, 153))
-            Case 98 ' GC
-                aIconLoc(0) = "5900"
-                aIconPos.Add(New Point(102, 72))
-                aIconLoc(1) = "5902"
-                aIconPos.Add(New Point(118, 72))
-                aIconLoc(2) = "5901"
-                aIconPos.Add(New Point(134, 72))
-                aIconLoc(3) = "7014"
-                aIconPos.Add(New Point(257, 254))
-                aIconLoc(4) = "7025"
-                aIconPos.Add(New Point(273, 254))
-                aIconLoc(5) = "3031"
-                aIconPos.Add(New Point(266, 196))
-                aIconLoc(6) = locSwap(6)
-                aIconPos.Add(New Point(273, 58))
-                aIconLoc(7) = "3001"
-                aIconPos.Add(New Point(148, 345))
-                aIconLoc(8) = "8130"
-                aIconPos.Add(New Point(134, 56))
-                aIconLoc(9) = "8129"
-                aIconPos.Add(New Point(266, 212))
-                aIconLoc(10) = "9501"
-                aIconPos.Add(New Point(363, 69))
-                aIconLoc(11) = "9504"
-                aIconPos.Add(New Point(379, 69))
-                aIconLoc(12) = "9506"
-                aIconPos.Add(New Point(395, 69))
-                If My.Settings.setShop > 0 Then
-                    aIconLoc(13) = name2loc("Shop: Lower-Left", "GC")
-                    aIconPos.Add(New Point(228, 203))
-                    aIconLoc(14) = name2loc("Shop: Lower-Right", "GC")
-                    aIconPos.Add(New Point(244, 203))
-                    aIconLoc(15) = name2loc("Shop: Upper-Left", "GC")
-                    aIconPos.Add(New Point(228, 187))
-                    aIconLoc(16) = name2loc("Shop: Upper-Right", "GC")
-                    aIconPos.Add(New Point(244, 187))
-                End If
-            Case 99 ' LLR
-                aIconLoc(0) = "2101"
-                aIconPos.Add(New Point(164, 364))
-                aIconLoc(1) = "6818"
-                aIconPos.Add(New Point(340, 85))
-                aIconLoc(2) = locSwap(9)
-                aIconPos.Add(New Point(251, 229))
-                aIconLoc(3) = "6208"
-                aIconPos.Add(New Point(267, 229))
-                aIconLoc(4) = "8024"
-                aIconPos.Add(New Point(129, 315))
-                aIconLoc(5) = "8025"
-                aIconPos.Add(New Point(312, 289))
-                aIconLoc(6) = "8026"
-                aIconPos.Add(New Point(323, 106))
-                aIconLoc(7) = "8027"
-                aIconPos.Add(New Point(336, 131))
-                aIconLoc(8) = "10124"
-                aIconPos.Add(New Point(277, 103))
-                aIconLoc(9) = "10125"
-                aIconPos.Add(New Point(277, 87))
-                aIconLoc(10) = "2125"
-                aIconPos.Add(New Point(156, 380))
-                aIconLoc(11) = "2124"
-                aIconPos.Add(New Point(172, 380))
-                aIconLoc(12) = "6214"
-                aIconPos.Add(New Point(259, 245))
-                aIconLoc(13) = "9601"
-                aIconPos.Add(New Point(362, 354))
-                aIconLoc(14) = "9604"
-                aIconPos.Add(New Point(378, 354))
-                aIconLoc(15) = "9606"
-                aIconPos.Add(New Point(394, 354))
-            Case 100 ' OGC
-                aIconLoc(0) = locSwap(0)
-                aIconPos.Add(New Point(460, 165))
-                aIconLoc(1) = "8116"
-                aIconPos.Add(New Point(355, 168))
-        End Select
-
-        Dim key As New keyCheck
-        Dim fillColour As Color = Color.Lime
-        Dim shutupLambda As Integer = 0
-        Dim addCheck As Boolean = False
-        Dim prefix As String = String.Empty
-        Dim suffix As String = String.Empty
-
-        For i = 0 To aIconLoc.Length - 1
-            If aIconLoc(i) = String.Empty Then Exit For
-            If Not aIconLoc(i) = "0" Then
-                ' This shuts VB.NET up about the /!\ Warning about iteration variable in the lambda expression. It is dumb, I know.
-                shutupLambda = i
-
-                If iLastMinimap > 25 Then
-
-                    ' Checks normal keys
-                    For Each thisKey In aKeys.Where(Function(k As keyCheck) k.loc.Equals(aIconLoc(shutupLambda)))
-                        key = thisKey
-                    Next
-                Else
-                    Dim ii As Byte = CByte(iLastMinimap)
-                    Select Case ii
-                        Case 11
-                            ii = 10
-                        Case 10, 13
-                            ii = 11
-                    End Select
-                    For Each thiskey In aKeysDungeons(ii).Where(Function(k As keyCheck) k.loc.Equals(aIconLoc(shutupLambda)))
-                        key = thiskey
-                    Next
-                End If
-
-                addCheck = True
-                prefix = String.Empty
-                suffix = String.Empty
-                If key.gs Then
-                    prefix = "GS: "
-                    If My.Settings.setGSLoc >= 1 Then
-                        Select Case My.Settings.setSkulltula
-                            Case 0
-                                addCheck = False
-                            Case 1
-                                addCheck = True
-                            Case Else
-                                addCheck = CBool(IIf(goldSkulltulas < 50, True, False))
-                        End Select
-                    End If
-                ElseIf key.cow Then
-                    prefix = "Cow: "
-                    addCheck = My.Settings.setCow
-                ElseIf key.scrub Then
-                    prefix = "Scrub: "
-                    addCheck = My.Settings.setScrub
-                    'ElseIf key.shop Then
-                    'If My.Settings.setShop > 0 Then addCheck = True
-                End If
-
-                If My.Settings.setHideQuests And key.area = "QBPH" Then addCheck = False
-
-                With aIconPos(i)
-                    If (key.scan Or Mid(key.loc, 1, 3) = "650") And addCheck Then
-                        lRegions.Add(New Rectangle(.X, .Y, 15, 15))
-
-                        Graphics.FromImage(pbxMap.Image).DrawRectangle(Pens.Black, .X, .Y, 15, 15)
-                        Graphics.FromImage(pbxMap.Image).DrawRectangle(Pens.White, .X + 1, .Y + 1, 13, 13)
-
-                        If Not key.forced And Not key.checked Then
-                            fillColour = Color.Lime
-                            Select Case checkLogic(key.logic, key.zone)
-                                Case 0
-                                    fillColour = Color.Red
-                                Case 1
-                                    suffix = " (Y)"
-                                Case 2
-                                    suffix = " (A)"
-                            End Select
-                            Graphics.FromImage(pbxMap.Image).FillRectangle(New SolidBrush(fillColour), .X + 2, .Y + 2, 12, 12)
-                        End If
-                        aIconName(i) = prefix & key.name & suffix
-                    Else
-                        ' Have to create an unreachable location to at least populate the list to make it match up
-                        lRegions.Add(New Rectangle(-2, -2, 1, 1))
-                    End If
-                End With
-            End If
-        Next
-        If iLastMinimap = 94 Then
-            ' Slow down the slow scan, and speed up the fast scan
-            tmrAutoScan.Interval = 7500
-            tmrFastScan.Interval = 333
-            wastelandPOS()
-        Else
-            ' Return them to normal
-            tmrAutoScan.Interval = 5000
-            tmrFastScan.Interval = 1000
-        End If
-        'pbxMap.Invalidate()
-        'pbxMap.Update()
-    End Sub
-    Private Function exit2label(ByVal exitCode As String, ByRef reachMap As Byte) As String
-        exit2label = String.Empty
-        Select Case exitCode
-            Case "09C", "0BB", "0C1", "0C9", "209", "211", "266", "26A", "272", "286", "33C", "433", "437", "443", "447"
-                ' KF Main
-                exit2label = "KF"
-                reachMap = 0
-            Case "20D"
-                ' KF Trapped
-                exit2label = "KF"
-                reachMap = 0
-            Case "11E", "4D6", "4DA"
-                ' LW Front
-                exit2label = "LW Front"
-                reachMap = 2
-            Case "1A9"
-                ' LW Behind Mido
-                exit2label = "LW Back"
-                reachMap = 3
-            Case "4DE"
-                ' LW Bridge
-                exit2label = "LW Bridge"
-                reachMap = 4
-            Case "5E0"
-                ' LW Between Bridge (For Gift from Saria)
-                exit2label = "LW Bridge"
-                reachMap = 8
-            Case "0FC", "215", "600"
-                ' SFM Main
-                exit2label = "SFM"
-                reachMap = 5
-            Case "17D", "181", "185", "189", "18D", "1F9", "1FD", "27E", "311"
-                ' HF
-                exit2label = "HF"
-                reachMap = 7
-            Case "04F", "157", "2F9", "378", "42F", "5D0", "5D4"
-                ' LLR
-                exit2label = "LLR"
-                reachMap = 9
-            Case "033", "034", "035", "036", "26E", "26F", "270", "271", "276", "277", "278", "279"
-                ' MK Entrance
-                exit2label = "MK Entrance"
-                reachMap = 197
-            Case "063", "067", "07E", "0B1", "16D", "1CD", "1D1", "1D5", "25A", "25E", "262", "263", "29E", "29F", "2A2", "388",
-                    "3B8", "3BC", "3C0", "43B", "507", "528", "52C", "530"
-                ' MK
-                exit2label = "MK"
-                reachMap = 10
-            Case "29A", "29B", "29C", "29D"
-                ' MK Alley Back (left)
-                exit2label = "MK Back Alley"
-                reachMap = 198
-            Case "0AD", "0AE", "0AF", "0B0"
-                ' MK Alley Back (right)
-                exit2label = "MK Back Alley"
-                reachMap = 199
-            Case "171", "172", "472"
-                ' ToT Front
-                exit2label = "Outside ToT"
-                reachMap = 1
-            Case "053", "054", "5F4"
-                ' ToT
-                exit2label = "ToT"
-                reachMap = 200
-            Case "138", "23D", "340"
-                ' HC & OGC
-                If isAdult Then
-                    exit2label = "OGC"
-                    reachMap = 51
-                Else
-                    exit2label = "HC"
-                    reachMap = 13
-                End If
-            Case "07A", "296"
-                ' HC Castle Courtyard
-                exit2label = "Castle Courtyard"
-                reachMap = 13
-            Case "400", "5F0"
-                ' HC Zelda's Courtyard
-                exit2label = "Zelda's Courtyard"
-                reachMap = 13
-            Case "03B", "072", "0B7", "0DB", "195", "201", "2FD", "2A6", "345", "349", "34D", "351", "384", "39C", "3EC", "44B",
-                    "453", "463", "4EE", "4FF", "550", "5C8", "5DC"
-                ' KV Main
-                exit2label = "KV"
-                reachMap = 15
-            Case "554"
-                ' KV Rooftops
-                exit2label = "KV Roofs"
-                reachMap = 16
-            Case "191"
-                ' KV Behind Gate
-                exit2label = "KV"
-                reachMap = 17
-            Case "0E4", "30D", "355"
-                ' GY Main
-                exit2label = "GY"
-                reachMap = 18
-            Case "205", "568"
-                ' GY Upper
-                exit2label = "GY near Temple"
-                reachMap = 19
-            Case "13D", "1B9", "242"
-                ' DMT Lower
-                exit2label = "DMT Lower"
-                reachMap = 20
-            Case "1BD", "315", "45B"
-                ' DMT Upper 
-                exit2label = "DMT Upper"
-                reachMap = 21
-            Case "147"
-                ' DMC Upper Local
-                exit2label = "DMC Upper"
-                reachMap = 22
-            Case "246", "482", "4BE"
-                ' DMC Lower Nearby
-                exit2label = "DMC near GC"
-                reachMap = 24
-            Case "4F6"
-                ' DMC Central Local
-                exit2label = "DMC Warp"
-                reachMap = 27
-            Case "24A"
-                ' DMC near Temple
-                exit2label = "DMC near Temple"
-                reachMap = 28
-            Case "14D", "3FC"
-                ' GC Main
-                exit2label = "GC"
-                reachMap = 29
-            Case "4E2"
-                ' GC Shortcut
-                exit2label = "GC"
-                reachMap = 30
-            Case "1C1"
-                ' GC Darunia
-                exit2label = "GC Darunia"
-                reachMap = 31
-            Case "37C"
-                ' GC Shoppe
-                exit2label = "GC Shop"
-                reachMap = 32
-            Case "0EA"
-                ' ZR Front
-                exit2label = "ZR Front"
-                reachMap = 34
-            Case "199", "1DD"
-                ' ZR Main
-                exit2label = "ZR"
-                reachMap = 35
-            Case "19D"
-                ' ZR Behind Waterfall
-                exit2label = "ZR"
-                reachMap = 36
-            Case "108", "153", "328", "3C4"
-                ' ZD Main
-                exit2label = "ZD"
-                reachMap = 37
-            Case "1A1"
-                ' ZD Behind King
-                exit2label = "ZD Behind King"
-                reachMap = 38
-            Case "221", "225", "371", "394"
-                ' ZF Main
-                exit2label = "ZF"
-                reachMap = 40
-            Case "3D4"
-                ' ZF Ledge
-                exit2label = "ZF Ledge"
-                reachMap = 41
-            Case "043", "102", "219", "21D", "3CC", "560", "604"
-                ' LH Main
-                exit2label = "LH"
-                reachMap = 42
-            Case "309", "45F"
-                ' LH Fishing Ledge
-                exit2label = "LH"
-                reachMap = 43
-            Case "117"
-                ' GV Hyrule Side
-                exit2label = "GV Hyrule Side"
-                reachMap = 44
-            Case "22D", "3A0", "3D0"
-                ' GV Gerudo Side
-                exit2label = "GV Gerudo Side"
-                reachMap = 45
-            Case "129", "3A8"
-                ' GF Main
-                exit2label = "GF"
-                reachMap = 46
-            Case "3AC"
-                ' GF Behind Gate
-                exit2label = "GF Behind Gate"
-                reachMap = 47
-            Case "130"
-                ' HW Gerudo Side
-                exit2label = "HW Gerudo Side"
-                reachMap = 48
-            Case "365"
-                ' HW Colossus Side
-                exit2label = "HW Colossus Side"
-                reachMap = 49
-            Case "123", "1F1", "1E1", "57C", "588"
-                ' DC Main
-                exit2label = "DC"
-                reachMap = 50
-            Case "1E5"
-                ' DC Statue Hand Right
-                exit2label = "DC Statue Hand Right"
-                reachMap = 50
-            Case "1E9"
-                ' DC Statue Hand Left
-                exit2label = "DC Statue Hand left"
-                reachMap = 50
-            Case "4C2"
-                ' Schrodinger's Fairy Adult
-                exit2label = "OGC Fairy"
-                reachMap = 51
-            Case "578"
-                ' Schrodinger's Fairy Young
-                exit2label = "HC Fairy"
-                reachMap = 13
-            Case "000"
-                ' Deku Tree
-                exit2label = "Deku Tree"
-                reachMap = 60
-            Case "40F"
-                ' Queen Gohma
-                exit2label = "Queen Gohma"
-            Case "004"
-                ' Dodongo's Cavern
-                exit2label = "Dodongo's Cavern"
-                reachMap = 69
-            Case "40B"
-                ' King Dodongo
-                exit2label = "King Dodongo"
-            Case "028"
-                ' Jabu-Jabu's Belly
-                exit2label = "Jabu-Jabu's Belly"
-                reachMap = 79
-            Case "301"
-                ' Barinade
-                exit2label = "Barinade"
-            Case "169"
-                ' Forest Temple
-                exit2label = "Forest Temple"
-                reachMap = 88
-            Case "00C"
-                ' Phantom Ganon
-                exit2label = "Phantom Ganon"
-            Case "165"
-                ' Fire Temple
-                exit2label = "Fire Temple"
-                reachMap = 108
-            Case "305"
-                ' Volvagia
-                exit2label = "Volvagia"
-            Case "010"
-                ' Water Temple
-                exit2label = "Water Temple"
-                reachMap = 119
-            Case "417"
-                ' Morpha
-                exit2label = "Morpha"
-            Case "082", "3F0", "3F4"
-                ' Spirit Temple
-                exit2label = "Spirit Temple"
-                reachMap = 132
-            Case "08D"
-                ' Twinrova
-                exit2label = "Twinrova"
-            Case "037"
-                ' Shadow Temple
-                exit2label = "Shadow Temple"
-                reachMap = 150
-            Case "413"
-                ' Bongo Bongo
-                exit2label = "Bongo Bongo"
-            Case "098"
-                ' Bottom of the Well
-                exit2label = "BotW"
-                reachMap = 174
-            Case "088"
-                ' Ice Cavern
-                exit2label = "Ice Cavern"
-                reachMap = 178
-            Case "008"
-                ' Gerudo Training Ground
-                exit2label = "GTG"
-                reachMap = 179
-            Case "467", "534"
-                ' Ganon's Castle
-                exit2label = "Ganon's Castle"
-            Case "41B"
-                ' Ganon's Tower
-                exit2label = "Ganon's Tower"
-            Case "41F"
-                ' Ganondorf
-                exit2label = "Ganondorf"
-            Case Else
-                ' Unknown entry
-                exit2label = exitCode & "?"
-        End Select
-    End Function
-    Private Function zone2map(ByVal zone As Byte) As Byte
-        ' Converts zone into map array for ER usage. Default 255 as null
-        zone2map = 255
-
-        Select Case zone
-            Case 0, 1
-                zone2map = 10   ' KF
-            Case 2 To 4, 8
-                zone2map = 16   ' LW
-            Case 5, 6
-                zone2map = 11   ' SFM
-            Case 7
-                zone2map = 6    ' HF
-            Case 9
-                zone2map = 24   ' LLR
-            Case 197
-                zone2map = 0    ' MK Entrance
-            Case 10
-                If isAdult Then
-                    zone2map = 3    ' MK Adult
-                Else
-                    zone2map = 2    ' MK Young
-                End If
-            Case 198, 199
-                zone2map = 1    ' MK Back Alley
-            Case 11
-                zone2map = 4    ' Outside ToT
-            Case 12, 200
-                zone2map = 5    ' ToT
-            Case 13
-                zone2map = 20   ' HC
-            Case 15 To 17
-                zone2map = 7    ' KV
-            Case 18, 19
-                zone2map = 8    ' GY
-            Case 20, 21
-                zone2map = 21   ' DMT
-            Case 22 To 28
-                zone2map = 22   ' DMC
-            Case 29 To 33
-                zone2map = 23   ' GC
-            Case 34 To 36
-                zone2map = 9    ' ZR
-            Case 37 To 39
-                zone2map = 13   ' ZD
-            Case 40, 41
-                zone2map = 14   ' ZF
-            Case 42, 43
-                zone2map = 12   ' LH
-            Case 44, 45, 56, 57
-                zone2map = 15   ' GV
-            Case 46, 47
-                zone2map = 18   ' GF
-            Case 48, 49, 55
-                zone2map = 19   ' HW
-            Case 50, 54
-                zone2map = 17   ' DC
-            Case 51, 53
-                zone2map = 25   ' OGC
-            Case 60 To 68
-                zone2map = 26   ' Deku Tree
-            Case 69 To 78
-                zone2map = 27   ' Dodongo's Cavern
-            Case 79 To 87
-                zone2map = 28   ' Jabu-Jabu's Belly
-            Case 88 To 107
-                zone2map = 29   ' Forest Temple
-            Case 108 To 118
-                zone2map = 30   ' Fire Temple
-            Case 119 To 131
-                zone2map = 31   ' Water Temple
-            Case 132 To 149
-                zone2map = 32   ' Spirit Temple
-            Case 150 To 173
-                zone2map = 33   ' Shadow Temple
-            Case 174 To 177
-                zone2map = 34   ' Bottom of the Well
-            Case 178, 201 To 204
-                zone2map = 35   ' Ice Cavern
-            Case 179 To 192
-                zone2map = 36   ' Gerudo Training Ground
-            Case 193 To 196
-                zone2map = 37   ' Ganon's Castle and Tower
-        End Select
-    End Function
     ' Scan each of the chests data
     Private Sub readChestData()
         If emulator = String.Empty Then
@@ -4170,8 +734,7 @@ Public Class frmTrackerOfTime
                     Case "emuhawk", "rmg", "mupen64plus-gui", "retroarch - mupen64plus", "retroarch - parallel", "modloader64-gui"
                         ' SoH is separate from the others so they can test wasSoH in fixing the keys
                         emulator = "variousX64"
-                        If wasSoH Then redirectChecks(True)
-                        defaultArrLocations()
+                        If wasSoH Then firstRunSetup()
                         wasSoH = False
                     Case "soh"
                         emulator = "variousX64"
@@ -4583,6 +1146,43 @@ Public Class frmTrackerOfTime
         End If
     End Sub
 
+
+    Private Function checkBit(ByVal address As Integer, ByVal bit As Byte) As Boolean
+        checkBit = False
+        ' Reads word from memory
+        Dim read As String = Hex(goRead(address))
+
+        ' Fixes hex size
+        While read.Length < 8
+            read = "0" & read
+        End While
+
+        ' Grab only the hex digit we want
+        read = Mid(read, CInt(8 - Math.Floor(bit / 4)), 1)
+
+        Select Case (bit Mod 4)
+            Case 0
+                Select Case CInt("&H" & read)
+                    Case 1, 3, 5, 7, 9, 11, 13, 150
+                        Return True
+                End Select
+            Case 1
+                Select Case CInt("&H" & read)
+                    Case 2, 3, 6, 7, 10, 11, 14, 15
+                        Return True
+                End Select
+            Case 2
+                Select Case CInt("&H" & read)
+                    Case 4 To 7, 12 To 15
+                        Return True
+                End Select
+            Case 3
+                Select Case CInt("&H" & read)
+                    Case 8 To 15
+                        Return True
+                End Select
+        End Select
+    End Function
     Private Sub parseChestData(ByVal loc As Integer)
         Dim foundChests As Double = arrChests(loc)
         Dim compareTo As Double = 2147483648
@@ -4620,7 +1220,7 @@ Public Class frmTrackerOfTime
                 doCheck = True
             End If
 
-            For Each key In aKeys.Where(Function(k As keyCheck) k.loc.Equals(strI & strII))
+            For Each key In aKeysOverworld.Where(Function(k As keyCheck) k.loc.Equals(strI & strII))
                 With key
                     .checked = doCheck
                     Select Case .loc
@@ -4701,8 +1301,8 @@ Public Class frmTrackerOfTime
             aBoldLabels(i) = False
         Next
 
-        For i = 0 To aKeys.Length - 1
-            With aKeys(i)
+        For i = 0 To aKeysOverworld.Length - 1
+            With aKeysOverworld(i)
                 If .scan = True And Not .area = "EVENT" Then
                     countCheck = False
                     If .gs Then
@@ -4821,10 +1421,10 @@ Public Class frmTrackerOfTime
             For i = 0 To 23
                 If i >= 22 Then
                     ' 22, 23, 24, and 25 are Quests, add the quest title and grab the second part of the split
-                    If aoLabels(i).Text.Contains(":") Then outputLabel(i) = "Quest:" & aoLabels(i).Text.Split(CChar(":"))(1) & ": "
+                    If aoOverworldLabels(i).Text.Contains(":") Then outputLabel(i) = "Quest:" & aoOverworldLabels(i).Text.Split(CChar(":"))(1) & ": "
                 Else
                     ' All others, just use the first grab of the split
-                    If aoLabels(i).Text.Contains(":") Then outputLabel(i) = aoLabels(i).Text.Split(CChar(":"))(0) & ": "
+                    If aoOverworldLabels(i).Text.Contains(":") Then outputLabel(i) = aoOverworldLabels(i).Text.Split(CChar(":"))(0) & ": "
                 End If
 
                 outputLabel(i) = outputLabel(i) & aCheck(i).ToString & "/" & aTotal(i).ToString
@@ -5194,7 +1794,7 @@ Public Class frmTrackerOfTime
         emulator = String.Empty
     End Sub
 
-    Private Function goRead(ByVal offsetAddress As Integer, Optional bitType As Byte = 31) As Integer
+    Public Function goRead(ByVal offsetAddress As Integer, Optional bitType As Byte = 31) As Integer
         goRead = 0
         Select Case emulator
             Case String.Empty
@@ -5298,7 +1898,7 @@ Public Class frmTrackerOfTime
             If My.Settings.setNavi Then shutupNavi()
             checkMQs()
             ' Do not bother scanning the all the checks if we are focused on the ER panel
-            updateEverything()
+            updateSlow()
             readChestData()
             If Not keepRunning Then
                 stopScanning()
@@ -5310,7 +1910,7 @@ Public Class frmTrackerOfTime
         zeldazFails = 0
         keepRunning = True
         updateFast()
-        updateEverything()
+        updateSlow()
         readChestData()
         If Not keepRunning Then
             stopScanning()
@@ -5319,7 +1919,7 @@ Public Class frmTrackerOfTime
         getAge()
         checkMQs()
         updateFast()
-        updateEverything()
+        updateSlow()
         readChestData()
         If Not keepRunning Then
             stopScanning()
@@ -5462,7 +2062,7 @@ Public Class frmTrackerOfTime
         Next
         updateMQs()
     End Sub
-    Private Sub updateEverything()
+    Private Sub updateSlow()
         If checkZeldaz() = 2 And isLoadedGame() Then
             If isSoH Then getSoHRandoSettings()
             getRainbowBridge()
@@ -5484,7 +2084,7 @@ Public Class frmTrackerOfTime
 
     Private Sub updateFast()
         If checkZeldaz() = 2 And isLoadedGame() Then
-            getER()
+            iER = getER()
             updateItems()
             updateQuestItems()
             updateDungeonItems()
@@ -5492,13 +2092,13 @@ Public Class frmTrackerOfTime
         End If
     End Sub
 
-    Private Function checkLoc(ByVal cloc As String) As Boolean
+    Public Function checkLoc(ByVal cloc As String) As Boolean
         If firstRun Then Return False
         ' Checks for a specific key by location to see if it is checked
         checkLoc = False
 
         ' Checks normal keys
-        For Each key In aKeys.Where(Function(k As keyCheck) k.loc.Equals(cloc))
+        For Each key In aKeysOverworld.Where(Function(k As keyCheck) k.loc.Equals(cloc))
             Return key.checked
         Next
 
@@ -5520,21 +2120,12 @@ Public Class frmTrackerOfTime
             Next
         Else
             ' Checks normal keys
-            For Each key In aKeys.Where(Function(k As keyCheck) k.loc.Equals(loc))
+            For Each key In aKeysOverworld.Where(Function(k As keyCheck) k.loc.Equals(loc))
                 key.checked = checked
             Next
         End If
     End Sub
-    Private Function name2loc(ByVal keyName As String, ByVal keyArea As String) As String
-        name2loc = "0"
-        If firstRun Then Exit Function
-        ' Checks for a specific key by name to get the loc
 
-        ' Checks normal keys only because this is used only for shops
-        For Each key In aKeys.Where(Function(k As keyCheck) k.name.Equals(keyName))
-            If key.area = keyArea Then Return key.loc
-        Next
-    End Function
     Private Sub shutupNavi()
         ' With great power, comes little care for what others have to day. Shut up Navi's timed complaints.
 
@@ -5921,8 +2512,8 @@ Public Class frmTrackerOfTime
         ' If in compact mode, float checks to a readable location
         Dim floatChecks As New List(Of String)
         Dim doFloat As Boolean = False
-        For i = 0 To aKeys.Length - 1
-            With aKeys(i)
+        For i = 0 To aKeysOverworld.Length - 1
+            With aKeysOverworld(i)
                 ' Stop if an empty key
                 If .loc = String.Empty Then Exit For
                 If .area = area Then
@@ -6188,7 +2779,7 @@ Public Class frmTrackerOfTime
         Dim bLoc As Byte = 0
         Dim bVal As Byte = 0
         Dim strLoc As String = String.Empty
-        For Each key In aKeys
+        For Each key In aKeysOverworld
             With key
                 If IsNumeric(.loc) Then
                     strLoc = .loc
@@ -6221,7 +2812,6 @@ Public Class frmTrackerOfTime
     End Sub
 
     Private Sub reachAreas(ByVal area As Byte, ByVal asAdult As Boolean)
-
         ' Make sure the area is set to prevent branching from unreachable areas
         If asAdult Then
             If Not aReachA(area) Then Return
@@ -7611,6 +4201,7 @@ Public Class frmTrackerOfTime
                 If item("song of time") Or checkLoc("6427") Then addArea(12, asAdult)
         End Select
     End Sub
+
     Private Sub addArea(ByVal area As Byte, ByVal asAdult As Boolean)
         ' Depending on if as an adult or not, focus on the correct array
         Dim addArray() As Boolean
@@ -7625,6 +4216,7 @@ Public Class frmTrackerOfTime
         addArray(area) = True
         reachAreas(area, asAdult)
     End Sub
+
     Private Sub addAreaExit(ByVal area As Byte, ByVal ext As Byte, ByVal asAdult As Boolean)
         ' Depending on if as an adult or not, focus on the correct array
         Dim realArea As Byte = aExitMap(area)(ext)
@@ -8099,7 +4691,7 @@ Public Class frmTrackerOfTime
         End If
     End Function
 
-    Private Function checkLogic(ByVal logicKey As String, ByVal zone As Byte) As Byte ' Boolean
+    Public Function checkLogic(ByVal logicKey As String, ByVal zone As Byte) As Byte ' Boolean
         ' Checks the logic key to see if it is available. Start with false
         checkLogic = 0 ' TESTLOGIC False
         Dim canDoThis As Boolean = True
@@ -8605,35 +5197,35 @@ Public Class frmTrackerOfTime
         ' 01 KF Deku Tree
         ' 08 KF Between Bridges
 
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "4500"
             .area = "KF"
             .zone = 0
             .name = "Mido's House Upper Left Chest"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "4501"
             .area = "KF"
             .zone = 0
             .name = "Mido's House Upper Right Chest"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "4502"
             .area = "KF"
             .zone = 0
             .name = "Mido's House Lower Left Chest"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "4503"
             .area = "KF"
             .zone = 0
             .name = "Mido's House Lower Right Chest"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "5100"
             .area = "KF"
             .zone = 0
@@ -8641,7 +5233,7 @@ Public Class frmTrackerOfTime
             .logic = "Y"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "4612"
             .area = "KF"
             .zone = 0
@@ -8649,7 +5241,7 @@ Public Class frmTrackerOfTime
             .logic = "G02"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "8100"
             .area = "KF"
             .zone = 0
@@ -8658,7 +5250,7 @@ Public Class frmTrackerOfTime
             .logic = "YJG0D"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "8101"
             .area = "KF"
             .zone = 0
@@ -8667,7 +5259,7 @@ Public Class frmTrackerOfTime
             .logic = "YJN"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "8102"
             .area = "KF"
             .zone = 0
@@ -8676,7 +5268,7 @@ Public Class frmTrackerOfTime
             .logic = "ZNk"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "10024"
             .area = "KF"
             .zone = 0
@@ -8685,13 +5277,13 @@ Public Class frmTrackerOfTime
             .logic = "ZLL6214hLL7713"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "6220"
             .area = "EVENT"
             .name = "Mido Moved From Deku Path"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "6223"
             .area = "EVENT"
             .name = "Kid Moved From Exit to MF"
@@ -8704,7 +5296,7 @@ Public Class frmTrackerOfTime
         ' 03 LW Behind Mido
         ' 04 LW Bridge
 
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "7202"
             .area = "LW"
             .zone = 2
@@ -8712,7 +5304,7 @@ Public Class frmTrackerOfTime
             .logic = "YS"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "4620"
             .area = "LW"
             .zone = 2
@@ -8720,7 +5312,7 @@ Public Class frmTrackerOfTime
             .logic = "G00"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "7203"
             .area = "LW"
             .zone = 3
@@ -8728,7 +5320,7 @@ Public Class frmTrackerOfTime
             .logic = "YG00S.ZG00"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "6717"
             .area = "LW"
             .zone = 8
@@ -8736,7 +5328,7 @@ Public Class frmTrackerOfTime
             .logic = "YU.Z"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "6813"
             .area = "LW"
             .zone = 2
@@ -8744,7 +5336,7 @@ Public Class frmTrackerOfTime
             .logic = "Yg"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "6807"
             .area = "LW"
             .zone = 2
@@ -8752,7 +5344,7 @@ Public Class frmTrackerOfTime
             .logic = "Yh"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "6806"
             .area = "LW"
             .zone = 2
@@ -8760,7 +5352,7 @@ Public Class frmTrackerOfTime
             .logic = "YhLL7714"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = locSwap(16)
             .area = "LW"
             .zone = 3
@@ -8768,7 +5360,7 @@ Public Class frmTrackerOfTime
             .logic = "YLL6908.Yy5"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = locSwap(17)
             .area = "LW"
             .zone = 3
@@ -8776,7 +5368,7 @@ Public Class frmTrackerOfTime
             .logic = "YLL6911.YyB"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "8108"
             .area = "LW"
             .zone = 2
@@ -8785,7 +5377,7 @@ Public Class frmTrackerOfTime
             .logic = "YJG0D"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "8109"
             .area = "LW"
             .zone = 3
@@ -8794,7 +5386,7 @@ Public Class frmTrackerOfTime
             .logic = "YJG0D"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "8110"
             .area = "LW"
             .zone = 3
@@ -8803,7 +5395,7 @@ Public Class frmTrackerOfTime
             .logic = "ZNG30"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "9810"
             .area = "LW"
             .zone = 2
@@ -8812,7 +5404,7 @@ Public Class frmTrackerOfTime
             .logic = "YS"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "9801"
             .area = "LW"
             .zone = 3
@@ -8821,7 +5413,7 @@ Public Class frmTrackerOfTime
             .logic = "YS"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "9802"
             .area = "LW"
             .zone = 3
@@ -8830,7 +5422,7 @@ Public Class frmTrackerOfTime
             .logic = "YS"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "9311"
             .area = "LW"
             .zone = 3
@@ -8839,7 +5431,7 @@ Public Class frmTrackerOfTime
             .logic = "YG00S.ZG00"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "9304"
             .area = "LW"
             .zone = 3
@@ -8848,13 +5440,13 @@ Public Class frmTrackerOfTime
             .logic = "YG00S.ZG00"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "B0"
             .area = "EVENT"
             .name = "Beans Planted Near Theatre"
         End With
         inc(tK)
-        With aKeys(tK)
+        With aKeysOverworld(tK)
             .loc = "6226"
             .area = "EVENT"
             .name = "Play Saria's Song for Mido"
@@ -8866,7 +5458,7 @@ Public Class frmTrackerOfTime
         ' 05 SFM Main
         ' 06 SFM Temple Ledge
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "4617"
             .area = "SFM"
             .zone = 5
@@ -8874,7 +5466,7 @@ Public Class frmTrackerOfTime
             .logic = "ZG01.YG03xa.YG03xf.YG03xg.YG03xLL7416"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(8)
             .area = "SFM"
             .zone = 5
@@ -8882,7 +5474,7 @@ Public Class frmTrackerOfTime
             .logic = "YLL6416"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6400"
             .area = "SFM"
             .zone = 5
@@ -8890,7 +5482,7 @@ Public Class frmTrackerOfTime
             .logic = "Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8111"
             .area = "SFM"
             .zone = 5
@@ -8899,7 +5491,7 @@ Public Class frmTrackerOfTime
             .logic = "ZNk"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9009"
             .area = "SFM"
             .zone = 5
@@ -8908,7 +5500,7 @@ Public Class frmTrackerOfTime
             .logic = "YG02S.G02Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9008"
             .area = "SFM"
             .zone = 5
@@ -8922,7 +5514,7 @@ Public Class frmTrackerOfTime
         ' Set up keys for Hyrule Field
         ' 07 HF
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "4600"
             .area = "HF"
             .zone = 7
@@ -8930,7 +5522,7 @@ Public Class frmTrackerOfTime
             .logic = "G00"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "4602"
             .area = "HF"
             .zone = 7
@@ -8938,14 +5530,14 @@ Public Class frmTrackerOfTime
             .logic = "G00"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "4603"
             .area = "HF"
             .zone = 7
             .name = "Open Grotto Chest"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6827"
             .area = "HF"
             .zone = 7
@@ -8953,7 +5545,7 @@ Public Class frmTrackerOfTime
             .logic = "YG03xS.G01Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "1901"
             .area = "HF"
             .zone = 7
@@ -8961,7 +5553,7 @@ Public Class frmTrackerOfTime
             .logic = "ZG01LL7429.G01LL7610"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "103"
             .area = "HF"
             .zone = 7
@@ -8969,7 +5561,7 @@ Public Class frmTrackerOfTime
             .logic = "YLL7718LL7719LL7720"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(11)
             .area = "HF"
             .zone = 7
@@ -8977,7 +5569,7 @@ Public Class frmTrackerOfTime
             .logic = "YLL7718LL7719LL7720"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8016"
             .area = "HF"
             .zone = 7
@@ -8986,7 +5578,7 @@ Public Class frmTrackerOfTime
             .logic = "YG03xfo.ZrG24k"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8017"
             .area = "HF"
             .zone = 7
@@ -8995,7 +5587,7 @@ Public Class frmTrackerOfTime
             .logic = "YG01o.ZG01k"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "1925"
             .area = "HF"
             .zone = 7
@@ -9004,7 +5596,7 @@ Public Class frmTrackerOfTime
             .logic = "YG03xfhLL7713.ZrG24hLL7713"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8803"
             .area = "HF"
             .zone = 7
@@ -9018,7 +5610,7 @@ Public Class frmTrackerOfTime
         ' Set up keys for Lon Lon Ranch
         ' 09 LLR
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2101"
             .area = "LLR"
             .zone = 9
@@ -9026,7 +5618,7 @@ Public Class frmTrackerOfTime
             .logic = "Y"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6818"
             .area = "LLR"
             .zone = 9
@@ -9034,7 +5626,7 @@ Public Class frmTrackerOfTime
             .logic = "YLL6204h"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(9)
             .area = "LLR"
             .zone = 9
@@ -9042,7 +5634,7 @@ Public Class frmTrackerOfTime
             .logic = "YLL6204h"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6208"
             .area = "LLR"
             .zone = 9
@@ -9050,7 +5642,7 @@ Public Class frmTrackerOfTime
             .logic = "ZhLL7713"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8024"
             .area = "LLR"
             .zone = 9
@@ -9059,7 +5651,7 @@ Public Class frmTrackerOfTime
             .logic = "YNo"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8025"
             .area = "LLR"
             .zone = 9
@@ -9068,7 +5660,7 @@ Public Class frmTrackerOfTime
             .logic = "YN"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8026"
             .area = "LLR"
             .zone = 9
@@ -9077,7 +5669,7 @@ Public Class frmTrackerOfTime
             .logic = "YNo"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8027"
             .area = "LLR"
             .zone = 9
@@ -9086,7 +5678,7 @@ Public Class frmTrackerOfTime
             .logic = "Y"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "10124"
             .area = "LLR"
             .zone = 9
@@ -9095,7 +5687,7 @@ Public Class frmTrackerOfTime
             .logic = "hLL7713"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "10125"
             .area = "LLR"
             .zone = 9
@@ -9104,7 +5696,7 @@ Public Class frmTrackerOfTime
             .logic = "hLL7713"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2125"
             .area = "LLR"
             .zone = 9
@@ -9113,7 +5705,7 @@ Public Class frmTrackerOfTime
             .logic = "hLL7713"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2124"
             .area = "LLR"
             .zone = 9
@@ -9122,7 +5714,7 @@ Public Class frmTrackerOfTime
             .logic = "hLL7713"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6214"
             .area = "LLR"
             .zone = 9
@@ -9131,7 +5723,7 @@ Public Class frmTrackerOfTime
             .logic = "ZhLL7713"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9601"
             .area = "LLR"
             .zone = 9
@@ -9140,7 +5732,7 @@ Public Class frmTrackerOfTime
             .logic = "YS"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9604"
             .area = "LLR"
             .zone = 9
@@ -9149,7 +5741,7 @@ Public Class frmTrackerOfTime
             .logic = "YS"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9606"
             .area = "LLR"
             .zone = 9
@@ -9162,7 +5754,7 @@ Public Class frmTrackerOfTime
     Private Sub makeKeysMK(ByRef tk As Integer)
         ' Set up keys for the Market
         ' 10 ML
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6829"
             .area = "MK"
             .zone = 10
@@ -9170,7 +5762,7 @@ Public Class frmTrackerOfTime
             .logic = "Y"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6801"
             .area = "MK"
             .zone = 10
@@ -9178,7 +5770,7 @@ Public Class frmTrackerOfTime
             .logic = "YX"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6802"
             .area = "MK"
             .zone = 10
@@ -9186,7 +5778,7 @@ Public Class frmTrackerOfTime
             .logic = "YX"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7201"
             .area = "MK"
             .zone = 10
@@ -9194,7 +5786,7 @@ Public Class frmTrackerOfTime
             .logic = "YN"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6811"
             .area = "MK"
             .zone = 10
@@ -9202,7 +5794,7 @@ Public Class frmTrackerOfTime
             .logic = "YNT"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8119"
             .area = "MK"
             .zone = 10
@@ -9217,7 +5809,7 @@ Public Class frmTrackerOfTime
         ' 11 ToT Front
         ' 12 ToT Behind Door
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6405"
             .area = "TT"
             .zone = 11
@@ -9225,7 +5817,7 @@ Public Class frmTrackerOfTime
             .logic = "ZLL7700"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(12)
             .area = "TT"
             .zone = 11
@@ -9233,7 +5825,7 @@ Public Class frmTrackerOfTime
             .logic = "ZG22"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6427"
             .area = "EVENT"
             .name = "Opened Temple of Time"
@@ -9245,7 +5837,7 @@ Public Class frmTrackerOfTime
         ' 13 HC
         ' 54 HC Great Fairy Fountain
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6202"
             .area = "HC"
             .zone = 13
@@ -9253,7 +5845,7 @@ Public Class frmTrackerOfTime
             .logic = "Y"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6416"
             .area = "HC"
             .zone = 13
@@ -9261,7 +5853,7 @@ Public Class frmTrackerOfTime
             .logic = "Yy1.Yy2"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6409"
             .area = "HC"
             .zone = 13
@@ -9269,7 +5861,7 @@ Public Class frmTrackerOfTime
             .logic = "Yy1.Yy2"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(14)
             .area = "HC"
             .zone = 54
@@ -9277,7 +5869,7 @@ Public Class frmTrackerOfTime
             .logic = "hLL7712"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8117"
             .area = "HC"
             .zone = 13
@@ -9286,7 +5878,7 @@ Public Class frmTrackerOfTime
             .logic = "YG02o"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8118"
             .area = "HC"
             .zone = 13
@@ -9295,7 +5887,7 @@ Public Class frmTrackerOfTime
             .logic = "YJ"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6204"
             .area = "EVENT"
             .name = "Woke Talon"
@@ -9309,7 +5901,7 @@ Public Class frmTrackerOfTime
         ' 16 KV Rooftops
         ' 17 KV Behind Gate
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "4610"
             .area = "KV"
             .zone = 15
@@ -9317,14 +5909,14 @@ Public Class frmTrackerOfTime
             .logic = "YG03xa.YG03xf.YG03xLL7416.G01Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "4608"
             .area = "KV"
             .zone = 15
             .name = "Open Grotto Chest"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6828"
             .area = "KV"
             .zone = 15
@@ -9332,7 +5924,7 @@ Public Class frmTrackerOfTime
             .logic = "Y"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6928"
             .area = "KV"
             .zone = 15
@@ -9340,7 +5932,7 @@ Public Class frmTrackerOfTime
             .logic = "Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6805"
             .area = "KV"
             .zone = 15
@@ -9348,7 +5940,7 @@ Public Class frmTrackerOfTime
             .logic = "Zk"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "1801"
             .area = "KV"
             .zone = 15
@@ -9356,7 +5948,7 @@ Public Class frmTrackerOfTime
             .logic = "Y"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(18)
             .area = "KV"
             .zone = 15
@@ -9364,7 +5956,7 @@ Public Class frmTrackerOfTime
             .logic = "Zd"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2001"
             .area = "KV"
             .zone = 15
@@ -9372,7 +5964,7 @@ Public Class frmTrackerOfTime
             .logic = "Yo.ZhLL7716"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6411"
             .area = "KV"
             .zone = 15
@@ -9380,7 +5972,7 @@ Public Class frmTrackerOfTime
             .logic = "Zh"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(7)
             .area = "KV"
             .zone = 15
@@ -9388,7 +5980,7 @@ Public Class frmTrackerOfTime
             .logic = "ZLL7700LL7701LL7702"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8205"
             .area = "KV"
             .zone = 15
@@ -9397,7 +5989,7 @@ Public Class frmTrackerOfTime
             .logic = "YN"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8203"
             .area = "KV"
             .zone = 15
@@ -9406,7 +5998,7 @@ Public Class frmTrackerOfTime
             .logic = "YN"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8204"
             .area = "KV"
             .zone = 15
@@ -9415,7 +6007,7 @@ Public Class frmTrackerOfTime
             .logic = "YN"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8201"
             .area = "KV"
             .zone = 15
@@ -9424,7 +6016,7 @@ Public Class frmTrackerOfTime
             .logic = "YN"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8202"
             .area = "KV"
             .zone = 15
@@ -9433,7 +6025,7 @@ Public Class frmTrackerOfTime
             .logic = "YNg.YNj"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8206"
             .area = "KV"
             .zone = 16
@@ -9442,7 +6034,7 @@ Public Class frmTrackerOfTime
             .logic = "ZN"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "1824"
             .area = "KV"
             .zone = 15
@@ -9451,7 +6043,7 @@ Public Class frmTrackerOfTime
             .logic = "hLL7713"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "C02"
             .area = "EVENT"
             .name = "Drained Kakariko Well"
@@ -9463,7 +6055,7 @@ Public Class frmTrackerOfTime
         ' 18 GY Main
         ' 19 GY Upper
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(3)
             .area = "GY"
             .zone = 18
@@ -9471,7 +6063,7 @@ Public Class frmTrackerOfTime
             .logic = "YN"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "4800"
             .area = "GY"
             .zone = 18
@@ -9479,7 +6071,7 @@ Public Class frmTrackerOfTime
             .logic = "YN.Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2204"
             .area = "GY"
             .zone = 18
@@ -9487,7 +6079,7 @@ Public Class frmTrackerOfTime
             .logic = "ZG34.Zl"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "4700"
             .area = "GY"
             .zone = 18
@@ -9495,7 +6087,7 @@ Public Class frmTrackerOfTime
             .logic = "YNhLL7715.ZhLL7715"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "4900"
             .area = "GY"
             .zone = 18
@@ -9503,7 +6095,7 @@ Public Class frmTrackerOfTime
             .logic = "YhLL7712f.ZhLL7712G24"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(10)
             .area = "GY"
             .zone = 18
@@ -9511,7 +6103,7 @@ Public Class frmTrackerOfTime
             .logic = "YJhLL7712.ZhLL7712"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "5000"
             .area = "GY"
             .zone = 18
@@ -9519,7 +6111,7 @@ Public Class frmTrackerOfTime
             .logic = "Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2007"
             .area = "GY"
             .zone = 18
@@ -9527,7 +6119,7 @@ Public Class frmTrackerOfTime
             .logic = "Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8200"
             .area = "GY"
             .zone = 18
@@ -9536,7 +6128,7 @@ Public Class frmTrackerOfTime
             .logic = "YJG0D"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8207"
             .area = "GY"
             .zone = 18
@@ -9545,7 +6137,7 @@ Public Class frmTrackerOfTime
             .logic = "YNo"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "B4"
             .area = "EVENT"
             .name = "Beans Planted in Graveyard"
@@ -9557,7 +6149,7 @@ Public Class frmTrackerOfTime
         ' 20 DMT Lower
         ' 21 DMT Upper
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "5801"
             .area = "DMT"
             .zone = 20
@@ -9565,14 +6157,14 @@ Public Class frmTrackerOfTime
             .logic = "G00"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2830"
             .area = "DMT"
             .zone = 20
             .name = "Piece of Heart Above Cavern"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(2)
             .area = "DMT"
             .zone = 21
@@ -9580,7 +6172,7 @@ Public Class frmTrackerOfTime
             .logic = "G00hLL7712"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "4623"
             .area = "DMT"
             .zone = 20
@@ -9588,7 +6180,7 @@ Public Class frmTrackerOfTime
             .logic = "G02"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(5)
             .area = "DMT"
             .zone = 21
@@ -9596,7 +6188,7 @@ Public Class frmTrackerOfTime
             .logic = "Zz9.ZzA.ZzB"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8125"
             .area = "DMT"
             .zone = 20
@@ -9605,7 +6197,7 @@ Public Class frmTrackerOfTime
             .logic = "YxG0D.YJG0DV01"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8126"
             .area = "DMT"
             .zone = 20
@@ -9614,7 +6206,7 @@ Public Class frmTrackerOfTime
             .logic = "G00"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8127"
             .area = "DMT"
             .zone = 20
@@ -9623,7 +6215,7 @@ Public Class frmTrackerOfTime
             .logic = "Zr"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8128"
             .area = "DMT"
             .zone = 21
@@ -9632,7 +6224,7 @@ Public Class frmTrackerOfTime
             .logic = "Zr"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "1924"
             .area = "DMT"
             .zone = 21
@@ -9641,7 +6233,7 @@ Public Class frmTrackerOfTime
             .logic = "G00hLL7713"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "B2"
             .area = "EVENT"
             .name = "DMT Planted Beans"
@@ -9658,7 +6250,7 @@ Public Class frmTrackerOfTime
         ' 27 DMC Central Local
         ' 28 DMC Fire Temple Entrance
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "4626"
             .area = "DMC"
             .zone = 22
@@ -9666,14 +6258,14 @@ Public Class frmTrackerOfTime
             .logic = "G00"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2902"
             .area = "DMC"
             .zone = 22
             .name = "Wall Piece of Heart"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2908"
             .area = "DMC"
             .zone = 26
@@ -9681,7 +6273,7 @@ Public Class frmTrackerOfTime
             .logic = "ZG33.ZH"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(1)
             .area = "DMC"
             .zone = 24
@@ -9689,7 +6281,7 @@ Public Class frmTrackerOfTime
             .logic = "ZrhLL7712"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6401"
             .area = "DMC"
             .zone = 26
@@ -9697,7 +6289,7 @@ Public Class frmTrackerOfTime
             .logic = "Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8131"
             .area = "DMC"
             .zone = 22
@@ -9706,7 +6298,7 @@ Public Class frmTrackerOfTime
             .logic = "YJ"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8124"
             .area = "DMC"
             .zone = 27
@@ -9715,7 +6307,7 @@ Public Class frmTrackerOfTime
             .logic = "YJG0D"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "C01"
             .area = "DMC"
             .zone = 23
@@ -9724,7 +6316,7 @@ Public Class frmTrackerOfTime
             .logic = "YS"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9401"
             .area = "DMC"
             .zone = 26
@@ -9733,7 +6325,7 @@ Public Class frmTrackerOfTime
             .logic = "Zr"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9404"
             .area = "DMC"
             .zone = 26
@@ -9742,7 +6334,7 @@ Public Class frmTrackerOfTime
             .logic = "Zr"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9406"
             .area = "DMC"
             .zone = 26
@@ -9751,7 +6343,7 @@ Public Class frmTrackerOfTime
             .logic = "Zr"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "B3"
             .area = "EVENT"
             .name = "DMC Planted Beans"
@@ -9766,7 +6358,7 @@ Public Class frmTrackerOfTime
         ' 32 GC Shoppe
         ' 33 GC Grotto Platform
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "5900"
             .area = "GC"
             .zone = 29
@@ -9774,7 +6366,7 @@ Public Class frmTrackerOfTime
             .logic = "Zr.ZV02.ZHx"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "5902"
             .area = "GC"
             .zone = 29
@@ -9782,7 +6374,7 @@ Public Class frmTrackerOfTime
             .logic = "G00.ZV02"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "5901"
             .area = "GC"
             .zone = 29
@@ -9790,7 +6382,7 @@ Public Class frmTrackerOfTime
             .logic = "G00.ZV02"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7014"
             .area = "GC"
             .zone = 29
@@ -9798,7 +6390,7 @@ Public Class frmTrackerOfTime
             .logic = "Yx"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7025"
             .area = "GC"
             .zone = 29
@@ -9806,7 +6398,7 @@ Public Class frmTrackerOfTime
             .logic = "Zx.Zd.ZV01"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "3031"
             .area = "GC"
             .zone = 29
@@ -9814,7 +6406,7 @@ Public Class frmTrackerOfTime
             .logic = "Yfx.YfV01.YhLL7712x.YhLL7712V01"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(6)
             .area = "GC"
             .zone = 31
@@ -9822,7 +6414,7 @@ Public Class frmTrackerOfTime
             .logic = "YhLL7714"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "3001"
             .area = "GC"
             .zone = 29
@@ -9830,7 +6422,7 @@ Public Class frmTrackerOfTime
             .logic = "ZV21G00.ZV21V01"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8130"
             .area = "GC"
             .zone = 29
@@ -9839,7 +6431,7 @@ Public Class frmTrackerOfTime
             .logic = "Yx"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8129"
             .area = "GC"
             .zone = 29
@@ -9848,7 +6440,7 @@ Public Class frmTrackerOfTime
             .logic = "Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9501"
             .area = "GC"
             .zone = 33
@@ -9857,7 +6449,7 @@ Public Class frmTrackerOfTime
             .logic = "Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9504"
             .area = "GC"
             .zone = 33
@@ -9866,7 +6458,7 @@ Public Class frmTrackerOfTime
             .logic = "Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9506"
             .area = "GC"
             .zone = 33
@@ -9875,37 +6467,37 @@ Public Class frmTrackerOfTime
             .logic = "Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "11501"
             .area = "EVENT"
             .name = "Young Shoppe Opened"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "11508"
             .area = "EVENT"
             .name = "Shortcut Rock 1"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "11511"
             .area = "EVENT"
             .name = "Shortcut Rock 2"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "11512"
             .area = "EVENT"
             .name = "Shortcut Rock 3"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "11527"
             .area = "EVENT"
             .name = "Darunia's Door Opened"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "11528"
             .area = "EVENT"
             .name = "Torches Lit"
@@ -9918,7 +6510,7 @@ Public Class frmTrackerOfTime
         ' 35 ZR Main
         ' 36 ZR Behind Waterfall
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2304"
             .area = "ZR"
             .zone = 35
@@ -9926,14 +6518,14 @@ Public Class frmTrackerOfTime
             .logic = "Y.ZLL7430"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "4609"
             .area = "ZR"
             .zone = 35
             .name = "Open Grotto Chest"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2311"
             .area = "ZR"
             .zone = 35
@@ -9941,7 +6533,7 @@ Public Class frmTrackerOfTime
             .logic = "Y.ZLL7430"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2301"
             .area = "ZR"
             .zone = 35
@@ -9950,7 +6542,7 @@ Public Class frmTrackerOfTime
             .scan = False
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8209"
             .area = "ZR"
             .zone = 34
@@ -9959,7 +6551,7 @@ Public Class frmTrackerOfTime
             .logic = "YJ"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8208"
             .area = "ZR"
             .zone = 35
@@ -9968,7 +6560,7 @@ Public Class frmTrackerOfTime
             .logic = "YJ"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8212"
             .area = "ZR"
             .zone = 35
@@ -9977,7 +6569,7 @@ Public Class frmTrackerOfTime
             .logic = "Zk"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8211"
             .area = "ZR"
             .zone = 35
@@ -9986,7 +6578,7 @@ Public Class frmTrackerOfTime
             .logic = "Zk"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8909"
             .area = "ZR"
             .zone = 35
@@ -9995,7 +6587,7 @@ Public Class frmTrackerOfTime
             .logic = "YG02S.G02Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8908"
             .area = "ZR"
             .zone = 35
@@ -10004,19 +6596,19 @@ Public Class frmTrackerOfTime
             .logic = "YG02S.G02Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "11603"
             .area = "EVENT"
             .name = "Front Rock 1"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "11608"
             .area = "EVENT"
             .name = "Front Rock 2"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "11609"
             .area = "EVENT"
             .name = "Front Rock 3"
@@ -10029,7 +6621,7 @@ Public Class frmTrackerOfTime
         ' 38 ZD Behind King
         ' 39 ZD Shoppe
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "5300"
             .area = "ZD"
             .zone = 37
@@ -10037,7 +6629,7 @@ Public Class frmTrackerOfTime
             .logic = "Ya"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6308"
             .area = "ZD"
             .zone = 37
@@ -10045,7 +6637,7 @@ Public Class frmTrackerOfTime
             .logic = "Y"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7109"
             .area = "ZD"
             .zone = 37
@@ -10053,7 +6645,7 @@ Public Class frmTrackerOfTime
             .logic = "ZG17"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8214"
             .area = "ZD"
             .zone = 37
@@ -10062,7 +6654,7 @@ Public Class frmTrackerOfTime
             .logic = "ZNk.ZNd.ZNM"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6303"
             .area = "EVENT"
             .name = "Delivered Ruto's Letter"
@@ -10074,7 +6666,7 @@ Public Class frmTrackerOfTime
         ' 40 ZF Main
         ' 41 ZF Ice Cavern Ledge
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(13)
             .area = "ZF"
             .zone = 40
@@ -10082,7 +6674,7 @@ Public Class frmTrackerOfTime
             .logic = "xhLL7712"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2501"
             .area = "ZF"
             .zone = 40
@@ -10090,7 +6682,7 @@ Public Class frmTrackerOfTime
             .logic = "Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2520"
             .area = "ZF"
             .zone = 40
@@ -10098,7 +6690,7 @@ Public Class frmTrackerOfTime
             .logic = "ZG0ALL7429"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8210"
             .area = "ZF"
             .zone = 40
@@ -10107,7 +6699,7 @@ Public Class frmTrackerOfTime
             .logic = "YNo"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8215"
             .area = "ZF"
             .zone = 40
@@ -10116,7 +6708,7 @@ Public Class frmTrackerOfTime
             .logic = "Y"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8213"
             .area = "ZF"
             .zone = 40
@@ -10131,7 +6723,7 @@ Public Class frmTrackerOfTime
         ' 43 LH Fishing Ledge
 
         ' Set up keys for Lake Hylia
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7316"
             .area = "LH"
             .zone = 42
@@ -10139,7 +6731,7 @@ Public Class frmTrackerOfTime
             .logic = "Yh"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6512"
             .area = "LH"
             .zone = 42
@@ -10147,7 +6739,7 @@ Public Class frmTrackerOfTime
             .logic = "ZhLL7316"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "211"
             .area = "LH"
             .zone = 42
@@ -10155,7 +6747,7 @@ Public Class frmTrackerOfTime
             .logic = "YV11"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6110"
             .area = "LH"
             .zone = 43
@@ -10163,7 +6755,7 @@ Public Class frmTrackerOfTime
             .logic = "Y"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6111"
             .area = "LH"
             .zone = 43
@@ -10171,7 +6763,7 @@ Public Class frmTrackerOfTime
             .logic = "Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2430"
             .area = "LH"
             .zone = 42
@@ -10179,7 +6771,7 @@ Public Class frmTrackerOfTime
             .logic = "YZG35.ZkhLL6512"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6800"
             .area = "LH"
             .zone = 42
@@ -10187,7 +6779,7 @@ Public Class frmTrackerOfTime
             .logic = "ZV12"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(4)
             .area = "LH"
             .zone = 42
@@ -10195,7 +6787,7 @@ Public Class frmTrackerOfTime
             .logic = "ZdlhLL6512.ZdG16"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8216"
             .area = "LH"
             .zone = 42
@@ -10204,7 +6796,7 @@ Public Class frmTrackerOfTime
             .logic = "YJG0D"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8218"
             .area = "LH"
             .zone = 42
@@ -10213,7 +6805,7 @@ Public Class frmTrackerOfTime
             .logic = "Yo"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8217"
             .area = "LH"
             .zone = 42
@@ -10222,7 +6814,7 @@ Public Class frmTrackerOfTime
             .logic = "YJ"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8219"
             .area = "LH"
             .zone = 42
@@ -10231,7 +6823,7 @@ Public Class frmTrackerOfTime
             .logic = "ZLL7429k"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8220"
             .area = "LH"
             .zone = 42
@@ -10240,7 +6832,7 @@ Public Class frmTrackerOfTime
             .logic = "Zl"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9101"
             .area = "LH"
             .zone = 42
@@ -10249,7 +6841,7 @@ Public Class frmTrackerOfTime
             .logic = "YS.Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9104"
             .area = "LH"
             .zone = 42
@@ -10258,7 +6850,7 @@ Public Class frmTrackerOfTime
             .logic = "YS.Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9106"
             .area = "LH"
             .zone = 42
@@ -10267,19 +6859,19 @@ Public Class frmTrackerOfTime
             .logic = "YS.Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "231"
             .area = "EVENT"
             .name = "Open Water Temple"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "C04"
             .area = "EVENT"
             .name = "Lake Restored"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "202"
             .area = "EVENT"
             .name = "Lake Hylia Bean Planted"
@@ -10293,21 +6885,21 @@ Public Class frmTrackerOfTime
         ' 56 GV Upper Stream
         ' 57 GV Crate Ledge
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2602"
             .area = "GV"
             .zone = 57
             .name = "Crate Piece of Heart"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2601"
             .area = "GV"
             .zone = 56
             .name = "Waterfall Piece of Heart"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "5400"
             .area = "GV"
             .zone = 45
@@ -10315,7 +6907,7 @@ Public Class frmTrackerOfTime
             .logic = "Zr"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8225"
             .area = "GV"
             .zone = 44
@@ -10324,7 +6916,7 @@ Public Class frmTrackerOfTime
             .logic = "Yo"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8224"
             .area = "GV"
             .zone = 56
@@ -10333,7 +6925,7 @@ Public Class frmTrackerOfTime
             .logic = "YJG0D"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8227"
             .area = "GV"
             .zone = 45
@@ -10342,7 +6934,7 @@ Public Class frmTrackerOfTime
             .logic = "ZNk"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8226"
             .area = "GV"
             .zone = 45
@@ -10351,7 +6943,7 @@ Public Class frmTrackerOfTime
             .logic = "ZNk"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2624"
             .area = "GV"
             .zone = 56
@@ -10360,7 +6952,7 @@ Public Class frmTrackerOfTime
             .logic = "YhLL7713"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9209"
             .area = "GV"
             .name = "Storms Grotto Front"
@@ -10369,7 +6961,7 @@ Public Class frmTrackerOfTime
             .logic = "ZG02"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9208"
             .area = "GV"
             .zone = 45
@@ -10384,7 +6976,7 @@ Public Class frmTrackerOfTime
         ' 46 GF Main
         ' 47 GF Behind Gate
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "5600"
             .area = "GF"
             .zone = 46
@@ -10392,7 +6984,7 @@ Public Class frmTrackerOfTime
             .logic = "Zl.ZLL7430.ZkhLL6512"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "CARD"
             .area = "GF"
             .zone = 46
@@ -10400,7 +6992,7 @@ Public Class frmTrackerOfTime
             .logic = "Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7200"
             .area = "GF"
             .zone = 46
@@ -10408,7 +7000,7 @@ Public Class frmTrackerOfTime
             .logic = "ZhLL7713LL6208LL7722"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6831"
             .area = "GF"
             .zone = 46
@@ -10416,7 +7008,7 @@ Public Class frmTrackerOfTime
             .logic = "ZhLL7713LL6208LL7722"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6500"
             .area = "GF"
             .zone = 46
@@ -10425,7 +7017,7 @@ Public Class frmTrackerOfTime
             .logic = "Z.LL7416"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6502"
             .area = "GF"
             .zone = 46
@@ -10434,7 +7026,7 @@ Public Class frmTrackerOfTime
             .logic = "Z.LL7416"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6503"
             .area = "GF"
             .zone = 46
@@ -10443,7 +7035,7 @@ Public Class frmTrackerOfTime
             .logic = "ZLL7722.Zd.Zk.ZLL7430.LL7416LL7722"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6501"
             .area = "GF"
             .zone = 46
@@ -10452,7 +7044,7 @@ Public Class frmTrackerOfTime
             .logic = "Z.LL7416"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8301"
             .area = "GF"
             .zone = 46
@@ -10461,7 +7053,7 @@ Public Class frmTrackerOfTime
             .logic = "ZNd.ZNk.ZNLL7430.ZNLL7722"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8300"
             .area = "GF"
             .zone = 46
@@ -10470,7 +7062,7 @@ Public Class frmTrackerOfTime
             .logic = "ZNLL7722k"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "C00"
             .area = "EVENT"
             .name = "Opened Haunted Wasteland Gate"
@@ -10483,7 +7075,7 @@ Public Class frmTrackerOfTime
         ' 49 HW Colossus Side
         ' 55 HW Main
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "5700"
             .area = "HW"
             .zone = 55
@@ -10491,7 +7083,7 @@ Public Class frmTrackerOfTime
             .logic = "Yf.ZG24"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8309"
             .area = "HW"
             .zone = 55
@@ -10500,7 +7092,7 @@ Public Class frmTrackerOfTime
             .logic = "Yo.Zk"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "11401"
             .area = "HW"
             .zone = 55
@@ -10514,7 +7106,7 @@ Public Class frmTrackerOfTime
         ' Set up keys for the Desert Colossus
         ' 50 DC
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(15)
             .area = "DC"
             .zone = 50
@@ -10522,14 +7114,14 @@ Public Class frmTrackerOfTime
             .logic = "xhLL7712"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6628"
             .area = "DC"
             .zone = 50
             .name = "Song from Shiek"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "2713"
             .area = "DC"
             .zone = 50
@@ -10537,7 +7129,7 @@ Public Class frmTrackerOfTime
             .logic = "ZG31"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8308"
             .area = "DC"
             .zone = 50
@@ -10546,7 +7138,7 @@ Public Class frmTrackerOfTime
             .logic = "YJG0D"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8310"
             .area = "DC"
             .zone = 50
@@ -10555,7 +7147,7 @@ Public Class frmTrackerOfTime
             .logic = "ZG31"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8311"
             .area = "DC"
             .zone = 50
@@ -10564,7 +7156,7 @@ Public Class frmTrackerOfTime
             .logic = "Zk"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9709"
             .area = "DC"
             .zone = 50
@@ -10573,7 +7165,7 @@ Public Class frmTrackerOfTime
             .logic = "ZV02"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "9708"
             .area = "DC"
             .zone = 50
@@ -10582,7 +7174,7 @@ Public Class frmTrackerOfTime
             .logic = "ZV02"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "B1"
             .area = "EVENT"
             .name = "Desert Colossus Bean Planted"
@@ -10594,7 +7186,7 @@ Public Class frmTrackerOfTime
         ' 51 OGC
         ' 53 OGC Great Fairy Fountain
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = locSwap(0)
             .area = "OGC"
             .zone = 53
@@ -10602,7 +7194,7 @@ Public Class frmTrackerOfTime
             .logic = "hLL7712"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "8116"
             .area = "OGC"
             .zone = 51
@@ -10611,7 +7203,7 @@ Public Class frmTrackerOfTime
             .logic = "Z"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6429"
             .area = "EVENT"
             .name = "Rainbow Bridge"
@@ -10621,70 +7213,70 @@ Public Class frmTrackerOfTime
     Private Sub makeKeysQBPH(ByRef tk As Integer)
         ' Set up keys for Quest: Big Poe Hunt
         ' 57 Big Poe Hunt
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "124"
             .area = "QBPH"
             .zone = 59
             .name = "#1: Near Castle Gate"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "123"
             .area = "QBPH"
             .zone = 59
             .name = "#2: Near Lon Lon Ranch"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "122"
             .area = "QBPH"
             .zone = 59
             .name = "#3: West of Castle"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "130"
             .area = "QBPH"
             .zone = 59
             .name = "#4: Between Gerudo Valley and Ranch"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "131"
             .area = "QBPH"
             .zone = 59
             .name = "#5: Near Gerudo Valley"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "128"
             .area = "QBPH"
             .zone = 59
             .name = "#6: Southeast Field Near Path"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "129"
             .area = "QBPH"
             .zone = 59
             .name = "#7: Southeast Field Near Grotto"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "127"
             .area = "QBPH"
             .zone = 59
             .name = "#8: Between Kokiri Forest and Ranch"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "126"
             .area = "QBPH"
             .zone = 59
             .name = "#9: Wall East of Lon Lon Ranch"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "125"
             .area = "QBPH"
             .zone = 59
@@ -10696,7 +7288,7 @@ Public Class frmTrackerOfTime
         ' Set up keys for Quest: Frogs
         ' 58 Frogs
 
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6706"
             .area = "QF"
             .zone = 58
@@ -10704,7 +7296,7 @@ Public Class frmTrackerOfTime
             .logic = "LL7717"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6705"
             .area = "QF"
             .zone = 58
@@ -10712,7 +7304,7 @@ Public Class frmTrackerOfTime
             .logic = "LL7716"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6704"
             .area = "QF"
             .zone = 58
@@ -10720,7 +7312,7 @@ Public Class frmTrackerOfTime
             .logic = "LL7714"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6703"
             .area = "QF"
             .zone = 58
@@ -10728,7 +7320,7 @@ Public Class frmTrackerOfTime
             .logic = "LL7715"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6702"
             .area = "QF"
             .zone = 58
@@ -10736,7 +7328,7 @@ Public Class frmTrackerOfTime
             .logic = "LL7713"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6701"
             .area = "QF"
             .zone = 58
@@ -10744,7 +7336,7 @@ Public Class frmTrackerOfTime
             .logic = "LL7712"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6700"
             .area = "QF"
             .zone = 58
@@ -10756,7 +7348,7 @@ Public Class frmTrackerOfTime
     Private Sub makeKeysQGS(ByRef tk As Integer)
         ' Set up keys for Quest: Gold Skulltula Rewards
         ' 15 KV Main
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6710"
             .area = "QGS"
             .zone = 15
@@ -10764,7 +7356,7 @@ Public Class frmTrackerOfTime
             .logic = "K1"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6711"
             .area = "QGS"
             .zone = 15
@@ -10772,7 +7364,7 @@ Public Class frmTrackerOfTime
             .logic = "K2"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6712"
             .area = "QGS"
             .zone = 15
@@ -10780,7 +7372,7 @@ Public Class frmTrackerOfTime
             .logic = "K3"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6713"
             .area = "QGS"
             .zone = 15
@@ -10788,7 +7380,7 @@ Public Class frmTrackerOfTime
             .logic = "K4"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6714"
             .area = "QGS"
             .zone = 15
@@ -10799,7 +7391,7 @@ Public Class frmTrackerOfTime
     End Sub
     Private Sub makeKeysQM(ByRef tk As Integer)
         ' Set up keys for the Quest: Masks
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "C05"
             .area = "QM"
             .zone = 15
@@ -10807,7 +7399,7 @@ Public Class frmTrackerOfTime
             .logic = "Yy3"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6908"
             .area = "QM"
             .zone = 10
@@ -10815,7 +7407,7 @@ Public Class frmTrackerOfTime
             .logic = "YLLLC05Q0015"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6909"
             .area = "QM"
             .zone = 10
@@ -10823,7 +7415,7 @@ Public Class frmTrackerOfTime
             .logic = "YLL6908hLL7714Q0002"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6910"
             .area = "QM"
             .zone = 10
@@ -10831,7 +7423,7 @@ Public Class frmTrackerOfTime
             .logic = "YLL6909Q0018"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "6911"
             .area = "QM"
             .zone = 10
@@ -10842,295 +7434,295 @@ Public Class frmTrackerOfTime
     End Sub
     Private Sub makeKeysInventory(ByRef tk As Integer)
         ' Set up keys for the inventory
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7416"
             .area = "INV"
             .name = "Kokiri Sword"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7417"
             .area = "INV"
             .name = "Master Sword"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7418"
             .area = "INV"
             .name = "Biggoron's Sword"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7419"
             .area = "INV"
             .name = "Broken Knife"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7420"
             .area = "INV"
             .name = "Deku Shield"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7421"
             .area = "INV"
             .name = "Hylian Shield"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7422"
             .area = "INV"
             .name = "Mirror Shield"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7424"
             .area = "INV"
             .name = "Kokiri Tunic"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7425"
             .area = "INV"
             .name = "Goron Tunic"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7426"
             .area = "INV"
             .name = "Zora Tunic"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7428"
             .area = "INV"
             .name = "Kokiri Boots"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7429"
             .area = "INV"
             .name = "Iron Boots"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7430"
             .area = "INV"
             .name = "Hover Boots"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7508"
             .area = "INV"
             .name = "Biggoron or Knife"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7600"
             .area = "INV"
             .name = "Quiver 1"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7601"
             .area = "INV"
             .name = "Quiver 2"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7603"
             .area = "INV"
             .name = "Bomb Bag 1"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7604"
             .area = "INV"
             .name = "Bomb Bag 2"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7606"
             .area = "INV"
             .name = "Gauntlet 1"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7607"
             .area = "INV"
             .name = "Gauntlet 2"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7609"
             .area = "INV"
             .name = "Scale 1"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7610"
             .area = "INV"
             .name = "Scale 2"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7612"
             .area = "INV"
             .name = "Wallet 1"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7613"
             .area = "INV"
             .name = "Wallet 2"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7614"
             .area = "INV"
             .name = "Bullet Bag 1"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7615"
             .area = "INV"
             .name = "Bullet Bag 2"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7700"
             .area = "INV"
             .name = "Forest Medallion"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7701"
             .area = "INV"
             .name = "Fire Medallion"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7702"
             .area = "INV"
             .name = "Water Medallion"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7703"
             .area = "INV"
             .name = "Spirit Medallion"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7704"
             .area = "INV"
             .name = "Shadow Medallion"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7705"
             .area = "INV"
             .name = "Light Medallion"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7706"
             .area = "INV"
             .name = "Minuet of Forest"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7707"
             .area = "INV"
             .name = "Bolero of Fire"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7708"
             .area = "INV"
             .name = "Serenade of Water"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7709"
             .area = "INV"
             .name = "Requiem of Spirit"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7710"
             .area = "INV"
             .name = "Nocturne of Shadow"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7711"
             .area = "INV"
             .name = "Prelude of Light"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7712"
             .area = "INV"
             .name = "Zelda's Lullaby"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7713"
             .area = "INV"
             .name = "Epona's Song"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7714"
             .area = "INV"
             .name = "Saria's Song"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7715"
             .area = "INV"
             .name = "Sun's Song"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7716"
             .area = "INV"
             .name = "Song of Time"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7717"
             .area = "INV"
             .name = "Song of Storms"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7718"
             .area = "INV"
             .name = "Kokiri Emerald"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7719"
             .area = "INV"
             .name = "Goron Ruby"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7720"
             .area = "INV"
             .name = "Zora Sapphire"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7721"
             .area = "INV"
             .name = "Stone of Agony"
         End With
         inc(tk)
-        With aKeys(tk)
+        With aKeysOverworld(tk)
             .loc = "7722"
             .area = "INV"
             .name = "Gerudo's Membership Card"
@@ -11144,7 +7736,7 @@ Public Class frmTrackerOfTime
                 generateShoppeKeys(4)
                 ' For Archipelago, once we have a full shopsanity key set, disable the unneccessary ones
                 For i = keyCount - 31 To keyCount
-                    With aKeys(i)
+                    With aKeysOverworld(i)
                         If .name.Contains(": Upper-Right") Then .scan = CBool(IIf(My.Settings.setShop >= 4, True, False))
                         If .name.Contains(": Upper-Left") Then .scan = CBool(IIf(My.Settings.setShop >= 3, True, False))
                         If .name.Contains(": Lower-Right") Then .scan = CBool(IIf(My.Settings.setShop >= 2, True, False))
@@ -11189,10 +7781,10 @@ Public Class frmTrackerOfTime
         For i = 0 To 31
 
             ' Start with resetting the key
-            aKeys(startKey + i) = New keyCheck
+            aKeysOverworld(startKey + i) = New keyCheck
 
             If i < (items * 8) Then
-                With aKeys(startKey + i)
+                With aKeysOverworld(startKey + i)
                     ' = 24 - (math.floor(i /8)*4)
                     workKey = ((3 - Math.Floor(i / 8)) * 8 + (i Mod 8)).ToString
                     fixHex(workKey, 2)
@@ -15319,7 +11911,7 @@ Public Class frmTrackerOfTime
         ' Small sub for shorthand increments
         value = value + amount
     End Sub
-    Private Sub fixHex(ByRef hex As String, Optional digits As Byte = 8)
+    Public Sub fixHex(ByRef hex As String, Optional digits As Byte = 8)
         ' Small sub for fixing hex digits
         If hex.Length > digits Then
             hex = Mid(hex, hex.Length - digits + 1)
@@ -15339,7 +11931,7 @@ Public Class frmTrackerOfTime
         If checkLoc("6500") And checkLoc("6501") And checkLoc("6502") And checkLoc("6503") Then allFound = True
 
         ' Find the key for the Membership Card and make it the allFound
-        For Each key In aKeys
+        For Each key In aKeysOverworld
             With key
                 Select Case .loc
                     Case "CARD"
@@ -15628,9 +12220,9 @@ Public Class frmTrackerOfTime
         End If
 
         ' Clear all the keys
-        For i = 0 To aKeys.Length - 1
-            aKeys(i) = New keyCheck
-            aKeys(i).scan = True
+        For i = 0 To aKeysOverworld.Length - 1
+            aKeysOverworld(i) = New keyCheck
+            aKeysOverworld(i).scan = True
         Next
 
         setupKeys()
@@ -16693,7 +13285,7 @@ Public Class frmTrackerOfTime
     Private Sub changeScrubs()
         ' Step through each entry in aKeys and search for the 3 Scrubs
         Dim foundScrubs As Integer = 0
-        For Each key In aKeys
+        For Each key In aKeysOverworld
             Select Case key.loc
                 ' The 3 .loc codes for the 3 Scrubs
                 Case "6827", "7202", "7203"
@@ -16707,7 +13299,7 @@ Public Class frmTrackerOfTime
     End Sub
     Private Sub changeSalesmans()
         ' Change shuffled salesmans to be scannable or not scannable, depending on the setting
-        For Each key In aKeys
+        For Each key In aKeysOverworld
             With key
                 ' Magic Bean Salesman
                 If .loc = "2301" Then .scan = My.Settings.setBeans
@@ -17096,7 +13688,7 @@ Public Class frmTrackerOfTime
 
         If Not Mid(area, 1, 3) = "DUN" Then
             ' Start with the non-dungeon checks
-            For Each key In aKeys.Where(Function(k As keyCheck) k.name.Equals(name))
+            For Each key In aKeysOverworld.Where(Function(k As keyCheck) k.name.Equals(name))
                 With key
                     If .area = area Then
                         .forced = Not .forced
@@ -17147,7 +13739,7 @@ Public Class frmTrackerOfTime
                 End Select
             End If
 
-            For Each key In aKeys.Where(Function(k As keyCheck) k.name.Equals(name))
+            For Each key In aKeysOverworld.Where(Function(k As keyCheck) k.name.Equals(name))
                 With key
                     If .area = area Or .area = area2 Or .area = area3 Then
                         Select Case setAs
@@ -17203,7 +13795,7 @@ Public Class frmTrackerOfTime
         rtbOutputLeft.Clear()
         rtbOutputRight.Clear()
         lastRoomScan = 0
-        populateLocations()
+        clearSettings()
     End Sub
     Private Sub ExitScanToolStripMenuItem_Click(sender As Object, e As EventArgs)
         Me.Close()
@@ -17922,27 +14514,6 @@ Public Class frmTrackerOfTime
         ' Rainbow Bridge Condition Count
         rainbowBridge(1) = CByte(goRead(aAddresses(5), 1))
     End Sub
-    Private Sub getER()
-        'If isSoH Then Exit Sub ' soh 3.0.0 has no entrance rando
-
-        iER = 0
-        ' Overworld ER check
-        If Not aAddresses(18) = 0 Then
-            If goRead(aAddresses(18), 1) = 1 Then incB(iER)
-        End If
-        ' Dungeon ER check
-        If Not aAddresses(19) = 0 Then
-            If goRead(aAddresses(19), 1) = 1 Then incB(iER, 2)
-        End If
-        If Not iER = iOldER Then
-            ' If a change in ER is detected (basically first scan), clear the appropriate exits
-            If iER Mod 2 = 1 Then clearArrayExitsOverworld()
-            If iER > 1 Then clearArrayExitsDungeons()
-            iOldER = iER
-        End If
-        'iER = 3 ' Debug REMOVE
-        scanER()
-    End Sub
     Private Sub pnlSettings_Paint(sender As Object, e As PaintEventArgs) Handles pnlSettings.Paint
         updateSettingsPanel()
     End Sub
@@ -18229,311 +14800,6 @@ Public Class frmTrackerOfTime
         justTheTip.SetToolTip(pbxMap, aIconName(reg))
         tmrTT.Enabled = False
         tmrTT.Enabled = True
-    End Sub
-
-    Private Sub overrideExits()
-        Dim writeExits(7) As Integer
-        For i = 0 To 6
-            writeExits(i) = 0
-        Next
-        Select Case iLastMinimap
-            Case 0
-                writeExits(0) = &H377116     ' KF from Deku Tree
-                If aMQ(0) Then writeExits(0) = &H3770B6 ' MQ version
-            Case 1
-                writeExits(0) = &H36FABE     ' DMT from Dodongo's Cavern
-                If aMQ(1) Then writeExits(0) = &H36FA8E ' MQ version
-            Case 2
-                writeExits(0) = &H36F43E     ' ZD from Jabu-Jabu's Belly
-                If aMQ(2) Then writeExits(0) = &H36F40E ' MQ version
-            Case 3
-                writeExits(0) = &H36ED12     ' SFM from Forest Temple
-                If aMQ(3) Then writeExits(0) = &H36ED12 ' MQ version
-            Case 4
-                writeExits(0) = &H36A3C6     ' DMC from Fire Temple
-                If aMQ(4) Then writeExits(0) = &H36A376 ' MQ version
-            Case 5
-                writeExits(0) = &H36EF76     ' LH from Water Temple
-                If aMQ(5) Then writeExits(0) = &H36EF36 ' MQ version
-            Case 6
-                writeExits(0) = &H36B1EA     ' DC from Spirit Temple
-                If aMQ(6) Then writeExits(0) = &H36B12A ' MQ version
-            Case 7
-                writeExits(0) = &H36C86E     ' GY from Shadow Temple
-                If aMQ(7) Then writeExits(0) = &H36C86E ' MQ version
-            Case 8
-                writeExits(0) = &H3785C6     ' KV from BotW
-                If aMQ(8) Then writeExits(0) = &H378566 ' MQ version
-            Case 9
-                writeExits(0) = &H37352E     ' ZF from Ice Cavern
-                If aMQ(9) Then writeExits(0) = &H37344E ' MQ version
-            Case 10
-                writeExits(0) = &H374348     ' Ganon's Castle from Ganon's Tower
-            Case 11
-                writeExits(0) = &H373686     ' GF from GTG
-                If aMQ(10) Then writeExits(0) = &H373686 ' MQ version
-            Case 13
-                writeExits(0) = &H3634BC     ' Ganon's Tower from Ganon's Castle
-                writeExits(1) = &H3634BE     ' OGC from Ganon's Castle
-            Case 27 To 29
-                writeExits(0) = &H384650     ' HF from MK Entrance Day
-                writeExits(1) = &H384652     ' MK from MK Entrance Day
-                If iLastMinimap = 28 Then
-                    writeExits(0) = writeExits(0) - &H48
-                    writeExits(1) = writeExits(1) - &H48
-                End If
-            Case 30, 31
-                writeExits(0) = &H383824     ' MK from Back Alley Left Day
-                writeExits(1) = &H383826     ' MK from Back Alley Right Day
-                If iLastMinimap = 31 Then
-                    writeExits(0) = writeExits(0) - &H98
-                    writeExits(1) = writeExits(1) - &H98
-                End If
-            Case 32, 33
-                writeExits(0) = &H3824A8     ' HC from MK Day
-                writeExits(1) = &H3824AA     ' MK Entrance from MK Day
-                writeExits(2) = &H3824AE     ' Outside ToT from MK Day
-                writeExits(3) = &H3824AC     ' Back Alley Right from MK Day
-                writeExits(4) = &H3824B2     ' Back Alley Left from MK Day
-                If iLastMinimap = 33 Then
-                    writeExits(0) = writeExits(0) + &H40
-                    writeExits(1) = writeExits(1) + &H40
-                    writeExits(2) = writeExits(2) + &H40
-                    writeExits(3) = writeExits(3) + &H40
-                    writeExits(4) = writeExits(4) + &H40
-                End If
-            Case 34
-                writeExits(0) = &H383478     ' OGC from MK Day
-                writeExits(1) = &H38347A     ' MK Entrance from MK
-                writeExits(2) = &H38347E     ' Outside ToT from MK
-            Case 35, 36
-                writeExits(0) = &H383524     ' ToT from Outside ToT Day
-                writeExits(1) = &H383526     ' MK from Outside ToT Day
-                If iLastMinimap = 36 Then
-                    writeExits(0) = writeExits(0) - &H18
-                    writeExits(1) = writeExits(1) - &H18
-                End If
-            Case 37
-                writeExits(0) = &H383574     ' ToT from Outside ToT
-                writeExits(1) = &H383576     ' MK from Outside ToT 
-            Case 67
-                writeExits(0) = &H372332     ' Outside ToT from ToT
-            Case 81
-                writeExits(0) = &H36BF9C     ' KV from HF
-                writeExits(1) = &H36BFA0     ' LW Bridge from HF
-                writeExits(2) = &H36BFA2     ' ZR from HF
-                writeExits(3) = &H36BFA4     ' GV from HF
-                writeExits(4) = &H36BFA8     ' MK from HF
-                writeExits(5) = &H36BFAA     ' LLR from HF
-                writeExits(6) = &H36BFAE     ' LH from HF
-            Case 82
-                writeExits(0) = &H368A82     ' BotW from KV
-                writeExits(1) = &H368A78     ' DMT from KV
-                writeExits(2) = &H368A7A     ' HF from KV
-                writeExits(3) = &H368A7E     ' GY from KV
-            Case 83
-                writeExits(0) = &H378E44     ' Shadow Temple from GY
-                writeExits(1) = &H378E46     ' KV from GY
-            Case 84
-                writeExits(0) = &H37951C     ' HF from ZR
-                writeExits(1) = &H37951E     ' ZD from ZR
-                writeExits(2) = &H379522     ' LW from ZR
-            Case 85
-                writeExits(0) = &H3738F4     ' Deku Tree from KF
-                writeExits(1) = &H3738FA     ' LW Bridge from KF
-                writeExits(2) = &H373902     ' LW from KF
-            Case 86
-                writeExits(0) = &H36FCD4     ' Forest Temple from SFM
-                writeExits(1) = &H36FCD6     ' LW from SFM
-            Case 87
-                writeExits(0) = &H3696A6     ' Water Temple from LH
-                writeExits(1) = &H3696A2     ' HF from LH
-                writeExits(2) = &H3696AE     ' ZD from LH
-            Case 88
-                writeExits(0) = &H37B26C     ' ZF from ZD
-                writeExits(1) = &H37B26E     ' ZR from ZD
-                writeExits(2) = &H37B270     ' LH from ZD
-            Case 89
-                writeExits(0) = &H3733CC     ' Jabu-Jabu's Belly from ZF
-                writeExits(1) = &H3733D0     ' Ice Cavern from ZF
-                writeExits(2) = &H3733D2     ' ZD from ZF
-            Case 90
-                writeExits(0) = &H373904     ' LH from GV
-                writeExits(1) = &H373906     ' HF from GV
-                writeExits(2) = &H373908     ' GF from GV
-            Case 91
-                writeExits(0) = &H37475C     ' SFM from LW
-                writeExits(1) = &H37475E     ' KF from LW
-                writeExits(2) = &H374768     ' ZR from LW
-                writeExits(3) = &H37476A     ' GC from LW
-                writeExits(4) = &H37476C     ' KF from LW Bridge
-                writeExits(5) = &H37476E     ' HF from LW Bridge
-            Case 92
-                writeExits(0) = &H36B5AC     ' Spirit Temple from DC
-                writeExits(1) = &H36B5AE     ' HW from DC
-            Case 93
-                writeExits(0) = &H374D02     ' GTG from GF
-                writeExits(1) = &H374CE6     ' GV from GF
-                writeExits(2) = &H374D00     ' HW from GF
-            Case 94
-                writeExits(0) = &H37EBFC     ' DC from HW
-                writeExits(1) = &H37EBFE     ' GF from HW
-            Case 95
-                writeExits(0) = &H36C55E     ' MK from HC
-                writeExits(1) = &H36C562     ' GFF from HC
-                writeExits(2) = &H36C55C     ' Castle Courtyard from HC
-            Case 96
-                writeExits(0) = &H365FF0     ' Dodongo's Cavern from DMT
-                writeExits(1) = &H365FEC     ' GC from DMT
-                writeExits(2) = &H365FEE     ' KV from DMT
-                writeExits(3) = &H365FF2     ' DMC from DMT
-            Case 97
-                writeExits(0) = &H374B9E     ' Fire Temple from DMC
-                writeExits(1) = &H374B98     ' GC from DMC
-                writeExits(2) = &H374B9A     ' DMT from DMC
-            Case 98
-                writeExits(0) = &H37A64C     ' DMC from GC
-                writeExits(1) = &H37A64E     ' DMT from GC
-                writeExits(2) = &H37A650     ' LW from GC
-            Case 99
-                writeExits(0) = &H377C12     ' HF from LLR
-            Case 100
-                writeExits(0) = &H37FEC0     ' Ganon's Castle from OGC
-                writeExits(1) = &H37FEC2     ' MK from OGC
-        End Select
-
-        For i = 0 To 6
-            If writeExits(i) = 0 Then Exit For
-            quickWrite16(writeExits(i), 0, emulator)
-        Next
-    End Sub
-
-    Private Function getGanonMap() As Byte
-        getGanonMap = 0
-
-        ' 0: Main Region Upper
-        ' 1: Main Region Lower
-        ' 2: Forest Trial
-        ' 3: Water Trial
-        ' 4: Shadow Trial
-        ' 5: Fire Trial
-        ' 6: Light Trial
-        ' 7: Spirit Trial
-
-        ' Get the XYZ position
-        Dim linkPOS As Double() = getPosition()
-
-        ' First determine if player is on the upper or lower region of the castle
-        ' Divide line being -37, the height of the landing halfway down the stairs
-        If linkPOS(1) > -37 Then
-            ' Top half of the castle
-            Dim testDistance As Double = 0
-            Dim ptLink As New Point(CInt(linkPOS(0)), CInt(linkPOS(2)))
-            ' Split into 4 regions
-            If linkPOS(2) > -840 Then
-                ' This is the southern region of the castle
-
-                ' Create a gap to ignore the area you enter in at
-                If linkPOS(0) < -370 Then
-                    ' This is the south-western region: Spirit
-                    If lineSide(New Point(-147, 454), New Point(-1194, -151), ptLink) < -50000 Then getGanonMap = 7
-                ElseIf linkPOS(0) > 370 Then
-                    ' This is the south-eastern region: Forest
-                    If lineSide(New Point(1194, -151), New Point(146, 455), ptLink) < -50000 Then getGanonMap = 2
-                End If
-            Else
-                ' This is the northern region of the castle
-                If linkPOS(0) < 0 Then
-                    ' This is the north-western region: Fire
-                    If lineSide(New Point(-1197, -1529), New Point(0, -2219), ptLink) < -50000 Then getGanonMap = 5
-                Else
-                    ' This is the south-western region: Shadow
-                    If lineSide(New Point(0, -2219), New Point(1194, -1529), ptLink) < -50000 Then getGanonMap = 4
-                End If
-            End If
-        Else
-            ' Lower half of the castle
-            If linkPOS(0) < -1319 Then
-                ' The divide between the Castle into the Light Trial door is from -1291 to -1347
-                ' Using -1319 as the halfway point: Light
-                getGanonMap = 6
-            ElseIf linkPOS(0) > 1232 Then
-                ' The divide between the Castle into the Water Trial door is from 1204 to 1260
-                ' Using 1232 as the halfway point: Water
-                getGanonMap = 3
-            Else
-                ' Else, on the lower level, just use the main region
-                getGanonMap = 1
-            End If
-        End If
-    End Function
-
-    Private Function lineSide(ByVal pt1 As Point, ByVal pt2 As Point, ByVal ptTest As Point) As Double
-        lineSide = (pt2.X - pt1.X) * (ptTest.Y - pt1.Y) - (pt2.Y - pt1.Y) * (ptTest.X - pt1.X)
-    End Function
-
-    Private Function getPosition() As Double()
-        ' Grab values for XYZ
-        Dim valX As String = String.Empty
-        Dim valY As String = String.Empty
-        Dim valZ As String = String.Empty
-
-        If isSoH Then
-            valX = Convert.ToString(GDATA(&H17264), 2)
-            valY = Convert.ToString(GDATA(&H17268), 2)
-            valZ = Convert.ToString(GDATA(&H1726C), 2)
-        Else
-            valX = Convert.ToString(goRead(&H1DAA54), 2)
-            valY = Convert.ToString(goRead(&H1DAA54), 2)
-            valZ = Convert.ToString(goRead(&H1DAA54), 2)
-        End If
-
-        fixBinaryLength(valX, valY, valZ)
-
-        ' Convert values into IEEE-754 floating points
-        Dim coordX As Double = bin2float(valX)
-        Dim coordY As Double = bin2float(valY)
-        Dim coordZ As Double = bin2float(valZ)
-
-        ' Return the whole array
-        Return New Double() {coordX, coordY, coordZ}
-    End Function
-
-    Private Sub updateTrials()
-        pbxTrialForest.Visible = checkLoc("6611")
-        pbxTrialFire.Visible = checkLoc("6614")
-        pbxTrialWater.Visible = checkLoc("6612")
-        pbxTrialSpirit.Visible = checkLoc("6629")
-        pbxTrialShadow.Visible = checkLoc("6613")
-        pbxTrialLight.Visible = checkLoc("6615")
-    End Sub
-
-    Private Sub wastelandPOS()
-        Dim linkPOS As Double() = getPosition()
-
-        Dim coordX As Double = ((linkPOS(0) + 4550) / 8200) * 400 + 53
-        Dim coordZ As Double = ((linkPOS(2) + 3750) / 8200) * 400 + 17
-
-
-        Dim linkRot As Integer = 0
-
-        If isSoH Then
-            linkRot = CInt(GDATA(&H1730A, 2))
-        Else
-            linkRot = goRead(&H1DAA74, 15)
-        End If
-        Dim headA As Double = (((linkRot / 65535 * 360) - 90) * -1) * Math.PI / 180
-        Dim tailA As Double = (((linkRot / 65535 * 360) + 90) * -1) * Math.PI / 180
-
-        Dim headX As Double = (8 * Math.Cos(headA)) + coordX
-        Dim headZ As Double = (8 * Math.Sin(headA)) + coordZ
-        Dim tailX As Double = (8 * Math.Cos(tailA)) + coordX
-        Dim tailZ As Double = (8 * Math.Sin(tailA)) + coordZ
-
-        Dim p As New Pen(Color.Yellow, 5)
-        p.EndCap = Drawing2D.LineCap.ArrowAnchor
-
-        Graphics.FromImage(pbxMap.Image).DrawLine(p, CInt(tailX), CInt(tailZ), CInt(headX), CInt(headZ))
     End Sub
 
     Private Sub tmrFastScan_Tick(sender As Object, e As EventArgs) Handles tmrFastScan.Tick

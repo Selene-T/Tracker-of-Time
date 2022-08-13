@@ -1,4 +1,7 @@
 ﻿Module attachToEmulators
+    ' Contains all the functions to attack to each emulator
+    ' Note: SoH has its own module since it is rather extensive and technically not an emulator
+
     Public Function attachToProject64() As Process
         ' First steps, make sure we are in the right bit mode and declare the process
         If frmTrackerOfTime.IS_64BIT Then Return Nothing
@@ -133,7 +136,7 @@
 
         ' Read the first half of the address and make sure it is 8 digits long
         Dim readAddress As String = Hex(ReadMemory(Of Integer)(addressDLL))
-        fixHex(readAddress)
+        frmTrackerOfTime.fixHex(readAddress)
 
         ' Since it is a 64bit address, we need the other part of it
         readAddress = Hex(ReadMemory(Of Integer)(addressDLL + 4)) & readAddress
@@ -193,7 +196,7 @@
                     If Not readAddress = 0 Then
                         readAddress += &H140
                         Dim hexAddress As String = Hex(readAddress)
-                        fixHex(hexAddress)
+                        frmTrackerOfTime.fixHex(hexAddress)
                         hexAddress = Hex(ReadMemory(Of Integer)(addressDLL + attemptOffset + 4)) & hexAddress
                         attemptOffset = CLng("&H" & hexAddress) - addressDLL
                     End If
@@ -212,7 +215,7 @@
                 ' Convert to hex
                 If Not readAddress = "0" Then
                     ' Make sure length is 8 digits
-                    fixHex(readAddress)
+                    frmTrackerOfTime.fixHex(readAddress)
                     ' Read the second half of the address
                     readAddress = Hex(ReadMemory(Of Integer)(addressDLL + 4)) & readAddress
                     frmTrackerOfTime.romAddrStart64 = CLng("&H" & readAddress) + attemptAdded
@@ -256,7 +259,7 @@
 
             ' Read the first half of the address 
             Dim readAddress As String = Hex(ReadMemory(Of Integer)(addressDLL))
-            fixHex(readAddress)
+            frmTrackerOfTime.fixHex(readAddress)
             ' Read the second half of the address
             readAddress = Hex(ReadMemory(Of Integer)(addressDLL + 4)) & readAddress
 
@@ -379,7 +382,7 @@
                                 Dim hexR15 As String = Hex(readR15)
                                 If Not hexR15 = "0" Then
                                     ' Make sure length is 8 digit for any dropped 0's
-                                    fixHex(hexR15)
+                                    frmTrackerOfTime.fixHex(hexR15)
                                     ' Read the second half of the address
                                     readR15 = ReadMemory(Of Integer)(addressDLL + 4)
                                     ' Convert to hex and attach to first half
@@ -427,17 +430,4 @@
         End Try
         Return target
     End Function
-
-    Private Sub fixHex(ByRef hex As String, Optional digits As Byte = 8)
-        ' Small sub for fixing hex digits
-        If hex.Length > digits Then
-            hex = Mid(hex, hex.Length - digits + 1)
-            Return
-        End If
-
-        While hex.Length < digits
-            hex = "0" & hex
-        End While
-    End Sub
-
 End Module

@@ -1,4 +1,4 @@
-﻿Module trackerKey
+﻿Public Module trackerKey
 
     Public Class keyCheck
         Public loc As String
