@@ -2,46 +2,62 @@
     ' Contains all the functions to attack to each emulator
     ' Note: SoH has its own module since it is rather extensive and technically not an emulator
 
-    Public Function attachToProject64() As Process
-        ' First steps, make sure we are in the right bit mode and declare the process
-        If frmTrackerOfTime.IS_64BIT Then Return Nothing
-        Dim target As Process = Nothing
+    Public Function attachToProject64(Optional doOffsetScan As Boolean = False) As Process
+        With frmTrackerOfTime
+            ' First steps, make sure we are in the right bit mode and declare the process
+            If frmTrackerOfTime.IS_64BIT Then Return Nothing
+            Dim target As Process = Nothing
 
-        ' Try to attach to the first instance of project64
-        Try
-            target = Process.GetProcessesByName("project64")(0)
-        Catch ex As Exception
-            Return Nothing
-        End Try
-
-        ' I have found 2 different addresses when connecting to project 64, Case 1 tends to be on lower end laptops
-        For i = 0 To 2
-            Select Case i
-                Case 0
-                    frmTrackerOfTime.romAddrStart = &HDFE40000
-                Case 1
-                    frmTrackerOfTime.romAddrStart = &HDFFB0000
-                Case Else
-                    Return Nothing
-            End Select
-
-            ' Try to read what should be the first part of the ZELDAZ check
-            Dim ootCheck As Integer = 0
+            ' Try to attach to the first instance of project64
             Try
-                ootCheck = Memory.ReadInt32(target, frmTrackerOfTime.romAddrStart + &H11A5EC)
+                target = Process.GetProcessesByName("project64")(0)
             Catch ex As Exception
-                MessageBox.Show("quickRead Problem: " & vbCrLf & ex.Message & vbCrLf & (frmTrackerOfTime.romAddrStart + &H11A5EC).ToString, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return Nothing
             End Try
 
-            ' If it matches, set emulator variable and leave the FOR LOOP
-            If ootCheck = 1514490948 Then
-                frmTrackerOfTime.emulator = "project64"
-                Exit For
+            If doOffsetScan Then
+                ' So some people's pj64 has a different offset, this will help determine it
+                For i = &HDFD00000 To &HE01FFFFF Step 16
+                    If Memory.ReadInt32(target, i + &H11A5EC) = 1514490948 Then
+                        .rtbAddLine(Hex(i))
+                    End If
+                Next
+                .rtbAddLine("Done")
+                Return target
             End If
-        Next
 
-        ' Return the process
-        Return target
+            ' I have found 3 different addresses when connecting to project 64
+            For i = 0 To 3
+                Select Case i
+                    Case 0
+                        .romAddrStart = &HDFE40000
+                    Case 1
+                        .romAddrStart = &HDFE70000
+                    Case 2
+                        .romAddrStart = &HDFFB0000
+                    Case Else
+                        Return Nothing
+                End Select
+
+                ' Try to read what should be the first part of the ZELDAZ check
+                Dim ootCheck As Integer = 0
+
+                Try
+                    ootCheck = Memory.ReadInt32(target, .romAddrStart + &H11A5EC)
+                Catch ex As Exception
+                    MessageBox.Show("quickRead Problem: " & vbCrLf & ex.Message & vbCrLf & (.romAddrStart + &H11A5EC).ToString, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                End Try
+
+                ' If it matches, set emulator variable and leave the FOR LOOP
+                If ootCheck = 1514490948 Then
+                    .emulator = "project64"
+                    Exit For
+                End If
+            Next
+
+            ' Return the process
+            Return target
+        End With
     End Function
 
     Public Function attachToM64PY() As Process

@@ -10,8 +10,8 @@ Public Class frmTrackerOfTime
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 124
-    Public Const IS_64BIT As Boolean = True
-    Private Const VER As String = "4.1.4"
+    Public Const IS_64BIT As Boolean = False
+    Private Const VER As String = "4.1.4a"
     Public p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
@@ -12253,125 +12253,6 @@ Public Class frmTrackerOfTime
     End Sub
 
 
-    Private Sub attachToModLoader642()
-        ' This sub, and thus support for ML64, is credited to subenji, who also added the memory function to attach by process ID -- 2022.06.17
-
-        ' This should already be empty in order to reach this point, but never hurts to make sure
-        emulator = String.Empty
-        ' If not 64bit, do not even bother
-        If IS_64BIT = False Then Exit Sub
-        ' Prepare new target process
-        Dim target As Process = Nothing
-
-        Try
-            ' Try to attach to application
-            ' target = Process.GetProcessesByName("modloader64-gui")(0)
-            ''
-            ' ModLoader64 runs 5 or 6 processes with only one of them actually being the emulator window, so we need to check the emulation is running
-            ''
-            Dim processes As Process() = Process.GetProcessesByName("modloader64-gui")
-            If processes.Length = 0 Then
-                ' If process was not found, just return
-                Return
-            End If
-            For Each p As Process In processes
-                For Each pModule As ProcessModule In p.Modules
-                    If LCase(pModule.ModuleName) = "mupen64plus.dll" Then
-                        ''
-                        ' As the process is run several times and I need to specify by PID rather than name, I need to attach this once by hand
-                        ''
-                        If Not OpenProcessHandleById(p.Id) Then
-                            rtbOutputLeft.Text = "Attachment Problem: Could not open process handle: " & p.Id & vbCrLf
-                            Return
-                        End If
-                        target = p
-                        Exit For
-                    End If
-                Next
-                If target IsNot Nothing Then
-                    Exit For
-                End If
-            Next
-            ''
-            ' I added a line to handle the case that the launcher had started but emulation hadn't yet. Printing here isn't really necessary.
-            ''
-            If target Is Nothing Then
-                rtbOutputLeft.Text = "Found modloader64 but couldn't find a running emulator." & vbCrLf
-                Return
-            End If
-        Catch ex As Exception
-            If ex.Message = "Index was outside the bounds of the array." Then
-                ' This is the expected error if process was not found, just return
-                Return
-            Else
-                ' Any other error, output error message to textbox
-                rtbOutputLeft.Text = "Attachment Problem: " & ex.Message & vbCrLf
-                Return
-            End If
-        End Try
-
-        ' Prepare new address variable
-        Dim addressDLL As Int64 = 0
-        Dim attemptOffset As Int64 = 0
-        Dim attemptAdded As Int64 = 0
-
-        ''
-        ' These pointers to the Base ROM location were all listed as static, I felt it best just to add them all. The first one worked every time in testing.
-        ' I found adding 0x80000000 was never necessary.
-        ''
-        For attempt = 0 To 5
-            Select Case attempt
-                Case 0
-                    attemptOffset = &H116ECF8
-                Case 1
-                    attemptOffset = &H12EED10
-                Case 2
-                    attemptOffset = &H6A6F0
-                Case 3
-                    attemptOffset = &H6C400
-                Case 4
-                    attemptOffset = &H6C460
-                Case 5
-                    attemptOffset = &H6C538
-                Case Else
-                    Return
-            End Select
-
-            ''
-            ' As the emulator is the same mupen64plus module, the rest of the code is the same as the existing attachToM64P function.
-            ''
-            ' Step through all modules to find mupen64plus.dll's base address
-            For Each mo As ProcessModule In target.Modules
-                If LCase(mo.ModuleName) = "mupen64plus.dll" Then
-                    addressDLL = mo.BaseAddress.ToInt64
-                    Exit For
-                End If
-            Next
-            ' Check if mupen64plus.dll was found
-            If Not addressDLL = 0 Then
-                ' Add location of variable to base address
-                addressDLL = addressDLL + attemptOffset
-                ' Set it as the current emulator
-                emulator = "modloader64-gui"
-                ' Read the first half of the address
-                Dim readR15 As Integer = ReadMemory(Of Integer)(addressDLL)
-                ' Convert to hex
-                Dim hexR15 As String = Hex(readR15)
-                If Not hexR15 = "0" Then
-                    ' Make sure length is 8 digit for any dropped 0's
-                    fixHex(hexR15)
-                    ' Read the second half of the address
-                    readR15 = ReadMemory(Of Integer)(addressDLL + 4)
-                    ' Convert to hex and attach to first half
-                    hexR15 = Hex(readR15) & hexR15
-                    romAddrStart64 = CLng("&H" & hexR15) + attemptAdded
-                    If ReadMemory(Of Integer)(romAddrStart64 + &H11A5EC) = 1514490948 Then Exit For
-                End If
-            End If
-        Next
-    End Sub
-
-
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         Select Case emulator
             Case String.Empty
@@ -13774,6 +13655,7 @@ Public Class frmTrackerOfTime
     Private Sub ScanToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScanToolStripMenuItem.Click
         goScan(False)
     End Sub
+
     Private Sub AutoScanToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AutoScanToolStripMenuItem.Click
         If tmrAutoScan.Enabled Then
             stopScanning()
@@ -14517,7 +14399,7 @@ Public Class frmTrackerOfTime
     Private Sub pnlSettings_Paint(sender As Object, e As PaintEventArgs) Handles pnlSettings.Paint
         updateSettingsPanel()
     End Sub
-    Private Sub rtbAddLine(ByVal line As String, Optional hideRight As Boolean = False)
+    Public Sub rtbAddLine(ByVal line As String, Optional hideRight As Boolean = False)
         rtbOutputRight.Visible = Not hideRight
         If rtbOutputLeft.Lines.Count <= rtbLines Then
             rtbOutputLeft.AppendText(vbCrLf & line)
