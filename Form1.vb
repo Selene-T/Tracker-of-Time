@@ -10,8 +10,8 @@ Public Class frmTrackerOfTime
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 124
-    Public Const IS_64BIT As Boolean = False
-    Private Const VER As String = "4.1.4a"
+    Public Const IS_64BIT As Boolean = True
+    Private Const VER As String = "4.1.4"
     Public p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
