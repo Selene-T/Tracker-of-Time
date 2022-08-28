@@ -370,6 +370,7 @@ Partial Class frmTrackerOfTime
         Me.checkMQ5 = New System.Windows.Forms.CheckBox()
         Me.tmrTT = New System.Windows.Forms.Timer(Me.components)
         Me.tmrFastScan = New System.Windows.Forms.Timer(Me.components)
+        Me.lcxBFA = New System.Windows.Forms.Label()
         Me.mnuOptions.SuspendLayout()
         Me.pnlSettings.SuspendLayout()
         Me.pnlMain.SuspendLayout()
@@ -784,6 +785,7 @@ Partial Class frmTrackerOfTime
         '
         'pnlSettings
         '
+        Me.pnlSettings.Controls.Add(Me.lcxBFA)
         Me.pnlSettings.Controls.Add(Me.nlbGTGTricks)
         Me.pnlSettings.Controls.Add(Me.lcxGTGLensless)
         Me.pnlSettings.Controls.Add(Me.lcxHideQuests)
@@ -4101,6 +4103,16 @@ Partial Class frmTrackerOfTime
         '
         Me.tmrFastScan.Interval = 1000
         '
+        'lcxBFA
+        '
+        Me.lcxBFA.Location = New System.Drawing.Point(401, 288)
+        Me.lcxBFA.Name = "lcxBFA"
+        Me.lcxBFA.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxBFA.Size = New System.Drawing.Size(155, 20)
+        Me.lcxBFA.TabIndex = 336
+        Me.lcxBFA.Text = "Blue Fire Arrows"
+        Me.lcxBFA.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
         'frmTrackerOfTime
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -4661,5 +4673,6 @@ Partial Class frmTrackerOfTime
     Friend WithEvents pbxTrialSpirit As System.Windows.Forms.PictureBox
     Friend WithEvents tmrFastScan As System.Windows.Forms.Timer
     Friend WithEvents DumpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents lcxBFA As System.Windows.Forms.Label
 
 End Class

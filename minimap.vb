@@ -135,6 +135,7 @@
                         .aExitMap(24)(0) = 7     ' HF
                     Case 25
                         ' OGC (100)
+                        .aExitMap(25)(0) = 191   ' Ganon's Castle
                         .aExitMap(25)(1) = 10    ' MK
                     Case 26
                         ' Deku Tree
@@ -474,63 +475,63 @@
                         If .aMQ(0) Then readExits(0) = &H3770B6 ' MQ version
                         lPoints.Add(New Point(278, 390))
                         aAlign(0) = 1
-                        'readExits(1) = &H377114     ' Queen Gohma from Deku Tree
-                        'lPoints.Add(New Point(278, 3))
-                        'aAlign(1) = 1
+                        readExits(1) = &H377114     ' Queen Gohma from Deku Tree
+                        lPoints.Add(New Point(278, 3))
+                        aAlign(1) = 1
                         locationArray = 26
                     Case 1
                         readExits(0) = &H36FABE     ' DMT from Dodongo's Cavern
                         If .aMQ(1) Then readExits(0) = &H36FA8E ' MQ version
                         lPoints.Add(New Point(278, 390))
                         aAlign(0) = 1
-                        'readExits(1) = &H36FABC     ' King Dodongo from Dodongo's Cavern
-                        'lPoints.Add(New Point(278, 3))
-                        'aAlign(1) = 1
+                        readExits(1) = &H36FABC     ' King Dodongo from Dodongo's Cavern
+                        lPoints.Add(New Point(278, 3))
+                        aAlign(1) = 1
                         locationArray = 27
                     Case 2
                         readExits(0) = &H36F43E     ' ZD from Jabu-Jabu's Belly
                         If .aMQ(2) Then readExits(0) = &H36F40E ' MQ version
                         lPoints.Add(New Point(278, 390))
                         aAlign(0) = 1
-                        'readExits(1) = &H36F43C     ' Barinade from Jabu-Jabu's Belly
-                        'lPoints.Add(New Point(278, 3))
-                        'aAlign(1) = 1
+                        readExits(1) = &H36F43C     ' Barinade from Jabu-Jabu's Belly
+                        lPoints.Add(New Point(278, 3))
+                        aAlign(1) = 1
                         locationArray = 28
                     Case 3
                         readExits(0) = &H36ED12     ' SFM from Forest Temple
                         If .aMQ(3) Then readExits(0) = &H36ED12 ' MQ version
                         lPoints.Add(New Point(278, 390))
                         aAlign(0) = 1
-                        'readExits(1) = &H36ED10     ' Phantom Ganon from Forest Temple
-                        'lPoints.Add(New Point(278, 3))
-                        'aAlign(1) = 1
+                        readExits(1) = &H36ED10     ' Phantom Ganon from Forest Temple
+                        lPoints.Add(New Point(278, 3))
+                        aAlign(1) = 1
                         locationArray = 29
                     Case 4
                         readExits(0) = &H36A3C6     ' DMC from Fire Temple
                         If .aMQ(4) Then readExits(0) = &H36A376 ' MQ version
                         lPoints.Add(New Point(278, 390))
                         aAlign(0) = 1
-                        'readExits(1) = &H36A3C4     ' Volvagia from Fire Temple
-                        'lPoints.Add(New Point(278, 3))
-                        'aAlign(1) = 1
+                        readExits(1) = &H36A3C4     ' Volvagia from Fire Temple
+                        lPoints.Add(New Point(278, 3))
+                        aAlign(1) = 1
                         locationArray = 30
                     Case 5
                         readExits(0) = &H36EF76     ' LH from Water Temple
                         If .aMQ(5) Then readExits(0) = &H36EF36 ' MQ version
                         lPoints.Add(New Point(278, 390))
                         aAlign(0) = 1
-                        'readExits(1) = &H36EF74     ' Morpha from Temple
-                        'lPoints.Add(New Point(278, 3))
-                        'aAlign(1) = 1
+                        readExits(1) = &H36EF74     ' Morpha from Temple
+                        lPoints.Add(New Point(278, 3))
+                        aAlign(1) = 1
                         locationArray = 31
                     Case 6
                         readExits(0) = &H36B1EA     ' DC from Spirit Temple
                         If .aMQ(6) Then readExits(0) = &H36B12A ' MQ version
                         lPoints.Add(New Point(278, 390))
                         aAlign(0) = 1
-                        'readExits(1) = &H36B1E8     ' Twinrova from Spirit Temple
-                        'lPoints.Add(New Point(278, 3))
-                        'aAlign(1) = 1
+                        readExits(1) = &H36B1E8     ' Twinrova from Spirit Temple
+                        lPoints.Add(New Point(278, 3))
+                        aAlign(1) = 1
                         'readExits(2) = &H36B1EC     ' DC Statue Hand Right from Spirit Temple
                         'lPoints.Add(New Point(99, 332))
                         'aAlign(2) = 2
@@ -542,9 +543,9 @@
                         If .aMQ(7) Then readExits(0) = &H36C86E ' MQ version
                         lPoints.Add(New Point(278, 390))
                         aAlign(0) = 1
-                        'readExits(1) = &H36C86C     ' Bongo Bongo from Shadow Temple
-                        'lPoints.Add(New Point(278, 3))
-                        'aAlign(1) = 1
+                        readExits(1) = &H36C86C     ' Bongo Bongo from Shadow Temple
+                        lPoints.Add(New Point(278, 3))
+                        aAlign(1) = 1
                         locationArray = 33
                     Case 8
                         readExits(0) = &H3785C6     ' KV from BotW
@@ -562,9 +563,9 @@
                         'readExits(0) = &H374348     ' Ganon's Castle from Ganon's Tower
                         'lPoints.Add(New Point(278, 3))
                         'aAlign(0) = 1
-                        'readExits(1) = &H37434A     ' Ganon from Ganon's Tower
-                        'lPoints.Add(New Point(278, 390))
-                        'aAlign(1) = 1
+                        readExits(1) = &H37434A     ' Ganon from Ganon's Tower
+                        lPoints.Add(New Point(278, 390))
+                        aAlign(1) = 1
                     Case 11
                         readExits(0) = &H373686     ' GF from GTG
                         If .aMQ(10) Then readExits(0) = &H373686 ' MQ version

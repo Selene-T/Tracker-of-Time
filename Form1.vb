@@ -11,7 +11,7 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 124
     Public Const IS_64BIT As Boolean = True
-    Private Const VER As String = "4.1.4"
+    Private Const VER As String = "4.1.5 x" & If(IS_64BIT, "64", "86")
     Public p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
@@ -132,8 +132,8 @@ Public Class frmTrackerOfTime
             incB(iCheat)
             If iCheat = aCheat.Length Then
                 showMenuButtons(True)
-                'btnTest.Visible = True
-                'Button2.Visible = True
+                btnTest.Visible = True
+                Button2.Visible = True
                 iCheat = 0
             End If
         Else
@@ -902,7 +902,8 @@ Public Class frmTrackerOfTime
                 Case 54, 76, 99
                     ' Lon Lon Ranch
                     newArea = "LLR"
-                Case 16, 27, 28, 30 To 33, 43, 44, 49 To 51, 53, 75, 77
+                    ' Removed 44 (Bazaar) and 49 (Potion) shoppes because they are duplicated rooms
+                Case 16, 27, 28, 30 To 33, 43, 50, 51, 53, 75, 77
                     ' The Market
                     newArea = "MK"
                 Case 35 To 37, 67
@@ -4288,6 +4289,13 @@ Public Class frmTrackerOfTime
         If aDungeonKeys(dunKeys) + countDoors >= needKeys Then Return True
     End Function
 
+    Private Function canBFA() As Boolean
+        canBFA = False
+        If My.Settings.setBFA Then
+            If canAdult And allItems.Contains("d") And allItems.Contains("l") And canMagic Then Return True
+        End If
+    End Function
+
     Private Function item(ByVal name As String, Optional rank As Byte = 1) As Boolean
         item = False
         Dim count As Integer = 0
@@ -4309,7 +4317,7 @@ Public Class frmTrackerOfTime
             Case "hover boots"
                 If canAdult And checkLoc("7430") Then Return True
             Case "blue fire"
-                If allItems.Contains("u") And (allItems.Contains("w") Or aReachA(190) Or aReachA(193) Or aReachA(201) Or aReachY(202) Or aReachA(202)) Then Return True
+                If (allItems.Contains("u") And (allItems.Contains("w") Or aReachA(190) Or aReachA(193) Or aReachA(201) Or aReachY(202) Or aReachA(202))) Or canBFA() Then Return True
             Case "bomb", "bombs"
                 If allItems.Contains("c") Then Return True
             Case "bombchu", "bombchus"
@@ -4502,6 +4510,9 @@ Public Class frmTrackerOfTime
             Case 5
                 ' Gold Skulltulas
                 If goldSkulltulas >= rainbowBridge(1) Then Return True
+            Case 6
+                ' Hearts
+                If maxLife >= rainbowBridge(1) Then Return True
         End Select
     End Function
     Private Function canExplode() As Boolean
@@ -4578,6 +4589,9 @@ Public Class frmTrackerOfTime
             Case 4
                 ' Gold Skulltula Tokens
                 If goldSkulltulas >= countLACS Then Return True
+            Case 5
+                ' Hearts
+                If maxLife >= countLACS Then Return True
         End Select
     End Function
     Private Function canFewerGoron() As Boolean
@@ -12993,6 +13007,8 @@ Public Class frmTrackerOfTime
                 My.Settings.setHideQuests = Not My.Settings.setHideQuests
             Case lcxGTGLensless.Text
                 My.Settings.setGTGLensless = Not My.Settings.setGTGLensless
+            Case lcxBFA.Text
+                My.Settings.setBFA = Not My.Settings.setBFA
                 'Case lcxxx.Text
                 'My.Settings.setxx = Not My.Settings.setxx
             Case lblGoldSkulltulas.Text, lblShopsanity.Text, lblSmallKeys.Text, lblInfo.Text
@@ -13150,6 +13166,8 @@ Public Class frmTrackerOfTime
                 message = "Hide Big Poes from being displayed."
             Case lcxGTGLensless.Text
                 message = "Navigate Gerudo Training Ground without Lens of Truth."
+            Case lcxBFA.Text
+                message = "Ice arrows have the power of blue fire."
                 'Case lcxxx.Text
                 'message = "."
         End Select
@@ -13467,6 +13485,8 @@ Public Class frmTrackerOfTime
                                 isTrue = My.Settings.setHideQuests
                             Case lcxGTGLensless.Name
                                 isTrue = My.Settings.setGTGLensless
+                            Case lcxBFA.Name
+                                isTrue = My.Settings.setBFA
                                 'Case lcxxx.Name
                                 'isTrue = My.Settings.setxx
                             Case Else
@@ -14260,12 +14280,13 @@ Public Class frmTrackerOfTime
 
 
         'Addr:              80400000 80400004 80400008 8040000C
-        'AP1:               80400020 80400844 80409FD4 00000000
-        'AP2:               80400020 80400844 8040A334 00000000
+        'AP 0.3.1:          80400020 80400844 80409FD4 00000000
+        'AP 0.3.2:          80400020 80400844 8040A334 00000000
         'OOTR 6.2:          80400020 80400834 8040A474 00000000
         'OOTR 6.2.72:       80400020 80400834 8040AA7C 80400CD0
         'Roman 6.2.43:      80400020 80400834 8040ACC4 80400CD0
-        'ROMAN 6.2.72-R2:   80400020 80400834 8040B11C 80400CD0
+        'Roman 6.2.72-R2:   80400020 80400834 8040B11C 80400CD0
+        'Roman 6.2.163:     80400020 80400834 8040E478 80400D60
         Select Case readC
             Case "80409FD4"
                 ' AP 0.3.1
@@ -14334,7 +14355,7 @@ Public Class frmTrackerOfTime
                 aAddresses(18) = &H400CCD   ' Overworld ER
                 aAddresses(19) = &H400CCE   ' Dungeon ER
             Case "8040ACC4"
-                ' ROMAN 6.2.43
+                ' Roman 6.2.43
                 aAddresses(0) = &H400CF8    ' MQs Addr
                 aAddresses(1) = &H400CB4    ' LAC1 Addr
                 aAddresses(2) = &H400CC0    ' LAC2 Addr
@@ -14346,7 +14367,7 @@ Public Class frmTrackerOfTime
                 aAddresses(18) = &H400CCD   ' Overworld ER
                 aAddresses(19) = &H400CCE   ' Dungeon ER
             Case "8040B11C"
-                ' ROMAN 6.2.72-R2
+                ' Roman 6.2.72-R2
                 aAddresses(0) = &H400CF8    ' MQs Addr
                 aAddresses(1) = &H400CB4    ' LAC1 Addr
                 aAddresses(2) = &H400CC0    ' LAC2 Addr
@@ -14357,6 +14378,21 @@ Public Class frmTrackerOfTime
                 aAddresses(8) = &H400CC4    ' Cow Shuffle
                 aAddresses(18) = &H400CCD   ' Overworld ER
                 aAddresses(19) = &H400CCE   ' Dungeon ER
+            Case "8040E478"
+                ' Roman 6.2.163
+                aAddresses(0) = &H400D88    ' MQs Addr
+                aAddresses(1) = &H400D9C    ' LAC1 Addr
+                aAddresses(2) = &H400DA0    ' LAC2 Addr
+                aAddresses(3) = &H400DA4    ' TH Addr
+                aAddresses(4) = &H400D98    ' RB1 Addr
+                aAddresses(5) = &H400DA2    ' RB2 Addr
+                aAddresses(7) = &H400D44    ' Bombchu's in Logic
+                aAddresses(8) = &H400D50    ' Cow Shuffle
+                aAddresses(9) = &H400D7C    ' Dungeon Rewards
+                aAddresses(12) = &H400D78   ' Pedestal DRs
+                aAddresses(13) = &H400D74   ' Compass DRs
+                aAddresses(18) = &H400D59   ' Overworld ER
+                aAddresses(19) = &H400D5A   ' Dungeon ER
         End Select
     End Sub
     Private Sub getRainbowBridge()
@@ -14705,9 +14741,18 @@ Public Class frmTrackerOfTime
     End Sub
 
     Private Sub dump()
-        ' Dump values to help debug issues for users, start with the current items
-        Dim sText As String = allItems & vbCrLf
+        ' Dump values to help debug issues for users
+        Dim sText As String = VER & vbCrLf
         Dim sHex As String = String.Empty
+
+        ' Grab the context addresses. The third one identified which rando version is running
+        For i = 0 To 3
+            sHex = Hex(goRead(&H400000 + (i * 4)))
+            fixHex(sHex)
+            sText &= sHex & Chr(32)
+        Next
+        ' Add in all the players items
+        sText &= vbCrLf & vbCrLf & allItems & vbCrLf
         ' Next read all the values of arrLocation
         For i = 0 To arrLocation.Length - 1
             If isSoH And i = 84 Then i = 100
