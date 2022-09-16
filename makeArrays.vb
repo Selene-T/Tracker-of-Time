@@ -151,7 +151,7 @@
 
         With frmTrackerOfTime
             Select Case LCase(whichArray)
-                Case "dungeonlabels"
+                Case "dungeon"
                     ' Link the dungeon labels for displaying progress into an array
                     array(0) = .lblDekuTree
                     array(1) = .lblDodongosCavern
@@ -165,7 +165,7 @@
                     array(9) = .lblIceCavern
                     array(10) = .lblGerudoTrainingGround
                     array(11) = .lblGanonsCastle
-                Case "labels"
+                Case "overworld"
                     ' Link the labels for displaying progress into an array
                     array(0) = .lblKokiriForest
                     array(1) = .lblLostWoods

@@ -30,11 +30,11 @@
             For i = 0 To 3
                 Select Case i
                     Case 0
-                        .romAddrStart = &HDFE40000
+                        .romAddrStart = &HDFE40000UI
                     Case 1
-                        .romAddrStart = &HDFE70000
+                        .romAddrStart = &HDFE70000UI
                     Case 2
-                        .romAddrStart = &HDFFB0000
+                        .romAddrStart = &HDFFB0000UI
                     Case Else
                         Return Nothing
                 End Select
@@ -296,14 +296,17 @@
             Dim attemptOffset As Int64 = 0
 
             ' RA's parallel core has version differences to attach
-            For i = 0 To 2
+            For i = 0 To 3
                 Select Case i
                     Case 0
                         ' 1.9.0 - 1.10.2
                         attemptOffset = &H845000
                     Case 1
-                        ' 1.10.3+
+                        ' 1.10.3+ ver1
                         attemptOffset = &H844000
+                    Case 2
+                        ' 1.10.3+ ver2
+                        attemptOffset = &HD56000
                     Case Else
                         Return Nothing
                 End Select
@@ -318,7 +321,60 @@
         Return target
     End Function
 
-    Public Function attachToModLoader64() As Process
+    Public Function attachToModLoader64x86() As Process
+        With frmTrackerOfTime
+            ' First steps, make sure we are in the right bit mode and declare the process
+            If frmTrackerOfTime.IS_64BIT Then Return Nothing
+            Dim target As Process = Nothing
+            Dim addressDLL As Int64 = 0
+
+            ' Try to attach to m64py
+            Try
+                ' ML64 love having MANY instances running, so we need to look through them all
+                Dim allProcs As Process() = Process.GetProcessesByName("modloader64-gui")
+
+                ' We are going to step through all of the found processs, but backwards
+                ' This is because the correct process is usually the last one
+                For i = allProcs.Length - 1 To 0 Step -1
+
+                    ' Step through all the modules to look for mupen64plus.dll
+                    For Each m As ProcessModule In allProcs(i).Modules
+                        If LCase(m.ModuleName) = "mupen64plus.dll" Then
+                            ' Move the current process into target
+                            target = allProcs(i)
+                            ' Try to attach to process by ID. We are still inside the Try so it should still return nothing on error
+                            'OpenProcessHandleById(target.Id)
+                            'Dim TromAddrStart = ReadMemory(Of Integer)(m.BaseAddress + &H4B46BB4)
+                            .romAddrStart = Memory.ReadInt32(target, m.BaseAddress + &H4B46BB4)
+                            ' Try to read what should be the first part of the ZELDAZ check
+                            Dim ootCheck As UInteger = 0
+
+                            ' Attach to process and grab the oot check
+                            Try
+                                OpenProcessHandleById(target.Id)
+                                ootCheck = Memory.ReadInt32(target, .romAddrStart + &H11A5EC)
+                            Catch ex As Exception
+                                MessageBox.Show("quickRead Problem: " & vbCrLf & ex.Message & vbCrLf & (.romAddrStart + &H11A5EC).ToString, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                            End Try
+
+                            ' If it matches, set emulator variable and return
+                            If ootCheck = 1514490948 Then
+                                .emulator = "ModLoader64"
+                                Return target
+                            End If
+                        End If
+                    Next
+                Next
+            Catch ex As Exception
+                Return Nothing
+            End Try
+
+            ' If we made it this far, something it was not found
+            Return Nothing
+        End With
+    End Function
+
+    Public Function attachToModLoader64x64() As Process
         ' This sub, and thus support for ML64, is credited to subenji, who also added the memory function to attach by process ID -- 2022.06.17
 
         If frmTrackerOfTime.IS_64BIT = False Then Return Nothing

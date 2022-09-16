@@ -11,11 +11,11 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 124
     Public Const IS_64BIT As Boolean = True
-    Private Const VER As String = "4.1.5 x" & If(IS_64BIT, "64", "86")
+    Private Const VER As String = "4.1.8 x" & If(IS_64BIT, "64", "86")
     Public p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
-    Public romAddrStart As Integer = &HDFE40000
+    Public romAddrStart As UInteger = &HDFE40000UI
     Public romAddrStart64 As Int64 = 0
     Public emulator As String = String.Empty
     Private keepRunning As Boolean = False
@@ -403,6 +403,7 @@ Public Class frmTrackerOfTime
         Dim stringItems As String = String.Empty
         Dim tempItems As String = String.Empty
         Dim valueItems As Integer = 0
+        Dim readAddr As UInteger = 0
 
         For i = 0 To 2
             ' Scans at &H11A678, &H11A67C, and &H11A680 
@@ -720,12 +721,13 @@ Public Class frmTrackerOfTime
             If IS_64BIT = False Then
                 p = attachToProject64()
                 If emulator = String.Empty Then p = attachToM64PY()
+                If emulator = String.Empty Then p = attachToModLoader64x86()
             Else
                 p = attachToBizHawk()
                 If emulator = String.Empty Then p = attachToRMG()
                 If emulator = String.Empty Then p = attachToM64P()
                 If emulator = String.Empty Then p = attachToRetroArch()
-                If emulator = String.Empty Then p = attachToModLoader64()
+                If emulator = String.Empty Then p = attachToModLoader64x64()
                 If emulator = String.Empty Then attachToSoH()
             End If
             If Not emulator = String.Empty Then
@@ -1820,15 +1822,15 @@ Public Class frmTrackerOfTime
                 If IS_64BIT Then Exit Function
                 Select Case bitType
                     Case 0 To 7
-                        goRead = quickRead8(romAddrStart + offsetAddress, emulator)
+                        goRead = quickRead8(CUInt(romAddrStart + offsetAddress), emulator)
                     Case 8 To 15
-                        goRead = quickRead16(romAddrStart + offsetAddress, emulator)
+                        goRead = quickRead16(CUInt(romAddrStart + offsetAddress), emulator)
                     Case Else
-                        goRead = quickRead32(romAddrStart + offsetAddress, emulator)
+                        goRead = quickRead32(CUInt(romAddrStart + offsetAddress), emulator)
                 End Select
         End Select
     End Function
-    Private Function quickRead8(ByVal readAddress As Integer, ByVal sTarget As String) As Integer
+    Private Function quickRead8(ByVal readAddress As UInteger, ByVal sTarget As String) As Integer
         quickRead8 = 0
 
         Try
@@ -1838,7 +1840,7 @@ Public Class frmTrackerOfTime
             MessageBox.Show("quickRead Problem: " & vbCrLf & ex.Message & vbCrLf & readAddress.ToString, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End Try
     End Function
-    Private Function quickRead16(ByVal readAddress As Integer, ByVal sTarget As String) As Integer
+    Private Function quickRead16(ByVal readAddress As UInteger, ByVal sTarget As String) As Integer
         quickRead16 = 0
 
         Try
@@ -1848,7 +1850,7 @@ Public Class frmTrackerOfTime
             MessageBox.Show("quickRead Problem: " & vbCrLf & ex.Message & vbCrLf & readAddress.ToString, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End Try
     End Function
-    Private Function quickRead32(ByVal readAddress As Integer, ByVal sTarget As String, Optional doStopScanning As Boolean = True) As Integer
+    Private Function quickRead32(ByVal readAddress As UInteger, ByVal sTarget As String, Optional doStopScanning As Boolean = True) As Integer
         quickRead32 = 0
 
         Try
@@ -1858,7 +1860,7 @@ Public Class frmTrackerOfTime
             MessageBox.Show("quickRead Problem: " & vbCrLf & ex.Message & vbCrLf & readAddress.ToString, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End Try
     End Function
-    Private Sub quickWrite16(ByVal writeAddress As Integer, ByVal writeValue As Int16, ByVal sTarget As String)
+    Private Sub quickWrite16(ByVal writeAddress As UInteger, ByVal writeValue As Int16, ByVal sTarget As String)
         writeAddress = romAddrStart + writeAddress
 
         Try
@@ -1867,7 +1869,7 @@ Public Class frmTrackerOfTime
             MessageBox.Show("quickWrite Problem: " & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End Try
     End Sub
-    Private Sub quickWrite(ByVal writeAddress As Integer, ByVal writeValue As Integer, ByVal sTarget As String)
+    Private Sub quickWrite(ByVal writeAddress As UInteger, ByVal writeValue As Integer, ByVal sTarget As String)
         Try
             WriteInt32(p, writeAddress, writeValue)
         Catch ex As Exception
@@ -1965,7 +1967,7 @@ Public Class frmTrackerOfTime
         Else
             If isSoH Then
                 lastFirstEnum = 255 ' SOH is loaded but we're on the main menu, so clear the rando settings
-                ResetToolStripMenuItem_Click(Nothing, Nothing)
+                'ResetToolStripMenuItem_Click(Nothing, Nothing)
             End If
         End If
     End Function
@@ -1979,7 +1981,7 @@ Public Class frmTrackerOfTime
             If emulator = String.Empty Then attachToRMG()
             If emulator = String.Empty Then attachToM64P()
             If emulator = String.Empty Then attachToRetroArch()
-            If emulator = String.Empty Then attachToModLoader64()
+            If emulator = String.Empty Then attachToModLoader64x64()
             If emulator = String.Empty Then attachToSoH()
         End If
         If Not emulator = String.Empty Then
@@ -2130,12 +2132,12 @@ Public Class frmTrackerOfTime
     Private Sub shutupNavi()
         ' With great power, comes little care for what others have to day. Shut up Navi's timed complaints.
 
-        Dim addrNavi As Integer = &H11A60A
+        Dim addrNavi As UInteger = &H11A60AUI
         Select Case emulator
             Case String.Empty
                 Exit Sub
             Case "variousX64"
-                If isSoH Then addrNavi = SAV(&H32)
+                If isSoH Then addrNavi = CUInt(SAV(&H32))
                 WriteMemory(Of Int16)(romAddrStart64 + addrNavi, 0)
             Case Else
                 quickWrite16(addrNavi, 0, emulator)
@@ -3649,7 +3651,7 @@ Public Class frmTrackerOfTime
                     (canExplode() Or item("bow") Or item("hookshot")) Then addArea(110, asAdult)
             Case 110
                 ' FiT: Middle to Upper
-                If asAdult And dungeonKeyCounter(4, "29302427263125") Or (dungeonKeyCounter(4, "293024272631") And (item("hover boots") Or item("hammer") Or My.Settings.setFiTMaze)) Then addArea(111, asAdult)
+                If asAdult And dungeonKeyCounter(4, "29302427263125") Or (dungeonKeyCounter(4, "293024272631") And ((item("hover boots") And item("hammer")) Or My.Settings.setFiTMaze)) Then addArea(111, asAdult)
             Case 114
                 ' Fit MQ: Big Lava Room to Lower Maze
                 If asAdult And item("goron tunic") And dungeonKeyCounter(4, "30") And (canBurnAdult() Or (My.Settings.setFiTMQClimb And item("hover boots"))) Then addArea(115, asAdult)
@@ -4706,8 +4708,12 @@ Public Class frmTrackerOfTime
     End Function
 
     Public Function checkLogic(ByVal logicKey As String, ByVal zone As Byte) As Byte ' Boolean
+        ' If we are hiding quests and it is the big poe hunt, return 0
+        If My.Settings.setHideQuests And zone = 59 Then Return 0
+
         ' Checks the logic key to see if it is available. Start with false
         checkLogic = 0 ' TESTLOGIC False
+
         Dim canDoThis As Boolean = True
 
         ' Check we can reach the overworld zone, or dungeon area
@@ -7019,7 +7025,7 @@ Public Class frmTrackerOfTime
             .area = "GF"
             .zone = 46
             .name = "Archery 1500 points"
-            .logic = "ZhLL7713LL6208LL7722"
+            .logic = "ZdhLL7713LL6208LL7722"
         End With
         inc(tk)
         With aKeysOverworld(tk)
@@ -12286,19 +12292,19 @@ Public Class frmTrackerOfTime
                 WriteMemory(Of Integer)(romAddrStart64 + &H11A670, &H36E4DB)
                 WriteMemory(Of Integer)(romAddrStart64 + &H11A674, &H7FFFFF)
             Case Else
-                quickWrite(romAddrStart + &H11A644, &H10203, emulator)
-                quickWrite(romAddrStart + &H11A648, &H4050608, emulator)
-                quickWrite(romAddrStart + &H11A64C, &H90B0C0D, emulator)
-                quickWrite(romAddrStart + &H11A650, &HE0F1011, emulator)
-                quickWrite(romAddrStart + &H11A654, &H12131818, emulator)
-                quickWrite(romAddrStart + &H11A658, &H1818372B, emulator)
-                quickWrite(romAddrStart + &H11A65C, &H1E28281B, emulator)
-                quickWrite(romAddrStart + &H11A660, &H2B00, emulator)
-                quickWrite(romAddrStart + &H11A664, &H2B000000, emulator)
-                quickWrite(romAddrStart + &H11A668, &HA0A, emulator)
-                quickWrite(romAddrStart + &H11A66C, &H77770000, emulator)
-                quickWrite(romAddrStart + &H11A670, &H36E4DB, emulator)
-                quickWrite(romAddrStart + &H11A674, &H7FFFFF, emulator)
+                quickWrite(romAddrStart + &H11A644UI, &H10203, emulator)
+                quickWrite(romAddrStart + &H11A648UI, &H4050608, emulator)
+                quickWrite(romAddrStart + &H11A64CUI, &H90B0C0D, emulator)
+                quickWrite(romAddrStart + &H11A650UI, &HE0F1011, emulator)
+                quickWrite(romAddrStart + &H11A654UI, &H12131818, emulator)
+                quickWrite(romAddrStart + &H11A658UI, &H1818372B, emulator)
+                quickWrite(romAddrStart + &H11A65CUI, &H1E28281B, emulator)
+                quickWrite(romAddrStart + &H11A660UI, &H2B00, emulator)
+                quickWrite(romAddrStart + &H11A664UI, &H2B000000, emulator)
+                quickWrite(romAddrStart + &H11A668UI, &HA0A, emulator)
+                quickWrite(romAddrStart + &H11A66CUI, &H77770000, emulator)
+                quickWrite(romAddrStart + &H11A670UI, &H36E4DB, emulator)
+                quickWrite(romAddrStart + &H11A674UI, &H7FFFFF, emulator)
         End Select
     End Sub
 
@@ -13763,6 +13769,7 @@ Public Class frmTrackerOfTime
             Graphics.FromImage(.Image).DrawString(outputText, fontDungeon, New SolidBrush(Color.White), xPos, 32)
         End With
     End Sub
+
     Private Sub scanDungeonRewards()
         ' If either are blank, abort
         If aAddresses(12) = 0 Or aAddresses(13) = 0 Then Return
@@ -14750,6 +14757,11 @@ Public Class frmTrackerOfTime
             sHex = Hex(goRead(&H400000 + (i * 4)))
             fixHex(sHex)
             sText &= sHex & Chr(32)
+        Next
+        getRandoVer()
+        ' Rando Settings
+        For i = 1 To aAddresses.Length - 1
+            If Not aAddresses(i) = 0 Then sText &= i.ToString & ": " & CByte(goRead(aAddresses(i), 1)) & vbCrLf
         Next
         ' Add in all the players items
         sText &= vbCrLf & vbCrLf & allItems & vbCrLf
