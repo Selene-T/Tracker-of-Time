@@ -8,7 +8,7 @@ Module Memory
     End Function
 
     <DllImport("kernel32.dll")> _
-    Public Function WriteProcessMemory(ByVal hProcess As IntPtr, ByVal lpBaseAddress As IntPtr, <[In](), Out()> ByVal buffer As Byte(), ByVal size As UInt32, ByRef lpNumberOfBytesWritten As IntPtr) As Int32
+    Public Function WriteProcessMemory(ByVal hProcess As IntPtr, ByVal lpBaseAddress As UIntPtr, <[In](), Out()> ByVal buffer As Byte(), ByVal size As UInt32, ByRef lpNumberOfBytesWritten As IntPtr) As Int32
     End Function
 
     'Public Function WriteInt16(ByVal P As Process, ByVal memAdr As Int32, ByVal value As Integer) As Boolean
@@ -56,9 +56,9 @@ Module Memory
         Return buffer
     End Function
 
-    Private Function WriteBytes(ByVal P As Process, ByVal memAdr As Long, ByVal bytes As Byte(), ByVal length As UInteger) As Boolean
+    Private Function WriteBytes(ByVal P As Process, ByVal memAdr As UInteger, ByVal bytes As Byte(), ByVal length As UInteger) As Boolean
         Dim bytesWritten As IntPtr
-        Dim result As Integer = WriteProcessMemory(P.Handle, New IntPtr(memAdr), bytes, length, bytesWritten)
+        Dim result As Integer = WriteProcessMemory(P.Handle, New UIntPtr(memAdr), bytes, length, bytesWritten)
         Return result <> 0
     End Function
 End Module

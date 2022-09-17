@@ -11,7 +11,7 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 124
     Public Const IS_64BIT As Boolean = True
-    Private Const VER As String = "4.1.8 x" & If(IS_64BIT, "64", "86")
+    Private Const VER As String = "4.1.9 x" & If(IS_64BIT, "64", "86")
     Public p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
@@ -132,8 +132,8 @@ Public Class frmTrackerOfTime
             incB(iCheat)
             If iCheat = aCheat.Length Then
                 showMenuButtons(True)
-                btnTest.Visible = True
-                Button2.Visible = True
+                'btnTest.Visible = True
+                'Button2.Visible = True
                 iCheat = 0
             End If
         Else
@@ -1863,11 +1863,11 @@ Public Class frmTrackerOfTime
     Private Sub quickWrite16(ByVal writeAddress As UInteger, ByVal writeValue As Int16, ByVal sTarget As String)
         writeAddress = romAddrStart + writeAddress
 
-        Try
-            WriteInt16(p, writeAddress, writeValue)
-        Catch ex As Exception
-            MessageBox.Show("quickWrite Problem: " & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        End Try
+        'Try
+        WriteInt16(p, writeAddress, writeValue)
+        'Catch ex As Exception
+        '   MessageBox.Show("quickWrite Problem: " & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        'End Try
     End Sub
     Private Sub quickWrite(ByVal writeAddress As UInteger, ByVal writeValue As Integer, ByVal sTarget As String)
         Try

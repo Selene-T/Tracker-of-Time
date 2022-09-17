@@ -1963,7 +1963,7 @@
                                 aIconLoc(7) = "1631"
                                 aIconPos.Add(New Point(261, 64))
                                 aIconLoc(8) = "7916"
-                                aIconPos.Add(New Point(108, 306))
+                                aIconPos.Add(New Point(108, 276))
                                 aIconLoc(9) = "7918"
                                 aIconPos.Add(New Point(213, 83))
                             Case 5, 6, 28, 30 ' 2F
