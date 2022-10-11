@@ -1696,6 +1696,8 @@
                                 aIconPos.Add(New Point(295, 125))
                                 aIconLoc(7) = "7824"
                                 aIconPos.Add(New Point(359, 100))
+                                aIconLoc(8) = "7826"
+                                aIconPos.Add(New Point(186, 87))
                             Case 9 ' B1
                                 aIconLoc(0) = "3409"
                                 aIconPos.Add(New Point(195, 169))

@@ -10,8 +10,8 @@ Public Class frmTrackerOfTime
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 124
-    Public Const IS_64BIT As Boolean = True
-    Private Const VER As String = "4.1.9 x" & If(IS_64BIT, "64", "86")
+    Public IS_64BIT As Boolean = Environment.Is64BitProcess
+    Private VER As String = "4.1.9a x" & If(IS_64BIT, "64", "86")
     Public p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
@@ -104,6 +104,7 @@ Public Class frmTrackerOfTime
     ' Cheat menu vars
     Private iCheat As Byte = 0
     Private aCheat() As Keys = {Keys.Up, Keys.Up, Keys.Down, Keys.Down, Keys.Left, Keys.Right, Keys.Left, Keys.Right}
+    Private aCheat2() As Keys = {Keys.F, Keys.I, Keys.X, Keys.I, Keys.T, Keys.F, Keys.E, Keys.L, Keys.I, Keys.X}
 
 
     ' Arrays of MQ settings, a current and old to compare to so updating only happens on changes
@@ -128,17 +129,29 @@ Public Class frmTrackerOfTime
     End Sub
 
     Protected Overrides Function ProcessCmdKey(ByRef msg As Message, ByVal keyData As Keys) As Boolean
+        ' I added a 2nd chat option, not currently being used.
+
+        If keyData = aCheat2(iCheat) Then
+            incB(iCheat)
+            If iCheat = aCheat2.Length Then
+                showMenuButtons(True)
+                iCheat = 0
+            End If
+            Return MyBase.ProcessCmdKey(msg, keyData)
+        End If
+        If iCheat > aCheat.Length Then iCheat = 0
+
         If keyData = aCheat(iCheat) Then
             incB(iCheat)
             If iCheat = aCheat.Length Then
                 showMenuButtons(True)
-                'btnTest.Visible = True
-                'Button2.Visible = True
+
                 iCheat = 0
             End If
-        Else
-            iCheat = 0
+            Return MyBase.ProcessCmdKey(msg, keyData)
         End If
+
+        iCheat = 0
         Return MyBase.ProcessCmdKey(msg, keyData)
     End Function
 
@@ -755,6 +768,7 @@ Public Class frmTrackerOfTime
         End If
 
         Dim locationCode As Integer = CInt(IIf(isSoH, GDATA(&H200, 1), goRead(CUR_ROOM_ADDR + 2, 15)))
+
         'Me.Text = locationCode.ToString
 
         Dim doMath As Integer = 0
@@ -2171,7 +2185,7 @@ Public Class frmTrackerOfTime
         'MsgBox(checkLoc("11806").ToString)
         'Dim test As Integer = goRead(arrLocation(118))
         'MsgBox(Hex(test))
-        dump()
+        'dump()
         'Dim test As String = Hex(goRead(arrLocation(121)))
         'For Each k In aKeys
         'If k.loc = "12102" Then MsgBox(Hex(arrLocation(121)) & ": " & test & ": " & checkLoc("12102").ToString)
@@ -2192,6 +2206,13 @@ Public Class frmTrackerOfTime
             Clipboard.SetText(outputXX)
         End If
 
+        If True Then
+            Dim outputXX As String = String.Empty
+            For i = 0 To aRandoSet.Length - 1
+                outputXX &= i.ToString & ": " & aRandoSet(i) & vbCrLf
+            Next
+            Clipboard.SetText(outputXX)
+        End If
 
         If False Then
             Dim outputXX As String = String.Empty
@@ -2270,8 +2291,8 @@ Public Class frmTrackerOfTime
         'updateSettingsPanel()
     End Sub
     Private Sub resizeForm()
-        btnTest.Visible = False
-        Button2.Visible = False
+        'btnTest.Visible = False
+        'Button2.Visible = False
 
         Dim setHeight As Integer = 990
         If My.Settings.setShortForm Then

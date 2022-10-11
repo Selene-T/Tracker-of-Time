@@ -23,27 +23,34 @@
     End Function
 
     Private Function getSohVersion(startAddress As Int64) As Integer
-        If ReadMemory(Of String)(startAddress + &HAECB78, 20, False) = "RACHAEL ALFA (3.0.0)" Then Return 300
+        If ReadMemory(Of String)(startAddress + &HAA7FE0, 21, False) = "ZHORA CHARLIE (4.0.2)" Then Return 402
         If ReadMemory(Of String)(startAddress + &HAECD38, 21, False) = "RACHAEL BRAVO (3.0.1)" Then Return 301
+        If ReadMemory(Of String)(startAddress + &HAECB78, 20, False) = "RACHAEL ALFA (3.0.0)" Then Return 300
         Return Nothing
     End Function
 
     Public Sub sohSetup(ByVal startAddress As Int64)
         sohVersion = getSohVersion(startAddress)
         Dim gOffset As Long = 0
+        Dim gShift As Long = 0
 
         Select Case sohVersion
             Case 300
                 gOffset = &HE4D878
                 gSaveCtxOff = &HEC8560
             Case 301
-                gOffset = &HE4D878 + &H30000
-                gSaveCtxOff = &HEC8560 + &H1D00 '(&HECA260)
+                gOffset = &HE7D878
+                gSaveCtxOff = &HECA260
+            Case 402
+                gOffset = &HE492E8
+                gSaveCtxOff = &HEC56A0
+                gShift = -&H40
             Case Else
                 Exit Sub
         End Select
 
         gGameData = ReadMemory(Of Long)(startAddress + gOffset)
+        gGameData = gGameData + gShift
 
         frmTrackerOfTime.arrLocation(0) = SAV(&H750)
         frmTrackerOfTime.arrLocation(1) = SAV(&H9B8)
