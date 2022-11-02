@@ -23,6 +23,7 @@
     End Function
 
     Private Function getSohVersion(startAddress As Int64) As Integer
+        If ReadMemory(Of String)(startAddress + &HAA7570, 19, False) = "ZHORA DELTA (4.0.3)" Then Return 403
         If ReadMemory(Of String)(startAddress + &HAA7FE0, 21, False) = "ZHORA CHARLIE (4.0.2)" Then Return 402
         If ReadMemory(Of String)(startAddress + &HAECD38, 21, False) = "RACHAEL BRAVO (3.0.1)" Then Return 301
         If ReadMemory(Of String)(startAddress + &HAECB78, 20, False) = "RACHAEL ALFA (3.0.0)" Then Return 300
@@ -36,14 +37,19 @@
 
         Select Case sohVersion
             Case 300
-                gOffset = &HE4D878
                 gSaveCtxOff = &HEC8560
+                gOffset = &HE4D878
             Case 301
-                gOffset = &HE7D878
                 gSaveCtxOff = &HECA260
+                gOffset = &HE7D878
             Case 402
-                gOffset = &HE492E8
                 gSaveCtxOff = &HEC56A0
+                gOffset = &HE492E8
+                gShift = -&H40
+            Case 403
+                ' Rupees: + EC570E
+                gSaveCtxOff = &HEC56E0
+                gOffset = &HE78398
                 gShift = -&H40
             Case Else
                 Exit Sub

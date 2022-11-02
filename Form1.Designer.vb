@@ -54,6 +54,7 @@ Partial Class frmTrackerOfTime
         Me.lcxTunic = New System.Windows.Forms.Label()
         Me.ltbShopsanity = New System.Windows.Forms.Label()
         Me.pnlSettings = New System.Windows.Forms.Panel()
+        Me.lcxBFA = New System.Windows.Forms.Label()
         Me.nlbGTGTricks = New System.Windows.Forms.Label()
         Me.lcxGTGLensless = New System.Windows.Forms.Label()
         Me.lcxHideQuests = New System.Windows.Forms.Label()
@@ -370,7 +371,6 @@ Partial Class frmTrackerOfTime
         Me.checkMQ5 = New System.Windows.Forms.CheckBox()
         Me.tmrTT = New System.Windows.Forms.Timer(Me.components)
         Me.tmrFastScan = New System.Windows.Forms.Timer(Me.components)
-        Me.lcxBFA = New System.Windows.Forms.Label()
         Me.mnuOptions.SuspendLayout()
         Me.pnlSettings.SuspendLayout()
         Me.pnlMain.SuspendLayout()
@@ -567,7 +567,7 @@ Partial Class frmTrackerOfTime
         '
         'btnFocus
         '
-        Me.btnFocus.Location = New System.Drawing.Point(578, 1053)
+        Me.btnFocus.Location = New System.Drawing.Point(578, 1263)
         Me.btnFocus.Name = "btnFocus"
         Me.btnFocus.Size = New System.Drawing.Size(88, 23)
         Me.btnFocus.TabIndex = 238
@@ -878,6 +878,16 @@ Partial Class frmTrackerOfTime
         Me.pnlSettings.Padding = New System.Windows.Forms.Padding(1)
         Me.pnlSettings.Size = New System.Drawing.Size(597, 1039)
         Me.pnlSettings.TabIndex = 253
+        '
+        'lcxBFA
+        '
+        Me.lcxBFA.Location = New System.Drawing.Point(401, 288)
+        Me.lcxBFA.Name = "lcxBFA"
+        Me.lcxBFA.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxBFA.Size = New System.Drawing.Size(155, 20)
+        Me.lcxBFA.TabIndex = 336
+        Me.lcxBFA.Text = "Blue Fire Arrows"
+        Me.lcxBFA.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'nlbGTGTricks
         '
@@ -4103,21 +4113,11 @@ Partial Class frmTrackerOfTime
         '
         Me.tmrFastScan.Interval = 1000
         '
-        'lcxBFA
-        '
-        Me.lcxBFA.Location = New System.Drawing.Point(401, 288)
-        Me.lcxBFA.Name = "lcxBFA"
-        Me.lcxBFA.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
-        Me.lcxBFA.Size = New System.Drawing.Size(155, 20)
-        Me.lcxBFA.TabIndex = 336
-        Me.lcxBFA.Text = "Blue Fire Arrows"
-        Me.lcxBFA.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
         'frmTrackerOfTime
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1175, 1209)
+        Me.ClientSize = New System.Drawing.Size(1175, 1126)
         Me.Controls.Add(Me.mnuOptions)
         Me.Controls.Add(Me.pnlMain)
         Me.Controls.Add(Me.pnlSettings)

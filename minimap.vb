@@ -79,7 +79,7 @@
                         .aExitMap(11)(1) = 3     ' LW Behind Mido
                     Case 12
                         ' LH (87)
-                        .aExitMap(12)(0) = 7     ' HF
+                        .aExitMap(12)(1) = 7     ' HF
                         .aExitMap(12)(2) = 37    ' ZD Main
                     Case 13
                         ' ZD (88)

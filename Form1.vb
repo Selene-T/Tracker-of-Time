@@ -11,7 +11,7 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 124
     Public IS_64BIT As Boolean = Environment.Is64BitProcess
-    Private VER As String = "4.1.9a x" & If(IS_64BIT, "64", "86")
+    Private VER As String = "4.1.13 x" & If(IS_64BIT, "64", "86")
     Public p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
@@ -2291,8 +2291,8 @@ Public Class frmTrackerOfTime
         'updateSettingsPanel()
     End Sub
     Private Sub resizeForm()
-        'btnTest.Visible = False
-        'Button2.Visible = False
+        btnTest.Visible = False
+        Button2.Visible = False
 
         Dim setHeight As Integer = 990
         If My.Settings.setShortForm Then
@@ -2947,7 +2947,7 @@ Public Class frmTrackerOfTime
                 addAreaExit(7, 3, asAdult) 'addArea(18, asAdult)
                 If asAdult Then
                     addArea(17, asAdult)
-                    If item("hookshot") Or My.Settings.setHoverTricks Then addArea(16, asAdult)
+                    If item("hookshot") Or (My.Settings.setHoverTricks And item("hover boots")) Then addArea(16, asAdult)
                     If iER > 1 And (checkLoc("C02") Or item("song of storms")) Then addAreaExit(7, 0, asAdult)
                 Else
                     If allItems.Contains("y3") Or checkLoc("C05") Then addArea(17, asAdult)
@@ -7038,7 +7038,7 @@ Public Class frmTrackerOfTime
             .area = "GF"
             .zone = 46
             .name = "Archery 1000 points"
-            .logic = "ZhLL7713LL6208LL7722"
+            .logic = "ZdhLL7713LL6208LL7722"
         End With
         inc(tk)
         With aKeysOverworld(tk)
@@ -12274,6 +12274,8 @@ Public Class frmTrackerOfTime
 
     Private Sub getSoHRandoSettings()
         Dim offset As Integer = SAV(&H13E8)
+        Clipboard.SetText(Hex(offset))
+        'EC6AC8
         Dim varEnum As Byte = 0
         Dim varVal As Byte = 0
 
@@ -14001,7 +14003,7 @@ Public Class frmTrackerOfTime
             Else
                 bSpawnWarps = True
             End If
-            If aWarps(2) & aWarps(3) & aWarps(4) & aWarps(5) & aWarps(6) & aWarps(7) = "" Then
+            If aWarps(2) & aWarps(3) & aWarps(4) & aWarps(5) & aWarps(6) & aWarps(7) = "6004F66041F15685F4" Then
                 ' If all warps are vanilla, then skip having to check them and set displaying them to false
                 bSongWarps = False
             Else
@@ -14802,8 +14804,16 @@ Public Class frmTrackerOfTime
         Next
         sText &= vbCrLf & "Young:" & vbCrLf
         For i = 0 To aReachY.Length - 1
-            sText &= i.ToString & ": " & aReachY(i).ToString & vbCrLf
+            sText &= i.ToString & ": " & aReachY(i).ToString & vbCrLf & vbCrLf
         Next
+        ' Some ER info like all the exits
+        sText &= "ER: " & iER.ToString & vbCrLf
+        For i = 0 To aExitMap.Length - 1
+            For ii = 0 To 6
+                If aExitMap(i)(ii) < 255 Then sText &= i.ToString & ":" & ii.ToString & " = " & aExitMap(i)(ii) & vbCrLf
+            Next
+        Next
+
         Clipboard.SetText(sText)
         MsgBox("Some variables dumped to clipboard. Please send them to" & vbCrLf & _
                 "me on Discord (Selene#0230), along with a screenshot of the" & vbCrLf & _
