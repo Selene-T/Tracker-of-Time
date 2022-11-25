@@ -11,7 +11,7 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 124
     Public IS_64BIT As Boolean = Environment.Is64BitProcess
-    Private VER As String = "4.1.13 x" & If(IS_64BIT, "64", "86")
+    Private VER As String = "4.2.0 x" & If(IS_64BIT, "64", "86")
     Public p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
@@ -14314,6 +14314,7 @@ Public Class frmTrackerOfTime
         'AP 0.3.2:          80400020 80400844 8040A334 00000000
         'OOTR 6.2:          80400020 80400834 8040A474 00000000
         'OOTR 6.2.72:       80400020 80400834 8040AA7C 80400CD0
+        'OOTR 7.0:          80400020 8040083C 80411E64 80400D6C
         'Roman 6.2.43:      80400020 80400834 8040ACC4 80400CD0
         'Roman 6.2.72-R2:   80400020 80400834 8040B11C 80400CD0
         'Roman 6.2.163:     80400020 80400834 8040E478 80400D60
@@ -14384,6 +14385,26 @@ Public Class frmTrackerOfTime
                 aAddresses(17) = &H400CE0   ' OOTR Info On/Off
                 aAddresses(18) = &H400CCD   ' Overworld ER
                 aAddresses(19) = &H400CCE   ' Dungeon ER
+            Case "80411E64"
+                ' OOTR 7.0
+                aAddresses(0) = &H400D98    ' MQs Addr
+                aAddresses(1) = &H400DAC    ' LAC1 Addr
+                aAddresses(2) = &H400DB0    ' LAC2 Addr
+                aAddresses(3) = &H400DB4    ' TH Addr
+                aAddresses(4) = &H400DA8    ' RB1 Addr
+                aAddresses(5) = &H400DB2    ' RB2 Addr
+                aAddresses(7) = &H400D4C    ' Bombchu's in Logic
+                aAddresses(8) = &H400D5F    ' Cow Shuffle
+                aAddresses(9) = &H400D8C    ' Dungeon Rewards
+                'aAddresses(10) = &H   ' Scrub Shuffle
+                'aAddresses(11) = &H   ' Key Mode
+                aAddresses(12) = &H400D84   ' Pedestal DRs
+                aAddresses(13) = &H400D80   ' Compass DRs
+                'aAddresses(14) = &H   ' Big Poe Goal
+                'aAddresses(15) = &H   ' KF | 0: Open | 1: Closed Deku | 2: Closed
+                'aAddresses(16) = &H   ' ZF | 0: Open | 1: Adult | 2: Closed
+                aAddresses(18) = &H400D60   ' Overworld ER
+                aAddresses(19) = &H400D61   ' Dungeon ER
             Case "8040ACC4"
                 ' Roman 6.2.43
                 aAddresses(0) = &H400CF8    ' MQs Addr
