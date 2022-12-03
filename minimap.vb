@@ -252,9 +252,8 @@
 
             .getAge()
 
-            Dim addrRoom As Integer = If(.isSoH, &HD17DCC, &H1D8BEE)
-            'Dim addrRoom As Integer = If(.isSoH, &HD16D9C, &H1D8BEE)
-            'Dim addrRoom As Integer = If(.isSoH, SAV(-&H1B17C4), &H1D8BEE)
+            Dim addrRoom As Integer = If(.isSoH, soh.gRoomAddr, &H1D8BEE)
+
             If locationCode <= 9 Then
                 .iRoom = CByte(.goRead(addrRoom, 1))
             End If

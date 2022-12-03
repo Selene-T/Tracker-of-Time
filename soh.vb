@@ -2,6 +2,7 @@
     Private gSaveCtxOff As Integer = 0
     Private sohVersion As Integer = 0
     Private gGameData As Long = 0
+    Public gRoomAddr As Long = 0
 
     Public Function SAV(offset As Integer) As Integer
         Return gSaveCtxOff + offset
@@ -23,6 +24,7 @@
     End Function
 
     Private Function getSohVersion(startAddress As Int64) As Integer
+        If ReadMemory(Of String)(startAddress + &HAEFD10, 19, False) = "FLYNN BRAVO (5.0.1)" Then Return 501
         If ReadMemory(Of String)(startAddress + &HAA7570, 19, False) = "ZHORA DELTA (4.0.3)" Then Return 403
         If ReadMemory(Of String)(startAddress + &HAA7FE0, 21, False) = "ZHORA CHARLIE (4.0.2)" Then Return 402
         If ReadMemory(Of String)(startAddress + &HAECD38, 21, False) = "RACHAEL BRAVO (3.0.1)" Then Return 301
@@ -51,6 +53,15 @@
                 gSaveCtxOff = &HEC56E0
                 gOffset = &HE78398
                 gShift = -&H40
+            Case 501
+                ' Rupees: + F07B0E
+                gSaveCtxOff = &HEC56E0 + &H42400
+                ' Scene rcx + 1C0: + E9A698
+                gOffset = &HE9A698
+                gShift = -&H40
+                ' Room addr: + D1D858
+                ' This moves around too much and while the previous version do not have it, will try to have it in all future releases
+                gRoomAddr = &HD1D858
             Case Else
                 Exit Sub
         End Select
