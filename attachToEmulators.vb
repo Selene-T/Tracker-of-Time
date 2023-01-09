@@ -271,16 +271,30 @@
         ' RetroArch will be coded for two cores, though no idea why someone would use the second. If it found the mupen64plus, go ahead with it
         If addressDLL <> 0 Then
             ' Add location of variable to base address
-            addressDLL = addressDLL + &H8E795E0
+            Dim readAddress As String = ""
+            Dim tempAddressDLL As Int64 = 0
 
-            ' Read the first half of the address 
-            Dim readAddress As String = Hex(ReadMemory(Of Integer)(addressDLL))
-            frmTrackerOfTime.fixHex(readAddress)
-            ' Read the second half of the address
-            readAddress = Hex(ReadMemory(Of Integer)(addressDLL + 4)) & readAddress
+            ' Prepare new address variable
+            Dim attemptOffset As Int64 = 0
+            For i = 0 To 2
+                Select Case i
+                    Case 0
+                        attemptOffset = &H8E795E0&
+                    Case 1
+                        attemptOffset = &H8E825D8&
+                    Case Else
+                        Return Nothing
+                End Select
 
-            ' Set it + 0x8000000 as starting address
-            frmTrackerOfTime.romAddrStart64 = CLng("&H" & readAddress) + &H80000000&
+                tempAddressDLL = addressDLL + attemptOffset
+                ' Read the first half of the address 
+                readAddress = Hex(ReadMemory(Of Integer)(tempAddressDLL))
+                frmTrackerOfTime.fixHex(readAddress)
+                ' Read the second half of the address
+                readAddress = Hex(ReadMemory(Of Integer)(addressDLL + attemptOffset + 4)) & readAddress
+                frmTrackerOfTime.romAddrStart64 = CLng("&H" & readAddress) + &H80000000&
+                If ReadMemory(Of Integer)(frmTrackerOfTime.romAddrStart64 + &H11A5EC) = 1514490948 Then Exit For
+            Next
             frmTrackerOfTime.emulator = "retroarch - mupen64plus"
         Else
             ' Check for RetroArch's parallel core, again, for whatever reason but best to cover extra bases
