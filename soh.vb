@@ -5,6 +5,8 @@
     Public gRoomAddr As Long = 0
 
     Public Function SAV(offset As Integer) As Integer
+        ' Somewhere between 5.0.1 and 5.1.4, they shifted the save data 0x0E at the inventory
+        If sohVersion >= 514 And offset >= &H78 Then offset += &HE
         Return gSaveCtxOff + offset
     End Function
 
@@ -23,7 +25,8 @@
         Return sohVersion
     End Function
 
-    Private Function getSohVersion(startAddress As Int64) As Integer
+    Private Function getSohVersion(startAddress As Int64) As Integer ' Non-writable area String search
+        If ReadMemory(Of String)(startAddress + &HF15490, 20, False) = "BRADLEY ECHO (5.1.4)" Then Return 514
         If ReadMemory(Of String)(startAddress + &HAEFD10, 19, False) = "FLYNN BRAVO (5.0.1)" Then Return 501
         If ReadMemory(Of String)(startAddress + &HAA7570, 19, False) = "ZHORA DELTA (4.0.3)" Then Return 403
         If ReadMemory(Of String)(startAddress + &HAA7FE0, 21, False) = "ZHORA CHARLIE (4.0.2)" Then Return 402
@@ -54,14 +57,23 @@
                 gOffset = &HE78398
                 gShift = -&H40
             Case 501
-                ' Rupees: + F07B0E
-                gSaveCtxOff = &HEC56E0 + &H42400
+                ' Rupees: soh.exe + F07B0E: -2E = F07AE0
+                gSaveCtxOff = &HF07AE0
                 ' Scene rcx + 1C0: + E9A698
                 gOffset = &HE9A698
                 gShift = -&H40
                 ' Room addr: + D1D858
-                ' This moves around too much and while the previous version do not have it, will try to have it in all future releases
+                ' This moves around too much, while the previous version do not.
                 gRoomAddr = &HD1D858
+            Case 514
+                ' Rupees (2 byte): soh.exe + 1298074: -2E = 1298046
+                gSaveCtxOff = &H1298074 - &H2E
+                ' Scene (1 byte) rax + 1C0: KF = 85 / Mido's = 40: soh.exe + 1238FF8
+                gOffset = &H1238FF8
+                gShift = -&H40
+                ' Room addr for minimap (1 byte): DT 1F = 0 / DT 2F = 11 > 1 > 2 / DT 3F = 12 > 10: soh.exe + 1061F74
+                ' This moves around too much, while the previous version do no.
+                gRoomAddr = &H1061F74
             Case Else
                 Exit Sub
         End Select

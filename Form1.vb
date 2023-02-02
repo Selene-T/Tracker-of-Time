@@ -11,7 +11,7 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 124
     Public IS_64BIT As Boolean = Environment.Is64BitProcess
-    Private VER As String = "4.2.3 x" & If(IS_64BIT, "64", "86")
+    Private VER As String = "4.2.5 x" & If(IS_64BIT, "64", "86")
     Public p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
@@ -3067,7 +3067,7 @@ Public Class frmTrackerOfTime
                 If asAdult Then
                     addArea(35, asAdult)
                 Else
-                    If canExplode() Or checkLoc("11603") Or checkLoc("11608") Or checkLoc("11609") Then addArea(35, asAdult)
+                    If canExplode() Or checkLoc("11602") Or checkLoc("11608") Or checkLoc("11609") Then addArea(35, asAdult)
                 End If
             Case 35
                 ' ZR Main to ZR Front, ZR Behind Waterfall, LW Front, Frogs
@@ -4716,8 +4716,8 @@ Public Class frmTrackerOfTime
             Return True
         End If
     End Function
-    Private Function inlogicBombchus() As Boolean
-        inlogicBombchus = False
+    Private Function inLogicBombchus() As Boolean
+        inLogicBombchus = False
         ' Check for bombchu logic setting
         If My.Settings.setBombchus Then
             ' If bombchus are in logic, check for bombchus
@@ -4778,7 +4778,7 @@ Public Class frmTrackerOfTime
         ' x is for checking if you can explode things
         If logicKey.Contains("x") And canExplode() Then logicKey = logicKey.Replace("x", "")
         ' X is for checking if Bombchus are in logic. If they are, test them, if not, test bomb bag
-        If logicKey.Contains("X") And inlogicBombchus() Then logicKey = logicKey.Replace("X", "")
+        If logicKey.Contains("X") And inLogicBombchus() Then logicKey = logicKey.Replace("X", "")
         ' Y is for young Link access
         If logicKey.Contains("Y") Then
             'If zone = 99 Then
@@ -6638,7 +6638,7 @@ Public Class frmTrackerOfTime
         End With
         inc(tk)
         With aKeysOverworld(tk)
-            .loc = "11603"
+            .loc = "11602"
             .area = "EVENT"
             .name = "Front Rock 1"
         End With
@@ -11100,7 +11100,7 @@ Public Class frmTrackerOfTime
                 .loc = "4220"
                 .area = "GTG7"
                 .zone = 186
-                .name = "Heaby Block Third Chest"
+                .name = "Heavy Block Third Chest"
             End With
             With aKeysDungeons(10)(8)
                 .loc = "4202"
@@ -12213,7 +12213,7 @@ Public Class frmTrackerOfTime
             redirectChecks(False)
         End If
         wasSoH = True
-        AutoScanToolStripMenuItem.Text = "Squadala"
+        'AutoScanToolStripMenuItem.Text = "Squadala"
     End Sub
 
     Private Sub redirectChecks(Optional ByVal regularRando As Boolean = True)
@@ -14834,6 +14834,16 @@ Public Class frmTrackerOfTime
                 If aExitMap(i)(ii) < 255 Then sText &= i.ToString & ":" & ii.ToString & " = " & aExitMap(i)(ii) & vbCrLf
             Next
         Next
+
+        ' Can checks
+        Dim canChecks As String = vbCrLf
+        canChecks &= canAttackYoung(False) & canAttackYoung(True) & canBombGrotto() & canBreakRocks() & canBurnAdult() & canBurnYoung() & canChangeLake() & vbCrLf
+        canChecks &= canSpiritShortcut() & canDeku() & canEnterGanonsCastle() & canExplode() & canLens() & canLACS() & canFewerGoron() & vbCrLf
+        canChecks &= canFewerZora() & canGetBugs() & canHoverTricks() & canProjectile() & canStormsGrotto() & canTimeChange() & inLogicBombchus() & vbCrLf
+        sText &= canChecks.Replace("False", "x").Replace("True", "o") & vbCrLf
+
+        ' ZR Rock checks
+        sText &= "ZR:" & checkLoc("11602") & checkLoc("11608") & checkLoc("11609") & vbCrLf
 
         Clipboard.SetText(sText)
         MsgBox("Some variables dumped to clipboard. Please send them to" & vbCrLf & _
