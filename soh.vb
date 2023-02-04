@@ -6,7 +6,11 @@
 
     Public Function SAV(offset As Integer) As Integer
         ' Somewhere between 5.0.1 and 5.1.4, they shifted the save data 0x0E at the inventory
-        If sohVersion >= 514 And offset >= &H78 Then offset += &HE
+        Select Case sohVersion
+            Case 514
+                If offset = &H4 Then offset = -2
+                If offset >= &H78 Then offset += &HE
+        End Select
         Return gSaveCtxOff + offset
     End Function
 

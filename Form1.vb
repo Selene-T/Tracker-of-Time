@@ -11,7 +11,7 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 124
     Public IS_64BIT As Boolean = Environment.Is64BitProcess
-    Private VER As String = "4.2.5 x" & If(IS_64BIT, "64", "86")
+    Private VER As String = "4.2.5a x" & If(IS_64BIT, "64", "86")
     Public p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
@@ -30,7 +30,7 @@ Public Class frmTrackerOfTime
     Private randoVer As String = String.Empty
     Private rainbowBridge(1) As Byte
     Private aGetQuantity(14) As Boolean
-    Private aRandoSet(50) As Byte
+    Private aRandoSet(100) As Byte
     Private lastFirstEnum As Byte = 255
 
     ' Arrays for tracking checks
@@ -406,6 +406,7 @@ Public Class frmTrackerOfTime
                 isAdult = False
                 If aReachY(12) Then canAdult = True
         End Select
+
     End Sub
 
     Private Sub getDungeonItems()
@@ -1049,7 +1050,7 @@ Public Class frmTrackerOfTime
         ' EV: LH Restored
         setLoc("C04", checkBit(arrSingles(7), 25))
         ' Deliver Zelda's Letter | Unlock Mask Shoppe
-        If isSoH And aRandoSet(2) = 1 Then
+        If isSoH And aRandoSet(3) = 1 Then
             ' SoH handles Mask Shoppe differently if Kakariko Gate is set to Open. It gets tied to Zelda's Letter
             setLoc("C05", checkLoc("6416"))
         Else
@@ -1064,6 +1065,18 @@ Public Class frmTrackerOfTime
                 My.Settings.setBombchus = updateSetting
                 updateSettingsPanel()
             End If
+        ElseIf isSoH And sohVer() >= 514 Then
+            Select Case aRandoSet(60)
+                ' 0 is off, 1 is on
+                Case 0
+                    updateSetting = False
+                Case Else
+                    updateSetting = True
+            End Select
+            If Not My.Settings.setBombchus = updateSetting Then
+                My.Settings.setBombchus = updateSetting
+                updateSettingsPanel()
+            End If
         End If
 
         ' Cow Shuffle setting
@@ -1074,12 +1087,36 @@ Public Class frmTrackerOfTime
                 My.Settings.setCow = updateSetting
                 updateSettingsPanel()
             End If
+        ElseIf isSoH And sohVer() >= 514 Then
+            Select Case aRandoSet(27)
+                ' 0 is off, 1 is on
+                Case 0
+                    updateSetting = False
+                Case Else
+                    updateSetting = True
+            End Select
+            If Not My.Settings.setCow = updateSetting Then
+                My.Settings.setCow = updateSetting
+                updateSettingsPanel()
+            End If
         End If
 
         ' Scrub Shuffle setting
         If Not aAddresses(10) = 0 Then
             updateSetting = False
             If goRead(aAddresses(10), 1) = 1 Then updateSetting = True
+            If Not My.Settings.setScrub = updateSetting Then
+                My.Settings.setScrub = updateSetting
+                updateSettingsPanel()
+            End If
+        ElseIf isSoH And sohVer() >= 514 Then
+            Select Case aRandoSet(26)
+                ' 0 is off, others are on
+                Case 0
+                    updateSetting = False
+                Case Else
+                    updateSetting = True
+            End Select
             If Not My.Settings.setScrub = updateSetting Then
                 My.Settings.setScrub = updateSetting
                 updateSettingsPanel()
@@ -1119,7 +1156,7 @@ Public Class frmTrackerOfTime
                 updateSettingsPanel()
             End If
         ElseIf isSoH Then
-            Select Case aRandoSet(1)
+            Select Case aRandoSet(2)
                 ' 1 and 2 are 'Open' and 'Closed Deku'
                 Case 1, 2
                     updateSetting = True
@@ -1148,7 +1185,7 @@ Public Class frmTrackerOfTime
                 updateSettingsPanel()
             End If
         ElseIf isSoH Then
-            Select Case aRandoSet(4)
+            Select Case aRandoSet(5)
                 Case 2
                     ' 0 is 'Normal' ZF (aka Closed)
                     updateSetting = False
@@ -12274,8 +12311,10 @@ Public Class frmTrackerOfTime
 
     Private Sub getSoHRandoSettings()
         Dim offset As Integer = SAV(&H13E8)
+        ' Things changed between versions
+        If sohVer() >= 514 Then offset = SAV(&H19D4)
         Clipboard.SetText(Hex(offset))
-        'EC6AC8
+
         Dim varEnum As Byte = 0
         Dim varVal As Byte = 0
 
@@ -12293,8 +12332,18 @@ Public Class frmTrackerOfTime
             varVal = CByte(goRead(offset + (i * 8) + 4, 1))
             aRandoSet(varEnum) = varVal
         Next
-    End Sub
 
+        If sohVer() < 514 Then
+            ' 5/4/3/2 for 5.1.4 was 4/3/2/1 for previous versions
+            For i = 5 To 2 Step -1
+                aRandoSet(i) = aRandoSet(i - 1)
+            Next
+            ' 13/12/11/10/9/8 for 5.1.4 was 11/10/9/8/7/6 for previous versions
+            For i = 13 To 8 Step -1
+                aRandoSet(i) = aRandoSet(i - 2)
+            Next
+        End If
+    End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         Select Case emulator
@@ -14449,26 +14498,26 @@ Public Class frmTrackerOfTime
     Private Sub getRainbowBridge()
         ' Start with checking for SoH since things are handled differently
         If isSoH Then
-            Select Case aRandoSet(6)
+            Select Case aRandoSet(8)
                 Case 0  ' Open
                     rainbowBridge(0) = 0
                 Case 1  ' Vanilla
                     rainbowBridge(0) = 4
                 Case 2  ' Stone
                     rainbowBridge(0) = 3
-                    rainbowBridge(1) = aRandoSet(7)
+                    rainbowBridge(1) = aRandoSet(9)
                 Case 3  ' Medallions
                     rainbowBridge(0) = 1
-                    rainbowBridge(1) = aRandoSet(8)
+                    rainbowBridge(1) = aRandoSet(10)
                 Case 4 ' Rewards (aka Dungeons for normal randos)
                     rainbowBridge(0) = 2
-                    rainbowBridge(1) = aRandoSet(9)
+                    rainbowBridge(1) = aRandoSet(11)
                 Case 5  ' Dungeons (when blue portal is used, not used in normal randos)
                     rainbowBridge(0) = 2    ' TODO: Track blue portals used. For now, make it Rewards and add one to the count
-                    rainbowBridge(1) = CByte(aRandoSet(10) + 1)
+                    rainbowBridge(1) = CByte(aRandoSet(12) + 1)
                 Case 6  ' Tokens
                     rainbowBridge(0) = 5
-                    rainbowBridge(1) = aRandoSet(11)
+                    rainbowBridge(1) = aRandoSet(13)
             End Select
             Exit Sub
         End If
@@ -14825,7 +14874,7 @@ Public Class frmTrackerOfTime
         Next
         sText &= vbCrLf & "Young:" & vbCrLf
         For i = 0 To aReachY.Length - 1
-            sText &= i.ToString & ": " & aReachY(i).ToString & vbCrLf & vbCrLf
+            sText &= i.ToString & ": " & aReachY(i).ToString & vbCrLf
         Next
         ' Some ER info like all the exits
         sText &= "ER: " & iER.ToString & vbCrLf
