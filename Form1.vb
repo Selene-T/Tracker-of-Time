@@ -11,7 +11,7 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 124
     Public IS_64BIT As Boolean = Environment.Is64BitProcess
-    Private VER As String = "4.2.5a x" & If(IS_64BIT, "64", "86")
+    Private VER As String = "4.2.6 x" & If(IS_64BIT, "64", "86")
     Public p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
@@ -7007,7 +7007,7 @@ Public Class frmTrackerOfTime
             .loc = "8227"
             .area = "GV"
             .zone = 45
-            .name = "Behind Tents (N)"
+            .name = "Behind Tent (N)"
             .gs = True
             .logic = "ZNk"
         End With
@@ -7888,6 +7888,7 @@ Public Class frmTrackerOfTime
     Private Sub updateMQs()
         ' Set up the dungeons based on if they are Master Quest versions or not
 
+        Dim mqLabel As New Label
         ' Step through the aMQ array, where the current Master Quest settings are set
         For i = 0 To 11
             ' If the new read is different than the old read (old is what is already read and loaded), update the dungeon array
@@ -7895,28 +7896,40 @@ Public Class frmTrackerOfTime
                 Select Case i
                     Case 0
                         makeKeysDekuTree(aMQ(i))
+                        mqLabel = lcxMQDT
                     Case 1
                         makeKeysDodongosCavern(aMQ(i))
+                        mqLabel = lcxMQDC
                     Case 2
                         makeKeysJabuJabusBelly(aMQ(i))
+                        mqLabel = lcxMQJB
                     Case 3
                         makeKeysForestTemple(aMQ(i))
+                        mqLabel = lcxMQFoT
                     Case 4
                         makeKeysFireTemple(aMQ(i))
+                        mqLabel = lcxMQFiT
                     Case 5
                         makeKeysWaterTemple(aMQ(i))
+                        mqLabel = lcxMQWT
                     Case 6
                         makeKeysSpiritTemple(aMQ(i))
+                        mqLabel = lcxMQSpT
                     Case 7
                         makeKeysShadowTemple(aMQ(i))
+                        mqLabel = lcxMQShT
                     Case 8
                         makeKeysBottomOfTheWell(aMQ(i))
+                        mqLabel = lcxMQBotW
                     Case 9
                         makeKeysIceCavern(aMQ(i))
+                        mqLabel = lcxMQIC
                     Case 10
                         makeKeysGerudoTrainingGround(aMQ(i))
+                        mqLabel = lcxMQGTG
                     Case 11
                         makeKeysGanonsCastle(aMQ(i))
+                        mqLabel = lcxMQGT
                 End Select
             End If
         Next
@@ -13087,6 +13100,20 @@ Public Class frmTrackerOfTime
                 My.Settings.setGTGLensless = Not My.Settings.setGTGLensless
             Case lcxBFA.Text
                 My.Settings.setBFA = Not My.Settings.setBFA
+            Case lcxMQDT.Text
+            Case lcxMQDC.Text
+            Case lcxMQJB.Text
+            Case lcxMQFoT.Text
+            Case lcxMQFiT.Text
+            Case lcxMQWT.Text
+            Case lcxMQSpT.Text
+            Case lcxMQShT.Text
+            Case lcxMQBotW.Text
+            Case lcxMQIC.Text
+            Case lcxMQGTG.Text
+            Case lcxMQGT.Text
+
+
                 'Case lcxxx.Text
                 'My.Settings.setxx = Not My.Settings.setxx
             Case lblGoldSkulltulas.Text, lblShopsanity.Text, lblSmallKeys.Text, lblInfo.Text
@@ -13692,6 +13719,10 @@ Public Class frmTrackerOfTime
     End Function
     Private Function flipKeyForced(ByVal name As String, ByVal area As String, Optional setAs As Byte = 0) As Boolean
         flipKeyForced = False
+
+        ' Test for separating a GS and Cow that share the same name
+        Dim isCow As Boolean = name.Contains("Cow:")
+
         ' Strip any extras we added to the display name to get the original key name
         name = Replace(name, "GS:", "")
         name = Replace(name, "Cow:", "")
@@ -13718,7 +13749,7 @@ Public Class frmTrackerOfTime
                 End Select
             End If
 
-            For Each key In aKeysOverworld.Where(Function(k As keyCheck) k.name.Equals(name))
+            For Each key In aKeysOverworld.Where(Function(k As keyCheck) k.cow.Equals(isCow)).Where(Function(k As keyCheck) k.name.Equals(name))
                 With key
                     If .area = area Or .area = area2 Or .area = area3 Then
                         Select Case setAs
@@ -14364,6 +14395,8 @@ Public Class frmTrackerOfTime
         'OOTR 6.2:          80400020 80400834 8040A474 00000000
         'OOTR 6.2.72:       80400020 80400834 8040AA7C 80400CD0
         'OOTR 7.0:          80400020 8040083C 80411E64 80400D6C
+        'OOTR 7.1:          80400020 8040083C 80412064 80400D6C
+
         'Roman 6.2.43:      80400020 80400834 8040ACC4 80400CD0
         'Roman 6.2.72-R2:   80400020 80400834 8040B11C 80400CD0
         'Roman 6.2.163:     80400020 80400834 8040E478 80400D60
@@ -14434,7 +14467,7 @@ Public Class frmTrackerOfTime
                 aAddresses(17) = &H400CE0   ' OOTR Info On/Off
                 aAddresses(18) = &H400CCD   ' Overworld ER
                 aAddresses(19) = &H400CCE   ' Dungeon ER
-            Case "80411E64"
+            Case "80411E64", "80412064"
                 ' OOTR 7.0
                 aAddresses(0) = &H400D98    ' MQs Addr
                 aAddresses(1) = &H400DAC    ' LAC1 Addr

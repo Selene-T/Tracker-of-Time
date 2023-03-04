@@ -1534,7 +1534,7 @@
                                 aIconPos.Add(New Point(313, 200))
                             Case 0 To 4, 7, 8, 11, 13 To 15 ' 1F
                                 aIconLoc(0) = "3208"
-                                aIconPos.Add(New Point(158, 239))
+                                aIconPos.Add(New Point(158, 262))
                                 aIconLoc(1) = "3205"
                                 aIconPos.Add(New Point(109, 319))
                                 aIconLoc(2) = "4400"

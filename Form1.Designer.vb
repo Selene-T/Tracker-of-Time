@@ -371,6 +371,19 @@ Partial Class frmTrackerOfTime
         Me.checkMQ5 = New System.Windows.Forms.CheckBox()
         Me.tmrTT = New System.Windows.Forms.Timer(Me.components)
         Me.tmrFastScan = New System.Windows.Forms.Timer(Me.components)
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.lcxMQDT = New System.Windows.Forms.Label()
+        Me.lcxMQDC = New System.Windows.Forms.Label()
+        Me.lcxMQJB = New System.Windows.Forms.Label()
+        Me.lcxMQFoT = New System.Windows.Forms.Label()
+        Me.lcxMQFiT = New System.Windows.Forms.Label()
+        Me.lcxMQIC = New System.Windows.Forms.Label()
+        Me.lcxMQBotW = New System.Windows.Forms.Label()
+        Me.lcxMQShT = New System.Windows.Forms.Label()
+        Me.lcxMQSpT = New System.Windows.Forms.Label()
+        Me.lcxMQWT = New System.Windows.Forms.Label()
+        Me.lcxMQGTG = New System.Windows.Forms.Label()
+        Me.lcxMQGT = New System.Windows.Forms.Label()
         Me.mnuOptions.SuspendLayout()
         Me.pnlSettings.SuspendLayout()
         Me.pnlMain.SuspendLayout()
@@ -538,7 +551,7 @@ Partial Class frmTrackerOfTime
         '
         'btnTest
         '
-        Me.btnTest.Location = New System.Drawing.Point(433, 340)
+        Me.btnTest.Location = New System.Drawing.Point(16, 890)
         Me.btnTest.Name = "btnTest"
         Me.btnTest.Size = New System.Drawing.Size(88, 23)
         Me.btnTest.TabIndex = 42
@@ -548,7 +561,7 @@ Partial Class frmTrackerOfTime
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(433, 369)
+        Me.Button2.Location = New System.Drawing.Point(16, 919)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(88, 23)
         Me.Button2.TabIndex = 221
@@ -559,7 +572,7 @@ Partial Class frmTrackerOfTime
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(13, 961)
+        Me.Label1.Location = New System.Drawing.Point(13, 966)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(128, 26)
         Me.Label1.TabIndex = 233
@@ -785,6 +798,19 @@ Partial Class frmTrackerOfTime
         '
         'pnlSettings
         '
+        Me.pnlSettings.Controls.Add(Me.lcxMQGTG)
+        Me.pnlSettings.Controls.Add(Me.lcxMQGT)
+        Me.pnlSettings.Controls.Add(Me.lcxMQIC)
+        Me.pnlSettings.Controls.Add(Me.lcxMQBotW)
+        Me.pnlSettings.Controls.Add(Me.lcxMQShT)
+        Me.pnlSettings.Controls.Add(Me.lcxMQSpT)
+        Me.pnlSettings.Controls.Add(Me.lcxMQWT)
+        Me.pnlSettings.Controls.Add(Me.lcxMQFiT)
+        Me.pnlSettings.Controls.Add(Me.lcxMQFoT)
+        Me.pnlSettings.Controls.Add(Me.lcxMQJB)
+        Me.pnlSettings.Controls.Add(Me.lcxMQDC)
+        Me.pnlSettings.Controls.Add(Me.lcxMQDT)
+        Me.pnlSettings.Controls.Add(Me.Label2)
         Me.pnlSettings.Controls.Add(Me.lcxBFA)
         Me.pnlSettings.Controls.Add(Me.nlbGTGTricks)
         Me.pnlSettings.Controls.Add(Me.lcxGTGLensless)
@@ -893,7 +919,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbGTGTricks.AutoSize = True
         Me.nlbGTGTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbGTGTricks.Location = New System.Drawing.Point(401, 696)
+        Me.nlbGTGTricks.Location = New System.Drawing.Point(401, 701)
         Me.nlbGTGTricks.Name = "nlbGTGTricks"
         Me.nlbGTGTricks.Size = New System.Drawing.Size(76, 13)
         Me.nlbGTGTricks.TabIndex = 335
@@ -901,7 +927,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxGTGLensless
         '
-        Me.lcxGTGLensless.Location = New System.Drawing.Point(401, 713)
+        Me.lcxGTGLensless.Location = New System.Drawing.Point(401, 718)
         Me.lcxGTGLensless.Name = "lcxGTGLensless"
         Me.lcxGTGLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxGTGLensless.Size = New System.Drawing.Size(159, 20)
@@ -942,7 +968,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFiTScarecrow
         '
-        Me.lcxFiTScarecrow.Location = New System.Drawing.Point(201, 480)
+        Me.lcxFiTScarecrow.Location = New System.Drawing.Point(201, 485)
         Me.lcxFiTScarecrow.Name = "lcxFiTScarecrow"
         Me.lcxFiTScarecrow.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFiTScarecrow.Size = New System.Drawing.Size(190, 36)
@@ -982,7 +1008,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxIGCMQRustedSwitches
         '
-        Me.lcxIGCMQRustedSwitches.Location = New System.Drawing.Point(401, 874)
+        Me.lcxIGCMQRustedSwitches.Location = New System.Drawing.Point(401, 879)
         Me.lcxIGCMQRustedSwitches.Name = "lcxIGCMQRustedSwitches"
         Me.lcxIGCMQRustedSwitches.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxIGCMQRustedSwitches.Size = New System.Drawing.Size(195, 36)
@@ -993,7 +1019,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxIGCLensless
         '
-        Me.lcxIGCLensless.Location = New System.Drawing.Point(401, 856)
+        Me.lcxIGCLensless.Location = New System.Drawing.Point(401, 861)
         Me.lcxIGCLensless.Name = "lcxIGCLensless"
         Me.lcxIGCLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxIGCLensless.Size = New System.Drawing.Size(190, 20)
@@ -1004,7 +1030,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxBotWMQPits
         '
-        Me.lcxBotWMQPits.Location = New System.Drawing.Point(401, 673)
+        Me.lcxBotWMQPits.Location = New System.Drawing.Point(401, 678)
         Me.lcxBotWMQPits.Name = "lcxBotWMQPits"
         Me.lcxBotWMQPits.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxBotWMQPits.Size = New System.Drawing.Size(159, 20)
@@ -1015,7 +1041,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTMQPit
         '
-        Me.lcxShTMQPit.Location = New System.Drawing.Point(401, 581)
+        Me.lcxShTMQPit.Location = New System.Drawing.Point(401, 586)
         Me.lcxShTMQPit.Name = "lcxShTMQPit"
         Me.lcxShTMQPit.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTMQPit.Size = New System.Drawing.Size(159, 36)
@@ -1026,7 +1052,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSpTLensless
         '
-        Me.lcxSpTLensless.Location = New System.Drawing.Point(201, 816)
+        Me.lcxSpTLensless.Location = New System.Drawing.Point(201, 821)
         Me.lcxSpTLensless.Name = "lcxSpTLensless"
         Me.lcxSpTLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSpTLensless.Size = New System.Drawing.Size(181, 20)
@@ -1037,7 +1063,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWaTDrgnSwitch
         '
-        Me.lcxWaTDrgnSwitch.Location = New System.Drawing.Point(201, 692)
+        Me.lcxWaTDrgnSwitch.Location = New System.Drawing.Point(201, 697)
         Me.lcxWaTDrgnSwitch.Name = "lcxWaTDrgnSwitch"
         Me.lcxWaTDrgnSwitch.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWaTDrgnSwitch.Size = New System.Drawing.Size(181, 36)
@@ -1070,7 +1096,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbGCTricks.AutoSize = True
         Me.nlbGCTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbGCTricks.Location = New System.Drawing.Point(401, 839)
+        Me.nlbGCTricks.Location = New System.Drawing.Point(401, 844)
         Me.nlbGCTricks.Name = "nlbGCTricks"
         Me.nlbGCTricks.Size = New System.Drawing.Size(135, 13)
         Me.nlbGCTricks.TabIndex = 317
@@ -1078,7 +1104,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTPlatform
         '
-        Me.lcxShTPlatform.Location = New System.Drawing.Point(401, 479)
+        Me.lcxShTPlatform.Location = New System.Drawing.Point(401, 484)
         Me.lcxShTPlatform.Name = "lcxShTPlatform"
         Me.lcxShTPlatform.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTPlatform.Size = New System.Drawing.Size(195, 36)
@@ -1091,7 +1117,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbWasteland.AutoSize = True
         Me.nlbWasteland.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbWasteland.Location = New System.Drawing.Point(1, 445)
+        Me.nlbWasteland.Location = New System.Drawing.Point(1, 450)
         Me.nlbWasteland.Name = "nlbWasteland"
         Me.nlbWasteland.Size = New System.Drawing.Size(162, 13)
         Me.nlbWasteland.TabIndex = 314
@@ -1099,7 +1125,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWastelandReverse
         '
-        Me.lcxWastelandReverse.Location = New System.Drawing.Point(1, 500)
+        Me.lcxWastelandReverse.Location = New System.Drawing.Point(1, 505)
         Me.lcxWastelandReverse.Name = "lcxWastelandReverse"
         Me.lcxWastelandReverse.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWastelandReverse.Size = New System.Drawing.Size(124, 20)
@@ -1110,7 +1136,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWastelandLensless
         '
-        Me.lcxWastelandLensless.Location = New System.Drawing.Point(1, 481)
+        Me.lcxWastelandLensless.Location = New System.Drawing.Point(1, 486)
         Me.lcxWastelandLensless.Name = "lcxWastelandLensless"
         Me.lcxWastelandLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWastelandLensless.Size = New System.Drawing.Size(124, 20)
@@ -1120,7 +1146,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWastelandBackstep
         '
-        Me.lcxWastelandBackstep.Location = New System.Drawing.Point(1, 462)
+        Me.lcxWastelandBackstep.Location = New System.Drawing.Point(1, 467)
         Me.lcxWastelandBackstep.Name = "lcxWastelandBackstep"
         Me.lcxWastelandBackstep.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWastelandBackstep.Size = New System.Drawing.Size(190, 20)
@@ -1160,7 +1186,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxBotWDeadHand
         '
-        Me.lcxBotWDeadHand.Location = New System.Drawing.Point(401, 654)
+        Me.lcxBotWDeadHand.Location = New System.Drawing.Point(401, 659)
         Me.lcxBotWDeadHand.Name = "lcxBotWDeadHand"
         Me.lcxBotWDeadHand.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxBotWDeadHand.Size = New System.Drawing.Size(181, 20)
@@ -1173,7 +1199,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbBotWTricks.AutoSize = True
         Me.nlbBotWTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbBotWTricks.Location = New System.Drawing.Point(401, 618)
+        Me.nlbBotWTricks.Location = New System.Drawing.Point(401, 623)
         Me.nlbBotWTricks.Name = "nlbBotWTricks"
         Me.nlbBotWTricks.Size = New System.Drawing.Size(155, 13)
         Me.nlbBotWTricks.TabIndex = 304
@@ -1181,7 +1207,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxBotWLensless
         '
-        Me.lcxBotWLensless.Location = New System.Drawing.Point(401, 635)
+        Me.lcxBotWLensless.Location = New System.Drawing.Point(401, 640)
         Me.lcxBotWLensless.Name = "lcxBotWLensless"
         Me.lcxBotWLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxBotWLensless.Size = New System.Drawing.Size(159, 20)
@@ -1192,7 +1218,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTStatue
         '
-        Me.lcxShTStatue.Location = New System.Drawing.Point(401, 531)
+        Me.lcxShTStatue.Location = New System.Drawing.Point(401, 536)
         Me.lcxShTStatue.Name = "lcxShTStatue"
         Me.lcxShTStatue.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTStatue.Size = New System.Drawing.Size(159, 20)
@@ -1203,7 +1229,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTMQGap
         '
-        Me.lcxShTMQGap.Location = New System.Drawing.Point(401, 549)
+        Me.lcxShTMQGap.Location = New System.Drawing.Point(401, 554)
         Me.lcxShTMQGap.Name = "lcxShTMQGap"
         Me.lcxShTMQGap.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTMQGap.Size = New System.Drawing.Size(159, 36)
@@ -1214,7 +1240,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTUmbrella
         '
-        Me.lcxShTUmbrella.Location = New System.Drawing.Point(401, 512)
+        Me.lcxShTUmbrella.Location = New System.Drawing.Point(401, 517)
         Me.lcxShTUmbrella.Name = "lcxShTUmbrella"
         Me.lcxShTUmbrella.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTUmbrella.Size = New System.Drawing.Size(124, 20)
@@ -1227,7 +1253,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbShTTricks.AutoSize = True
         Me.nlbShTTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbShTTricks.Location = New System.Drawing.Point(401, 444)
+        Me.nlbShTTricks.Location = New System.Drawing.Point(401, 449)
         Me.nlbShTTricks.Name = "nlbShTTricks"
         Me.nlbShTTricks.Size = New System.Drawing.Size(140, 13)
         Me.nlbShTTricks.TabIndex = 299
@@ -1235,7 +1261,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShTLensless
         '
-        Me.lcxShTLensless.Location = New System.Drawing.Point(401, 461)
+        Me.lcxShTLensless.Location = New System.Drawing.Point(401, 466)
         Me.lcxShTLensless.Name = "lcxShTLensless"
         Me.lcxShTLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShTLensless.Size = New System.Drawing.Size(150, 20)
@@ -1246,7 +1272,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSpTMQSunRoom
         '
-        Me.lcxSpTMQSunRoom.Location = New System.Drawing.Point(201, 904)
+        Me.lcxSpTMQSunRoom.Location = New System.Drawing.Point(201, 909)
         Me.lcxSpTMQSunRoom.Name = "lcxSpTMQSunRoom"
         Me.lcxSpTMQSunRoom.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSpTMQSunRoom.Size = New System.Drawing.Size(195, 36)
@@ -1257,7 +1283,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSpTMQLowAdult
         '
-        Me.lcxSpTMQLowAdult.Location = New System.Drawing.Point(201, 886)
+        Me.lcxSpTMQLowAdult.Location = New System.Drawing.Point(201, 891)
         Me.lcxSpTMQLowAdult.Name = "lcxSpTMQLowAdult"
         Me.lcxSpTMQLowAdult.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSpTMQLowAdult.Size = New System.Drawing.Size(195, 20)
@@ -1268,7 +1294,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSpTBombchu
         '
-        Me.lcxSpTBombchu.Location = New System.Drawing.Point(201, 835)
+        Me.lcxSpTBombchu.Location = New System.Drawing.Point(201, 840)
         Me.lcxSpTBombchu.Name = "lcxSpTBombchu"
         Me.lcxSpTBombchu.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSpTBombchu.Size = New System.Drawing.Size(181, 20)
@@ -1281,7 +1307,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbSpTTricks.AutoSize = True
         Me.nlbSpTTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbSpTTricks.Location = New System.Drawing.Point(201, 799)
+        Me.nlbSpTTricks.Location = New System.Drawing.Point(201, 804)
         Me.nlbSpTTricks.Name = "nlbSpTTricks"
         Me.nlbSpTTricks.Size = New System.Drawing.Size(124, 13)
         Me.nlbSpTTricks.TabIndex = 294
@@ -1289,7 +1315,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSpTWall
         '
-        Me.lcxSpTWall.Location = New System.Drawing.Point(201, 853)
+        Me.lcxSpTWall.Location = New System.Drawing.Point(201, 858)
         Me.lcxSpTWall.Name = "lcxSpTWall"
         Me.lcxSpTWall.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSpTWall.Size = New System.Drawing.Size(182, 36)
@@ -1300,7 +1326,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWaTCrackHovers
         '
-        Me.lcxWaTCrackHovers.Location = New System.Drawing.Point(201, 776)
+        Me.lcxWaTCrackHovers.Location = New System.Drawing.Point(201, 781)
         Me.lcxWaTCrackHovers.Name = "lcxWaTCrackHovers"
         Me.lcxWaTCrackHovers.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWaTCrackHovers.Size = New System.Drawing.Size(181, 20)
@@ -1311,7 +1337,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWaTCrackNothing
         '
-        Me.lcxWaTCrackNothing.Location = New System.Drawing.Point(201, 743)
+        Me.lcxWaTCrackNothing.Location = New System.Drawing.Point(201, 748)
         Me.lcxWaTCrackNothing.Name = "lcxWaTCrackNothing"
         Me.lcxWaTCrackNothing.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWaTCrackNothing.Size = New System.Drawing.Size(181, 36)
@@ -1322,7 +1348,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWaTBKR
         '
-        Me.lcxWaTBKR.Location = New System.Drawing.Point(201, 725)
+        Me.lcxWaTBKR.Location = New System.Drawing.Point(201, 730)
         Me.lcxWaTBKR.Name = "lcxWaTBKR"
         Me.lcxWaTBKR.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWaTBKR.Size = New System.Drawing.Size(195, 20)
@@ -1333,7 +1359,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWaTDrgnDive
         '
-        Me.lcxWaTDrgnDive.Location = New System.Drawing.Point(201, 674)
+        Me.lcxWaTDrgnDive.Location = New System.Drawing.Point(201, 679)
         Me.lcxWaTDrgnDive.Name = "lcxWaTDrgnDive"
         Me.lcxWaTDrgnDive.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWaTDrgnDive.Size = New System.Drawing.Size(159, 20)
@@ -1346,7 +1372,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbWaTTricks.AutoSize = True
         Me.nlbWaTTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbWaTTricks.Location = New System.Drawing.Point(201, 638)
+        Me.nlbWaTTricks.Location = New System.Drawing.Point(201, 643)
         Me.nlbWaTTricks.Name = "nlbWaTTricks"
         Me.nlbWaTTricks.Size = New System.Drawing.Size(129, 13)
         Me.nlbWaTTricks.TabIndex = 287
@@ -1354,7 +1380,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxWaTTorch
         '
-        Me.lcxWaTTorch.Location = New System.Drawing.Point(201, 655)
+        Me.lcxWaTTorch.Location = New System.Drawing.Point(201, 660)
         Me.lcxWaTTorch.Name = "lcxWaTTorch"
         Me.lcxWaTTorch.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxWaTTorch.Size = New System.Drawing.Size(134, 20)
@@ -1365,7 +1391,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFiTMQMazeJump
         '
-        Me.lcxFiTMQMazeJump.Location = New System.Drawing.Point(201, 601)
+        Me.lcxFiTMQMazeJump.Location = New System.Drawing.Point(201, 606)
         Me.lcxFiTMQMazeJump.Name = "lcxFiTMQMazeJump"
         Me.lcxFiTMQMazeJump.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFiTMQMazeJump.Size = New System.Drawing.Size(200, 36)
@@ -1376,7 +1402,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFiTMQMazeHovers
         '
-        Me.lcxFiTMQMazeHovers.Location = New System.Drawing.Point(201, 569)
+        Me.lcxFiTMQMazeHovers.Location = New System.Drawing.Point(201, 574)
         Me.lcxFiTMQMazeHovers.Name = "lcxFiTMQMazeHovers"
         Me.lcxFiTMQMazeHovers.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFiTMQMazeHovers.Size = New System.Drawing.Size(190, 36)
@@ -1387,7 +1413,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFiTRustedSwitches
         '
-        Me.lcxFiTRustedSwitches.Location = New System.Drawing.Point(201, 532)
+        Me.lcxFiTRustedSwitches.Location = New System.Drawing.Point(201, 537)
         Me.lcxFiTRustedSwitches.Name = "lcxFiTRustedSwitches"
         Me.lcxFiTRustedSwitches.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFiTRustedSwitches.Size = New System.Drawing.Size(190, 20)
@@ -1398,7 +1424,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFiTMQClimb
         '
-        Me.lcxFiTMQClimb.Location = New System.Drawing.Point(201, 551)
+        Me.lcxFiTMQClimb.Location = New System.Drawing.Point(201, 556)
         Me.lcxFiTMQClimb.Name = "lcxFiTMQClimb"
         Me.lcxFiTMQClimb.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFiTMQClimb.Size = New System.Drawing.Size(169, 20)
@@ -1409,7 +1435,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFiTMaze
         '
-        Me.lcxFiTMaze.Location = New System.Drawing.Point(201, 513)
+        Me.lcxFiTMaze.Location = New System.Drawing.Point(201, 518)
         Me.lcxFiTMaze.Name = "lcxFiTMaze"
         Me.lcxFiTMaze.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFiTMaze.Size = New System.Drawing.Size(134, 20)
@@ -1422,7 +1448,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbFiTTricks.AutoSize = True
         Me.nlbFiTTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbFiTTricks.Location = New System.Drawing.Point(201, 445)
+        Me.nlbFiTTricks.Location = New System.Drawing.Point(201, 450)
         Me.nlbFiTTricks.Name = "nlbFiTTricks"
         Me.nlbFiTTricks.Size = New System.Drawing.Size(116, 13)
         Me.nlbFiTTricks.TabIndex = 280
@@ -1430,7 +1456,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFiTClimb
         '
-        Me.lcxFiTClimb.Location = New System.Drawing.Point(201, 462)
+        Me.lcxFiTClimb.Location = New System.Drawing.Point(201, 467)
         Me.lcxFiTClimb.Name = "lcxFiTClimb"
         Me.lcxFiTClimb.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFiTClimb.Size = New System.Drawing.Size(134, 20)
@@ -1460,7 +1486,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFoTLedge
         '
-        Me.lcxFoTLedge.Location = New System.Drawing.Point(1, 760)
+        Me.lcxFoTLedge.Location = New System.Drawing.Point(1, 765)
         Me.lcxFoTLedge.Name = "lcxFoTLedge"
         Me.lcxFoTLedge.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFoTLedge.Size = New System.Drawing.Size(190, 20)
@@ -1471,7 +1497,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFoTMQWell
         '
-        Me.lcxFoTMQWell.Location = New System.Drawing.Point(1, 830)
+        Me.lcxFoTMQWell.Location = New System.Drawing.Point(1, 835)
         Me.lcxFoTMQWell.Name = "lcxFoTMQWell"
         Me.lcxFoTMQWell.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFoTMQWell.Size = New System.Drawing.Size(140, 20)
@@ -1484,7 +1510,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbFoTTricks.AutoSize = True
         Me.nlbFoTTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbFoTTricks.Location = New System.Drawing.Point(1, 673)
+        Me.nlbFoTTricks.Location = New System.Drawing.Point(1, 678)
         Me.nlbFoTTricks.Name = "nlbFoTTricks"
         Me.nlbFoTTricks.Size = New System.Drawing.Size(130, 13)
         Me.nlbFoTTricks.TabIndex = 273
@@ -1494,7 +1520,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbDDCTricks.AutoSize = True
         Me.nlbDDCTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbDDCTricks.Location = New System.Drawing.Point(1, 563)
+        Me.nlbDDCTricks.Location = New System.Drawing.Point(1, 568)
         Me.nlbDDCTricks.Name = "nlbDDCTricks"
         Me.nlbDDCTricks.Size = New System.Drawing.Size(154, 13)
         Me.nlbDDCTricks.TabIndex = 272
@@ -1504,7 +1530,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbDTTricks.AutoSize = True
         Me.nlbDTTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbDTTricks.Location = New System.Drawing.Point(1, 523)
+        Me.nlbDTTricks.Location = New System.Drawing.Point(1, 528)
         Me.nlbDTTricks.Name = "nlbDTTricks"
         Me.nlbDTTricks.Size = New System.Drawing.Size(110, 13)
         Me.nlbDTTricks.TabIndex = 271
@@ -1512,7 +1538,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFoTMQTwisted
         '
-        Me.lcxFoTMQTwisted.Location = New System.Drawing.Point(1, 797)
+        Me.lcxFoTMQTwisted.Location = New System.Drawing.Point(1, 802)
         Me.lcxFoTMQTwisted.Name = "lcxFoTMQTwisted"
         Me.lcxFoTMQTwisted.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFoTMQTwisted.Size = New System.Drawing.Size(190, 36)
@@ -1523,7 +1549,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFoTMQPuzzle
         '
-        Me.lcxFoTMQPuzzle.Location = New System.Drawing.Point(1, 779)
+        Me.lcxFoTMQPuzzle.Location = New System.Drawing.Point(1, 784)
         Me.lcxFoTMQPuzzle.Name = "lcxFoTMQPuzzle"
         Me.lcxFoTMQPuzzle.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFoTMQPuzzle.Size = New System.Drawing.Size(190, 20)
@@ -1534,7 +1560,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFoTBackdoor
         '
-        Me.lcxFoTBackdoor.Location = New System.Drawing.Point(1, 741)
+        Me.lcxFoTBackdoor.Location = New System.Drawing.Point(1, 746)
         Me.lcxFoTBackdoor.Name = "lcxFoTBackdoor"
         Me.lcxFoTBackdoor.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFoTBackdoor.Size = New System.Drawing.Size(190, 20)
@@ -1545,7 +1571,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFoTFrame
         '
-        Me.lcxFoTFrame.Location = New System.Drawing.Point(1, 708)
+        Me.lcxFoTFrame.Location = New System.Drawing.Point(1, 713)
         Me.lcxFoTFrame.Name = "lcxFoTFrame"
         Me.lcxFoTFrame.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFoTFrame.Size = New System.Drawing.Size(170, 36)
@@ -1556,7 +1582,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxFoTVines
         '
-        Me.lcxFoTVines.Location = New System.Drawing.Point(1, 690)
+        Me.lcxFoTVines.Location = New System.Drawing.Point(1, 695)
         Me.lcxFoTVines.Name = "lcxFoTVines"
         Me.lcxFoTVines.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxFoTVines.Size = New System.Drawing.Size(190, 20)
@@ -1567,7 +1593,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxDCLightEyes
         '
-        Me.lcxDCLightEyes.Location = New System.Drawing.Point(1, 650)
+        Me.lcxDCLightEyes.Location = New System.Drawing.Point(1, 655)
         Me.lcxDCLightEyes.Name = "lcxDCLightEyes"
         Me.lcxDCLightEyes.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxDCLightEyes.Size = New System.Drawing.Size(186, 20)
@@ -1597,7 +1623,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxDCSlingshotSkips
         '
-        Me.lcxDCSlingshotSkips.Location = New System.Drawing.Point(1, 631)
+        Me.lcxDCSlingshotSkips.Location = New System.Drawing.Point(1, 636)
         Me.lcxDCSlingshotSkips.Name = "lcxDCSlingshotSkips"
         Me.lcxDCSlingshotSkips.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxDCSlingshotSkips.Size = New System.Drawing.Size(137, 20)
@@ -1608,7 +1634,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxDCSpikeJump
         '
-        Me.lcxDCSpikeJump.Location = New System.Drawing.Point(1, 598)
+        Me.lcxDCSpikeJump.Location = New System.Drawing.Point(1, 603)
         Me.lcxDCSpikeJump.Name = "lcxDCSpikeJump"
         Me.lcxDCSpikeJump.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxDCSpikeJump.Size = New System.Drawing.Size(174, 36)
@@ -1619,7 +1645,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxDCStaircase
         '
-        Me.lcxDCStaircase.Location = New System.Drawing.Point(1, 580)
+        Me.lcxDCStaircase.Location = New System.Drawing.Point(1, 585)
         Me.lcxDCStaircase.Name = "lcxDCStaircase"
         Me.lcxDCStaircase.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxDCStaircase.Size = New System.Drawing.Size(137, 20)
@@ -1630,7 +1656,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxDekuB1Skip
         '
-        Me.lcxDekuB1Skip.Location = New System.Drawing.Point(1, 540)
+        Me.lcxDekuB1Skip.Location = New System.Drawing.Point(1, 545)
         Me.lcxDekuB1Skip.Name = "lcxDekuB1Skip"
         Me.lcxDekuB1Skip.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxDekuB1Skip.Size = New System.Drawing.Size(160, 20)
@@ -1663,7 +1689,7 @@ Partial Class frmTrackerOfTime
         Me.rtbDebug.BackColor = System.Drawing.SystemColors.Control
         Me.rtbDebug.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.rtbDebug.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rtbDebug.Location = New System.Drawing.Point(4, 563)
+        Me.rtbDebug.Location = New System.Drawing.Point(4, 568)
         Me.rtbDebug.MaxLength = 4096
         Me.rtbDebug.Name = "rtbDebug"
         Me.rtbDebug.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical
@@ -4113,6 +4139,149 @@ Partial Class frmTrackerOfTime
         '
         Me.tmrFastScan.Interval = 1000
         '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(401, 311)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(147, 13)
+        Me.Label2.TabIndex = 337
+        Me.Label2.Text = "Master Quest Dungeons:"
+        Me.Label2.Visible = False
+        '
+        'lcxMQDT
+        '
+        Me.lcxMQDT.Location = New System.Drawing.Point(401, 325)
+        Me.lcxMQDT.Name = "lcxMQDT"
+        Me.lcxMQDT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQDT.Size = New System.Drawing.Size(46, 20)
+        Me.lcxMQDT.TabIndex = 338
+        Me.lcxMQDT.Text = "DT"
+        Me.lcxMQDT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxMQDT.Visible = False
+        '
+        'lcxMQDC
+        '
+        Me.lcxMQDC.Location = New System.Drawing.Point(401, 344)
+        Me.lcxMQDC.Name = "lcxMQDC"
+        Me.lcxMQDC.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQDC.Size = New System.Drawing.Size(46, 20)
+        Me.lcxMQDC.TabIndex = 339
+        Me.lcxMQDC.Text = "DC"
+        Me.lcxMQDC.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxMQDC.Visible = False
+        '
+        'lcxMQJB
+        '
+        Me.lcxMQJB.Location = New System.Drawing.Point(401, 364)
+        Me.lcxMQJB.Name = "lcxMQJB"
+        Me.lcxMQJB.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQJB.Size = New System.Drawing.Size(46, 20)
+        Me.lcxMQJB.TabIndex = 340
+        Me.lcxMQJB.Text = "JB"
+        Me.lcxMQJB.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxMQJB.Visible = False
+        '
+        'lcxMQFoT
+        '
+        Me.lcxMQFoT.Location = New System.Drawing.Point(469, 325)
+        Me.lcxMQFoT.Name = "lcxMQFoT"
+        Me.lcxMQFoT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQFoT.Size = New System.Drawing.Size(72, 20)
+        Me.lcxMQFoT.TabIndex = 341
+        Me.lcxMQFoT.Text = "Forest"
+        Me.lcxMQFoT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxMQFoT.Visible = False
+        '
+        'lcxMQFiT
+        '
+        Me.lcxMQFiT.Location = New System.Drawing.Point(469, 345)
+        Me.lcxMQFiT.Name = "lcxMQFiT"
+        Me.lcxMQFiT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQFiT.Size = New System.Drawing.Size(46, 20)
+        Me.lcxMQFiT.TabIndex = 342
+        Me.lcxMQFiT.Text = "Fire"
+        Me.lcxMQFiT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxMQFiT.Visible = False
+        '
+        'lcxMQIC
+        '
+        Me.lcxMQIC.Location = New System.Drawing.Point(401, 402)
+        Me.lcxMQIC.Name = "lcxMQIC"
+        Me.lcxMQIC.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQIC.Size = New System.Drawing.Size(46, 20)
+        Me.lcxMQIC.TabIndex = 347
+        Me.lcxMQIC.Text = "IC"
+        Me.lcxMQIC.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxMQIC.Visible = False
+        '
+        'lcxMQBotW
+        '
+        Me.lcxMQBotW.Location = New System.Drawing.Point(401, 383)
+        Me.lcxMQBotW.Name = "lcxMQBotW"
+        Me.lcxMQBotW.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQBotW.Size = New System.Drawing.Size(56, 20)
+        Me.lcxMQBotW.TabIndex = 346
+        Me.lcxMQBotW.Text = "BotW"
+        Me.lcxMQBotW.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxMQBotW.Visible = False
+        '
+        'lcxMQShT
+        '
+        Me.lcxMQShT.Location = New System.Drawing.Point(469, 402)
+        Me.lcxMQShT.Name = "lcxMQShT"
+        Me.lcxMQShT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQShT.Size = New System.Drawing.Size(77, 20)
+        Me.lcxMQShT.TabIndex = 345
+        Me.lcxMQShT.Text = "Shadow"
+        Me.lcxMQShT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxMQShT.Visible = False
+        '
+        'lcxMQSpT
+        '
+        Me.lcxMQSpT.Location = New System.Drawing.Point(469, 383)
+        Me.lcxMQSpT.Name = "lcxMQSpT"
+        Me.lcxMQSpT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQSpT.Size = New System.Drawing.Size(57, 20)
+        Me.lcxMQSpT.TabIndex = 344
+        Me.lcxMQSpT.Text = "Spirit"
+        Me.lcxMQSpT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxMQSpT.Visible = False
+        '
+        'lcxMQWT
+        '
+        Me.lcxMQWT.Location = New System.Drawing.Point(469, 364)
+        Me.lcxMQWT.Name = "lcxMQWT"
+        Me.lcxMQWT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQWT.Size = New System.Drawing.Size(57, 20)
+        Me.lcxMQWT.TabIndex = 343
+        Me.lcxMQWT.Text = "Water"
+        Me.lcxMQWT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxMQWT.Visible = False
+        '
+        'lcxMQGTG
+        '
+        Me.lcxMQGTG.Location = New System.Drawing.Point(401, 421)
+        Me.lcxMQGTG.Name = "lcxMQGTG"
+        Me.lcxMQGTG.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQGTG.Size = New System.Drawing.Size(56, 20)
+        Me.lcxMQGTG.TabIndex = 349
+        Me.lcxMQGTG.Text = "GTG"
+        Me.lcxMQGTG.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxMQGTG.Visible = False
+        '
+        'lcxMQGT
+        '
+        Me.lcxMQGT.Location = New System.Drawing.Point(469, 421)
+        Me.lcxMQGT.Name = "lcxMQGT"
+        Me.lcxMQGT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQGT.Size = New System.Drawing.Size(46, 20)
+        Me.lcxMQGT.TabIndex = 348
+        Me.lcxMQGT.Text = "GT"
+        Me.lcxMQGT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxMQGT.Visible = False
+        '
         'frmTrackerOfTime
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -4674,5 +4843,18 @@ Partial Class frmTrackerOfTime
     Friend WithEvents tmrFastScan As System.Windows.Forms.Timer
     Friend WithEvents DumpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents lcxBFA As System.Windows.Forms.Label
+    Friend WithEvents lcxMQGTG As System.Windows.Forms.Label
+    Friend WithEvents lcxMQGT As System.Windows.Forms.Label
+    Friend WithEvents lcxMQIC As System.Windows.Forms.Label
+    Friend WithEvents lcxMQBotW As System.Windows.Forms.Label
+    Friend WithEvents lcxMQShT As System.Windows.Forms.Label
+    Friend WithEvents lcxMQSpT As System.Windows.Forms.Label
+    Friend WithEvents lcxMQWT As System.Windows.Forms.Label
+    Friend WithEvents lcxMQFiT As System.Windows.Forms.Label
+    Friend WithEvents lcxMQFoT As System.Windows.Forms.Label
+    Friend WithEvents lcxMQJB As System.Windows.Forms.Label
+    Friend WithEvents lcxMQDC As System.Windows.Forms.Label
+    Friend WithEvents lcxMQDT As System.Windows.Forms.Label
+    Friend WithEvents Label2 As System.Windows.Forms.Label
 
 End Class
