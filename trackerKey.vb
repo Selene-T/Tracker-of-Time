@@ -10,6 +10,10 @@
         Public gs As Boolean
         Public cow As Boolean
         Public scrub As Boolean
+        Public beehive As Boolean
+        Public crate As Boolean
+        Public pot As Boolean
+        Public standing As Boolean
         Public shop As Boolean
         Public forced As Boolean
         Public logic As String
@@ -24,6 +28,10 @@
             gs = False
             cow = False
             scrub = False
+            beehive = False
+            crate = False
+            pot = False
+            standing = False
             shop = False
             forced = False
             logic = String.Empty

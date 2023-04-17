@@ -917,6 +917,198 @@ Namespace My
                 Me("setBFA") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setMQDT() As Boolean
+            Get
+                Return CType(Me("setMQDT"),Boolean)
+            End Get
+            Set
+                Me("setMQDT") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setMQDC() As Boolean
+            Get
+                Return CType(Me("setMQDC"),Boolean)
+            End Get
+            Set
+                Me("setMQDC") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setMQJB() As Boolean
+            Get
+                Return CType(Me("setMQJB"),Boolean)
+            End Get
+            Set
+                Me("setMQJB") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setMQFoT() As Boolean
+            Get
+                Return CType(Me("setMQFoT"),Boolean)
+            End Get
+            Set
+                Me("setMQFoT") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setMQFiT() As Boolean
+            Get
+                Return CType(Me("setMQFiT"),Boolean)
+            End Get
+            Set
+                Me("setMQFiT") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setMQWT() As Boolean
+            Get
+                Return CType(Me("setMQWT"),Boolean)
+            End Get
+            Set
+                Me("setMQWT") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setMQSpT() As Boolean
+            Get
+                Return CType(Me("setMQSpT"),Boolean)
+            End Get
+            Set
+                Me("setMQSpT") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setMQShT() As Boolean
+            Get
+                Return CType(Me("setMQShT"),Boolean)
+            End Get
+            Set
+                Me("setMQShT") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setMQBotW() As Boolean
+            Get
+                Return CType(Me("setMQBotW"),Boolean)
+            End Get
+            Set
+                Me("setMQBotW") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setMQIC() As Boolean
+            Get
+                Return CType(Me("setMQIC"),Boolean)
+            End Get
+            Set
+                Me("setMQIC") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setMQGTG() As Boolean
+            Get
+                Return CType(Me("setMQGTG"),Boolean)
+            End Get
+            Set
+                Me("setMQGTG") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setMQGT() As Boolean
+            Get
+                Return CType(Me("setMQGT"),Boolean)
+            End Get
+            Set
+                Me("setMQGT") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setBeehive() As Boolean
+            Get
+                Return CType(Me("setBeehive"),Boolean)
+            End Get
+            Set
+                Me("setBeehive") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setCrate() As Boolean
+            Get
+                Return CType(Me("setCrate"),Boolean)
+            End Get
+            Set
+                Me("setCrate") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setPot() As Boolean
+            Get
+                Return CType(Me("setPot"),Boolean)
+            End Get
+            Set
+                Me("setPot") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setStanding() As Boolean
+            Get
+                Return CType(Me("setStanding"),Boolean)
+            End Get
+            Set
+                Me("setStanding") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

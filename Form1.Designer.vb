@@ -54,6 +54,24 @@ Partial Class frmTrackerOfTime
         Me.lcxTunic = New System.Windows.Forms.Label()
         Me.ltbShopsanity = New System.Windows.Forms.Label()
         Me.pnlSettings = New System.Windows.Forms.Panel()
+        Me.lcxPotShuffle = New System.Windows.Forms.Label()
+        Me.lcxStandingShuffle = New System.Windows.Forms.Label()
+        Me.lcxCrateShuffle = New System.Windows.Forms.Label()
+        Me.ComboBoxWarps = New System.Windows.Forms.ComboBox()
+        Me.lcxBeehiveShuffle = New System.Windows.Forms.Label()
+        Me.lcxMQGTG = New System.Windows.Forms.Label()
+        Me.lcxMQGT = New System.Windows.Forms.Label()
+        Me.lcxMQIC = New System.Windows.Forms.Label()
+        Me.lcxMQBotW = New System.Windows.Forms.Label()
+        Me.lcxMQShT = New System.Windows.Forms.Label()
+        Me.lcxMQSpT = New System.Windows.Forms.Label()
+        Me.lcxMQWT = New System.Windows.Forms.Label()
+        Me.lcxMQFiT = New System.Windows.Forms.Label()
+        Me.lcxMQFoT = New System.Windows.Forms.Label()
+        Me.lcxMQJB = New System.Windows.Forms.Label()
+        Me.lcxMQDC = New System.Windows.Forms.Label()
+        Me.lcxMQDT = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.lcxBFA = New System.Windows.Forms.Label()
         Me.nlbGTGTricks = New System.Windows.Forms.Label()
         Me.lcxGTGLensless = New System.Windows.Forms.Label()
@@ -371,19 +389,6 @@ Partial Class frmTrackerOfTime
         Me.checkMQ5 = New System.Windows.Forms.CheckBox()
         Me.tmrTT = New System.Windows.Forms.Timer(Me.components)
         Me.tmrFastScan = New System.Windows.Forms.Timer(Me.components)
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.lcxMQDT = New System.Windows.Forms.Label()
-        Me.lcxMQDC = New System.Windows.Forms.Label()
-        Me.lcxMQJB = New System.Windows.Forms.Label()
-        Me.lcxMQFoT = New System.Windows.Forms.Label()
-        Me.lcxMQFiT = New System.Windows.Forms.Label()
-        Me.lcxMQIC = New System.Windows.Forms.Label()
-        Me.lcxMQBotW = New System.Windows.Forms.Label()
-        Me.lcxMQShT = New System.Windows.Forms.Label()
-        Me.lcxMQSpT = New System.Windows.Forms.Label()
-        Me.lcxMQWT = New System.Windows.Forms.Label()
-        Me.lcxMQGTG = New System.Windows.Forms.Label()
-        Me.lcxMQGT = New System.Windows.Forms.Label()
         Me.mnuOptions.SuspendLayout()
         Me.pnlSettings.SuspendLayout()
         Me.pnlMain.SuspendLayout()
@@ -556,8 +561,9 @@ Partial Class frmTrackerOfTime
         Me.btnTest.Size = New System.Drawing.Size(88, 23)
         Me.btnTest.TabIndex = 42
         Me.btnTest.TabStop = False
-        Me.btnTest.Text = "Dump Vars"
+        Me.btnTest.Text = "Test"
         Me.btnTest.UseVisualStyleBackColor = True
+        Me.btnTest.Visible = False
         '
         'Button2
         '
@@ -568,6 +574,7 @@ Partial Class frmTrackerOfTime
         Me.Button2.TabStop = False
         Me.Button2.Text = "Give Items"
         Me.Button2.UseVisualStyleBackColor = True
+        Me.Button2.Visible = False
         '
         'Label1
         '
@@ -590,7 +597,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxCowShuffle
         '
-        Me.lcxCowShuffle.Location = New System.Drawing.Point(201, 231)
+        Me.lcxCowShuffle.Location = New System.Drawing.Point(201, 250)
         Me.lcxCowShuffle.Name = "lcxCowShuffle"
         Me.lcxCowShuffle.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxCowShuffle.Size = New System.Drawing.Size(137, 20)
@@ -609,7 +616,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxScrubShuffle
         '
-        Me.lcxScrubShuffle.Location = New System.Drawing.Point(201, 212)
+        Me.lcxScrubShuffle.Location = New System.Drawing.Point(201, 231)
         Me.lcxScrubShuffle.Name = "lcxScrubShuffle"
         Me.lcxScrubShuffle.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxScrubShuffle.Size = New System.Drawing.Size(137, 20)
@@ -798,6 +805,11 @@ Partial Class frmTrackerOfTime
         '
         'pnlSettings
         '
+        Me.pnlSettings.Controls.Add(Me.lcxPotShuffle)
+        Me.pnlSettings.Controls.Add(Me.lcxStandingShuffle)
+        Me.pnlSettings.Controls.Add(Me.lcxCrateShuffle)
+        Me.pnlSettings.Controls.Add(Me.ComboBoxWarps)
+        Me.pnlSettings.Controls.Add(Me.lcxBeehiveShuffle)
         Me.pnlSettings.Controls.Add(Me.lcxMQGTG)
         Me.pnlSettings.Controls.Add(Me.lcxMQGT)
         Me.pnlSettings.Controls.Add(Me.lcxMQIC)
@@ -905,9 +917,189 @@ Partial Class frmTrackerOfTime
         Me.pnlSettings.Size = New System.Drawing.Size(597, 1039)
         Me.pnlSettings.TabIndex = 253
         '
+        'lcxPotShuffle
+        '
+        Me.lcxPotShuffle.Location = New System.Drawing.Point(401, 250)
+        Me.lcxPotShuffle.Name = "lcxPotShuffle"
+        Me.lcxPotShuffle.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxPotShuffle.Size = New System.Drawing.Size(87, 19)
+        Me.lcxPotShuffle.TabIndex = 354
+        Me.lcxPotShuffle.Text = "Pot Shuffle"
+        Me.lcxPotShuffle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxStandingShuffle
+        '
+        Me.lcxStandingShuffle.Location = New System.Drawing.Point(401, 269)
+        Me.lcxStandingShuffle.Name = "lcxStandingShuffle"
+        Me.lcxStandingShuffle.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxStandingShuffle.Size = New System.Drawing.Size(150, 19)
+        Me.lcxStandingShuffle.TabIndex = 353
+        Me.lcxStandingShuffle.Text = "Hearts and Rupee Shuffle"
+        Me.lcxStandingShuffle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxCrateShuffle
+        '
+        Me.lcxCrateShuffle.Location = New System.Drawing.Point(401, 231)
+        Me.lcxCrateShuffle.Name = "lcxCrateShuffle"
+        Me.lcxCrateShuffle.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxCrateShuffle.Size = New System.Drawing.Size(137, 20)
+        Me.lcxCrateShuffle.TabIndex = 352
+        Me.lcxCrateShuffle.Text = "Crate Shuffle"
+        Me.lcxCrateShuffle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'ComboBoxWarps
+        '
+        Me.ComboBoxWarps.FormattingEnabled = True
+        Me.ComboBoxWarps.Location = New System.Drawing.Point(16, 863)
+        Me.ComboBoxWarps.Name = "ComboBoxWarps"
+        Me.ComboBoxWarps.Size = New System.Drawing.Size(139, 21)
+        Me.ComboBoxWarps.TabIndex = 351
+        Me.ComboBoxWarps.Text = "Override Warp Songs"
+        Me.ComboBoxWarps.Visible = False
+        '
+        'lcxBeehiveShuffle
+        '
+        Me.lcxBeehiveShuffle.Location = New System.Drawing.Point(401, 212)
+        Me.lcxBeehiveShuffle.Name = "lcxBeehiveShuffle"
+        Me.lcxBeehiveShuffle.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxBeehiveShuffle.Size = New System.Drawing.Size(137, 20)
+        Me.lcxBeehiveShuffle.TabIndex = 350
+        Me.lcxBeehiveShuffle.Text = "Beehive Shuffle"
+        Me.lcxBeehiveShuffle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxMQGTG
+        '
+        Me.lcxMQGTG.Location = New System.Drawing.Point(401, 923)
+        Me.lcxMQGTG.Name = "lcxMQGTG"
+        Me.lcxMQGTG.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQGTG.Size = New System.Drawing.Size(56, 23)
+        Me.lcxMQGTG.TabIndex = 349
+        Me.lcxMQGTG.Text = "GTG"
+        Me.lcxMQGTG.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxMQGT
+        '
+        Me.lcxMQGT.Location = New System.Drawing.Point(469, 923)
+        Me.lcxMQGT.Name = "lcxMQGT"
+        Me.lcxMQGT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQGT.Size = New System.Drawing.Size(46, 23)
+        Me.lcxMQGT.TabIndex = 348
+        Me.lcxMQGT.Text = "GT"
+        Me.lcxMQGT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxMQIC
+        '
+        Me.lcxMQIC.Location = New System.Drawing.Point(401, 904)
+        Me.lcxMQIC.Name = "lcxMQIC"
+        Me.lcxMQIC.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQIC.Size = New System.Drawing.Size(46, 23)
+        Me.lcxMQIC.TabIndex = 347
+        Me.lcxMQIC.Text = "IC"
+        Me.lcxMQIC.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxMQBotW
+        '
+        Me.lcxMQBotW.Location = New System.Drawing.Point(401, 885)
+        Me.lcxMQBotW.Name = "lcxMQBotW"
+        Me.lcxMQBotW.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQBotW.Size = New System.Drawing.Size(56, 23)
+        Me.lcxMQBotW.TabIndex = 346
+        Me.lcxMQBotW.Text = "BotW"
+        Me.lcxMQBotW.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxMQShT
+        '
+        Me.lcxMQShT.Location = New System.Drawing.Point(469, 904)
+        Me.lcxMQShT.Name = "lcxMQShT"
+        Me.lcxMQShT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQShT.Size = New System.Drawing.Size(77, 23)
+        Me.lcxMQShT.TabIndex = 345
+        Me.lcxMQShT.Text = "Shadow"
+        Me.lcxMQShT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxMQSpT
+        '
+        Me.lcxMQSpT.Location = New System.Drawing.Point(469, 885)
+        Me.lcxMQSpT.Name = "lcxMQSpT"
+        Me.lcxMQSpT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQSpT.Size = New System.Drawing.Size(57, 23)
+        Me.lcxMQSpT.TabIndex = 344
+        Me.lcxMQSpT.Text = "Spirit"
+        Me.lcxMQSpT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxMQWT
+        '
+        Me.lcxMQWT.Location = New System.Drawing.Point(469, 866)
+        Me.lcxMQWT.Name = "lcxMQWT"
+        Me.lcxMQWT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQWT.Size = New System.Drawing.Size(57, 23)
+        Me.lcxMQWT.TabIndex = 343
+        Me.lcxMQWT.Text = "Water"
+        Me.lcxMQWT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxMQFiT
+        '
+        Me.lcxMQFiT.Location = New System.Drawing.Point(469, 847)
+        Me.lcxMQFiT.Name = "lcxMQFiT"
+        Me.lcxMQFiT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQFiT.Size = New System.Drawing.Size(46, 23)
+        Me.lcxMQFiT.TabIndex = 342
+        Me.lcxMQFiT.Text = "Fire"
+        Me.lcxMQFiT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxMQFoT
+        '
+        Me.lcxMQFoT.Location = New System.Drawing.Point(469, 827)
+        Me.lcxMQFoT.Name = "lcxMQFoT"
+        Me.lcxMQFoT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQFoT.Size = New System.Drawing.Size(72, 23)
+        Me.lcxMQFoT.TabIndex = 341
+        Me.lcxMQFoT.Text = "Forest"
+        Me.lcxMQFoT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxMQJB
+        '
+        Me.lcxMQJB.Location = New System.Drawing.Point(401, 866)
+        Me.lcxMQJB.Name = "lcxMQJB"
+        Me.lcxMQJB.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQJB.Size = New System.Drawing.Size(46, 23)
+        Me.lcxMQJB.TabIndex = 340
+        Me.lcxMQJB.Text = "JB"
+        Me.lcxMQJB.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxMQDC
+        '
+        Me.lcxMQDC.Location = New System.Drawing.Point(401, 846)
+        Me.lcxMQDC.Name = "lcxMQDC"
+        Me.lcxMQDC.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQDC.Size = New System.Drawing.Size(46, 23)
+        Me.lcxMQDC.TabIndex = 339
+        Me.lcxMQDC.Text = "DC"
+        Me.lcxMQDC.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxMQDT
+        '
+        Me.lcxMQDT.Location = New System.Drawing.Point(401, 827)
+        Me.lcxMQDT.Name = "lcxMQDT"
+        Me.lcxMQDT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxMQDT.Size = New System.Drawing.Size(46, 23)
+        Me.lcxMQDT.TabIndex = 338
+        Me.lcxMQDT.Text = "DT"
+        Me.lcxMQDT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(401, 813)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(147, 13)
+        Me.Label2.TabIndex = 337
+        Me.Label2.Text = "Master Quest Dungeons:"
+        '
         'lcxBFA
         '
-        Me.lcxBFA.Location = New System.Drawing.Point(401, 288)
+        Me.lcxBFA.Location = New System.Drawing.Point(401, 365)
         Me.lcxBFA.Name = "lcxBFA"
         Me.lcxBFA.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxBFA.Size = New System.Drawing.Size(155, 20)
@@ -938,7 +1130,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxHideQuests
         '
-        Me.lcxHideQuests.Location = New System.Drawing.Point(401, 211)
+        Me.lcxHideQuests.Location = New System.Drawing.Point(401, 288)
         Me.lcxHideQuests.Name = "lcxHideQuests"
         Me.lcxHideQuests.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxHideQuests.Size = New System.Drawing.Size(159, 20)
@@ -958,7 +1150,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShortForm
         '
-        Me.lcxShortForm.Location = New System.Drawing.Point(401, 269)
+        Me.lcxShortForm.Location = New System.Drawing.Point(401, 346)
         Me.lcxShortForm.Name = "lcxShortForm"
         Me.lcxShortForm.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShortForm.Size = New System.Drawing.Size(155, 20)
@@ -988,7 +1180,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxExpand
         '
-        Me.lcxExpand.Location = New System.Drawing.Point(401, 250)
+        Me.lcxExpand.Location = New System.Drawing.Point(401, 327)
         Me.lcxExpand.Name = "lcxExpand"
         Me.lcxExpand.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxExpand.Size = New System.Drawing.Size(155, 20)
@@ -998,7 +1190,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShowMap
         '
-        Me.lcxShowMap.Location = New System.Drawing.Point(401, 231)
+        Me.lcxShowMap.Location = New System.Drawing.Point(401, 308)
         Me.lcxShowMap.Name = "lcxShowMap"
         Me.lcxShowMap.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShowMap.Size = New System.Drawing.Size(155, 20)
@@ -1008,7 +1200,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxIGCMQRustedSwitches
         '
-        Me.lcxIGCMQRustedSwitches.Location = New System.Drawing.Point(401, 879)
+        Me.lcxIGCMQRustedSwitches.Location = New System.Drawing.Point(401, 776)
         Me.lcxIGCMQRustedSwitches.Name = "lcxIGCMQRustedSwitches"
         Me.lcxIGCMQRustedSwitches.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxIGCMQRustedSwitches.Size = New System.Drawing.Size(195, 36)
@@ -1019,7 +1211,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxIGCLensless
         '
-        Me.lcxIGCLensless.Location = New System.Drawing.Point(401, 861)
+        Me.lcxIGCLensless.Location = New System.Drawing.Point(401, 758)
         Me.lcxIGCLensless.Name = "lcxIGCLensless"
         Me.lcxIGCLensless.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxIGCLensless.Size = New System.Drawing.Size(190, 20)
@@ -1096,7 +1288,7 @@ Partial Class frmTrackerOfTime
         '
         Me.nlbGCTricks.AutoSize = True
         Me.nlbGCTricks.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nlbGCTricks.Location = New System.Drawing.Point(401, 844)
+        Me.nlbGCTricks.Location = New System.Drawing.Point(401, 741)
         Me.nlbGCTricks.Name = "nlbGCTricks"
         Me.nlbGCTricks.Size = New System.Drawing.Size(135, 13)
         Me.nlbGCTricks.TabIndex = 317
@@ -1156,7 +1348,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxSaleman
         '
-        Me.lcxSaleman.Location = New System.Drawing.Point(201, 269)
+        Me.lcxSaleman.Location = New System.Drawing.Point(201, 288)
         Me.lcxSaleman.Name = "lcxSaleman"
         Me.lcxSaleman.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxSaleman.Size = New System.Drawing.Size(109, 20)
@@ -1166,7 +1358,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxBeans
         '
-        Me.lcxBeans.Location = New System.Drawing.Point(201, 250)
+        Me.lcxBeans.Location = New System.Drawing.Point(201, 269)
         Me.lcxBeans.Name = "lcxBeans"
         Me.lcxBeans.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxBeans.Size = New System.Drawing.Size(119, 20)
@@ -1176,7 +1368,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxNavi
         '
-        Me.lcxNavi.Location = New System.Drawing.Point(201, 288)
+        Me.lcxNavi.Location = New System.Drawing.Point(201, 212)
         Me.lcxNavi.Name = "lcxNavi"
         Me.lcxNavi.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxNavi.Size = New System.Drawing.Size(97, 20)
@@ -4139,149 +4331,6 @@ Partial Class frmTrackerOfTime
         '
         Me.tmrFastScan.Interval = 1000
         '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(401, 311)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(147, 13)
-        Me.Label2.TabIndex = 337
-        Me.Label2.Text = "Master Quest Dungeons:"
-        Me.Label2.Visible = False
-        '
-        'lcxMQDT
-        '
-        Me.lcxMQDT.Location = New System.Drawing.Point(401, 325)
-        Me.lcxMQDT.Name = "lcxMQDT"
-        Me.lcxMQDT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
-        Me.lcxMQDT.Size = New System.Drawing.Size(46, 20)
-        Me.lcxMQDT.TabIndex = 338
-        Me.lcxMQDT.Text = "DT"
-        Me.lcxMQDT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.lcxMQDT.Visible = False
-        '
-        'lcxMQDC
-        '
-        Me.lcxMQDC.Location = New System.Drawing.Point(401, 344)
-        Me.lcxMQDC.Name = "lcxMQDC"
-        Me.lcxMQDC.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
-        Me.lcxMQDC.Size = New System.Drawing.Size(46, 20)
-        Me.lcxMQDC.TabIndex = 339
-        Me.lcxMQDC.Text = "DC"
-        Me.lcxMQDC.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.lcxMQDC.Visible = False
-        '
-        'lcxMQJB
-        '
-        Me.lcxMQJB.Location = New System.Drawing.Point(401, 364)
-        Me.lcxMQJB.Name = "lcxMQJB"
-        Me.lcxMQJB.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
-        Me.lcxMQJB.Size = New System.Drawing.Size(46, 20)
-        Me.lcxMQJB.TabIndex = 340
-        Me.lcxMQJB.Text = "JB"
-        Me.lcxMQJB.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.lcxMQJB.Visible = False
-        '
-        'lcxMQFoT
-        '
-        Me.lcxMQFoT.Location = New System.Drawing.Point(469, 325)
-        Me.lcxMQFoT.Name = "lcxMQFoT"
-        Me.lcxMQFoT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
-        Me.lcxMQFoT.Size = New System.Drawing.Size(72, 20)
-        Me.lcxMQFoT.TabIndex = 341
-        Me.lcxMQFoT.Text = "Forest"
-        Me.lcxMQFoT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.lcxMQFoT.Visible = False
-        '
-        'lcxMQFiT
-        '
-        Me.lcxMQFiT.Location = New System.Drawing.Point(469, 345)
-        Me.lcxMQFiT.Name = "lcxMQFiT"
-        Me.lcxMQFiT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
-        Me.lcxMQFiT.Size = New System.Drawing.Size(46, 20)
-        Me.lcxMQFiT.TabIndex = 342
-        Me.lcxMQFiT.Text = "Fire"
-        Me.lcxMQFiT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.lcxMQFiT.Visible = False
-        '
-        'lcxMQIC
-        '
-        Me.lcxMQIC.Location = New System.Drawing.Point(401, 402)
-        Me.lcxMQIC.Name = "lcxMQIC"
-        Me.lcxMQIC.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
-        Me.lcxMQIC.Size = New System.Drawing.Size(46, 20)
-        Me.lcxMQIC.TabIndex = 347
-        Me.lcxMQIC.Text = "IC"
-        Me.lcxMQIC.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.lcxMQIC.Visible = False
-        '
-        'lcxMQBotW
-        '
-        Me.lcxMQBotW.Location = New System.Drawing.Point(401, 383)
-        Me.lcxMQBotW.Name = "lcxMQBotW"
-        Me.lcxMQBotW.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
-        Me.lcxMQBotW.Size = New System.Drawing.Size(56, 20)
-        Me.lcxMQBotW.TabIndex = 346
-        Me.lcxMQBotW.Text = "BotW"
-        Me.lcxMQBotW.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.lcxMQBotW.Visible = False
-        '
-        'lcxMQShT
-        '
-        Me.lcxMQShT.Location = New System.Drawing.Point(469, 402)
-        Me.lcxMQShT.Name = "lcxMQShT"
-        Me.lcxMQShT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
-        Me.lcxMQShT.Size = New System.Drawing.Size(77, 20)
-        Me.lcxMQShT.TabIndex = 345
-        Me.lcxMQShT.Text = "Shadow"
-        Me.lcxMQShT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.lcxMQShT.Visible = False
-        '
-        'lcxMQSpT
-        '
-        Me.lcxMQSpT.Location = New System.Drawing.Point(469, 383)
-        Me.lcxMQSpT.Name = "lcxMQSpT"
-        Me.lcxMQSpT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
-        Me.lcxMQSpT.Size = New System.Drawing.Size(57, 20)
-        Me.lcxMQSpT.TabIndex = 344
-        Me.lcxMQSpT.Text = "Spirit"
-        Me.lcxMQSpT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.lcxMQSpT.Visible = False
-        '
-        'lcxMQWT
-        '
-        Me.lcxMQWT.Location = New System.Drawing.Point(469, 364)
-        Me.lcxMQWT.Name = "lcxMQWT"
-        Me.lcxMQWT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
-        Me.lcxMQWT.Size = New System.Drawing.Size(57, 20)
-        Me.lcxMQWT.TabIndex = 343
-        Me.lcxMQWT.Text = "Water"
-        Me.lcxMQWT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.lcxMQWT.Visible = False
-        '
-        'lcxMQGTG
-        '
-        Me.lcxMQGTG.Location = New System.Drawing.Point(401, 421)
-        Me.lcxMQGTG.Name = "lcxMQGTG"
-        Me.lcxMQGTG.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
-        Me.lcxMQGTG.Size = New System.Drawing.Size(56, 20)
-        Me.lcxMQGTG.TabIndex = 349
-        Me.lcxMQGTG.Text = "GTG"
-        Me.lcxMQGTG.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.lcxMQGTG.Visible = False
-        '
-        'lcxMQGT
-        '
-        Me.lcxMQGT.Location = New System.Drawing.Point(469, 421)
-        Me.lcxMQGT.Name = "lcxMQGT"
-        Me.lcxMQGT.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
-        Me.lcxMQGT.Size = New System.Drawing.Size(46, 20)
-        Me.lcxMQGT.TabIndex = 348
-        Me.lcxMQGT.Text = "GT"
-        Me.lcxMQGT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.lcxMQGT.Visible = False
-        '
         'frmTrackerOfTime
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -4856,5 +4905,10 @@ Partial Class frmTrackerOfTime
     Friend WithEvents lcxMQDC As System.Windows.Forms.Label
     Friend WithEvents lcxMQDT As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents lcxBeehiveShuffle As System.Windows.Forms.Label
+    Friend WithEvents ComboBoxWarps As System.Windows.Forms.ComboBox
+    Friend WithEvents lcxPotShuffle As System.Windows.Forms.Label
+    Friend WithEvents lcxStandingShuffle As System.Windows.Forms.Label
+    Friend WithEvents lcxCrateShuffle As System.Windows.Forms.Label
 
 End Class

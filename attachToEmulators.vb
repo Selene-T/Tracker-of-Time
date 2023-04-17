@@ -116,7 +116,26 @@
 
         ' If dll is found, then set variables
         If addressDLL = 0 Then Return Nothing
-        frmTrackerOfTime.romAddrStart64 = addressDLL + &H658E0
+
+        Dim attemptOffset As Int64 = 0
+        For i = 0 To 2
+            Select Case i
+                Case 0
+                    ' Tests for BizHawk 2.7 and 2.8
+                    ' Rupees: mupen64plus.dll+17FEE6 - 0x11a606 = 0x658e0
+                    attemptOffset = &H658E0
+                Case 1
+                    ' Tests for BizHawk 2.9
+                    ' Rupees: mupen64plus.dll+17FED6 - 0x11a606 = 0x658d0
+                    attemptOffset = &H658D0
+                Case Else
+                    Return Nothing
+            End Select
+
+            frmTrackerOfTime.romAddrStart64 = addressDLL + attemptOffset
+            If ReadMemory(Of Integer)(frmTrackerOfTime.romAddrStart64 + &H11A5EC) = 1514490948 Then Exit For
+        Next
+
         frmTrackerOfTime.emulator = "emuhawk"
 
         ' Return the process

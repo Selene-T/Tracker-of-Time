@@ -1042,7 +1042,7 @@
 
         exit2label = String.Empty
         Select Case exitCode
-            Case "09C", "0BB", "0C1", "0C9", "209", "211", "266", "26A", "272", "286", "33C", "433", "437", "443", "447"
+            Case "09C", "0BB", "0C1", "0C9", "209", "211", "266", "26A", "272", "286", "33C", "433", "437", "443", "447", "457"
                 ' KF Main
                 exit2label = "KF"
                 reachMap = 0
@@ -1066,7 +1066,7 @@
                 ' LW Between Bridge (For Gift from Saria)
                 exit2label = "LW Bridge"
                 reachMap = 8
-            Case "0FC", "215", "600"
+            Case "0FC", "215", "600", "608"
                 ' SFM Main
                 exit2label = "SFM"
                 reachMap = 5
@@ -1137,11 +1137,11 @@
                 ' GY Main
                 exit2label = "GY"
                 reachMap = 18
-            Case "205", "568"
+            Case "205", "568", "580"
                 ' GY Upper
                 exit2label = "GY near Temple"
                 reachMap = 19
-            Case "13D", "1B9", "242"
+            Case "13D", "1B9", "242", "47A"
                 ' DMT Lower
                 exit2label = "DMT Lower"
                 reachMap = 20
@@ -1157,7 +1157,7 @@
                 ' DMC Lower Nearby
                 exit2label = "DMC near GC"
                 reachMap = 24
-            Case "4F6"
+            Case "4F6", "564"
                 ' DMC Central Local
                 exit2label = "DMC Warp"
                 reachMap = 27
@@ -1201,7 +1201,7 @@
                 ' ZD Behind King
                 exit2label = "ZD Behind King"
                 reachMap = 38
-            Case "221", "225", "371", "394"
+            Case "10E", "221", "225", "371", "394"
                 ' ZF Main
                 exit2label = "ZF"
                 reachMap = 40
@@ -1209,7 +1209,7 @@
                 ' ZF Ledge
                 exit2label = "ZF Ledge"
                 reachMap = 41
-            Case "043", "102", "219", "21D", "3CC", "560", "604"
+            Case "043", "102", "219", "21D", "3CC", "560", "604", "60C"
                 ' LH Main
                 exit2label = "LH"
                 reachMap = 42
@@ -1241,7 +1241,7 @@
                 ' HW Colossus Side
                 exit2label = "HW Colossus Side"
                 reachMap = 49
-            Case "123", "1F1", "1E1", "57C", "588"
+            Case "123", "1F1", "1E1", "57C", "588", "610"
                 ' DC Main
                 exit2label = "DC"
                 reachMap = 50

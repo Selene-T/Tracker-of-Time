@@ -9,9 +9,9 @@ Public Class frmTrackerOfTime
 
     ' Constant variables used throughout the app. The most important here is the 'IS_64BIT' as this needs to be set if compiling in x64
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
-    Private Const CHECK_COUNT As Byte = 124
+    Private Const CHECK_COUNT As Byte = 134
     Public IS_64BIT As Boolean = Environment.Is64BitProcess
-    Private VER As String = "4.2.6 x" & If(IS_64BIT, "64", "86")
+    Private VER As String = "4.3.0 x" & If(IS_64BIT, "64", "86")
     Public p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
@@ -105,6 +105,7 @@ Public Class frmTrackerOfTime
     Private iCheat As Byte = 0
     Private aCheat() As Keys = {Keys.Up, Keys.Up, Keys.Down, Keys.Down, Keys.Left, Keys.Right, Keys.Left, Keys.Right}
     Private aCheat2() As Keys = {Keys.F, Keys.I, Keys.X, Keys.I, Keys.T, Keys.F, Keys.E, Keys.L, Keys.I, Keys.X}
+    Private bShowCheats As Boolean = False
 
 
     ' Arrays of MQ settings, a current and old to compare to so updating only happens on changes
@@ -134,7 +135,10 @@ Public Class frmTrackerOfTime
         If keyData = aCheat2(iCheat) Then
             incB(iCheat)
             If iCheat = aCheat2.Length Then
-                showMenuButtons(True)
+                bShowCheats = True
+                btnTest.Visible = True
+                Button2.Visible = True
+                ComboBoxWarps.Visible = True
                 iCheat = 0
             End If
             Return MyBase.ProcessCmdKey(msg, keyData)
@@ -179,10 +183,13 @@ Public Class frmTrackerOfTime
             ReDim aExitMap(i)(6)
         Next
 
+
+        ' Default MQ settings on load
+        updateMQs(True, 99)
+
         makeArrayObjects()
         erExitArray()
-
-
+        setupWarps()
 
         custMenu.highlight = Me.ForeColor
         custMenu.backColour = Me.BackColor
@@ -314,11 +321,11 @@ Public Class frmTrackerOfTime
         ' Clears variables used during the scan
 
         ' Unset all MQs
-        For i = 0 To aMQ.Length - 1
-            aMQ(i) = False
-            aMQOld(i) = True
-        Next
-        updateMQs()
+        'For i = 0 To aMQ.Length - 1
+        '    aMQ(i) = False
+        '    aMQOld(i) = True
+        'Next
+        updateMQs(True)
 
         ' Reset some global variables
         randoVer = String.Empty
@@ -796,6 +803,7 @@ Public Class frmTrackerOfTime
                     ' These are the area checks, either chest, standing items, area events, as they will need to be checked as they happen
 
                     doMath = (locationCode * 28) + If(isSoH, SAV(&HD8), &H11A6A4)
+                    'Me.Text = Hex(doMath)
                     tempVar = CInt(IIf(isSoH, &H2388, &H1CA1D8))
 
                     Dim doFlip As Boolean = False
@@ -805,7 +813,7 @@ Public Class frmTrackerOfTime
                             inc(doMath, 4)
                             ' -0x10 from default
                             dec(tempVar, 16)
-                        Case 3 To 30, 100 To 102, 114
+                        Case 3 To 30, 100 To 102, 114, 125
                             ' Standing Checks
                             inc(doMath, 12)
                             inc(tempVar, 12)
@@ -2086,7 +2094,7 @@ Public Class frmTrackerOfTime
         Next
 
         If aAddresses(0) = 0 Then
-            updateMQs()
+            updateMQs(True)
             Exit Sub
         End If
 
@@ -2328,8 +2336,9 @@ Public Class frmTrackerOfTime
         'updateSettingsPanel()
     End Sub
     Private Sub resizeForm()
-        btnTest.Visible = False
-        Button2.Visible = False
+        btnTest.Visible = bShowCheats
+        Button2.Visible = bShowCheats
+        ComboBoxWarps.Visible = bShowCheats
 
         Dim setHeight As Integer = 990
         If My.Settings.setShortForm Then
@@ -2573,22 +2582,40 @@ Public Class frmTrackerOfTime
         ' If in compact mode, float checks to a readable location
         Dim floatChecks As New List(Of String)
         Dim doFloat As Boolean = False
+
+        ' For combinging many checks into 1 display
+        Dim doGroup As Boolean = False
+        Dim iGroupCount As Integer = 0
+        Dim bBoldenGroup As Boolean = False
+        'Dim bGroupCrates As Boolean = False
+        Dim bGroupPots As Boolean = False
+        Dim bGroupStanding As Boolean = False
+
         For i = 0 To aKeysOverworld.Length - 1
             With aKeysOverworld(i)
                 ' Stop if an empty key
                 If .loc = String.Empty Then Exit For
+
                 If .area = area Then
                     ' Reset and determine the prefix
                     prefix = "  "
-                    Select Case True
+                    doGroup = False
+
+                    Select True
                         Case .gs
                             prefix = "  GS: "
                         Case .cow
                             prefix = "  Cow: "
                         Case .scrub
                             prefix = "  Scrub: "
+                        Case .beehive
+                            prefix = "  Beehive: "
+                        Case .crate
+                            prefix = "   Crate: "
                         Case .shop
                             prefix = "  Shopsanity: "
+                        Case .pot, .standing
+                            doGroup = True
                     End Select
                     ' So long as it is not checked and in good standing, add it to the output
                     If .scan = True Then
@@ -2609,6 +2636,14 @@ Public Class frmTrackerOfTime
                                 addCheck = My.Settings.setCow
                             ElseIf .scrub Then
                                 addCheck = My.Settings.setScrub
+                            ElseIf .beehive Then
+                                addCheck = My.Settings.setBeehive
+                            ElseIf .crate Then
+                                addCheck = My.Settings.setCrate
+                            ElseIf .pot Then
+                                addCheck = My.Settings.setPot
+                            ElseIf .standing Then
+                                addCheck = My.Settings.setStanding
                             ElseIf .shop Then
                                 If My.Settings.setShop > 0 Then addCheck = True
                             Else
@@ -2618,13 +2653,15 @@ Public Class frmTrackerOfTime
                             If Not showChecked And .forced Then addCheck = False
                             If My.Settings.setHideQuests And .area = "QBPH" Then addCheck = False
 
-                            ' Reset and determing suffix
+                            ' Reset and determine suffix
                             suffix = ""
                             If .forced Then suffix = " (Forced)"
 
                             ' Do not bolden the checked list. This will still bolden the forced items in the check list
                             doFloat = False
-                            If Not .checked Then
+
+                            ' Skip if already checked, or if a group is already bolded
+                            If Not .checked And (doGroup = False Or bBoldenGroup = False) Then
                                 ' If logic is on, bold the ones that are accessable
                                 Dim logicResult As Byte = checkLogic(.logic, .zone)
                                 If My.Settings.setLogic And Not logicResult = 0 Then
@@ -2634,22 +2671,71 @@ Public Class frmTrackerOfTime
                                         Case 2
                                             suffix = " (A) " & suffix
                                     End Select
-                                    emboldenList.Add(prefix & .name & suffix)
-                                    doFloat = True
+
+                                    ' For combinging many checks into 1 display
+                                    If doGroup Then
+                                        bBoldenGroup = True
+                                    Else
+                                        emboldenList.Add(prefix & .name & suffix)
+                                        doFloat = True
+                                    End If
+
+                                    'emboldenList.Add(prefix & .name & suffix)
+                                    'doFloat = True
+
                                 End If
                             End If
                             If addCheck Then
-                                If lines.Count < (rtbLines * 2) Then
-                                    lines.Add(prefix & .name & suffix & Chr(32))
-                                ElseIf doFloat Then
-                                    floatChecks.Add(prefix & .name & suffix & Chr(32))
+
+                                Select Case True
+                                    'Case .crate
+                                    'bGroupCrates = True
+                                    Case .pot
+                                        bGroupPots = True
+                                    Case .standing
+                                        bGroupStanding = True
+                                End Select
+
+                                If doGroup Then
+                                    iGroupCount += 1
+                                Else
+                                    If lines.Count < (rtbLines * 2) Then
+                                        lines.Add(prefix & .name & suffix & Chr(32))
+                                    ElseIf doFloat Then
+                                        floatChecks.Add(prefix & .name & suffix & Chr(32))
+                                    End If
                                 End If
+
+
+                                'If lines.Count < (rtbLines * 2) Then
+                                '    lines.Add(prefix & .name & suffix & Chr(32))
+                                'ElseIf doFloat Then
+                                '    floatChecks.Add(prefix & .name & suffix & Chr(32))
+                                'End If
+
                             End If
                         End If
                     End If
                 End If
             End With
         Next
+
+        ' For combinging many checks into 1 display
+        If iGroupCount > 0 Then
+            Dim strGroupName As String = String.Empty
+            'If bGroupCrates Then strGroupName = "Crates:"
+            If bGroupPots Then strGroupName = strGroupName.Replace(":", "/") & "Pots:"
+            If bGroupStanding Then strGroupName = strGroupName.Replace(":", "/") & "Recovery Hearts/Rupees:"
+            strGroupName &= Chr(32) & iGroupCount.ToString
+            If lines.Count < (rtbLines * 2) Then
+                lines.Add("  " & strGroupName & Chr(32))
+            ElseIf bBoldenGroup Then
+                floatChecks.Add("  " & strGroupName & Chr(32))
+            End If
+            If bBoldenGroup Then emboldenList.Add("  " & strGroupName & Chr(32))
+
+        End If
+
         If Not floatChecks.Count = 0 Then
             Dim doRemove As Boolean = True
             For i = lines.Count - 1 To 0 Step -1
@@ -2759,8 +2845,12 @@ Public Class frmTrackerOfTime
                             addCheck = My.Settings.setCow
                         ElseIf .scrub Then
                             addCheck = My.Settings.setScrub
-                        ElseIf .shop Then
-                            If My.Settings.setShop > 0 Then addCheck = True
+                        ElseIf .crate Then
+                            addCheck = My.Settings.setCrate
+                        ElseIf .pot Then
+                            addCheck = My.Settings.setPot
+                        ElseIf .standing Then
+                            addCheck = My.Settings.setStanding
                         Else
                             addCheck = True
                         End If
@@ -4239,6 +4329,26 @@ Public Class frmTrackerOfTime
                 ' 194	Ganon's Castle Deku Room
                 ' 195	Ganon's Castle Light Trial
                 ' 196	Ganon's Tower
+
+                ' Ganon's Castle Lobby
+                ' Ganon's Castle Forest Trial
+                ' Ganon's Castle Forest Trial Ending
+                ' Ganon's Castle Water Trial
+                ' Ganon's Castle Water Trial Ending
+                ' Ganon's Castle Shadow Trial
+                ' Ganon's Castle Shadow Trial First Gap
+                ' Ganon's Castle Shadow Trial Second Gap
+                ' Ganon's Castle Shadow Trial Ending
+                ' Ganon's Castle Fire Trial
+                ' Ganon's Castle Light Trial
+                ' Ganon's Castle Light Trial Boulder Room
+                ' Ganon's Castle Light Trial Ending
+                ' Ganon's Castle Spirit Trial
+                ' Ganon's Castle Spirit Trial Second Room Front
+                ' Ganon's Castle Spirit Trial Second Room Back
+                ' Ganon's Castle Spirit Trial Ending
+                ' Ganon's Castle Deku Scrubs
+
 
                 ' Ganon's Castle to Deku Room, Light Trial, Tower
                 If item("lens of truth") Or My.Settings.setIGCLensless Then addArea(194, asAdult)
@@ -6054,7 +6164,7 @@ Public Class frmTrackerOfTime
             .loc = locSwap(7)
             .area = "KV"
             .zone = 15
-            .name = "Song from Shiek"
+            .name = "Song from Sheik"
             .logic = "ZLL7700LL7701LL7702"
         End With
         inc(tk)
@@ -7196,7 +7306,7 @@ Public Class frmTrackerOfTime
             .loc = "6628"
             .area = "DC"
             .zone = 50
-            .name = "Song from Shiek"
+            .name = "Song from Sheik"
         End With
         inc(tk)
         With aKeysOverworld(tk)
@@ -7885,51 +7995,85 @@ Public Class frmTrackerOfTime
         updateLabels()
     End Sub
 
-    Private Sub updateMQs()
+    Private Sub updateMQs(Optional bManual As Boolean = False, Optional iDungeon As Integer = 12)
         ' Set up the dungeons based on if they are Master Quest versions or not
 
-        Dim mqLabel As New Label
+        If bManual Then
+            ' If isManual, then the tracker does not detect the MQ settings, so read the user selected dungeons
+            aMQ(0) = My.Settings.setMQDT
+            aMQ(1) = My.Settings.setMQDC
+            aMQ(2) = My.Settings.setMQJB
+            aMQ(3) = My.Settings.setMQFoT
+            aMQ(4) = My.Settings.setMQFiT
+            aMQ(5) = My.Settings.setMQWT
+            aMQ(6) = My.Settings.setMQSpT
+            aMQ(7) = My.Settings.setMQShT
+            aMQ(8) = My.Settings.setMQBotW
+            aMQ(9) = My.Settings.setMQIC
+            aMQ(10) = My.Settings.setMQGTG
+            aMQ(11) = My.Settings.setMQGT
+        Else
+            ' Otherwise, move the aMQ settings into the user settings
+            My.Settings.setMQDT = aMQ(0)
+            My.Settings.setMQDC = aMQ(1)
+            My.Settings.setMQJB = aMQ(2)
+            My.Settings.setMQFoT = aMQ(3)
+            My.Settings.setMQFiT = aMQ(4)
+            My.Settings.setMQWT = aMQ(5)
+            My.Settings.setMQSpT = aMQ(6)
+            My.Settings.setMQShT = aMQ(7)
+            My.Settings.setMQBotW = aMQ(8)
+            My.Settings.setMQIC = aMQ(9)
+            My.Settings.setMQGTG = aMQ(10)
+            My.Settings.setMQGT = aMQ(11)
+        End If
+
+        ' If a specific dungeon was set, only focus on that dungeon. This is a minor enhancement boost.
+        Dim iStartDungeon As Integer = 0
+        Dim iEndDungeon As Integer = 11
+
+        If iDungeon < 12 Then
+            iStartDungeon = iDungeon
+            iEndDungeon = iDungeon
+        End If
+
+        If iDungeon = 99 Then
+            ' Use dungeon 99 to unset all for a default
+            For i = 0 To aMQ.Length - 1
+                aMQ(i) = False
+                aMQOld(i) = True
+            Next
+        End If
+
         ' Step through the aMQ array, where the current Master Quest settings are set
-        For i = 0 To 11
+        For i = iStartDungeon To iEndDungeon
             ' If the new read is different than the old read (old is what is already read and loaded), update the dungeon array
             If Not aMQ(i) = aMQOld(i) Then
                 Select Case i
                     Case 0
                         makeKeysDekuTree(aMQ(i))
-                        mqLabel = lcxMQDT
                     Case 1
                         makeKeysDodongosCavern(aMQ(i))
-                        mqLabel = lcxMQDC
                     Case 2
                         makeKeysJabuJabusBelly(aMQ(i))
-                        mqLabel = lcxMQJB
                     Case 3
                         makeKeysForestTemple(aMQ(i))
-                        mqLabel = lcxMQFoT
                     Case 4
                         makeKeysFireTemple(aMQ(i))
-                        mqLabel = lcxMQFiT
                     Case 5
                         makeKeysWaterTemple(aMQ(i))
-                        mqLabel = lcxMQWT
                     Case 6
                         makeKeysSpiritTemple(aMQ(i))
-                        mqLabel = lcxMQSpT
                     Case 7
                         makeKeysShadowTemple(aMQ(i))
-                        mqLabel = lcxMQShT
                     Case 8
                         makeKeysBottomOfTheWell(aMQ(i))
-                        mqLabel = lcxMQBotW
                     Case 9
                         makeKeysIceCavern(aMQ(i))
-                        mqLabel = lcxMQIC
                     Case 10
                         makeKeysGerudoTrainingGround(aMQ(i))
-                        mqLabel = lcxMQGTG
                     Case 11
                         makeKeysGanonsCastle(aMQ(i))
-                        mqLabel = lcxMQGT
                 End Select
             End If
         Next
@@ -9298,14 +9442,14 @@ Public Class frmTrackerOfTime
             With aKeysDungeons(4)(2)
                 .loc = "3500"
                 .area = "FIT1"
-                .zone = 108
+                .zone = 113
                 .name = "Megaton Hammer Chest"
                 .logic = "Zk.Zr.Zx"
             End With
             With aKeysDungeons(4)(3)
                 .loc = "3512"
                 .area = "FIT1"
-                .zone = 108
+                .zone = 113
                 .name = "Map Chest"
                 .logic = "Zr"
             End With
@@ -12276,7 +12420,7 @@ Public Class frmTrackerOfTime
             locSwap(4) = "5200"     ' Shoot the Sun
             locSwap(5) = "6008"     ' Help Biggoron
             locSwap(6) = "6306"     ' Darunia's Joy
-            locSwap(7) = "6404"     ' Song from Shiek Kakariko
+            locSwap(7) = "6404"     ' Song from Sheik Kakariko
             locSwap(8) = "6407"     ' Song from Saria
             locSwap(9) = "6408"     ' Song from Malon
             locSwap(10) = "6410"    ' Sun's Song
@@ -12296,7 +12440,7 @@ Public Class frmTrackerOfTime
             locSwap(4) = "5231"     ' Shoot the Sun
             locSwap(5) = "5831"     ' Help Biggoron
             locSwap(6) = "5930"     ' Darunia's Joy
-            locSwap(7) = "6626"     ' Song from Shiek Kakariko
+            locSwap(7) = "6626"     ' Song from Sheik Kakariko
             locSwap(8) = "11931"    ' Song from Saria
             locSwap(9) = "11831"    ' Song from Malon
             locSwap(10) = "4931"    ' Sun's Song
@@ -12953,6 +13097,14 @@ Public Class frmTrackerOfTime
                 ' Scrub shuffle requires a little more work, to disable the original 3 scrub keys and enable scrub shuffle keys. And vice versa
                 My.Settings.setScrub = Not My.Settings.setScrub
                 changeScrubs()
+            Case lcxBeehiveShuffle.Text
+                My.Settings.setBeehive = Not My.Settings.setBeehive
+            Case lcxCrateShuffle.Text
+                My.Settings.setCrate = Not My.Settings.setCrate
+            Case lcxPotShuffle.Text
+                My.Settings.setPot = Not My.Settings.setPot
+            Case lcxStandingShuffle.Text
+                My.Settings.setStanding = Not My.Settings.setStanding
             Case lcxBombchuLogic.Text
                 My.Settings.setBombchus = Not My.Settings.setBombchus
             Case lcxLoTLogic.Text
@@ -13101,17 +13253,29 @@ Public Class frmTrackerOfTime
             Case lcxBFA.Text
                 My.Settings.setBFA = Not My.Settings.setBFA
             Case lcxMQDT.Text
+                My.Settings.setMQDT = Not My.Settings.setMQDT
             Case lcxMQDC.Text
+                My.Settings.setMQDC = Not My.Settings.setMQDC
             Case lcxMQJB.Text
+                My.Settings.setMQJB = Not My.Settings.setMQJB
             Case lcxMQFoT.Text
+                My.Settings.setMQFoT = Not My.Settings.setMQFoT
             Case lcxMQFiT.Text
+                My.Settings.setMQFiT = Not My.Settings.setMQFiT
             Case lcxMQWT.Text
+                My.Settings.setMQWT = Not My.Settings.setMQWT
             Case lcxMQSpT.Text
+                My.Settings.setMQSpT = Not My.Settings.setMQSpT
             Case lcxMQShT.Text
+                My.Settings.setMQShT = Not My.Settings.setMQShT
             Case lcxMQBotW.Text
+                My.Settings.setMQBotW = Not My.Settings.setMQBotW
             Case lcxMQIC.Text
+                My.Settings.setMQIC = Not My.Settings.setMQIC
             Case lcxMQGTG.Text
+                My.Settings.setMQGTG = Not My.Settings.setMQGTG
             Case lcxMQGT.Text
+                My.Settings.setMQGT = Not My.Settings.setMQGT
 
 
                 'Case lcxxx.Text
@@ -13142,6 +13306,14 @@ Public Class frmTrackerOfTime
                 message = "Adds shuffled cows to the checks for each area."
             Case lcxScrubShuffle.Text
                 message = "Adds shuffled Deku Scrubs to the checks for each area."
+            Case lcxBeehiveShuffle.Text
+                message = "Adds shufffled beehives to the checks for each area."
+            Case lcxCrateShuffle.Text
+                message = "Adds shuffled crates to the checks for each area."
+            Case lcxPotShuffle.Text
+                message = "Adds shuffled pots to the checks for each area."
+            Case lcxStandingShuffle.Text
+                message = "Adds shuffled standing recovery hearts and rupees to checks for each area."
             Case lblShopsanity.Text
                 message = "Adds shopsanity checks to each shoppe." & vbCrLf & "NOTE: OOTR coding for Shopsanity Random is not supported due to their particular design. AP randomizer works with '4 items per shop' setting."
             Case lblSmallKeys.Text
@@ -13468,6 +13640,14 @@ Public Class frmTrackerOfTime
                                 isTrue = My.Settings.setCow
                             Case lcxScrubShuffle.Name
                                 isTrue = My.Settings.setScrub
+                            Case lcxBeehiveShuffle.Name
+                                isTrue = My.Settings.setBeehive
+                            Case lcxCrateShuffle.Name
+                                isTrue = My.Settings.setCrate
+                            Case lcxPotShuffle.Name
+                                isTrue = My.Settings.setPot
+                            Case lcxStandingShuffle.Name
+                                isTrue = My.Settings.setStanding
                             Case lcxBombchuLogic.Name
                                 isTrue = My.Settings.setBombchus
                             Case lcxLoTLogic.Name
@@ -13592,6 +13772,43 @@ Public Class frmTrackerOfTime
                                 isTrue = My.Settings.setGTGLensless
                             Case lcxBFA.Name
                                 isTrue = My.Settings.setBFA
+                            Case lcxMQDT.Name
+                                isTrue = My.Settings.setMQDT
+                                If Not firstRun Then updateMQs(True, 0)
+                            Case lcxMQDC.Name
+                                isTrue = My.Settings.setMQDC
+                                If Not firstRun Then updateMQs(True, 1)
+                            Case lcxMQJB.Name
+                                isTrue = My.Settings.setMQJB
+                                If Not firstRun Then updateMQs(True, 2)
+                            Case lcxMQFoT.Name
+                                isTrue = My.Settings.setMQFoT
+                                If Not firstRun Then updateMQs(True, 3)
+                            Case lcxMQFiT.Name
+                                isTrue = My.Settings.setMQFiT
+                                If Not firstRun Then updateMQs(True, 4)
+                            Case lcxMQWT.Name
+                                isTrue = My.Settings.setMQWT
+                                If Not firstRun Then updateMQs(True, 5)
+                            Case lcxMQSpT.Name
+                                isTrue = My.Settings.setMQSpT
+                                If Not firstRun Then updateMQs(True, 6)
+                            Case lcxMQShT.Name
+                                isTrue = My.Settings.setMQShT
+                                If Not firstRun Then updateMQs(True, 7)
+                            Case lcxMQBotW.Name
+                                isTrue = My.Settings.setMQBotW
+                                If Not firstRun Then updateMQs(True, 8)
+                            Case lcxMQIC.Name
+                                isTrue = My.Settings.setMQIC
+                                If Not firstRun Then updateMQs(True, 9)
+                            Case lcxMQGTG.Name
+                                isTrue = My.Settings.setMQGTG
+                                If Not firstRun Then updateMQs(True, 10)
+                            Case lcxMQGT.Name
+                                isTrue = My.Settings.setMQGT
+                                If Not firstRun Then updateMQs(True, 11)
+
                                 'Case lcxxx.Name
                                 'isTrue = My.Settings.setxx
                             Case Else
@@ -13727,6 +13944,7 @@ Public Class frmTrackerOfTime
         name = Replace(name, "GS:", "")
         name = Replace(name, "Cow:", "")
         name = Replace(name, "Scrub:", "")
+        name = Replace(name, "Beehive:", "")
         name = Replace(name, "Shopsanity:", "")
         name = Replace(name, "(Forced)", "")
         name = Trim(name)
@@ -14095,7 +14313,7 @@ Public Class frmTrackerOfTime
 
         For i As Byte = 0 To 7
             Select Case aWarps(i)
-                Case "09C", "0BB", "0C1", "0C9", "211", "266", "26A", "272", "286", "33C", "433", "437", "443", "447"
+                Case "09C", "0BB", "0C1", "0C9", "211", "266", "26A", "272", "286", "33C", "433", "437", "443", "447", "457"
                     ' KF Main
                     aWarps(i) = "KF"
                     addReach(0, i)
@@ -14115,7 +14333,7 @@ Public Class frmTrackerOfTime
                     ' LW Bridge
                     aWarps(i) = "LW"
                     addReach(4, i)
-                Case "0FC", "600"
+                Case "0FC", "600", "608"
                     ' SFM Main
                     aWarps(i) = "SFM"
                     addReach(5, i)
@@ -14157,11 +14375,11 @@ Public Class frmTrackerOfTime
                     ' GY Main
                     aWarps(i) = "GY"
                     addReach(18, i)
-                Case "568"
+                Case "568", "580"
                     ' GY Upper
                     aWarps(i) = "GY"
                     addReach(19, i)
-                Case "13D", "1B9"
+                Case "13D", "1B9", "47A"
                     ' DMT Lower
                     aWarps(i) = "DMT"
                     addReach(20, i)
@@ -14177,7 +14395,7 @@ Public Class frmTrackerOfTime
                     ' DMC Lower Nearby
                     aWarps(i) = "DMC"
                     addReach(24, i)
-                Case "4F6"
+                Case "4F6", "564"
                     ' DMC Central Local
                     aWarps(i) = "DMC"
                     addReach(27, i)
@@ -14220,11 +14438,11 @@ Public Class frmTrackerOfTime
                 Case "380"
                     aWarps(i) = "ZD"
                     addReach(39, i)
-                Case "225", "371", "394"
+                Case "10E", "225", "371", "394"
                     ' ZF Main
                     aWarps(i) = "ZF"
                     addReach(40, i)
-                Case "043", "102", "219", "3CC", "560", "604"
+                Case "043", "102", "219", "3CC", "560", "604", "60C"
                     ' LH Main
                     aWarps(i) = "LH"
                     addReach(42, i)
@@ -14256,7 +14474,7 @@ Public Class frmTrackerOfTime
                     ' HW Colossus Side
                     aWarps(i) = "HW"
                     addReach(49, i)
-                Case "123", "1F1", "57C", "588"
+                Case "123", "1F1", "57C", "588", "610"
                     ' DC Main
                     aWarps(i) = "DC"
                     addReach(50, i)
@@ -14931,6 +15149,144 @@ Public Class frmTrackerOfTime
         MsgBox("Some variables dumped to clipboard. Please send them to" & vbCrLf & _
                 "me on Discord (Selene#0230), along with a screenshot of the" & vbCrLf & _
                 "tracker, and a description of the problem you are having.")
+    End Sub
+
+    Private Sub setupWarps()
+        With ComboBoxWarps.Items
+            .Add("Deku Tree")               '0
+            .Add("Dodongo Cavern")          '1
+            .Add("Jabu-Jabu's Belly")       '2
+            .Add("Forest Temple")           '3
+            .Add("Fire Temple")             '4
+            .Add("Water Temple")            '5
+            .Add("Spirit Temple")           '6
+            .Add("Shadow Temple")           '7
+            .Add("Bottom of the Well")      '8
+            .Add("Ice Cavern")              '9
+            .Add("Gerudo Training Grounds") '10
+            .Add("Ganan's Castle")          '11
+            .Add("Kokiri Forest")           '12
+            .Add("Lost Woods")              '13
+            .Add("Sacred Forest Meadow")    '14
+            .Add("Hyrule Field North")      '15
+            .Add("Hyrule Field South")      '16
+            .Add("Lon Lon Ranch")           '17
+            .Add("Market")                  '18
+            .Add("Temple of Time")          '19
+            .Add("Castle Grounds")          '20
+            .Add("Kakariko Village")        '21
+            .Add("Graveyard")               '22
+            .Add("Death Mountain Trail")    '23
+            .Add("Goron City")              '24
+            .Add("Death Mountain Crater")   '25
+            .Add("Zora's River")            '26
+            .Add("Zora's Domain")           '27
+            .Add("Zora's Fountain")         '28
+            .Add("Lake Hylia")              '29
+            .Add("Gerudo Valley")           '30
+            .Add("Gerudo Fortress")         '31
+            .Add("Haunted Wasteland")       '32
+            .Add("Desert Colossus")         '33
+            .Add("Barinade")         '34
+            .Add("Water")         '34
+        End With
+    End Sub
+
+
+    Private Sub ComboBoxWarps_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxWarps.SelectedIndexChanged
+        Dim sOverride As String = ""
+        Select Case ComboBoxWarps.SelectedIndex
+            Case 0
+                sOverride = "000"
+            Case 1
+                sOverride = "004"
+            Case 2
+                sOverride = "028"
+            Case 3
+                sOverride = "169"
+            Case 4
+                sOverride = "165"
+            Case 5
+                sOverride = "010"
+            Case 6
+                sOverride = "082"
+            Case 7
+                sOverride = "037"
+            Case 8
+                sOverride = "098"
+            Case 9
+                sOverride = "088"
+            Case 10
+                sOverride = "008"
+            Case 11
+                sOverride = "467"
+            Case 12
+                sOverride = "5E0"
+            Case 13
+                sOverride = "11E"
+            Case 14
+                sOverride = "0FC"
+            Case 15
+                sOverride = "1FD"
+            Case 16
+                sOverride = "189"
+            Case 17
+                sOverride = "157"
+            Case 18
+                sOverride = "0B1"
+            Case 19
+                sOverride = "053"
+            Case 20
+                sOverride = "138"
+            Case 21
+                sOverride = "0DB"
+            Case 22
+                sOverride = "0E4"
+            Case 23
+                sOverride = "13D"
+            Case 24
+                sOverride = "14D"
+            Case 25
+                sOverride = "147"
+            Case 26
+                sOverride = "0EA"
+            Case 27
+                sOverride = "108"
+            Case 28
+                sOverride = "225"
+            Case 29
+                sOverride = "102"
+            Case 30
+                sOverride = "117"
+            Case 31
+                sOverride = "129"
+            Case 32
+                sOverride = "130"
+            Case 33
+                sOverride = "123"
+            Case 34
+                sOverride = "301"
+            Case 35
+                sOverride = "417"
+            Case Else
+                sOverride = "000"
+        End Select
+
+        sOverride &= Chr(48) & sOverride
+
+        Select Case emulator
+            Case String.Empty
+                Exit Sub
+
+            Case "variousX64"
+                WriteMemory(Of Integer)(romAddrStart64 + &H3AB22C, CInt("&H" & sOverride))
+                WriteMemory(Of Integer)(romAddrStart64 + &H3AB230, CInt("&H" & sOverride))
+                WriteMemory(Of Integer)(romAddrStart64 + &H3AB234, CInt("&H" & sOverride))
+            Case Else
+                quickWrite(romAddrStart + &H3AB22CUI, CInt("&H" & sOverride), emulator)
+                quickWrite(romAddrStart + &H3AB230UI, CInt("&H" & sOverride), emulator)
+                quickWrite(romAddrStart + &H3AB234UI, CInt("&H" & sOverride), emulator)
+        End Select
     End Sub
 End Class
 
