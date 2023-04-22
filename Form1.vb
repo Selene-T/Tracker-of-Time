@@ -11,7 +11,7 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 134
     Public IS_64BIT As Boolean = Environment.Is64BitProcess
-    Private VER As String = "4.3.0 x" & If(IS_64BIT, "64", "86")
+    Private VER As String = "4.3.1 x" & If(IS_64BIT, "64", "86")
     Public p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address

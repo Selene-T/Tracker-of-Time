@@ -919,33 +919,36 @@ Partial Class frmTrackerOfTime
         '
         'lcxPotShuffle
         '
-        Me.lcxPotShuffle.Location = New System.Drawing.Point(401, 250)
+        Me.lcxPotShuffle.Location = New System.Drawing.Point(401, 345)
         Me.lcxPotShuffle.Name = "lcxPotShuffle"
         Me.lcxPotShuffle.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxPotShuffle.Size = New System.Drawing.Size(87, 19)
         Me.lcxPotShuffle.TabIndex = 354
         Me.lcxPotShuffle.Text = "Pot Shuffle"
         Me.lcxPotShuffle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxPotShuffle.Visible = False
         '
         'lcxStandingShuffle
         '
-        Me.lcxStandingShuffle.Location = New System.Drawing.Point(401, 269)
+        Me.lcxStandingShuffle.Location = New System.Drawing.Point(401, 364)
         Me.lcxStandingShuffle.Name = "lcxStandingShuffle"
         Me.lcxStandingShuffle.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxStandingShuffle.Size = New System.Drawing.Size(150, 19)
         Me.lcxStandingShuffle.TabIndex = 353
         Me.lcxStandingShuffle.Text = "Hearts and Rupee Shuffle"
         Me.lcxStandingShuffle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxStandingShuffle.Visible = False
         '
         'lcxCrateShuffle
         '
-        Me.lcxCrateShuffle.Location = New System.Drawing.Point(401, 231)
+        Me.lcxCrateShuffle.Location = New System.Drawing.Point(401, 326)
         Me.lcxCrateShuffle.Name = "lcxCrateShuffle"
         Me.lcxCrateShuffle.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxCrateShuffle.Size = New System.Drawing.Size(137, 20)
         Me.lcxCrateShuffle.TabIndex = 352
         Me.lcxCrateShuffle.Text = "Crate Shuffle"
         Me.lcxCrateShuffle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxCrateShuffle.Visible = False
         '
         'ComboBoxWarps
         '
@@ -959,13 +962,14 @@ Partial Class frmTrackerOfTime
         '
         'lcxBeehiveShuffle
         '
-        Me.lcxBeehiveShuffle.Location = New System.Drawing.Point(401, 212)
+        Me.lcxBeehiveShuffle.Location = New System.Drawing.Point(401, 307)
         Me.lcxBeehiveShuffle.Name = "lcxBeehiveShuffle"
         Me.lcxBeehiveShuffle.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxBeehiveShuffle.Size = New System.Drawing.Size(137, 20)
         Me.lcxBeehiveShuffle.TabIndex = 350
         Me.lcxBeehiveShuffle.Text = "Beehive Shuffle"
         Me.lcxBeehiveShuffle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lcxBeehiveShuffle.Visible = False
         '
         'lcxMQGTG
         '
@@ -1099,7 +1103,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxBFA
         '
-        Me.lcxBFA.Location = New System.Drawing.Point(401, 365)
+        Me.lcxBFA.Location = New System.Drawing.Point(401, 288)
         Me.lcxBFA.Name = "lcxBFA"
         Me.lcxBFA.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxBFA.Size = New System.Drawing.Size(155, 20)
@@ -1130,7 +1134,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxHideQuests
         '
-        Me.lcxHideQuests.Location = New System.Drawing.Point(401, 288)
+        Me.lcxHideQuests.Location = New System.Drawing.Point(401, 212)
         Me.lcxHideQuests.Name = "lcxHideQuests"
         Me.lcxHideQuests.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxHideQuests.Size = New System.Drawing.Size(159, 20)
@@ -1150,7 +1154,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShortForm
         '
-        Me.lcxShortForm.Location = New System.Drawing.Point(401, 346)
+        Me.lcxShortForm.Location = New System.Drawing.Point(401, 270)
         Me.lcxShortForm.Name = "lcxShortForm"
         Me.lcxShortForm.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShortForm.Size = New System.Drawing.Size(155, 20)
@@ -1180,7 +1184,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxExpand
         '
-        Me.lcxExpand.Location = New System.Drawing.Point(401, 327)
+        Me.lcxExpand.Location = New System.Drawing.Point(401, 251)
         Me.lcxExpand.Name = "lcxExpand"
         Me.lcxExpand.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxExpand.Size = New System.Drawing.Size(155, 20)
@@ -1190,7 +1194,7 @@ Partial Class frmTrackerOfTime
         '
         'lcxShowMap
         '
-        Me.lcxShowMap.Location = New System.Drawing.Point(401, 308)
+        Me.lcxShowMap.Location = New System.Drawing.Point(401, 232)
         Me.lcxShowMap.Name = "lcxShowMap"
         Me.lcxShowMap.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
         Me.lcxShowMap.Size = New System.Drawing.Size(155, 20)
