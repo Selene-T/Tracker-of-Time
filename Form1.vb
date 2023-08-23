@@ -11,7 +11,7 @@ Public Class frmTrackerOfTime
     Private Const PROCESS_ALL_ACCESS As Integer = &H1F0FFF
     Private Const CHECK_COUNT As Byte = 134
     Public IS_64BIT As Boolean = Environment.Is64BitProcess
-    Private VER As String = "4.3.1 x" & If(IS_64BIT, "64", "86")
+    Private VER As String = "4.3.2 x" & If(IS_64BIT, "64", "86")
     Public p As Process = Nothing
 
     ' Variables used to determine what emulator is connected, its state, and its starting memory address
@@ -13276,6 +13276,10 @@ Public Class frmTrackerOfTime
                 My.Settings.setMQGTG = Not My.Settings.setMQGTG
             Case lcxMQGT.Text
                 My.Settings.setMQGT = Not My.Settings.setMQGT
+            Case lcxERDungeons.Text
+                My.Settings.setERDun = Not My.Settings.setERDun
+            Case lcxEROverworld.Text
+                My.Settings.setEROver = Not My.Settings.setEROver
 
 
                 'Case lcxxx.Text
@@ -13445,6 +13449,10 @@ Public Class frmTrackerOfTime
                 message = "Navigate Gerudo Training Ground without Lens of Truth."
             Case lcxBFA.Text
                 message = "Ice arrows have the power of blue fire."
+            Case lcxERDungeons.Text
+                message = "Entrance Randomizer for Dungeons."
+            Case lcxEROverworld.Text
+                message = "Entrance Randomizer for Overworld."
                 'Case lcxxx.Text
                 'message = "."
         End Select
@@ -13808,7 +13816,10 @@ Public Class frmTrackerOfTime
                             Case lcxMQGT.Name
                                 isTrue = My.Settings.setMQGT
                                 If Not firstRun Then updateMQs(True, 11)
-
+                            Case lcxERDungeons.Name
+                                isTrue = My.Settings.setERDun
+                            Case lcxEROverworld.Name
+                                isTrue = My.Settings.setEROver
                                 'Case lcxxx.Name
                                 'isTrue = My.Settings.setxx
                             Case Else
@@ -14610,6 +14621,8 @@ Public Class frmTrackerOfTime
         'Addr:              80400000 80400004 80400008 8040000C
         'AP 0.3.1:          80400020 80400844 80409FD4 00000000
         'AP 0.3.2:          80400020 80400844 8040A334 00000000
+
+
         'OOTR 6.2:          80400020 80400834 8040A474 00000000
         'OOTR 6.2.72:       80400020 80400834 8040AA7C 80400CD0
         'OOTR 7.0:          80400020 8040083C 80411E64 80400D6C
@@ -14745,6 +14758,7 @@ Public Class frmTrackerOfTime
                 aAddresses(18) = &H400D59   ' Overworld ER
                 aAddresses(19) = &H400D5A   ' Dungeon ER
         End Select
+        If Not (aAddresses(0) = &H40B220 Or aAddresses(0) = 0) Then minimap.changeERSettings()
     End Sub
     Private Sub getRainbowBridge()
         ' Start with checking for SoH since things are handled differently

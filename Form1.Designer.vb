@@ -389,6 +389,8 @@ Partial Class frmTrackerOfTime
         Me.checkMQ5 = New System.Windows.Forms.CheckBox()
         Me.tmrTT = New System.Windows.Forms.Timer(Me.components)
         Me.tmrFastScan = New System.Windows.Forms.Timer(Me.components)
+        Me.lcxERDungeons = New System.Windows.Forms.Label()
+        Me.lcxEROverworld = New System.Windows.Forms.Label()
         Me.mnuOptions.SuspendLayout()
         Me.pnlSettings.SuspendLayout()
         Me.pnlMain.SuspendLayout()
@@ -581,9 +583,9 @@ Partial Class frmTrackerOfTime
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(13, 966)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(128, 26)
+        Me.Label1.Size = New System.Drawing.Size(179, 26)
         Me.Label1.TabIndex = 233
-        Me.Label1.Text = "Suggestions or problems?" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Discord: Selene#0230"
+        Me.Label1.Text = "Suggestions or problems?" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Email: selene.tabacchini@gmail.com"
         '
         'btnFocus
         '
@@ -805,6 +807,8 @@ Partial Class frmTrackerOfTime
         '
         'pnlSettings
         '
+        Me.pnlSettings.Controls.Add(Me.lcxEROverworld)
+        Me.pnlSettings.Controls.Add(Me.lcxERDungeons)
         Me.pnlSettings.Controls.Add(Me.lcxPotShuffle)
         Me.pnlSettings.Controls.Add(Me.lcxStandingShuffle)
         Me.pnlSettings.Controls.Add(Me.lcxCrateShuffle)
@@ -4335,6 +4339,26 @@ Partial Class frmTrackerOfTime
         '
         Me.tmrFastScan.Interval = 1000
         '
+        'lcxERDungeons
+        '
+        Me.lcxERDungeons.Location = New System.Drawing.Point(401, 383)
+        Me.lcxERDungeons.Name = "lcxERDungeons"
+        Me.lcxERDungeons.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxERDungeons.Size = New System.Drawing.Size(137, 20)
+        Me.lcxERDungeons.TabIndex = 355
+        Me.lcxERDungeons.Text = "ER Dungeons"
+        Me.lcxERDungeons.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lcxEROverworld
+        '
+        Me.lcxEROverworld.Location = New System.Drawing.Point(401, 402)
+        Me.lcxEROverworld.Name = "lcxEROverworld"
+        Me.lcxEROverworld.Padding = New System.Windows.Forms.Padding(17, 0, 2, 1)
+        Me.lcxEROverworld.Size = New System.Drawing.Size(137, 20)
+        Me.lcxEROverworld.TabIndex = 356
+        Me.lcxEROverworld.Text = "ER Overworld"
+        Me.lcxEROverworld.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
         'frmTrackerOfTime
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -4914,5 +4938,7 @@ Partial Class frmTrackerOfTime
     Friend WithEvents lcxPotShuffle As System.Windows.Forms.Label
     Friend WithEvents lcxStandingShuffle As System.Windows.Forms.Label
     Friend WithEvents lcxCrateShuffle As System.Windows.Forms.Label
+    Friend WithEvents lcxEROverworld As System.Windows.Forms.Label
+    Friend WithEvents lcxERDungeons As System.Windows.Forms.Label
 
 End Class

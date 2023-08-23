@@ -1109,6 +1109,30 @@ Namespace My
                 Me("setStanding") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setERDun() As Boolean
+            Get
+                Return CType(Me("setERDun"),Boolean)
+            End Get
+            Set
+                Me("setERDun") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property setEROver() As Boolean
+            Get
+                Return CType(Me("setEROver"),Boolean)
+            End Get
+            Set
+                Me("setEROver") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

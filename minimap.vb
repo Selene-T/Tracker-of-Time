@@ -199,6 +199,22 @@
         iLastMinimap = 101
     End Sub
 
+    Public Sub changeERSettings()
+        If frmTrackerOfTime.aAddresses(18) = 0 Then
+            My.Settings.setEROver = False
+        Else
+            My.Settings.setEROver = True
+        End If
+
+        If frmTrackerOfTime.aAddresses(19) = 0 Then
+            My.Settings.setERDun = False
+        Else
+            My.Settings.setERDun = True
+        End If
+
+        frmTrackerOfTime.updateSettingsPanel()
+    End Sub
+
     Public Function getER() As Byte
         ' Gets the ER settings from the save context
 
@@ -212,6 +228,14 @@
             If Not .aAddresses(19) = 0 Then
                 If .goRead(.aAddresses(19), 1) = 1 Then iNewER += 2
             End If
+
+            ' Reset value for new method testing
+            iNewER = 0
+            ' Overworld ER check
+            If My.Settings.setEROver Then iNewER += 1
+            ' Dungeon ER check
+            If My.Settings.setERDun Then iNewER += 2
+
             If Not iNewER = iOldER Then
                 ' If a change in ER is detected (basically first scan), clear the appropriate exits
                 If iNewER Mod 2 = 1 Then erExitArray(True, 0, 25)
