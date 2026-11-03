@@ -118,7 +118,7 @@
         If addressDLL = 0 Then Return Nothing
 
         Dim attemptOffset As Int64 = 0
-        For i = 0 To 2
+        For i = 0 To 3
             Select Case i
                 Case 0
                     ' Tests for BizHawk 2.7 and 2.8
@@ -128,6 +128,10 @@
                     ' Tests for BizHawk 2.9
                     ' Rupees: mupen64plus.dll+17FED6 - 0x11a606 = 0x658d0
                     attemptOffset = &H658D0
+                Case 2
+                    ' Tests for BizHawk 2.10, 2.11, and 2.11.1
+                    ' Rupees: mupen64plus.dll+184F26 - 0x11a606 = 0x6A920
+                    attemptOffset = &H6A920
                 Case Else
                     Return Nothing
             End Select
