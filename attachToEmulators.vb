@@ -333,7 +333,7 @@
             Dim attemptOffset As Int64 = 0
 
             ' RA's parallel core has version differences to attach
-            For i = 0 To 3
+            For i = 0 To 4
                 Select Case i
                     Case 0
                         ' 1.9.0 - 1.10.2
@@ -344,11 +344,27 @@
                     Case 2
                         ' 1.10.3+ ver2
                         attemptOffset = &HD56000
+                    Case 3
+                        ' 1.22.2
+                        attemptOffset = &H8E795E0&
                     Case Else
                         Return Nothing
                 End Select
-                frmTrackerOfTime.romAddrStart64 = addressDLL + attemptOffset
-                If ReadMemory(Of Integer)(frmTrackerOfTime.romAddrStart64 + &H11A5EC) = 1514490948 Then Exit For
+                If i < 3 Then
+                    frmTrackerOfTime.romAddrStart64 = addressDLL + attemptOffset
+                    If ReadMemory(Of Integer)(frmTrackerOfTime.romAddrStart64 + &H11A5EC) = 1514490948 Then Exit For
+                Else
+                    Dim readAddress As String = ""
+                    Dim tempAddressDLL As Int64 = 0
+                    tempAddressDLL = addressDLL + attemptOffset
+                    ' Read the first half of the address 
+                    readAddress = Hex(ReadMemory(Of Integer)(tempAddressDLL))
+                    frmTrackerOfTime.fixHex(readAddress)
+                    ' Read the second half of the address
+                    readAddress = Hex(ReadMemory(Of Integer)(addressDLL + attemptOffset + 4)) & readAddress
+                    frmTrackerOfTime.romAddrStart64 = CLng("&H" & readAddress) + &H80000000&
+                    If ReadMemory(Of Integer)(frmTrackerOfTime.romAddrStart64 + &H11A5EC) = 1514490948 Then Exit For
+                End If
             Next
 
             frmTrackerOfTime.emulator = "retroarch - parallel"
